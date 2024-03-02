@@ -5,18 +5,18 @@ import { Link } from 'react-router-dom';
 const PaymentRoot = (props) => {
 
   const [isOpen, setIsOpen] = useState(false);
-  const [clientCode, setClientCode] = useState(import.meta.env.VITE_CLIENTCODE);
-  const [transUserName, setTransUserName] = useState(import.meta.env.VITE_TRANSUSERNAME);
-  const [transUserPassword, setTransUserPassword] = useState(import.meta.env.VITE_TRANSUSERPASSWORD);
-  const [authkey, setAuthkey] = useState(import.meta.env.VITE_AUTHKEY);
-  const [authiv, setAuthiv] = useState(import.meta.env.VITE_AUTHIV);
+  const [clientCode, setClientCode] = useState(process.env.CLIENTCODE);
+  const [transUserName, setTransUserName] = useState(process.env.TRANSUSERNAME);
+  const [transUserPassword, setTransUserPassword] = useState(process.env.TRANSUSERPASSWORD);
+  const [authkey, setAuthkey] = useState(process.env.AUTHKEY);
+  const [authiv, setAuthiv] = useState(process.env.AUTHIV);
   const [payerName, setPayerName] = useState("Anand Kumar Shaw");
   const [payerEmail, setPayerEmail] = useState("anand.kumar@sabpaisa.in");
   const [payerMobile, setPayerMobile] = useState("6291312929");
   const [clientTxnId, setclientTxnId] = useState("3828972293337345");
   const [amount, setAmount] = useState(8625);
   const [payerAddress, setPayerAddress] = useState("Kolkata");
-  const [callbackUrl, setCallbackUrl] = useState(import.meta.env.VITE_CALLBACKURL);
+  const [callbackUrl, setCallbackUrl] = useState(process.env.CALLBACKURL);
   const [data, setData] = useState(null)
   const [udf1, setudf1] = useState(null);
   const [udf2, setudf2] = useState(null);

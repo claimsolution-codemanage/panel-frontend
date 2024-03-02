@@ -1,7 +1,7 @@
 import axios from 'axios'
 // const API_BASE = "http://localhost:8000"
-const API_BASE = `${import.meta.env.VITE_API_BASE}`
-export const API_BASE_IMG =  `${import.meta.env.VITE_API_BASE_IMG}`
+const API_BASE = `${process.env.API_BASE}`
+export const API_BASE_IMG =  `${process.env.API_BASE_IMG}`
 import { getToken } from '../utils/helperFunction';
 
 

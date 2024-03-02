@@ -210,7 +210,7 @@ export default function EditProfile() {
                
                         {/* <div className="d-flex flex-column  align-items-center justify-content-center my-5">
                         <div className="d-flex align-items-center justify-content-center  bg-color-2" style={{ height: 150, width: 150,borderRadius:150,cursor:"pointer"}} onClick={handleImage}>
-                          {data.profilePhoto ? <img src={`${import.meta.env.VITE_API_BASE_IMG}/${data.profilePhoto}`} alt="profileImg"  style={{ height: 150, width: 150,borderRadius:150,cursor:"pointer"}} /> : <BsCameraFill className="h2 text-white " />}   
+                          {data.profilePhoto ? <img src={`${process.env.API_BASE_IMG}/${data.profilePhoto}`} alt="profileImg"  style={{ height: 150, width: 150,borderRadius:150,cursor:"pointer"}} /> : <BsCameraFill className="h2 text-white " />}   
                         <input type="file" name="profilePhoto" ref={imgRef} id="profilePhoto" hidden={true} onChange={handleImgOnchange}/>
                         </div>
                          {uploadPhoto.message && <span className={uploadPhoto.status==1 ? "text-success" : "text-danger"}>{uploadPhoto.message}</span>} 

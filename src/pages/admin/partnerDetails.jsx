@@ -83,7 +83,7 @@ export default function AdminPartnerDetails() {
                         <div className="align-items-center bg-color-1 rounded-2 row shadow m-0">
                                 <div className="col-12 col-md-2 align-items-center badge bg-primary px-4 py-3 d-flex flex-column gap-1">
                             <div className="d-flex align-items-center justify-content-center  bg-color-2" style={{ height: 150, width: 150,borderRadius:150,cursor:"pointer"}}>
-                           <img src={data[0]?.profile?.profilePhoto ? `${import.meta.env.VITE_API_BASE_IMG}${data[0]?.profile?.profilePhoto}` :"/Images/home/sign-in.png"} alt="profileImg"  style={{ height: 150, width: 150,borderRadius:150,cursor:"pointer"}} />  
+                           <img src={data[0]?.profile?.profilePhoto ? `${process.env.API_BASE_IMG}${data[0]?.profile?.profilePhoto}` :"/Images/home/sign-in.png"} alt="profileImg"  style={{ height: 150, width: 150,borderRadius:150,cursor:"pointer"}} />  
                         </div>
                         {/* <h5 className="mb-1 text-capitalize text-white">{data[0]?.profile?.consultantName}</h5> */}
                                 </div>

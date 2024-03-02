@@ -82,7 +82,7 @@ function SabpaisaPaymentGateway(props) {
         clientTxnId={uniqid()}
         authkey={authkey}
         authiv={authiv}
-        callbackUrl={"https://backend.claimsolution.in/api/payment/paymentWebHook"}
+        callbackUrl={props?.callbackUrl}
         payerName={payerName}
         payerEmail={payerEmail}
         payerMobile={payerMobile}

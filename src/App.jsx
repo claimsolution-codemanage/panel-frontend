@@ -131,7 +131,6 @@ export default function App(){
   const location = useLocation();
   const [myAppData,setMyAppData] = useState({isLogin:false,details:""})
 
-
   useEffect(()=>{
     const token = getToken()
     // console.log("token",token);
@@ -150,6 +149,7 @@ export default function App(){
   
   
   return(<>
+    
    <AppContext.Provider value={{myAppData,setMyAppData}}>
   {/* <Navbar/> */}
   <Routes>
