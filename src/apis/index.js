@@ -2,11 +2,11 @@ import axios from 'axios'
 // import dotenv from 'dotenv'
 // dotenv.config()
 // const API_BASE = "http://localhost:8000"
-const API_BASE = `${process.env.API_BASE}`
-const API_IMAGE_UPLOAD =  `${process.env.API_IMAGE_UPLOAD}`
+const API_BASE = `${import.meta.env.VITE_API_BASE}`
+const API_IMAGE_UPLOAD =  `${import.meta.env.VITE_API_IMAGE_UPLOAD}`
 import { deleteToken } from '../utils/helperFunction';
-// const API_BASE = `${process.env.API_BASE}`
-// const API_IMAGE_UPLOAD =  `${process.env.API_IMAGE_UPLOAD}`
+// const API_BASE = `${import.meta.env.VITE_API_BASE}`
+// const API_IMAGE_UPLOAD =  `${import.meta.env.VITE_API_IMAGE_UPLOAD}`
 
 
 

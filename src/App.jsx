@@ -130,6 +130,7 @@ import { useLocation } from 'react-router-dom'
 export default function App(){
   const location = useLocation();
   const [myAppData,setMyAppData] = useState({isLogin:false,details:""})
+ console.log("mode",import.meta.env.MODE)
 
   useEffect(()=>{
     const token = getToken()
