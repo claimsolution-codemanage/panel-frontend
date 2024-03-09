@@ -3,7 +3,7 @@ import axios from 'axios'
 // dotenv.config()
 // const API_BASE = "http://localhost:8000"
 const API_BASE = `${import.meta.env.VITE_API_BASE}`
-const API_IMAGE_UPLOAD =  `${import.meta.env.VITE_API_IMAGE_UPLOAD}`
+// const API_IMAGE_UPLOAD =  `${import.meta.env.VITE_API_IMAGE_UPLOAD}`
 import { deleteToken } from '../utils/helperFunction';
 // const API_BASE = `${import.meta.env.VITE_API_BASE}`
 // const API_IMAGE_UPLOAD =  `${import.meta.env.VITE_API_IMAGE_UPLOAD}`
@@ -12,8 +12,8 @@ import { deleteToken } from '../utils/helperFunction';
 
 import { getToken } from '../utils/helperFunction';
 
-export const API_BASE_IMG = `${API_IMAGE_UPLOAD}/images`
-// export const API_BASE_IMG = `${API_BASE}/images`
+// export const API_BASE_IMG = `${API_IMAGE_UPLOAD}/images`
+export const API_BASE_IMG = `images`
 
 
 
@@ -54,22 +54,22 @@ export const partnerAuthenticate = ()=>{
     return axios.get(`${API_BASE}/api/partner/authenticate`)
   }
 
-  export const clientImageUpload = (data)=>{
-    setheader()
-    return axios.post(`${API_IMAGE_UPLOAD}/api/upload/client`,data)
-  }
-  export const partnerImageUpload = (data)=>{
-    setheader()
-    return axios.post(`${API_IMAGE_UPLOAD}/api/upload/partner`,data)
-  }
-  export const adminImageUpload = (data)=>{
-    setheader()
-    return axios.post(`${API_IMAGE_UPLOAD}/api/upload/admin`,data)
-  }
-  export const employeeImageUpload = (data)=>{
-    setheader()
-    return axios.post(`${API_IMAGE_UPLOAD}/api/upload/employee`,data)
-  }
+  // export const clientImageUpload = (data)=>{
+  //   setheader()
+  //   return axios.post(`${API_IMAGE_UPLOAD}/api/upload/client`,data)
+  // }
+  // export const partnerImageUpload = (data)=>{
+  //   setheader()
+  //   return axios.post(`${API_IMAGE_UPLOAD}/api/upload/partner`,data)
+  // }
+  // export const adminImageUpload = (data)=>{
+  //   setheader()
+  //   return axios.post(`${API_IMAGE_UPLOAD}/api/upload/admin`,data)
+  // }
+  // export const employeeImageUpload = (data)=>{
+  //   setheader()
+  //   return axios.post(`${API_IMAGE_UPLOAD}/api/upload/employee`,data)
+  // }
 
 export const signUp = (data)=>{
  return axios.post(`${API_BASE}/api/partner/signUp`,data)
@@ -380,6 +380,11 @@ export const adminAddCaseReference = (query)=>{
   return axios.put(`${API_BASE}/api/admin/addReferenceCaseAndMarge?${query}`)
 }
 
+export const adminRemoveCaseReference = (_id,type)=>{
+  setheader()
+  return axios.put(`${API_BASE}/api/admin/removeReferenceCase?_id=${_id}&type=${type}`)
+}
+
 export const adminDeleteCaseById = (id)=>{
   setheader()
   return axios.delete(`${API_BASE}/api/admin/deleteCaseById?caseId=${id}`)
@@ -395,6 +400,15 @@ export const adminDeleteClientById = (id)=>{
   return axios.delete(`${API_BASE}/api/admin/deleteClientById?clientId=${id}`)
 }
 
+export const adminDeleteEmployeeById = (id)=>{
+  setheader()
+  return axios.delete(`${API_BASE}/api/admin/deleteEmployeeAccount?_id=${id}`)
+}
+
+export const adminUpdateEmployeeById = (id,data)=>{
+  setheader()
+  return axios.put(`${API_BASE}/api/admin/updateEmployeeAccount?_id=${id}`,data)
+}
 
 
 
@@ -497,6 +511,21 @@ export const clientTls =()=>{
   return axios.get(`${API_BASE}/api/client/getTls`)
 }
 
+export const clientViewAllInvoice = (pageItemLimit="",pageNo="",searchQuery="",startDate="",endDate="")=>{
+  setheader()
+  return axios.get(`${API_BASE}/api/client/getClientViewAllInvoice?limit=${pageItemLimit}&pageNo=${pageNo}&search=${searchQuery}&startDate=${startDate}&endDate=${endDate}`)
+}
+export const clientGetInvoiceById = (_id)=>{
+  setheader()
+  return axios.get(`${API_BASE}/api/client/getClientViewInvoiceById?_id=${_id}`)
+}
+
+export const clientPayInvoiceById = (invoiceId,caseId)=>{
+  setheader()
+  return axios.post(`${API_BASE}/api/client/clientPayInvoiceById?invoiceId=${invoiceId}&caseId=${caseId}`)
+}
+
+
 export const clientDashboardData =()=>{
   setheader()
   return axios.get(`${API_BASE}/api/client/getClientDashboardData`)
@@ -586,9 +615,9 @@ export const employeeAddCaseComment = (data)=>{
   return axios.put(`${API_BASE}/api/employee/addCaseComment`,data)
 }
 
-export const financeEmployeeCreateInvoice = (data)=>{
+export const financeEmployeeCreateInvoice = (data,clientId,caseId)=>{
   setheader()
-  return axios.post(`${API_BASE}/api/employee/finance/createInvoice`,data)
+  return axios.post(`${API_BASE}/api/employee/finance/createInvoice?clientId=${clientId}&caseId=${caseId}`,data)
 }
 
 export const financeEmployeeEditInvoice = (_id,data)=>{

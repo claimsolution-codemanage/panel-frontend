@@ -13,9 +13,12 @@ import { BiMessageSquareEdit } from "react-icons/bi";
 import { useReactToPrint } from 'react-to-print';
 import { toast } from 'react-toastify'
 import { financeEmployeeCreateInvoice } from '../../../../apis'
+import { useNavigate, useParams } from 'react-router-dom'
 
 export default function EmployeeCreateInvoice() {
+  const navigate = useNavigate()
   const printRef = useRef()
+  const caseParam = useParams()
   const [loading, setLoading] = useState(false)
   const [showSender, setShowSender] = useState(false)
   const [showReceiver, setShowReceiver] = useState(false)
@@ -24,6 +27,7 @@ export default function EmployeeCreateInvoice() {
   const [finalDetails, setFinalDetails] = useState({ subAmt: 0, gstAmt: 0, totalAmt: 0, invoiceDate: `${new Date().getDate()}-${new Date().getMonth() + 1}-${new Date().getFullYear()}` })
 
 
+  console.log("caseParam",caseParam);
 
   const senderFormik = useFormik({
     initialValues: {
@@ -196,10 +200,13 @@ export default function EmployeeCreateInvoice() {
         invoiceDate: finalDetails.invoiceDate
       }
       setLoading(true)
-      const res = await financeEmployeeCreateInvoice(payload)
+      const res = await financeEmployeeCreateInvoice(payload,caseParam?.clientId,caseParam?.caseId)
       if (res?.data?.success && res.status==200) {
         toast.success(res?.data?.message)
         setLoading(false)
+      }
+      if(res?.data?._id){
+        navigate(`/employee/view-invoice/${res?.data?._id}`)
       }
     } catch (error) {
       setLoading(false)
@@ -293,18 +300,6 @@ export default function EmployeeCreateInvoice() {
                   {/* end col */}
                   <div className="col-sm-6">
                     <div className="text-muted text-sm-end">
-                      {/* <div>
-                    <h5 className="font-size-15 mb-1">Invoice No:</h5>
-                    <p>#DZ0112</p>
-                  </div> */}
-                      {/* <div className="mt-4">
-                    <h5 className="font-size-15 mb-1">Invoice Date:</h5>
-                    <p>{finalDetails.invoiceDate}</p>
-                  </div> */}
-                      {/* <div className="mt-4">
-                    <h5 className="font-size-15 mb-1">Order No:</h5>
-                    <p>#1123456</p>
-                  </div> */}
                     </div>
                   </div>
                   {/* end col */}

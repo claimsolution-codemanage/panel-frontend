@@ -15,14 +15,16 @@ import { FaCircleArrowDown } from 'react-icons/fa6'
 import { LuPcCase } from 'react-icons/lu'
 import { IoArrowBackCircleOutline } from 'react-icons/io5'
 import ChangeStatusModal from "../../components/Common/changeStatusModal"
+import { FaFileInvoiceDollar } from "react-icons/fa6";
 import { useNavigate } from "react-router-dom"
 import {BiLeftArrow} from 'react-icons/bi'
 import {BiRightArrow} from 'react-icons/bi'
 import { employeeChangeCaseStatus } from "../../apis"
 import Loader from "../../components/Common/loader"
 import { AppContext } from "../../App"
-import { useContext } from "react"
+import { useContext} from "react"
 import loash from 'lodash'
+import { Link } from "react-router-dom"
  
 export default function EmployeeAllCase() {
   const state = useContext(AppContext)
@@ -100,7 +102,7 @@ export default function EmployeeAllCase() {
   };
 
 
-  // console.log("data", data);
+  console.log("empType", empType);
   // console.log("chagne status", changeStatus.details.currentStatus);
 
   // console.log("range",dateRange);
@@ -116,7 +118,6 @@ export default function EmployeeAllCase() {
           </div>
         </div>
 </div>
-
 
 
       <div className="m-5 p-3">
@@ -178,6 +179,7 @@ export default function EmployeeAllCase() {
               <th scope="col" className="text-nowrap" ><th scope="col" >S.no</th></th>
               <th scope="col" className="text-nowrap">Action</th>
               <th scope="col" className="text-nowrap" >Current Status</th>
+              {empType?.toLowerCase()=="finance" && <th scope="col" className="text-nowrap">Invoice</th>}
               <th scope="col" className="text-nowrap" >Date</th>
               <th scope="col" className="text-nowrap" >File No</th>
               <th scope="col" className="text-nowrap"  >Name</th>
@@ -192,8 +194,19 @@ export default function EmployeeAllCase() {
           <tbody>
             {data.map((item, ind) => <tr key={item._id} className="border-2 text-nowrap border-bottom border-light text-center">
               <th scope="row">{ind + 1}</th>
-              <td><span className=""><span style={{ cursor: "pointer" }} onClick={() => navigate(`/employee/view case/${item._id}`)}><HiMiniEye /></span> {empType=="assistant" && <span style={{ cursor: "pointer" }} onClick={() => setChangeStatus({ status: true, details: item })}><CiEdit /></span>} </span></td>
+              <td><span className="d-flex gap-1">
+                <span style={{ cursor: "pointer" }} onClick={() => navigate(`/employee/view case/${item._id}`)}><HiMiniEye className="fs-5 text-dark"/></span> 
+                {empType?.toLowerCase()=="assistant" && <span style={{ cursor: "pointer" }} onClick={() => setChangeStatus({ status: true, details: item })}><CiEdit className="fs-5 text-info"/></span>}
+                 </span></td>
               <td className="text-nowrap"><span className={(item?.currentStatus == "reject" || item?.currentStatus == "pending") ? " badge bg-danger text-white" : "badge bg-primary"}>{item?.currentStatus}</span></td>
+              <td className="text-nowrap">
+              {empType?.toLowerCase()=="finance"  && <span>
+                {item?.caseFrom?.toLowerCase()=="client" ?
+                <Link to={`/employee/create-invoice/${item?.clientId}/${item?._id}`}><span className="badge bg-primary" style={{ cursor: "pointer" }}>Create</span></Link>
+                : <span className="badge bg-secondary">Create</span>
+                 }
+                </span> }
+              </td>
               <td className="text-nowrap">{new Date(item?.createdAt).toLocaleDateString()}</td>
               <td className="text-nowrap">{item?.fileNo}</td>
               <td className="text-nowrap">{item?.name}</td>

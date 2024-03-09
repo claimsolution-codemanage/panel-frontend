@@ -1,30 +1,17 @@
 import { useEffect, useState } from "react"
-import { allState } from "../../../../utils/constant"
-import { adminGetCaseById } from "../../../../apis"
 import { toast } from 'react-toastify'
 import { useNavigate } from 'react-router-dom'
-import { API_BASE_IMG } from "../../../../apis"
 import { useParams } from "react-router-dom"
-import { FaCircleArrowDown } from 'react-icons/fa6'
-import { LuPcCase } from 'react-icons/lu'
-import { CiAlignCenterV, CiEdit } from 'react-icons/ci'
 import { IoArrowBackCircleOutline } from 'react-icons/io5'
-import { RxCrossCircled } from 'react-icons/rx'
-import { IoMdCheckmarkCircleOutline } from 'react-icons/io'
-import { MdOutlineAddCard } from 'react-icons/md'
-import Button from 'react-bootstrap/Button';
-import { employeeGetCaseById,employeeChangeCaseStatus,financeEmployeeGetInvoiceById } from "../../../../apis"
-import Loader from "../../../../components/Common/loader"
-import { AppContext } from "../../../../App"
+import { clientGetInvoiceById } from "../../apis"
+import Loader from "../../components/Common/loader"
+import { AppContext } from "../../App"
 import { useContext,useRef } from "react"
 import { useReactToPrint } from 'react-to-print';
-import { IoMdAdd } from 'react-icons/io'
-import AddCaseCommit from "../../../../components/Common/addCaseCommit"
-import ChangeStatusModal from "../../../../components/Common/changeStatusModal"
-import { employeeAddCaseComment } from "../../../../apis"
 
 
-export default function EmployeeViewInvoice() {
+
+export default function ClientViewInvoice() {
     const state = useContext(AppContext)
     const invoiceRef = useRef()
     const empType  = state?.myAppData?.details?.empType
@@ -40,7 +27,7 @@ export default function EmployeeViewInvoice() {
     const getCaseById = async () => {
         setLoading(true)
         try {
-            const res = await financeEmployeeGetInvoiceById(param?._id)
+            const res = await clientGetInvoiceById(param?._id)
             // console.log("case", res?.data?.data);
             if (res?.data?.success && res?.data?.data) {
 

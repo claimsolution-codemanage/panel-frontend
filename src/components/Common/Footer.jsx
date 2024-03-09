@@ -72,13 +72,13 @@ export default function Footer(){
                       </Link>
                     </li>
                     <li className="mb-2">
-                      <Link to="/Death-Claim-Solution" className="color-1">
-                        Death Claim Solution
+                      <Link to="/Life-Insurance-Claim-Solution" className="color-1">
+                      Life Insurance Claim Solution
                       </Link>
                     </li>
                     <li className="mb-2">
-                      <Link to="/Any-Insurance-Claim-Solution" className="color-1">
-                        Any Insurance Claim Solution
+                      <Link to="/General-Insurance-Claim-Solution" className="color-1">
+                      General Insurance Claim Solution
                       </Link>
                     </li>
                     {/* <li className="mb-2">

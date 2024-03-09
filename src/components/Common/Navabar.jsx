@@ -51,13 +51,13 @@ export default function Navbar2(){
                                     </li>
                                     {/* <li><hr className="dropdown-divider" /></li> */}
                                     <li>
-                                        <Link to="/Death-Claim-Solution" className="dropdown__link bg-color-1">
-                                            Death claim solution
+                                        <Link to="/Life-Insurance-Claim-Solution" className="dropdown__link bg-color-1">
+                                        Life Insurance Claim Solution
                                         </Link>
                                     </li>
                                     <li>
-                                        <Link to="/Any-Insurance-Claim-Solution" className="dropdown__link bg-color-1">
-                                            Any insurance claim solution
+                                        <Link to="/General-Insurance-Claim-Solution" className="dropdown__link bg-color-1">
+                                        General Insurance Claim Solution
                                         </Link>
                                     </li>
                                 </ul>

@@ -3,7 +3,7 @@ import { allState } from "../../utils/constant"
 import { adminGetCaseById } from "../../apis"
 import {toast} from 'react-toastify'
 import {useNavigate} from 'react-router-dom'
-import { API_BASE_IMG,adminGetPartnerById } from "../../apis"
+import { adminGetPartnerById } from "../../apis"
 import { useParams } from "react-router-dom"
 import {FaCircleArrowDown} from 'react-icons/fa6'
 import {LuPcCase} from 'react-icons/lu'
@@ -14,6 +14,7 @@ import ChangeStatusModal from "../../components/Common/changeStatusModal"
 import AddAdminTagModal from "../../components/Common/AddAdminTagModal"
 import {FaTags} from 'react-icons/fa'
 import { adminSetPartnerTag } from "../../apis"
+import { API_BASE_IMG} from "../../apis/upload"
 
 export default function AdminPartnerDetails() {
     const [data,setData] =useState([])
@@ -260,12 +261,12 @@ export default function AdminPartnerDetails() {
                         </div>
                         <div className="mb-3 d-flex flex-column">
                             <label htmlFor="chequeImg" className="form-label text-primary">Cancelled Cheque:</label>
-                            {<img style={{height:250}} className="border rounded-2"  src={data[0]?.bankingDetails?.cancelledChequeImg ?  `${data[0]?.bankingDetails?.cancelledChequeImg}` : "/Images/icons/book.svg"} alt="cancelCheque"/>}
+                            {<img style={{height:250}} className="border rounded-2"  src={data[0]?.bankingDetails?.cancelledChequeImg ?  `${API_BASE_IMG}/${data[0]?.bankingDetails?.cancelledChequeImg}` : "/Images/icons/book.svg"} alt="cancelCheque"/>}
                         </div>
                     
                         <div className="mb-3 d-flex flex-column">
                             <label htmlFor="gstImg" className="form-label text-primary">GST Copy</label>
-                            {<img style={{height:250}} className="border rounded-2" src={data[0]?.bankingDetails?.gstCopyImg ?  `${data[0]?.bankingDetails?.gstCopyImg}` : "/Images/icons/book.svg"} alt="gstcopyImg"/>}
+                            {<img style={{height:250}} className="border rounded-2" src={data[0]?.bankingDetails?.gstCopyImg ?  `${API_BASE_IMG}/${data[0]?.bankingDetails?.gstCopyImg}` : "/Images/icons/book.svg"} alt="gstcopyImg"/>}
                         </div>
                         </div>
                         </div>

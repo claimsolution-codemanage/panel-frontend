@@ -166,7 +166,7 @@ export default function Profile() {
                                         </div>
                                         <div className="mb-2 d-flex align-items-center gap-3 col-12 col-md-4">
                             <h6 className="fw-bold">Work Association</h6>
-                           <p className=" h6 text-capitalize">{data[0]?.profile?.workAssociation}</p>
+                           <p className=" h6 text-capitalize">{data[0]?.workAssociation}</p>
                         </div>
                         <div className="mb-3 d-flex align-items-center gap-3 col-12 col-md-4">
                                             {/* <label for="mobileNo." className="form-label">District</label> */}

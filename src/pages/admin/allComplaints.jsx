@@ -35,6 +35,7 @@ export default function AdminAllComplaint() {
   const [pageItemLimit, setPageItemLimit] = useState(10)
   const [searchQuery, setSearchQuery] = useState("")
   const [complaint, setComplaint] = useState([])
+  const [isSearch,setIsSearch] = useState(false)
   const [removeComplaint, setRemoveComplaint] = useState({ status: false, details: {} })
   const [noOfComplaint, setNoOfComplaint] = useState(0)
   const [pgNo, setPgNo] = useState(1)
@@ -68,42 +69,25 @@ export default function AdminAllComplaint() {
     }
   }, [pageItemLimit, pgNo, changeStatus,removeComplaint])
 
-  useEffect(() => {
-    if(searchQuery){     
-          let debouncedCall = loash.debounce(function () {
-            getAllComplaint()
-          }, 1000);
-          debouncedCall();
-          return () => {
-            debouncedCall.cancel();
-          };
+  useEffect(()=>{
+    if(isSearch){
+      let debouncedCall = loash.debounce(function () {
+        getAllComplaint()
+        setIsSearch(false)
+    }, 1000);
+    debouncedCall();
+    return () => {
+      debouncedCall.cancel();
+    };
     }
-  }, [searchQuery])
+
+   },[searchQuery,isSearch])
 
 
-  //   const handleChanges =async(_id,status)=>{
-  //     try {
-  //         const res = await adminSetPartnerStatus(_id,status)
-  //         if (res?.data?.success) {
-  //             setChangeStatus({ show: false, details: "" })
-  //           toast.success(res?.data?.message)
-
-  //         }
-  //       } catch (error) {
-  //         console.log("admin all partner error",error);
-  //         if (error && error?.response?.data?.message) {
-  //           toast.error(error?.response?.data?.message)
-  //         } else {
-  //           toast.error("Something went wrong")
-  //         }
-  //         if(error && error?.response?.status==401){
-  //           deleteToken()
-  //           state?.setMyAppData({ isLogin: false, details:{} })
-  //         }
-  //         console.log("allAdminPartner error", error);
-  //       }
-  //     } 
-
+   const handleSearchQuery =(value)=>{
+    setIsSearch(true)
+    setSearchQuery(value)
+  }
 
 
   const handlePageClick = (event) => {
@@ -131,7 +115,7 @@ export default function AdminAllComplaint() {
 
               <div className="form-control px-2 d-flex gap-2">
                 <span className=""><BsSearch className="text-black" /></span>
-                <input className="w-100" value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} placeholder="Search.." style={{ outline: "none", border: 0 }} />
+                <input className="w-100" value={searchQuery} onChange={(e) => handleSearchQuery(e.target.value)} placeholder="Search.." style={{ outline: "none", border: 0 }} />
               </div>
 
               <div className="">

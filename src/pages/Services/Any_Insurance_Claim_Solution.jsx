@@ -8,7 +8,7 @@ export default function Any_Insurance_Claim_Solution(){
                 <div className="container-px-5 mt-4 mb-3">
                     <div className="row">
                         <div className="col-sm-6">
-                            <img src="/Images/home-img/Any-Insurance-Claim-Solution.png" className="img-fluid w-100 card-shadow" alt="Any Insurance Claim Solution" />
+                            <img src="/Images/home-img/Any-Insurance-Claim-Solution.png" className="img-fluid w-100 card-shadow" alt="general insurance Claim Solution" />
                         </div>
                         <div className="col-sm-6">
                             <div className="h1 fw-bold p-2 color-2">Your Trusted Partner for Resolving All Types of Insurance Claim Challenges</div>
@@ -27,8 +27,8 @@ export default function Any_Insurance_Claim_Solution(){
             <div className="container-fluid mt-4 bg-color-1 py-5">
                 <div className="container-px-5 pb-4 pt-5">
                     <div className="row">
-                    <div className="h2 fw-bold color-2 text-center ">Any Insurance Claim Solution </div>                        
-                        <p className='fs-5 text-center'>Do you have problems with insurance claims from various policy types (LIFE INSURANCE CLAIMS, GENERAL INSURANCE CLAIMS & HEALTH INSURANCE CLAIMS )? Our Any Insurance Claim Solution at Claimsolution.in is designed to give full support regardless of the kind of insurance policy involved. Here are some of the reasons why you can rely on us to handle any insurance claim: </p>
+                    <div className="h2 fw-bold color-2 text-center ">General Insurance Claim Solution </div>                        
+                        <p className='fs-5 text-center'>Do you have problems with insurance claims from various policy types (LIFE INSURANCE CLAIMS, GENERAL INSURANCE CLAIMS & HEALTH INSURANCE CLAIMS )? Our General Insurance Claim Solution at Claimsolution.in is designed to give full support regardless of the kind of insurance policy involved. Here are some of the reasons why you can rely on us to handle general insurance claim: </p>
                     </div>
                 </div>
             </div>
@@ -44,7 +44,7 @@ export default function Any_Insurance_Claim_Solution(){
                                 <img src="/Images/service/a-versatility-in-expertise.png" className="card-img-top card-image" alt="Rejected" />
                                 <div className="bg-color-1 border border-bottom-0 border-end-0 border-start-0 card-body cardView">
                                     <h5 className="card-title fw-bold">Versatility in Expertise: </h5>
-                                    <p className="card-text">Our team of professionals understands the complexity of many different insurance products, from health and auto to life and beyond.  Our versatile expertise ensures that we can effectively navigate the unique challenges presented by any insurance claim.</p>
+                                    <p className="card-text">Our team of professionals understands the complexity of many different insurance products, from health and auto to life and beyond.  Our versatile expertise ensures that we can effectively navigate the unique challenges presented by general insurance claim.</p>
                                 </div>
                                 </div>
                             </div>
@@ -98,7 +98,7 @@ export default function Any_Insurance_Claim_Solution(){
                                 <img src="/Images/service/a-nationwide-coverage.png" className="card-img-top card-image" alt="Peace of Mind" />
                                 <div className="bg-color-1 border border-bottom-0 border-end-0 border-start-0 card-body cardView">
                                     <h5 className="card-title fw-bold">Nationwide Coverage: </h5>
-                                    <p className="card-text">Our Any Insurance Claim Solution is not geographically restricted. We operate across India, ensuring policyholders' accessibility and help regardless of their location. </p>
+                                    <p className="card-text">Our general insurance Claim Solution is not geographically restricted. We operate across India, ensuring policyholders' accessibility and help regardless of their location. </p>
                                 </div>
                                 </div>
                             </div>

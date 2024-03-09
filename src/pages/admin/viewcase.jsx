@@ -1,26 +1,19 @@
 import { useEffect, useState } from "react"
-import { allState } from "../../utils/constant"
 import { adminGetCaseById } from "../../apis"
 import { toast } from 'react-toastify'
 import { useNavigate } from 'react-router-dom'
-// import { API_BASE_IMG } from "../../apis"
 import { useParams } from "react-router-dom"
-import { FaCircleArrowDown } from 'react-icons/fa6'
-import { LuPcCase } from 'react-icons/lu'
-import { CiAlignCenterV, CiEdit } from 'react-icons/ci'
 import { IoArrowBackCircleOutline } from 'react-icons/io5'
-import { RxCrossCircled } from 'react-icons/rx'
-import { IoMdCheckmarkCircleOutline } from 'react-icons/io'
-import { MdOutlineAddCard } from 'react-icons/md'
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
-import { adminAddClientPayment, adminUpdateClientCaseFee, adminChangeCaseStatus, adminAddCaseCommit } from "../../apis"
+import { adminAddClientPayment, adminUpdateClientCaseFee, adminChangeCaseStatus, adminAddCaseCommit,adminRemoveCaseReference } from "../../apis"
 import { formatDateToISO } from "../../utils/helperFunction"
 import Loader from "../../components/Common/loader"
 import AddCaseModal from "../../components/Common/addCaseCommit"
 import AddCaseCommit from "../../components/Common/addCaseCommit"
 import { IoMdAdd } from 'react-icons/io'
 import { useContext } from "react"
+import { CiEdit } from "react-icons/ci"
 import { AppContext } from "../../App"
 import ChangeStatusModal from "../../components/Common/changeStatusModal"
 import { FaFilePdf, FaFileImage, FaFileWord } from 'react-icons/fa6'
@@ -31,7 +24,7 @@ import AddReferenceModal from "../../components/Common/addReferenceModal"
 import { API_BASE_IMG } from "../../apis/upload"
 import EditCaseStatusModal from "../../components/Common/EditCaseStatus"
 import { adminEditCaseProcessById } from "../../apis"
-import {getFormateDMYDate} from "../../utils/helperFunction"
+import { getFormateDMYDate } from "../../utils/helperFunction"
 
 export default function AdminViewCase() {
     const [data, setData] = useState([])
@@ -43,7 +36,8 @@ export default function AdminViewCase() {
     const [clearClientpayment, setClearClientPayment] = useState({ status: false, loading: false, payment: "", feeType: "", data: { _id: "", paymentId: "", paymentMode: "" } })
     const [caseCommitModal, setCaseCommitModal] = useState(false)
     const [viewDocs, setViewDocs] = useState({ status: false, details: {} })
-    const [showEditCaseModal,setShowEditCaseModal] = useState({status:false,details:{}})
+    const [showEditCaseModal, setShowEditCaseModal] = useState({ status: false, details: {} })
+    const [removeCaseReference,setRemoveCaseReference] =  useState({status:false,type:null,loading:false})
     const navigate = useNavigate()
     const param = useParams()
 
@@ -74,33 +68,12 @@ export default function AdminViewCase() {
     }
 
     useEffect(() => {
-        if (param?._id ||!showEditCaseModal.status) {
+        if (param?._id && !showEditCaseModal.status && !addCaseReference.show && !removeCaseReference.status) {
             getCaseById()
         }
-    }, [param, changeStatus, caseCommitModal,showEditCaseModal, addCaseReference])
+    }, [param, changeStatus, caseCommitModal, showEditCaseModal, addCaseReference,removeCaseReference])
 
-    const handleAddPayment = async () => {
-        setAddClientPayment({ ...addClientpayment, loading: true })
-        try {
-            const res = await adminAddClientPayment(addClientpayment._id, addClientpayment.data)
-            // console.log("case", res?.data);
-            if (res?.data?.success) {
-                toast.success(res?.data?.message)
-                setAddClientPayment({ ...addClientpayment, status: false, loading: false })
-                getCaseById()
-            }
-        } catch (error) {
-            if (error && error?.response?.data?.message) {
-                toast.error(error?.response?.data?.message)
-                setAddClientPayment({ ...addClientpayment, status: false, loading: false })
-            } else {
-                toast.error("Something went wrong")
-                setAddClientPayment({ ...addClientpayment, status: false, loading: false })
-            }
 
-            // console.log("add payment error", error);
-        }
-    }
 
     const handleClearClientPayment = async () => {
         // console.log("clear payment handler", clearClientpayment);
@@ -121,13 +94,30 @@ export default function AdminViewCase() {
                 toast.error("Something went wrong")
                 setClearClientPayment({ status: false, loading: false, payment: "", feeType: "", data: { _id: "", paymentId: "", paymentMode: "" } })
             }
-
-            // console.log("case error", error);
         }
     }
 
-    // console.log("clearpayment", clearClientpayment, state?.myAppData?.details?._id);
-    // console.log(data);
+ const handleRemoveCaseReference =async()=>{
+        if(removeCaseReference?.type){
+            try {
+                setRemoveCaseReference({...removeCaseReference,loading:true})
+                const res = await adminRemoveCaseReference(data[0]?._id,removeCaseReference?.type)
+                if(res?.status==200 && res?.data?.success){
+                    toast.success(res?.data?.message)
+
+                    setRemoveCaseReference({status:false,type:null,loading:false})
+                }
+            } catch (error) {
+                if(error && error?.response?.data?.message){
+                    toast.error(error?.response?.data?.message)
+                }else{
+                    toast.error("Failed to remove case reference")
+                }
+                setRemoveCaseReference({status:false,type:null,loading:false})
+            }
+        }
+ }
+
     return (<>
         {loading ? <Loader /> :
             <div>
@@ -138,18 +128,9 @@ export default function AdminViewCase() {
                                 <IoArrowBackCircleOutline className="fs-3" onClick={() => navigate(-1)} style={{ cursor: "pointer" }} />
                                 <div className="d-flex flex align-items-center gap-1">
                                     <span>View Cases</span>
-                                    {/* <span><LuPcCase /></span> */}
+                                  
                                 </div>
                             </div>
-
-                            {/* <div className="d-flex">
-                                <div className="d-flex gap-1 btn" onClick={() => setChangeStatus({ status: true, details: { ...data[0] } })}>
-                                    <span><CiEdit /></span>
-                                   
-                                </div>
-                            </div> */}
-
-
                         </div>
                         <div className=" m-md-5">
                             <div className="container-fluid color-4 p-0">
@@ -160,10 +141,10 @@ export default function AdminViewCase() {
                                                 <div className="bg-color-1 my-3 p-2 p-5 rounded-2 shadow">
                                                     <div className="border-3 border-primary border-bottom mb-5">
                                                         <div className="d-flex align-items-center justify-content-between">
-                                                        <h6 className="text-primary text-capitalize text-center fs-3">{data[0]?.caseFrom}</h6>
-                                                          <Link to={data[0]?.caseFrom == "partner" ? `/admin/partner%20details/${data[0]?.partnerId}` : `/admin/client%20details/${data[0]?.clientId}`} className="btn btn-primary">View</Link>          
+                                                            <h6 className="text-primary text-capitalize text-center fs-3">{data[0]?.caseFrom}</h6>
+                                                            <Link to={data[0]?.caseFrom == "partner" ? `/admin/partner%20details/${data[0]?.partnerId}` : `/admin/client%20details/${data[0]?.clientId}`} className="btn btn-primary">View</Link>
                                                         </div>
-                                                        </div>
+                                                    </div>
                                                     <div className="row">
                                                         <div className="mb-2 d-flex align-items-center gap-3 col-12 col-md-4">
                                                             <h6 className="fw-bold">Case From</h6>
@@ -176,16 +157,22 @@ export default function AdminViewCase() {
                                                             </div>
                                                         }
                                                         <div className="mb-2 d-flex align-items-center gap-3 col-12 col-md-4">
-                                                            <h6 className="fw-bold">Consultant Code</h6>
+                                                            <h6 className="fw-bold">{data[0]?.caseFrom?.toLowerCase() == "client" ? "Customer Code" : "Consultant Code"} </h6>
                                                             <p className=" h6 text-capitalize">{data[0]?.consultantCode}</p>
                                                         </div>
+
+                                                        {data[0]?.caseFrom?.toLowerCase() == "client" && data[0]?.partnerId && <div className="mb-2 d-flex align-items-center gap-3 col-12 col-md-4">
+                                                            <h6 className="fw-bold">Reference of partner </h6>
+                                                            <Link to={`/admin/partner details/${data[0]?.partnerId}`} className="h6 text-decoration-underline text-capitalize">View</Link>
+                                                        </div>}
+                                                    
                                                         {data[0]?.caseFrom == "partner" &&
                                                             <div className="mb-2 d-flex align-items-center gap-3 col-12 col-md-12">
                                                                 <h6 className="fw-bold">Mapping Id</h6>
                                                                 <p className=" h6 text-break">partnerId={data[0]?.partnerId}&partnerCaseId={data[0]?._id}</p>
                                                             </div>
                                                         }
-                                                        
+
 
                                                     </div>
                                                 </div>
@@ -194,7 +181,8 @@ export default function AdminViewCase() {
                                                         <div className="d-flex gap-2 align-items-center justify-content-between">
                                                             <h6 className="text-primary text-center fs-3">Case Details</h6>
                                                             <div className="d-flex gap-2">
-                                                                <Link to={`/admin/edit%20case/${data[0]?._id}`} className="btn btn-primary">Edit/Update</Link>
+                                                                <Link to={`/admin/edit%20case/${data[0]?._id}`} className="btn btn-primary">Edit/ Update</Link>
+                                                                {data[0]?.caseFrom != "partner" && (data[0]?.partnerId || data[0]?.empSaleId)  && <button className="btn btn-warning text-white" onClick={() => setRemoveCaseReference({...removeCaseReference,status:true})}>Remove Reference</button>}
                                                                 {data[0]?.caseFrom != "partner" && <button className="btn btn-success text-white" onClick={() => setAddCaseReference({ show: true, _id: data[0]?._id })}>Add Reference</button>}
                                                             </div>
                                                         </div>
@@ -240,7 +228,7 @@ export default function AdminViewCase() {
                                                         </div>
                                                         <div className="mb-2 d-flex align-items-center gap-3 col-12 col-md-4">
                                                             <h6 className="fw-bold">DOB</h6>
-                                                            <p className=" h6 text-capitalize">{data[0]?.DOB && getFormateDMYDate(data[0]?.DOB) }</p>
+                                                            <p className=" h6 text-capitalize">{data[0]?.DOB && getFormateDMYDate(data[0]?.DOB)}</p>
                                                         </div>
                                                         <div className="mb-2 d-flex align-items-center gap-3 col-12 col-md-4">
                                                             <h6 className="fw-bold">Insurance Company</h6>
@@ -332,78 +320,14 @@ export default function AdminViewCase() {
 
                                                         <div className="d-flex row  gap-0  align-items-center"></div>
                                                     </div>}
-                                                {/*for complete payment  */}
-                                                {/* {data[0]?.acceptPayment && <> {data[0]?.paymentDetails.filter(payment => payment?.completed == true).length > 0 && <div className="bg-color-1 my-5 p-3 p-md-5 rounded-2 shadow">
-                                                    <div className="border-3 border-primary border-bottom py-2 mb-5">
-                                                        <div className="text-primary text-center fs-4">Completed Payment</div>
-                                                    </div>
-                                                    <div className="d-flex row  gap-1  align-items-center">
-                                                        {
-                                                            data[0]?.paymentDetails.filter(payment => payment?.completed == true).map((duePayment, ind) => <div className="rounded-2 col-12 d-flex flex-column bg-success text-white align-items-center justify-content-center col-md-4 p-sm-1 p-md-3 shadow">
-                                                                <div><IoMdCheckmarkCircleOutline className="fs-3" /></div>
-                                                                <h3 className="h3">Rs. {duePayment?.caseFees}</h3>
-                                                                <p className="text p-0 m-0">Fee Type {duePayment?.typeFees}</p>
-                                                                <p className="text p-0 m-0">Mode {duePayment?.mode}</p>
-                                                                <p className="text p-0 m-0">On Date {new Date(duePayment?.onDate).toLocaleDateString()}</p>
-                                                            </div>)
-                                                        }
-                                                    </div>
-                                                </div>}
-                                                </>
-                                                } */}
-                                                {/* for due payment */}
-                                                {/* {data[0]?.acceptPayment && <>{data[0]?.paymentDetails.filter(payment => payment?.completed == false).length > 0 &&
-                                                    <div className="bg-color-1 my-5 p-3 p-md-5 rounded-2 shadow">
-                                                        <div className="border-3 border-primary border-bottom py-2 mb-5">
-                                                            <div className="text-primary text-center fs-4">Due Payment</div>
-
-                                                        </div>
-                                                        {console.log("not complete", data[0]?.paymentDetails.filter(payment => payment?.completed == false))}
-
-                                                        <div className="d-flex row  gap-1  align-items-center">
-                                                            {data[0]?.paymentDetails.filter(payment => payment?.completed == false).map((duePayment, ind) => <div className="rounded-2 col-12 d-flex flex-column bg-danger text-white align-items-center justify-content-center col-md-4 p-sm-1 p-md-3 shadow">
-                                                                <div><RxCrossCircled className="fs-3" /></div>
-                                                                <h3 className="h3">Rs. {duePayment?.caseFees}</h3>
-                                                                <p className="text">Fee Type {duePayment?.typeFees}</p>
-                                                                <button className="btn btn-primary" onClick={() => setClearClientPayment({ status: true, loading: false, payment: duePayment?.caseFees, feeType: duePayment?.typeFees, data: { _id: data[0]?._id, paymentId: duePayment?._id, paymentMode: "" } })}>Pay Now</button>
-                                                            </div>)
-                                                            }
-                                                        </div>
-                                                    </div>}
-                                                </>} */}
-
-
-
-
-                                                {/* <div className="bg-color-1 my-5 p-3 p-md-5 rounded-2 shadow">
-                                                    <div className="border-3 border-primary border-bottom py-2 mb-5">
-                                                        <div className="text-primary text-center fs-4">Case Process</div>
-                                                    </div>
-                                                    <div className="d-flex flex-column gap-3 align-items-center justify-content-center">
-
-                                                    
-                                                        {data[0]?.processSteps?.length > 0 &&
-                                                            data[0]?.processSteps.map(item => <div className="d-flex flex-column align-items-center justify-content-center w-50 bg-color-3 text-white rounded-3 p-4">
-                                                                <p className="text-primary text-center mb-1 fs-5 text-capitalize">{item?.status}</p>
-                                                                {item?.date && <p className="mb-1">Date: {new Date(item?.date).toLocaleDateString()}</p>}
-                                                                {item?.consultant && <p className="mb-1 text-capitalize">Consultant:  {item?.consultant} </p>}
-                                                                {item?.remark && <p className="mb-1 text-center">Remark: {item?.remark}</p>}
-
-                                                                {(item?.status != "reject" || item?.status != "resolved") && <FaCircleArrowDown className="fs-3 text-primary" />}
-                                                            </div>
-                                                            )}
-                                                    </div>
-
-                                                </div> */}
-
                                                 <div className="bg-color-1 my-5 p-3 p-md-5 rounded-2 shadow">
                                                     <div className="border-3 border-primary border-bottom py-2 mb-5">
                                                         <div className="d-flex justify-content-between">
-                                                        <div className="text-primary text-center fs-4">Case Process</div>
-                                                        <div className="d-flex gap-1 btn btn-primary" onClick={() => setChangeStatus({ status: true, details: { ...data[0] } })}>
-                                                            <span><CiEdit /></span>
-                                                            <div>Add Status</div>
-                                                        </div>
+                                                            <div className="text-primary text-center fs-4">Case Process</div>
+                                                            <div className="d-flex gap-1 btn btn-primary" onClick={() => setChangeStatus({ status: true, details: { ...data[0] } })}>
+                                                                <span><CiEdit /></span>
+                                                                <div>Add Status</div>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                     <div className="mt-4 rounded-2 shadow">
@@ -423,7 +347,7 @@ export default function AdminViewCase() {
                                                                     {data[0]?.processSteps.map((item, ind) => <tr key={item._id} className="border-2 border-bottom border-light text-center">
                                                                         <th scope="row">{ind + 1}</th>
                                                                         <td>
-                                                                        <span style={{ cursor: "pointer",height:30,width:30,borderRadius:30 }} className="bg-warning text-dark d-flex align-items-center justify-content-center" onClick={() => setShowEditCaseModal({status:true,details:{caseId:data[0]?._id,processId:item?._id,caseStatus:item?.status,caseRemark:item?.remark,isCurrentStatus:data[0]?.processSteps.length==ind+1}})}><CiEdit /></span>
+                                                                            <span style={{ cursor: "pointer", height: 30, width: 30, borderRadius: 30 }} className="bg-warning text-dark d-flex align-items-center justify-content-center" onClick={() => setShowEditCaseModal({ status: true, details: { caseId: data[0]?._id, processId: item?._id, caseStatus: item?.status, caseRemark: item?.remark, isCurrentStatus: data[0]?.processSteps.length == ind + 1 } })}><CiEdit /></span>
                                                                         </td>
                                                                         <td className="text-nowrap "> {item?.date && <p className="mb-1">{new Date(item?.date).toLocaleDateString()}</p>}</td>
                                                                         <td className="text-nowrap ">{item?.status && <p className={`mb-1 badge bg-${item?.status == "reject" || item?.status == "query" ? "danger" : (item?.status == "pending" ? "warning" : (item?.status == "resolved" ? "success" : "primary"))}`}>{item?.status}</p>}</td>
@@ -469,42 +393,10 @@ export default function AdminViewCase() {
                             </div>
                         </div>
                     </div>}
-                    {/* {console.log("showEditCaseModal",showEditCaseModal)} */}
+                {/* {console.log("showEditCaseModal",showEditCaseModal)} */}
                 {showEditCaseModal?.status && <EditCaseStatusModal changeStatus={showEditCaseModal} setChangeStatus={setShowEditCaseModal} handleCaseStatus={adminEditCaseProcessById} role="admin" />}
                 {changeStatus?.status && <ChangeStatusModal changeStatus={changeStatus} setChangeStatus={setChangeStatus} handleCaseStatus={adminChangeCaseStatus} role="admin" />}
-                {
-                    addClientpayment && <Modal
-                        show={addClientpayment?.status}
-                        size="md"
-                        aria-labelledby="contained-modal-title-vcenter"
-                        centered
-                        className="p-5"
-                    >
-                        <Modal.Body className='color-4'>
-                            <div className="border-3 border-primary border-bottom py-2 mb-2">
-                                <div className="text-primary text-center fs-4">Add Payment</div>
-                            </div>
-                            <div className="my-3">
-                                <label htmlFor="typeFees" className="form-label">Fees Type</label>
-                                <input type="text" name="typeFees" value={addClientpayment?.data?.typeFees} onChange={(e) => setAddClientPayment({ ...addClientpayment, data: { ...addClientpayment.data, typeFees: e?.target?.value } })} className="form-control" />
-                            </div>
-                            <div className="my-3">
-                                <label htmlFor="caseFees" className="form-label">Case Fees</label>
-                                <input type="number" name="caseFees" value={addClientpayment?.data?.caseFees} onChange={(e) => setAddClientPayment({ ...addClientpayment, data: { ...addClientpayment.data, caseFees: e?.target?.value } })} className="form-control" />
-                            </div>
-
-                            <div className="d-flex gap-1 flex-reverse">
-                                <div className="d-flex  justify-content-center">
-                                    <div aria-disabled={addClientpayment.loading} className={`d-flex align-items-center justify-content-center gap-3 btn btn-primary ${addClientpayment.loading
-                                        && "disabled"}`} onClick={handleAddPayment}>
-                                        {addClientpayment.loading ? <span className="spinner-border spinner-border-sm" role="status" aria-hidden={true}></span> : <span>Add Payment </span>}
-                                    </div>
-                                </div>
-                                <Button onClick={() => setAddClientPayment({ status: false, loading: false, _id: "", data: { typeFees: "", caseFees: "", } })}>Close</Button>
-                            </div>
-                        </Modal.Body>
-                    </Modal>
-                }
+             
 
                 {/* for clear case payment */}
                 <Modal
@@ -541,6 +433,41 @@ export default function AdminViewCase() {
                                 </div>
                             </div>
                             <Button onClick={() => setClearClientPayment({ status: false, loading: false, payment: "", feeType: "", data: { _id: "", paymentId: "", paymentMode: "" } })}>Close</Button>
+
+                        </div>
+
+                    </Modal.Body>
+                </Modal>
+
+                {/* for case unmerge */}
+                <Modal
+                    show={removeCaseReference.status}
+                    size="md"
+                    aria-labelledby="contained-modal-title-vcenter"
+                    centered
+                    className="p-5"
+                >
+                    <Modal.Body className='color-4'>
+                        <h4 className='text-danger text-center py-3 fs-3'>Are You Sure ?</h4>
+                        <p className='text-primary text-center fs-5'>
+                            Your want to remove the Reference in this case.
+                        </p>
+                        <div className="mb-3 col-12">
+                            <select className="form-select w-100" name="Type" value={removeCaseReference.type} onChange={(e) =>setRemoveCaseReference({...removeCaseReference,type:e?.target?.value}) } >
+                                <option value="">--select remove reference type</option>
+                                {data[0]?.partnerId && <option value="partner">Partner</option>}
+                                {data[0]?.empSaleId && <option value="sale-emp">Sale</option> }
+                            </select>
+                        </div>
+
+                        <div className="d-flex gap-1 flex-reverse">
+                            <div className="d-flex  justify-content-center">
+                                <div aria-disabled={removeCaseReference.loading} className={`d-flex align-items-center justify-content-center gap-3 btn btn-primary ${removeCaseReference.loading 
+                                    && "disabled"}`} onClick={handleRemoveCaseReference}>
+                                    {removeCaseReference.loading ? <span className="spinner-border spinner-border-sm" role="status" aria-hidden={true}></span> : <span>Remove</span>}
+                                </div>
+                            </div>
+                            <Button onClick={() => setRemoveCaseReference({status:false,type:null,loading:false})}>Close</Button>
 
                         </div>
 

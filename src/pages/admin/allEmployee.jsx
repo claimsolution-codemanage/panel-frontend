@@ -10,9 +10,13 @@ import { useNavigate } from "react-router-dom"
 import {BiLeftArrow} from 'react-icons/bi'
 import {BiRightArrow} from 'react-icons/bi'
 import SetStatusOfProfile from "../../components/Common/setStatusModal"
-import { adminSetEmployeeStatus,adminGetAllEmployee } from "../../apis"
+import { adminSetEmployeeStatus,adminGetAllEmployee,adminDeleteEmployeeById,adminUpdateEmployeeById } from "../../apis"
 import Loader from "../../components/Common/loader"
 import loash from 'lodash'
+import { AiOutlineDelete } from "react-icons/ai";
+import ConfirmationModal from "../../components/Common/confirmationModal";
+import { MdOutlinePublishedWithChanges } from "react-icons/md";
+import EditEmployeeModal from "../../components/editEmployeeModal";
 
 export default function AllAdminEmployee() {
   const [data, setData] = useState([])
@@ -20,9 +24,13 @@ export default function AllAdminEmployee() {
   const [loading, setLoading] = useState(false)
   const [pageItemLimit, setPageItemLimit] = useState(10)
   const [searchQuery, setSearchQuery] = useState("")
+  const [isSearch,setIsSearch] = useState(false)
   const [noOfEmployee, setNoOfEmployee] = useState(0)
   const [pgNo, setPgNo] = useState(1)
   const [changeStatus, setChangeStatus] = useState({show: false, details: "" })
+  const [employeeUpdateStatus, setEmployeeUpdateStatus] = useState({show: false,id:null, details: {} })
+  const [deleteEmployee,setDeleteEmployee] = useState({status:false,id:"",text:""})
+
 
 
   const getAllEmployees =async()=>{
@@ -46,13 +54,16 @@ export default function AllAdminEmployee() {
 }
 
   useEffect(() => {
-    getAllEmployees()
-  }, [pageItemLimit, pgNo,changeStatus])
+    if(!deleteEmployee?.status && !employeeUpdateStatus?.show){
+      getAllEmployees()
+    }
+  }, [pageItemLimit, pgNo,changeStatus,deleteEmployee?.status,employeeUpdateStatus?.show])
 
   useEffect(()=>{
-    if(searchQuery){
+    if(isSearch){
       let debouncedCall = loash.debounce(function () {
         getAllEmployees()
+        setIsSearch(false)
     }, 1000);
     debouncedCall();
     return () => {
@@ -60,7 +71,15 @@ export default function AllAdminEmployee() {
     };
     }
 
-   },[searchQuery])
+   },[searchQuery,isSearch])
+
+
+   const handleSearchQuery =(value)=>{
+    setIsSearch(true)
+    setSearchQuery(value)
+  }
+
+
 
 
   const handleChanges =async(_id,status)=>{
@@ -110,7 +129,7 @@ export default function AllAdminEmployee() {
        
           <div className="form-control px-2 d-flex gap-2">
             <span className=""><BsSearch className="text-black" /></span>
-            <input className="w-100" value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} placeholder="Search.." style={{ outline: "none", border: 0 }} />
+            <input className="w-100" value={searchQuery} onChange={(e) => handleSearchQuery(e.target.value)} placeholder="Search.." style={{ outline: "none", border: 0 }} />
           </div>
         
             <div className="">
@@ -138,30 +157,24 @@ export default function AllAdminEmployee() {
               <th scope="col" className="text-nowrap">Full Name</th>
               <th scope="col" className="text-nowrap" >Email</th>
               <th scope="col" className="text-nowrap" >Mobile No</th>
-              {/* <th scope="col" className="text-nowrap" >consultantCode</th>
-              <th scope="col" className="text-nowrap" >DOB</th>
-              <th scope="col" className="text-nowrap" >Area Of Operation</th>
-              <th scope="col" className="text-nowrap" >Work Association</th>*/}
             </tr>
           </thead>
           <tbody>
             {data.map((item, ind) => <tr key={item._id} className="border-2 border-bottom border-light text-center">
               <th scope="row" className="text-nowrap">{ind + 1}</th>
               <td className="text-nowrap"><span className="d-flex justify-content-center align-items-center gap-2">
-                {/* <span style={{ cursor: "pointer" }} onClick={() => navigate(`/admin/partner details/${item._id}`)}><HiMiniEye /></span> */}
-                <span style={{ cursor: "pointer" }} onClick={() => setChangeStatus({ show: true, details: {_id:item._id,currentStatus:item?.isActive,name:item?.fullName} })}><CiEdit /></span></span></td>
+                <span className="bg-danger text-white" style={{ cursor: "pointer",height:30,width:30,borderRadius:30 }} onClick={() => setDeleteEmployee({status:true,id:item?._id,text:`Your want to parmanent delete ${item?.fullName} employee`})}><AiOutlineDelete /></span>
+                <span className="bg-warning text-white" style={{ cursor: "pointer",height:30,width:30,borderRadius:30 }} onClick={() => setEmployeeUpdateStatus({ show: true,id:item?._id, details: {fullName:item?.fullName,type:item?.type,designation:item?.designation,mobileNo:item?.mobileNo} })}><CiEdit /></span>
+                <span className="bg-success text-white" style={{ cursor: "pointer",height:30,width:30,borderRadius:30 }} onClick={() => setChangeStatus({ show: true, details: {_id:item._id,currentStatus:item?.isActive,name:item?.fullName} })}><MdOutlinePublishedWithChanges /></span>
+                </span></td>
+                
               <td className="text-nowrap"> <span className={`badge ${item?.isActive ? "bg-primary" : "bg-danger"}`}>{item?.isActive ? "Active" : "Unactive"}</span> </td>
               <td className="text-nowrap">{new Date(item?.createdAt).toLocaleDateString()}</td>
               <td className="text-nowrap text-capitalize">{item?.type}</td> 
               <td className="text-nowrap text-capitalize">{item?.designation}</td> 
-
               <td className="text-nowrap">{item?.fullName}</td>
               <td className="text-nowrap">{item?.email}</td>
               <td className="text-nowrap">{item?.mobileNo}</td>
-              {/* <td>{item?.profile?.primaryMobileNo}</td>
-              <td>{new Date(item?.profile?.dob).toLocaleDateString()}</td>
-              <td>{item?.profile?.areaOfOperation}</td>
-              <td>{item?.profile?.workAssociation}</td>*/}
             </tr>)}
           </tbody>
         </table>
@@ -190,7 +203,8 @@ export default function AllAdminEmployee() {
 
     </div>
     {changeStatus?.show && <SetStatusOfProfile changeStatus={changeStatus} hide={()=>setChangeStatus({ show: false, details: "" })} isActive={true} type="Employee" handleChanges={handleChanges} />}
-
+    {deleteEmployee?.status && <ConfirmationModal show={deleteEmployee?.status} id={deleteEmployee?.id} hide={()=>setDeleteEmployee({status:false,id:""})} heading="Are you sure?" text={deleteEmployee?.text ? deleteEmployee?.text : "Your want to delete this employee"}  handleComfirmation={adminDeleteEmployeeById}/>} 
+    {employeeUpdateStatus.show && <EditEmployeeModal show={employeeUpdateStatus?.show} id={employeeUpdateStatus?.id} details={employeeUpdateStatus?.details} hide={()=>setEmployeeUpdateStatus({show:false,id:null,details:{}})} handleComfirmation={adminUpdateEmployeeById}/>}
       </div>
 
     </div>}

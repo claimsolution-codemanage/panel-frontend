@@ -5,26 +5,26 @@ import { BsSearch } from 'react-icons/bs'
 import { DateRange } from 'react-date-range';
 import 'react-date-range/dist/styles.css'; // main style file
 import 'react-date-range/dist/theme/default.css'; // theme css file
-import { getFormateDate } from "../../../../utils/helperFunction";
+import { getFormateDate } from "../../utils/helperFunction"
 import ReactPaginate from 'react-paginate';
 import { CiEdit } from 'react-icons/ci'
 import { useNavigate } from "react-router-dom"
 import { BiLeftArrow } from 'react-icons/bi'
 import { BiRightArrow } from 'react-icons/bi'
-import { employeeChangeCaseStatus, financeEmployeeViewAllInvoice,financeEmployeeDownloadInvoiceById,financeEmployeeUnactiveInvoice } from "../../../../apis"
-import Loader from "../../../../components/Common/loader"
-import { AppContext } from "../../../../App"
+import { clientViewAllInvoice,clientPayInvoiceById} from "../../apis"
+import Loader from "../../components/Common/loader";
+import { AppContext } from "../../App"
 import { useContext } from "react"
 import loash from 'lodash'
 import { CiAlignBottom } from 'react-icons/ci'
-import { FiDownload } from "react-icons/fi";
-import { AiOutlineDelete } from "react-icons/ai";
-import ConfirmationModal from "../../../../components/Common/confirmationModal"
+import { redirect } from "react-router-dom";
 
 
-export default function EmployeeAllInvoices() {
+
+export default function ClientAllInvoice() {
   const state = useContext(AppContext)
   const [data, setData] = useState([])
+  const [tranactionLoading,setTransactionLoading] = useState({status:false,id:null})
   const empType = state?.myAppData?.details?.empType
   const navigate = useNavigate()
   const [loading, setLoading] = useState(false)
@@ -60,7 +60,7 @@ export default function EmployeeAllInvoices() {
       const startDate = dateRange[0].startDate ? getFormateDate(dateRange[0].startDate) : ""
       const endDate = dateRange[0].endDate ? getFormateDate(dateRange[0].endDate) : ""
       // console.log("start", startDate, "end", endDate);
-      const res = await financeEmployeeViewAllInvoice(pageItemLimit, pgNo, searchQuery, startDate, endDate)
+      const res = await clientViewAllInvoice(pageItemLimit, pgNo, searchQuery, startDate, endDate)
       // console.log("allAdminCase", res?.data?.data);
       if (res?.data?.success && res?.data?.data) {
         setData([...res?.data?.data])
@@ -74,39 +74,27 @@ export default function EmployeeAllInvoices() {
       } else {
         toast.error("Something went wrong")
       }
-      // console.log("allAdminCase error", error);
     }
   }
 
-  const downloadInvoiceById = async (_id) => {
-    setDownloadLoading({...downloadLoading,status:true,_id:[...downloadLoading._id,_id]})
-    try {
-      const res = await financeEmployeeDownloadInvoiceById(_id)
-      // console.log("res",res)
-
-      if (res?.status==200) {
-        const url = window.URL.createObjectURL(new Blob([res.data]))
-        const link = document.createElement('a')
-        link.href =url;
-        link.setAttribute('download','invoice.pdf')
-        document.body.appendChild(link)
-        link.click()
-        window.URL.revokeObjectURL(url)
-        const filterAfterDownload = downloadLoading._id.filter(download=>download!=_id)
-        setDownloadLoading({status:false,data:[],_id:filterAfterDownload})
-        toast.success('Successfully download invoice')
-      }
-    } catch (error) {
-      const filterAfterDownload = downloadLoading._id.filter(download=>download!=_id)
-      setDownloadLoading({status:false,data:[],_id:filterAfterDownload})
-      if (error && error?.response?.data?.message) {
-        toast.error(error?.response?.data?.message)
-      } else {
-        toast.error("Something went wrong")
-      }
-      // console.log("downloadInvoiceById error", error);
+const generateTransaction =async(invoiceId,caseId)=>{
+  setTransactionLoading({status:true,id:invoiceId})
+  try {
+    const res = await clientPayInvoiceById(invoiceId,caseId)
+    if (res?.data?.success && res?.data?.tranactionId) {
+      setTransactionLoading({status:false,id:null})
+      // navigate(`${import.meta.env.VITE_API_BASE}/payment?transactionId=${res?.data?.tranactionId}`)
+      window.location.href = `${import.meta.env.VITE_API_BASE}/api/payment/paymentCheckoutPage?transactionId=${res?.data?.tranactionId}`;
     }
+  } catch (error) {
+    if (error && error?.response?.data?.message) {
+      toast.error(error?.response?.data?.message)
+    } else {
+      toast.error("Something went wrong")
+    }
+    setTransactionLoading({status:false,id:null})
   }
+}
 
 
   useEffect(() => {
@@ -136,6 +124,7 @@ export default function EmployeeAllInvoices() {
     // console.log("event", event);
     setPgNo(event.selected + 1)
   };
+
   return (<>
     {loading ? <Loader /> :
       <div>
@@ -191,10 +180,6 @@ export default function EmployeeAllInvoices() {
                     <div className="btn btn-primary" onClick={() => handleReset()}>Reset</div>
                   </div>
                   <div className="col-12 col-md-3">
-                    {/* <select className="form-select" name="caseStaus" value={statusType} onChange={(e) => setStatusType(e.target.value)} aria-label="Default select example">
-                <option value="">--select Case Status</option>
-                {caseStatus?.map(status => <option key={status} value={status}>{status}</option>)}
-              </select> */}
                   </div>
                   <div className="col-12 col-md-2">
                     <select className="form-select" name="pageItemLimit" value={pageItemLimit} onChange={(e) => setPageItemLimit(e.target.value)} aria-label="Default select example">
@@ -221,8 +206,6 @@ export default function EmployeeAllInvoices() {
                   ranges={dateRange}
                   moveRangeOnFirstSelection={false}
                   direction="horizontal"
-                // preventSnapRefocus={true}
-                // calendarFocus="backwards"
                 />}
               </div>
             </div>
@@ -241,21 +224,21 @@ export default function EmployeeAllInvoices() {
                     <th scope="col" className="text-nowrap" >Mobile No</th>
                     <th scope="col" className="text-nowrap" >State</th>
                     <th scope="col" className="text-nowrap"  >Invoice Amt</th>
-                    {/* <th scope="col" className="text-nowrap"  >complaint Type</th> */}
-                    {/* <th scope="col" className="text-nowrap"  >Claim Amount</th> */}
-                    {/* <th scope="col" className="text-nowrap" >Current Status</th> */}
                   </tr>
                 </thead>
                 <tbody>
                   {data.map((item, ind) => <tr key={item._id} className="border-2 text-nowrap border-bottom border-light text-center">
                     <th scope="row">{ind + 1}</th>
                     <td><span className="d-flex gap-2">
-                    <span style={{ cursor: "pointer",height:30,width:30,borderRadius:30 }} className="bg-warning text-white d-flex align-items-center justify-content-center" onClick={() => navigate(`/employee/view-invoice/${item._id}`)}><HiMiniEye /></span>
-                    <span style={{ cursor: "pointer",height:30,width:30,borderRadius:30 }} className="bg-success text-white d-flex align-items-center justify-content-center" onClick={() => navigate(`/employee/edit-invoice/${item._id}`)}><CiEdit /></span>
-                    {/* {downloadLoading?._id?.includes(item?._id) && downloadLoading.status ? <span style={{ cursor: "pointer",height:30,width:30,borderRadius:30 }} className="spinner-border spinner-border-sm" role="status" aria-hidden={true}></span> : <span style={{ cursor: "pointer",height:30,width:30,borderRadius:30 }} className="bg-primary text-white d-flex align-items-center justify-content-center" onClick={() => downloadInvoiceById(item?._id)}><FiDownload /></span>}  */}
-                    <span style={{ cursor: "pointer", height: 30, width: 30, borderRadius: 30 }} className="bg-danger text-white d-flex align-items-center justify-content-center" onClick={() => setIsActiveInvoice({ status: true, details: { _id: item._id, status: item?.isActive, invoiceNo: item?.invoiceNo} })}><AiOutlineDelete /></span>
+                    <span style={{ cursor: "pointer",height:30,width:30,borderRadius:30 }} className="bg-warning text-white d-flex align-items-center justify-content-center" onClick={() => navigate(`/client/view-invoice/${item._id}`)}><HiMiniEye /></span>
                     </span></td>
-                    <td className="text-nowrap"><span className={`badge bg-primary cursor-pointer ${item?.isPaid ? "bg-primary":"bg-success"}`}>{item?.isPaid ? "Paid":"To pay"}</span></td>
+                    <td className="text-nowrap"> 
+                    {tranactionLoading?.id ?
+                    <span className={`spinner-border spinner-border-sm cursor-pointer text-primary`} role="status" aria-hidden={true}></span>
+                    : <span onClick={()=>tranactionLoading?.status ? ()=>{} :  generateTransaction(item?._id,item?.caseId)} className={`badge bg-primary cursor-pointer ${item?.isPaid ? "bg-primary":"bg-success"}`}>{item?.isPaid ? "Paid":"To pay"}</span>
+                  }
+                    
+                    </td>
                     <td className="text-nowrap">{new Date(item?.createdAt).toLocaleDateString()}</td>
                     <td className="text-nowrap">{item?.invoiceNo}</td>
                     <td className="text-nowrap">{item?.receiver?.name}</td>
@@ -263,10 +246,7 @@ export default function EmployeeAllInvoices() {
                     <td className="text-nowrap">{item?.receiver?.mobileNo}</td>
                     <td className="text-nowrap">{item?.receiver?.state}</td>
                     <td className="text-nowrap">{item?.totalAmt}</td>
-                    {/* <td className="text-nowrap">{item?.complaintType}</td> */}
-                    {/* <td className="text-nowrap">{item?.claimAmount}</td> */}
-                    {/* <td className="text-nowrap"><span className={(item?.currentStatus == "reject" || item?.currentStatus == "pending") ? " badge bg-danger text-white" : "badge bg-primary"}>{item?.currentStatus}</span></td> */}
-                  </tr>)}
+        </tr>)}
                 </tbody>
               </table>
 
@@ -279,7 +259,7 @@ export default function EmployeeAllInvoices() {
                 nextLabel={<BiRightArrow />}
                 onPageChange={handlePageClick}
                 pageRangeDisplayed={5}
-                pageCount={Math.ceil(noOfInvoice / pageItemLimit)}
+                pageCount={Math.ceil(noOfInvoice / pageItemLimit) ||1}
                 previousLabel={<BiLeftArrow />}
                 className="d-flex flex gap-2"
                 pageClassName="border border-primary paginate-li"
@@ -292,9 +272,7 @@ export default function EmployeeAllInvoices() {
             </div>
 
           </div>
-          {/* {changeStatus?.status && <ChangeStatusModal changeStatus={changeStatus} setChangeStatus={setChangeStatus} handleCaseStatus={employeeChangeCaseStatus} role="invoice" />} */}
-          {isActiveInvoice.status && <ConfirmationModal show={isActiveInvoice.status} hide={()=>setIsActiveInvoice({status:false,details:{}})} id={isActiveInvoice.details?._id} handleComfirmation={financeEmployeeUnactiveInvoice} heading={"Are you sure"} text={`You want to remove invoice ${isActiveInvoice.details?.invoiceNo}`}/>}
-        </div>
+  </div>
 
       </div>
     }

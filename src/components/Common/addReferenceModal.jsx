@@ -14,7 +14,7 @@ const caseReferenceFormik = useFormik({
         referenceId:""
     },
     validationSchema:yup.object().shape({
-        referenceId: yup.string().required("Please enter partner reference Id"),}),
+        referenceId: yup.string().required("Please enter case reference Id"),}),
     onSubmit:async(values)=>{
         try {
             setLoading(true)
@@ -54,7 +54,7 @@ const caseReferenceFormik = useFormik({
         <p className='text-primary fs-5'>
             Your want to add Reference in this case. 
         </p>
-        <input className='form-control w-75 mx-auto' placeholder='Partner reference Id' value={caseReferenceFormik?.values?.referenceId} name='referenceId' onChange={caseReferenceFormik.handleChange}/>
+        <input className='form-control w-75 mx-auto' placeholder='Case reference Id' value={caseReferenceFormik?.values?.referenceId} name='referenceId' onChange={caseReferenceFormik.handleChange}/>
         <p className='text-danger fw-bold'>{caseReferenceFormik?.touched?.referenceId && caseReferenceFormik?.errors?.referenceId}</p>
       </Modal.Body>
       <Modal.Footer>

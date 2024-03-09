@@ -107,6 +107,13 @@ export default function PrivateNavbar() {
             icon={<SiReaddotcv />}
             />
             <NavItems 
+            active={location.pathname.includes("invoice")}
+            path={'/client/all-invoices'}
+            name={"My Invoice"}
+            disable={!state?.myAppData?.details.isProfileCompleted}
+            icon={<MdOutlineLibraryAdd />}
+            />
+            <NavItems 
             active={(location.pathname== "/client/view%20service%20agreement" )}
             path={'/client/view service agreement'}
             name={"Service Agreement"}
@@ -119,10 +126,6 @@ export default function PrivateNavbar() {
                 <Link to="/admin/dashboard" className={`d-flex align-items-center mx-2 px-2 py-2 gap-3 text-white   ${location.pathname.includes("dashboard") && "active_item"}`}  >
                     <RxDashboard />
                     <div className=''>Dashboard</div>
-                </Link>
-                <Link to="/admin/payment" className={`d-flex align-items-center mx-2 px-2 py-2 gap-3 text-white   ${location.pathname.includes("payment") && "active_item"}`}  >
-                    <RxDashboard />
-                    <div className=''>Payment</div>
                 </Link>
                 <Link to="/admin/all case" className={`d-flex align-items-center mx-2 px-2 py-2 gap-3 text-white   ${location.pathname.includes("case") && !location.pathname.includes("trash") && "active_item"}`}  >
                 <SiReaddotcv />
@@ -204,10 +207,10 @@ export default function PrivateNavbar() {
 
             {/* for finance employee */}
             {empType?.toLowerCase() =="finance".toLowerCase() && <>
-                <Link to="/employee/create-invoice" className={`d-flex align-items-center mx-2 px-2 py-2 gap-3 text-white   ${location.pathname.includes("/employee/create-invoice") && "active_item"}`}  >
+                {/* <Link to="/employee/create-invoice" className={`d-flex align-items-center mx-2 px-2 py-2 gap-3 text-white   ${location.pathname.includes("/employee/create-invoice") && "active_item"}`}  >
                     <RxDashboard />
                     <div className=''>Create Invoice</div>
-                </Link>
+                </Link> */}
                 <Link to="/employee/all-invoices" className={`d-flex align-items-center mx-2 px-2 py-2 gap-3 text-white   ${(location.pathname.includes("/employee/all-invoices") || location.pathname.includes("/employee/view-invoice") ) && "active_item"}`}  >
                     <RxDashboard />
                     <div className=''>All Invoices</div>

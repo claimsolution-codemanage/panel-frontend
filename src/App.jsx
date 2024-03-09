@@ -46,7 +46,6 @@ import AdminForgetPassword from './pages/admin/forgetPassword'
 import AdminResetForgetPassword from './pages/admin/resetForgetPassword'
 import MyAdmins from './pages/admin/SuperAdmin/MyAdmins'
 import AdminViewPartnerReport from './pages/admin/partnerReport'
-import PaymentRoot from './pages/payment/PaymentRoot'
 
 
 
@@ -109,8 +108,9 @@ import ClientAcceptTls from './pages/client/acceptTls'
 import ClientAfterVerification from './pages/client/afterVerification'
 import ClientServiceAgreement from './pages/client/ClientServiceAgreement'
 import ClientViewTLS from './pages/client/viewTls'
-import ClientViewBill from './pages/client/viewBill'
 import ClientEditCase from './pages/client/editCase'
+import ClientViewInvoice from './pages/client/viewInvoice'
+import ClientAllInvoice from './pages/client/AllInvoice'
 
 
 // import template
@@ -158,8 +158,8 @@ export default function App(){
     <Route path='/about-us' element={<PublicTemplate><About/></PublicTemplate>}/>
     <Route path='/contact-us' element={<PublicTemplate><Contact/></PublicTemplate>}/>
     <Route path='/Health-insurance-claim-solution' element={<PublicTemplate><Health_Insurance/></PublicTemplate>}/>
-    <Route path='/Any-Insurance-Claim-Solution' element={<PublicTemplate><Any_Insurance_Claim_Solution/></PublicTemplate>}/>
-    <Route path='/Death-Claim-Solution' element={<PublicTemplate><Death_Claim_Solution/></PublicTemplate> }/>
+    <Route path='/General-Insurance-Claim-Solution' element={<PublicTemplate><Any_Insurance_Claim_Solution/></PublicTemplate>}/>
+    <Route path='/Life-Insurance-Claim-Solution' element={<PublicTemplate><Death_Claim_Solution/></PublicTemplate> }/>
     <Route path='/Motor-Insurance-Claim-Solution' element={<PublicTemplate><Motor_Insurance_Claim_Solution/></PublicTemplate>}/>
     <Route path='/blogs' element={<BlogTemplate><Blogs/></BlogTemplate>}/>
     <Route path='/blog/:topic' element={<BlogTemplate><ViewBlogs/></BlogTemplate>}/>
@@ -224,8 +224,6 @@ export default function App(){
   <Route path='/admin/all trash case' element={<AdminTemplate><AdminTrashCase/></AdminTemplate>}/>
   <Route path='/admin/my-admins' element={<AdminTemplate><MyAdmins/></AdminTemplate>}/>
   <Route path='/admin/view-partner-report/:_id' element={<AdminTemplate><AdminViewPartnerReport/></AdminTemplate>}/>
-  <Route path='/admin/payment' element={<AdminTemplate><PaymentRoot/></AdminTemplate>}/>
-  <Route path='/admin/payment/callback' element={<AdminTemplate><div>CallBack Url</div></AdminTemplate>}/>
 
 
 
@@ -243,7 +241,7 @@ export default function App(){
   <Route path='/employee/partner details/:_id' element={<EmployeeTemplate><EmployeePartnerDetails/></EmployeeTemplate>}/>
   <Route path='/employee/all client' element={<EmployeeTemplate><EmployeeAllClient/></EmployeeTemplate>}/>
   <Route path='/employee/client details/:_id' element={<EmployeeTemplate><EmployeeClientDetails/></EmployeeTemplate>}/>
-  <Route path='/employee/create-invoice' element={<EmployeeTemplate><EmployeeCreateInvoice/></EmployeeTemplate>}/>
+  <Route path='/employee/create-invoice/:clientId/:caseId' element={<EmployeeTemplate><EmployeeCreateInvoice/></EmployeeTemplate>}/>
   <Route path='/employee/view-invoice/:_id' element={<EmployeeTemplate><EmployeeViewInvoice/></EmployeeTemplate>}/>
   <Route path='/employee/all-invoices' element={<EmployeeTemplate><EmployeeAllInvoices/></EmployeeTemplate>}/>
   <Route path='/employee/resetPassword/:verifyToken' sensitive={true} strict={false} element={<PanelTemplate><EmployeeResetForgetPassword/></PanelTemplate>}/>
@@ -271,8 +269,9 @@ export default function App(){
   <Route path='/client/view case/:_id' element={<ClientTemplate><ClientViewCase/></ClientTemplate>}/>
   {/* <Route path='/client/edit case/:_id' element={<ClientTemplate><ClientEditCase/></ClientTemplate>}/> */}
   <Route path='/client/view tls' element={<ClientTemplate><ClientViewTLS/></ClientTemplate>}/>
-  <Route path='/client/view bill/:_id' element={<ClientTemplate><ClientViewBill/></ClientTemplate>}/>
   <Route path='/client/view service agreement' element={<ClientTemplate><ClientServiceAgreement/></ClientTemplate>}/>
+  <Route path='/client/view-invoice/:_id' element={<ClientTemplate><ClientViewInvoice/></ClientTemplate>}/>
+  <Route path='/client/all-invoices' element={<ClientTemplate><ClientAllInvoice/></ClientTemplate>}/>
 
 
 

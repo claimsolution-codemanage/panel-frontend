@@ -303,7 +303,7 @@ export default function ClientEditProfile() {
                                                         ) : null}
                                                     </div>
                                                     <div className="mb-3 ">
-                                                        <label for="consultantCode" className={`form-label ${UserProfileFormik?.touched?.consultantCode && UserProfileFormik?.errors?.consultantCode && "text-danger"}`}>Consultant Code</label>
+                                                        <label for="consultantCode" className={`form-label ${UserProfileFormik?.touched?.consultantCode && UserProfileFormik?.errors?.consultantCode && "text-danger"}`}>Customer Code</label>
                                                         <input type="text" name="consultantCode" value={UserProfileFormik?.values?.consultantCode} disabled={true}  className={`form-control ${UserProfileFormik?.touched?.consultantCode && UserProfileFormik?.errors?.consultantCode && "border-danger"} `} />
                                                         {UserProfileFormik?.touched?.consultantCode && UserProfileFormik?.errors?.consultantCode ? (
                                                             <span className="text-danger">{UserProfileFormik?.errors?.consultantCode}</span>

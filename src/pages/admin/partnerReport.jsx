@@ -44,6 +44,7 @@ export default function AdminViewPartnerReport() {
   const [statusType, setStatusType] = useState("")
   const [pageItemLimit, setPageItemLimit] = useState(10)
   const [showCalender, setShowCalender] = useState(false)
+  const [isSearch,setIsSearch] = useState(false)
   const [searchQuery, setSearchQuery] = useState("")
   const [noOfCase, setNoOfCase] = useState(0)
   const [pgNo, setPgNo] = useState(1)
@@ -107,18 +108,26 @@ export default function AdminViewPartnerReport() {
     }
   }, [pageItemLimit, pgNo, dateRange, statusType, changeStatus, changeisActiveStatus, deleteCase])
 
-  useEffect(() => {
-    if(searchQuery){
+  useEffect(()=>{
+    if(isSearch){
       let debouncedCall = loash.debounce(function () {
         getAllCases()
-      }, 1000);
-      debouncedCall();
-      return () => {
-        debouncedCall.cancel();
-      };
+        setIsSearch(false)
+    }, 1000);
+    debouncedCall();
+    return () => {
+      debouncedCall.cancel();
+    };
     }
 
-  }, [searchQuery])
+   },[searchQuery,isSearch])
+
+
+   const handleSearchQuery =(value)=>{
+    setIsSearch(true)
+    setSearchQuery(value)
+  }
+
 
 
 
@@ -224,7 +233,7 @@ export default function AdminViewPartnerReport() {
               <div className="col-12 col-md-3">
                 <div className="form-control col-4 col-md-4 px-2 d-flex gap-2">
                   <span className=""><BsSearch className="text-black" /></span>
-                  <input className="w-100" value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} placeholder="Search.." style={{ outline: "none", border: 0 }} />
+                  <input className="w-100" value={searchQuery} onChange={(e) => handleSearchQuery(e.target.value)} placeholder="Search.." style={{ outline: "none", border: 0 }} />
                 </div>
               </div>
               <div className="col-12 col-md-9">

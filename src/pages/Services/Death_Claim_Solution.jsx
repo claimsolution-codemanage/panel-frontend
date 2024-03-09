@@ -27,8 +27,8 @@ export default function Death_Claim_Solution(){
             <div className="container-fluid mt-4 bg-color-1 py-5">
                 <div className="container-px-5 pb-4 pt-5">
                     <div className="row">
-                        <div className="h2 fw-bold color-2 text-center">life Claim Solution </div>
-                        <p className='fs-5 text-center'>Dealing with the loss of a loved one is an emotional and difficult time, and dealing with life claims may add to the responsibility. Our life Claim Solution at Claimsolution.in has been designed to give sympathetic support and efficient help during these tough times. Here are some of the reasons why you can rely on us to assist you with your life insurance claims:</p>
+                        <div className="h2 fw-bold color-2 text-center">Life Insurance Claim Solution</div>
+                        <p className='fs-5 text-center'>Dealing with the loss of a loved one is an emotional and difficult time, and dealing with life claims may add to the responsibility. Our life insurance Claim Solution at Claimsolution.in has been designed to give sympathetic support and efficient help during these tough times. Here are some of the reasons why you can rely on us to assist you with your life insurance claims:</p>
                     </div>
                 </div>
             </div>

@@ -33,6 +33,7 @@ export default function AdminTrashClient() {
   const [loading, setLoading] = useState(false)
   const [pageItemLimit, setPageItemLimit] = useState(10)
   const [searchQuery, setSearchQuery] = useState("")
+  const [isSearch,setIsSearch] = useState(false)
   const [noOfClient, setNoOfClient] = useState(0)
   const [pgNo, setPgNo] = useState(1)
   const [changeStatus, setChangeStatus] = useState({show: false, details: {} })
@@ -67,9 +68,10 @@ export default function AdminTrashClient() {
   }, [pageItemLimit, pgNo,changeStatus,deleteClient])
 
   useEffect(()=>{
-    if(searchQuery){
+    if(isSearch){
       let debouncedCall = loash.debounce(function () {
         getAllClients()
+        setIsSearch(false)
     }, 1000);
     debouncedCall();
     return () => {
@@ -77,7 +79,14 @@ export default function AdminTrashClient() {
     };
     }
 
-   },[searchQuery])
+   },[searchQuery,isSearch])
+
+
+   const handleSearchQuery =(value)=>{
+    setIsSearch(true)
+    setSearchQuery(value)
+  }
+
 
 
   const handleChanges =async(_id,status)=>{
@@ -127,7 +136,7 @@ export default function AdminTrashClient() {
        
           <div className="form-control px-2 d-flex gap-2">
             <span className=""><BsSearch className="text-black" /></span>
-            <input className="w-100" value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} placeholder="Search.." style={{ outline: "none", border: 0 }} />
+            <input className="w-100" value={searchQuery} onChange={(e) => handleSearchQuery(e.target.value)} placeholder="Search.." style={{ outline: "none", border: 0 }} />
           </div>
         
             <div className="">

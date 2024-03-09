@@ -210,13 +210,13 @@ export default function Home() {
               <li className="m-0 nav-item " role="presentation">
                 <button className="nav-link w-100" id="pills-death-tab" data-bs-toggle="pill" data-bs-target="#pills-death" type="button" role="tab" aria-controls="pills-death" aria-selected="false">
                   <img src="/Images/icons/life-insurance.png" alt="" className='btn-icon' />
-                  <br />Death claim solution
+                  <br />Life Insurance Claim Solution
                 </button>
               </li>
               <li className="m-0 p-0 nav-item " role="presentation">
                 <button className="nav-link w-100" id="pills-insurance-tab" data-bs-toggle="pill" data-bs-target="#pills-insurance" type="button" role="tab" aria-controls="pills-insurance" aria-selected="false">
                   <img src="/Images/icons/insurance.png" alt="" className='btn-icon' />
-                  <br />Any insurance claim solution
+                  <br />General Insurance Claim Solution
                 </button>
               </li>
             </ul>
@@ -253,9 +253,9 @@ export default function Home() {
                   <img src="Images/home-img/Death-Claim-Solution.png" alt="" className="w-100 rounded-4" />
                 </div>
                 <div className="col-12 col-md-6">
-                  <h2 className='pt-4 pb-2 color-1'>Death Claim Solution</h2>
-                  <p className='color-2 fs-5'>Death or Accident Claim Solution: Death or accident insurance claims can be rejected for various reasons, including non-disclosure, policy lapses, exclusions, and more. Our Death or Accident Claim experts are here to assist you in getting your rejected claims approved through the proper channels. Register your complaint today to ensure you receive the compensation you deserve.</p>
-                  <Link to="/Death-Claim-Solution" className="bg-color-4 btn rounded-2 color-1">Know more </Link>
+                  <h2 className='pt-4 pb-2 color-1'>Life Insurance Claim Solution</h2>
+                  <p className='color-2 fs-5'>Life Insurance Claim Solution: Life insurance claims can be rejected for various reasons, including non-disclosure, policy lapses, exclusions, and more. Our life insurance Claim experts are here to assist you in getting your rejected claims approved through the proper channels. Register your complaint today to ensure you receive the compensation you deserve.</p>
+                  <Link to="/Life-Insurance-Claim-Solution" className="bg-color-4 btn rounded-2 color-1">Know more </Link>
                 </div>
               </div>
             </div>
@@ -265,9 +265,9 @@ export default function Home() {
                   <img src="Images/home-img/Any-Insurance-Claim-Solution.png" alt="" className="w-100 rounded-4" />
                 </div>
                 <div className="col-12 col-md-6">
-                  <h2 className='pt-4 pb-2 color-1'>Any Insurance Claim Solution</h2>
-                  <p className='color-2 fs-5'> Any Insurance Claim Solution: Insurance claims can be rejected for a wide range of reasons, including non-disclosure, policy lapses, and non-cooperation. Our expert team can help you navigate these challenges and get your insurance claim approved. Register your complaint today to get the support you need.</p>
-                  <Link to="/Any-Insurance-Claim-Solution" className="bg-color-4 btn rounded-2 color-1">Know more </Link>
+                  <h2 className='pt-4 pb-2 color-1'>General Insurance Claim Solution</h2>
+                  <p className='color-2 fs-5'>General Insurance Claim Solution: Insurance claims can be rejected for a wide range of reasons, including non-disclosure, policy lapses, and non-cooperation. Our expert team can help you navigate these challenges and get your insurance claim approved. Register your complaint today to get the support you need.</p>
+                  <Link to="/General-Insurance-Claim-Solution" className="bg-color-4 btn rounded-2 color-1">Know more </Link>
                 </div>
               </div>
             </div>

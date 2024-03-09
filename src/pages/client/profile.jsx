@@ -110,7 +110,7 @@ export default function ClientProfile() {
                                 </div>
                                 <div className="">
                                 <div className="mb-2 d-flex align-items-center gap-3">
-                                    <h6 className="fw-bold">Consultant Code</h6>
+                                    <h6 className="fw-bold">Customer Code</h6>
                                     <p className=" h6 text-capitalize text-break">{data[0]?.profile?.consultantCode}</p>
                                 </div>
                                 </div>
