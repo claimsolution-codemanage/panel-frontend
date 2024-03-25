@@ -11,24 +11,25 @@ import { CiEdit } from 'react-icons/ci'
 import { useNavigate } from "react-router-dom"
 import { BiLeftArrow } from 'react-icons/bi'
 import { BiRightArrow } from 'react-icons/bi'
-import { clientViewAllInvoice,clientPayInvoiceById} from "../../apis"
+import { clientViewAllInvoice, clientPayInvoiceById } from "../../apis"
 import Loader from "../../components/Common/loader";
 import { AppContext } from "../../App"
 import { useContext } from "react"
 import loash from 'lodash'
 import { CiAlignBottom } from 'react-icons/ci'
 import { redirect } from "react-router-dom";
+import PaymentInfo from "../../components/Common/paymentInfo";
 
 
 
 export default function ClientAllInvoice() {
   const state = useContext(AppContext)
   const [data, setData] = useState([])
-  const [tranactionLoading,setTransactionLoading] = useState({status:false,id:null})
+  const [tranactionLoading, setTransactionLoading] = useState({ status: false, id: null })
   const empType = state?.myAppData?.details?.empType
   const navigate = useNavigate()
   const [loading, setLoading] = useState(false)
-  const [downloadLoading, setDownloadLoading] = useState({status:false,data:[],_id:[]})
+  const [downloadLoading, setDownloadLoading] = useState({ status: false, data: [], _id: [] })
   const [statusType, setStatusType] = useState("")
   const [pageItemLimit, setPageItemLimit] = useState(10)
   const [showCalender, setShowCalender] = useState(false)
@@ -37,7 +38,8 @@ export default function ClientAllInvoice() {
   const [totalInvoiceAmt, setTotalInvoiceAmt] = useState(0)
   const [pgNo, setPgNo] = useState(1)
   const [changeStatus, setChangeStatus] = useState({ status: false, details: "" })
-  const [isActiveInvoice,setIsActiveInvoice] = useState({status:false,details:{}})
+  const [isActiveInvoice, setIsActiveInvoice] = useState({ status: false, details: {} })
+  const [paymentDetails, setPaymentDetails] = useState({ status: false, details: {} })
   const [dateRange, setDateRange] = useState([
     {
       startDate: new Date("2023/01/01"),
@@ -77,38 +79,38 @@ export default function ClientAllInvoice() {
     }
   }
 
-const generateTransaction =async(invoiceId,caseId)=>{
-  setTransactionLoading({status:true,id:invoiceId})
-  try {
-    const res = await clientPayInvoiceById(invoiceId,caseId)
-    if (res?.data?.success && res?.data?.tranactionId) {
-      setTransactionLoading({status:false,id:null})
-      // navigate(`${import.meta.env.VITE_API_BASE}/payment?transactionId=${res?.data?.tranactionId}`)
-      window.location.href = `${import.meta.env.VITE_API_BASE}/api/payment/paymentCheckoutPage?transactionId=${res?.data?.tranactionId}`;
+  const generateTransaction = async (invoiceId, caseId) => {
+    setTransactionLoading({ status: true, id: invoiceId })
+    try {
+      const res = await clientPayInvoiceById(invoiceId, caseId)
+      if (res?.data?.success && res?.data?.tranactionId) {
+        // navigate(`${import.meta.env.VITE_API_BASE}/payment?transactionId=${res?.data?.tranactionId}`)
+        window.location.href = `${import.meta.env.VITE_API_BASE}/api/payment/paymentCheckoutPage?transactionId=${res?.data?.tranactionId}`;
+        // setTransactionLoading({ status: false, id: null })
+      }
+    } catch (error) {
+      if (error && error?.response?.data?.message) {
+        toast.error(error?.response?.data?.message)
+      } else {
+        toast.error("Something went wrong")
+      }
+      setTransactionLoading({ status: false, id: null })
     }
-  } catch (error) {
-    if (error && error?.response?.data?.message) {
-      toast.error(error?.response?.data?.message)
-    } else {
-      toast.error("Something went wrong")
-    }
-    setTransactionLoading({status:false,id:null})
   }
-}
 
 
   useEffect(() => {
     getViewAllInvoice()
   }, [pageItemLimit, pgNo, dateRange,])
 
-  useEffect(()=>{
-    if(!isActiveInvoice.status){
+  useEffect(() => {
+    if (!isActiveInvoice.status) {
       getViewAllInvoice()
     }
-  },[isActiveInvoice])
+  }, [isActiveInvoice])
 
   useEffect(() => {
-    if(searchQuery){
+    if (searchQuery) {
       let debouncedCall = loash.debounce(function () {
         getViewAllInvoice()
       }, 1000);
@@ -230,14 +232,20 @@ const generateTransaction =async(invoiceId,caseId)=>{
                   {data.map((item, ind) => <tr key={item._id} className="border-2 text-nowrap border-bottom border-light text-center">
                     <th scope="row">{ind + 1}</th>
                     <td><span className="d-flex gap-2">
-                    <span style={{ cursor: "pointer",height:30,width:30,borderRadius:30 }} className="bg-warning text-white d-flex align-items-center justify-content-center" onClick={() => navigate(`/client/view-invoice/${item._id}`)}><HiMiniEye /></span>
+                      <span style={{ cursor: "pointer", height: 30, width: 30, borderRadius: 30 }} className="bg-warning text-white d-flex align-items-center justify-content-center" onClick={() => navigate(`/client/view-invoice/${item._id}`)}><HiMiniEye /></span>
                     </span></td>
-                    <td className="text-nowrap"> 
-                    {tranactionLoading?.id ?
-                    <span className={`spinner-border spinner-border-sm cursor-pointer text-primary`} role="status" aria-hidden={true}></span>
-                    : <span onClick={()=>tranactionLoading?.status ? ()=>{} :  generateTransaction(item?._id,item?.caseId)} className={`badge bg-primary cursor-pointer ${item?.isPaid ? "bg-primary":"bg-success"}`}>{item?.isPaid ? "Paid":"To pay"}</span>
-                  }
-                    
+                    <td className="text-nowrap">
+
+                      {item?.isPaid ?
+                        <span onClick={() => setPaymentDetails({ status: true, details: item })} className={`badge cursor-pointer bg-success`}>Paid</span>
+                        : <>
+                          {tranactionLoading?.id == item._id ?
+                            <span className={`spinner-border spinner-border-sm cursor-pointer text-primary`} role="status" aria-hidden={true}></span>
+                            : <span onClick={() => tranactionLoading?.status ? () => { } : !item?.isPaid && generateTransaction(item?._id, item?.caseId)} className={`badge bg-primary cursor-pointer`}>To pay</span>
+                          }
+                        </>
+                      }
+
                     </td>
                     <td className="text-nowrap">{new Date(item?.createdAt).toLocaleDateString()}</td>
                     <td className="text-nowrap">{item?.invoiceNo}</td>
@@ -246,7 +254,7 @@ const generateTransaction =async(invoiceId,caseId)=>{
                     <td className="text-nowrap">{item?.receiver?.mobileNo}</td>
                     <td className="text-nowrap">{item?.receiver?.state}</td>
                     <td className="text-nowrap">{item?.totalAmt}</td>
-        </tr>)}
+                  </tr>)}
                 </tbody>
               </table>
 
@@ -259,7 +267,7 @@ const generateTransaction =async(invoiceId,caseId)=>{
                 nextLabel={<BiRightArrow />}
                 onPageChange={handlePageClick}
                 pageRangeDisplayed={5}
-                pageCount={Math.ceil(noOfInvoice / pageItemLimit) ||1}
+                pageCount={Math.ceil(noOfInvoice / pageItemLimit) || 1}
                 previousLabel={<BiLeftArrow />}
                 className="d-flex flex gap-2"
                 pageClassName="border border-primary paginate-li"
@@ -272,8 +280,8 @@ const generateTransaction =async(invoiceId,caseId)=>{
             </div>
 
           </div>
-  </div>
-
+        </div>
+        {paymentDetails?.status && <PaymentInfo show={paymentDetails.status} hide={() => setPaymentDetails({ status: false, details: {} })} details={paymentDetails?.details} />}
       </div>
     }
   </>)

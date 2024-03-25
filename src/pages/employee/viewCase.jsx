@@ -2,18 +2,21 @@ import { useEffect, useState } from "react"
 import { allState } from "../../utils/constant"
 import { adminGetCaseById } from "../../apis"
 import { toast } from 'react-toastify'
-import { useNavigate } from 'react-router-dom'
-import { API_BASE_IMG } from "../../apis"
+import { Link, useNavigate } from 'react-router-dom'
+// import { API_BASE_IMG } from "../../apis"
+import { API_BASE_IMG } from "../../apis/upload"
 import { useParams } from "react-router-dom"
 import { FaCircleArrowDown } from 'react-icons/fa6'
 import { LuPcCase } from 'react-icons/lu'
 import { CiAlignCenterV, CiEdit } from 'react-icons/ci'
+import { FaFilePdf, FaFileImage, FaFileWord } from 'react-icons/fa6'
 import { IoArrowBackCircleOutline } from 'react-icons/io5'
 import { RxCrossCircled } from 'react-icons/rx'
 import { IoMdCheckmarkCircleOutline } from 'react-icons/io'
 import { MdOutlineAddCard } from 'react-icons/md'
 import Button from 'react-bootstrap/Button';
 import { employeeGetCaseById,employeeChangeCaseStatus } from "../../apis"
+import { getFormateDMYDate } from "../../utils/helperFunction"
 import Loader from "../../components/Common/loader"
 import { AppContext } from "../../App"
 import { useContext } from "react"
@@ -21,11 +24,13 @@ import { IoMdAdd } from 'react-icons/io'
 import AddCaseCommit from "../../components/Common/addCaseCommit"
 import ChangeStatusModal from "../../components/Common/changeStatusModal"
 import { employeeAddCaseComment } from "../../apis"
+import ViewDocs from "../../components/Common/ViewDocs"
 
 export default function EmployeeViewCase() {
     const state = useContext(AppContext)
     const empType  = state?.myAppData?.details?.empType
     const [data, setData] = useState([])
+    const [viewDocs, setViewDocs] = useState({ status: false, details: {} })
     const [caseCommitModal,setCaseCommitModal] = useState(false)
     const [loading, setLoading] = useState(false)
     const [changeStatus, setChangeStatus] = useState({ status: false, details: "" })
@@ -68,6 +73,8 @@ export default function EmployeeViewCase() {
     return (<>
      {loading?<Loader/> :
         <div>
+            {viewDocs?.status ? <ViewDocs hide={() => setViewDocs({ status: false, details: {} })} details={viewDocs} type="View Case Doc" /> :
+            <>
             <div className="d-flex justify-content-between bg-color-1 text-primary fs-5 px-4 py-3 shadow">
                 <div className="d-flex flex align-items-center gap-3">
                     <IoArrowBackCircleOutline className="fs-3" onClick={() => navigate(-1)} style={{ cursor: "pointer" }} />
@@ -77,13 +84,13 @@ export default function EmployeeViewCase() {
                     </div>
                 </div>
 
-            {empType=="assistant" && 
+            {/* {empType?.toLowerCase()=="operation" && 
                 <div className="d-flex">
                     <div className="d-flex gap-1 btn" onClick={() => setChangeStatus({ status: true, details: { ...data[0] } })}>
                         <span><CiEdit /></span>
                        
                     </div>
-                </div>}
+                </div>} */}
 
 
             </div>
@@ -107,16 +114,19 @@ export default function EmployeeViewCase() {
                                                     <p className=" h6 text-capitalize">{data[0]?.partnerName}</p>
                                                 </div>
                                             }
-                                            <div className="mb-2 d-flex align-items-center gap-3 col-12 col-md-4">
+                                            {data[0]?.consultantCode &&  <div className="mb-2 d-flex align-items-center gap-3 col-12 col-md-4">
                                                 <h6 className="fw-bold">Consultant Code</h6>
                                                 <p className=" h6 text-capitalize">{data[0]?.consultantCode}</p>
-                                            </div>
+                                            </div>}
 
                                         </div>
                                     </div>
                                     <div className="bg-color-1 my-5 p-3 p-md-5 rounded-2 shadow">
-                                        <div className="border-3 border-primary border-bottom mb-5">
+                                    <div className="border-3 border-primary border-bottom mb-5">
+                                        <div className="d-flex gap-2 align-items-center justify-content-between">
                                             <h6 className="text-primary text-center fs-3">Case Details</h6>
+                                            {empType?.toLowerCase()=="operation" &&  <Link to={`/employee/edit-case/${data[0]?._id}`} className="btn btn-primary">Edit/ Update</Link>}
+                                        </div>
                                         </div>
                                         <div className="row">
                                             <div className="mb-2 d-flex align-items-center gap-3 col-12 col-md-4">
@@ -158,7 +168,7 @@ export default function EmployeeViewCase() {
                                             </div>
                                             <div className="mb-2 d-flex align-items-center gap-3 col-12 col-md-4">
                                                 <h6 className="fw-bold">DOB</h6>
-                                                <p className=" h6 text-capitalize">{data[0]?.DOB && new Date(data[0]?.DOB).toLocaleDateString()}</p>
+                                                <p className=" h6 text-capitalize">{data[0]?.DOB && getFormateDMYDate(data[0]?.DOB)}</p>
                                             </div>
                                             <div className="mb-2 d-flex align-items-center gap-3 col-12 col-md-4">
                                                 <h6 className="fw-bold">Insurance Company</h6>
@@ -221,70 +231,76 @@ export default function EmployeeViewCase() {
                                                 <div className="text-primary text-center fs-4">Document List</div>
                                             </div>
 
-                                            <div className="d-flex row  gap-0  align-items-center"></div>
+                                            <div className="d-flex flex-wrap  gap-5 px-5  align-items-center">
+                                                            {data[0]?.caseDocs.map(item =>
+                                                                <>{item?.docType == "image" ?
+                                                                    <div onClick={() => setViewDocs({ status: true, details: item })} style={{ cursor: "pointer" }} className="align-items-center bg-color-7 d-flex flex-column justify-content-center w-25 rounded-3">
+                                                                        <div className="d-flex flex-column p-4 justify-content-center align-items-center">
+                                                                            <div className="d-flex justify-content-center bg-color-6 align-items-center fs-4 text-white bg-primary" style={{ height: '3rem', width: '3rem', borderRadius: '3rem' }}>
+                                                                                {item?.docType == "image" ? <FaFileImage /> : (item?.docType == "pdf" ? <FaFilePdf /> : <FaFileWord />)}
+                                                                            </div>
+                                                                        </div>
+                                                                        <div className="d-flex align-items-center justify-content-center bg-dark gap-5 w-100 p-2 text-primary">
+                                                                            <p className="text-center text-nowrap fs-5 text-capitalize">{item?.docName}</p>
+                                                                            {/* <span onClick={()=>setViewDocs({status:true,details:item})} style={{ cursor: "pointer" }}><FaEye/></span><span style={{ cursor: "pointer" }}><IoCloudDownloadOutline/></span> */}
+                                                                        </div>
+                                                                    </div>
+                                                                    : <Link to={`${API_BASE_IMG}/${encodeURIComponent(item?.docURL)}`} target="_blank" style={{ cursor: "pointer" }} className="align-items-center bg-color-7 d-flex flex-column justify-content-center w-25 rounded-3">
+                                                                        <div className="d-flex flex-column p-4 justify-content-center align-items-center">
+                                                                            <div className="d-flex justify-content-center bg-color-6 align-items-center fs-4 text-white bg-primary" style={{ height: '3rem', width: '3rem', borderRadius: '3rem' }}>
+                                                                                {item?.docType == "image" ? <FaFileImage /> : (item?.docType == "pdf" ? <FaFilePdf /> : <FaFileWord />)}
+                                                                            </div>
+                                                                        </div>
+                                                                        <div className="d-flex align-items-center justify-content-center bg-dark gap-5 w-100 p-2 text-primary">
+                                                                            <p className="fs-5 text-break text-capitalize text-center text-wrap">{item?.docName}</p>
+                                                                            {/* <span onClick={()=>setViewDocs({status:true,details:item})} style={{ cursor: "pointer" }}><FaEye/></span><span style={{ cursor: "pointer" }}><IoCloudDownloadOutline/></span> */}
+                                                                        </div>
+                                                                    </Link>} </>
+                                                            )}
+                                                        </div>
                                         </div>}
-                                    {/*for complete payment  */}
-                                    {data[0]?.acceptPayment && <> {data[0]?.paymentDetails.filter(payment => payment?.completed == true).length > 0 && <div className="bg-color-1 my-5 p-3 p-md-5 rounded-2 shadow">
-                                        <div className="border-3 border-primary border-bottom py-2 mb-5">
-                                            <div className="text-primary text-center fs-4">Completed Payment</div>
-                                        </div>
-                                        <div className="d-flex row  gap-1  align-items-center">
-                                            {
-                                                data[0]?.paymentDetails.filter(payment => payment?.completed == true).map((duePayment, ind) => <div className="rounded-2 col-12 d-flex flex-column bg-success text-white align-items-center justify-content-center col-md-4 p-sm-1 p-md-3 shadow">
-                                                    <div><IoMdCheckmarkCircleOutline className="fs-3" /></div>
-                                                    <h3 className="h3">Rs. {duePayment?.caseFees}</h3>
-                                                    <p className="text p-0 m-0">Fee Type {duePayment?.typeFees}</p>
-                                                    <p className="text p-0 m-0">Mode {duePayment?.mode}</p>
-                                                    <p className="text p-0 m-0">On Date {new Date(duePayment?.onDate).toLocaleDateString() }</p>
-                                                </div>)
-                                            }
-                                        </div>
-                                    </div>}
-                                    </>
-                                    }
-                                    {/* for due payment */}
-                                    {data[0]?.acceptPayment && <>{data[0]?.paymentDetails.filter(payment => payment?.completed == false).length > 0 &&
-                                        <div className="bg-color-1 my-5 p-3 p-md-5 rounded-2 shadow">
-                                            <div className="border-3 border-primary border-bottom py-2 mb-5">
-                                                <div className="text-primary text-center fs-4">Due Payment</div>
+       
+                                       <div className="bg-color-1 my-5 p-3 p-md-5 rounded-2 shadow">
+                                                    <div className="border-3 border-primary border-bottom py-2 mb-5">
+                                                        <div className="d-flex justify-content-between">
+                                                            <div className="text-primary text-center fs-4">Case Process</div>
+                                                            {empType?.toLowerCase()=="operation" &&   <div className="d-flex gap-1 btn btn-primary"  onClick={() => setChangeStatus({ status: true, details: { ...data[0] } })}>
+                                                                <span><CiEdit /></span>
+                                                                <div>Add Status</div>
+                                                            </div> }
+                                                        </div>
+                                                    </div>
+                                                    <div className="mt-4 rounded-2 shadow">
+                                                        <div className="table-responsive">
+                                                            <table className="table table-responsive table-borderless">
+                                                                <thead className="">
+                                                                    <tr className="bg-primary text-white text-center">
+                                                                        <th scope="col" className="text-nowrap"><th scope="col" >S.no</th></th>
+                                                                        {/* <th scope="col" className="text-nowrap" >Edit</th> */}
+                                                                        <th scope="col" className="text-nowrap">Date</th>
+                                                                        <th scope="col" className="text-nowrap">Status</th>
+                                                                        <th scope="col" className="text-nowrap" >Marked By</th>
+                                                                        <th scope="col" className="text-nowrap" >Remark</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    {data[0]?.processSteps.map((item, ind) => <tr key={item._id} className="border-2 border-bottom border-light text-center">
+                                                                        <th scope="row">{ind + 1}</th>
+                                                                        {/* <td>
+                                                                            <span style={{ cursor: "pointer", height: 30, width: 30, borderRadius: 30 }} className="bg-warning text-dark d-flex align-items-center justify-content-center" onClick={() => setShowEditCaseModal({ status: true, details: { caseId: data[0]?._id, processId: item?._id, caseStatus: item?.status, caseRemark: item?.remark, isCurrentStatus: data[0]?.processSteps.length == ind + 1 } })}><CiEdit /></span>
+                                                                        </td> */}
+                                                                        <td className="text-nowrap "> {item?.date && <p className="mb-1">{new Date(item?.date).toLocaleDateString()}</p>}</td>
+                                                                        <td className="text-nowrap ">{item?.status && <p className={`mb-1 badge bg-${item?.status == "reject" || item?.status == "query" ? "danger" : (item?.status == "pending" ? "warning" : (item?.status == "resolved" ? "success" : "primary"))}`}>{item?.status}</p>}</td>
+                                                                        <td className="text-nowrap "> <p className="mb-1 text-capitalize">{item?.consultant ? item?.consultant : "System"} </p></td>
+                                                                        <td className="text-break col-4">{item?.remark && <p className="mb-1 text-center">{item?.remark}</p>}</td>
+                                                                        {/* <td className="text-nowrap">{(item?.status!="reject" || item?.status!="resolve")  && <FaCircleArrowDown className="fs-3 text-primary" />}</td> */}
+                                                                    </tr>)}
+                                                                </tbody>
+                                                            </table>
 
-                                            </div>
-                                            {/* {console.log("not complete", data[0]?.paymentDetails.filter(payment => payment?.completed == false))} */}
-
-                                            <div className="d-flex row  gap-1  align-items-center">
-                                                {data[0]?.paymentDetails.filter(payment => payment?.completed == false).map((duePayment, ind) => <div className="rounded-2 col-12 d-flex flex-column bg-danger text-white align-items-center justify-content-center col-md-4 p-sm-1 p-md-3 shadow">
-                                                    <div><RxCrossCircled className="fs-3" /></div>
-                                                    <h3 className="h3">Rs. {duePayment?.caseFees}</h3>
-                                                    <p className="text">Fee Type: {duePayment?.typeFees}</p>
-                                                </div>)
-                                                }
-                                            </div>
-                                        </div>}
-                                    </>}
-
-
-
-
-                                    <div className="bg-color-1 my-5 p-3 p-md-5 rounded-2 shadow">
-                                        <div className="border-3 border-primary border-bottom py-2 mb-5">
-                                            <div className="text-primary text-center fs-4">Case Process</div>
-                                        </div>
-                                        <div className="d-flex flex-column gap-3 align-items-center justify-content-center">
-
-                                            {/* pending */}
-                                            {data[0]?.processSteps?.length > 0 &&
-                                                data[0]?.processSteps.map(item => <div className="d-flex flex-column align-items-center justify-content-center w-50 bg-color-3 text-white rounded-3 p-4">
-                                                    <p className="text-primary text-center mb-1 fs-5 text-capitalize">{item?.status}</p>
-                                                    {item?.date && <p className="mb-1">Date: {new Date(item?.date).toLocaleDateString()}</p>}
-                                                    {item?.consultant && <p className="mb-1 text-capitalize">Consultant:  {item?.consultant} </p>}
-                                                    {item?.remark && <p className="mb-1 text-center">Remark: {item?.remark}</p>}
-
-                                                    {(item?.status != "reject" || item?.status != "resolved") && <FaCircleArrowDown className="fs-3 text-primary" />}
+                                                        </div>
+                                                    </div>
                                                 </div>
-                                                )}
-                                        </div>
-
-                                    </div>
 
                                     <div className="bg-color-1 my-5 p-3 p-md-5 rounded-2 shadow">
                                         <div className="border-3 border-primary border-bottom py-2 mb-5">
@@ -315,7 +331,8 @@ export default function EmployeeViewCase() {
                         </div>
                     </div>
                 </div>
-            </div>
+            </div>                                            
+            </>}
         </div>}
         {changeStatus?.status && <ChangeStatusModal changeStatus={changeStatus} setChangeStatus={setChangeStatus} handleCaseStatus={employeeChangeCaseStatus} role="admin" />}
         {caseCommitModal && <AddCaseCommit show={caseCommitModal} id={param?._id} close={()=>{setCaseCommitModal(false)}} handleCaseCommit={employeeAddCaseComment}/>}

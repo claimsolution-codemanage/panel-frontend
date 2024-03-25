@@ -4,9 +4,9 @@ import { useState } from 'react'
 import { useContext } from 'react'
 import { AppContext } from '../../App'
 import { toast } from 'react-toastify'
-import { clientUpdateProfile } from '../../apis'
+import { clientUpdateProfile,employeeUpdateClient } from '../../apis'
 import { setToken } from '../../utils/helperFunction'
-import { getClientProfile } from "../../apis"
+import { getClientProfile,employeeGetClientById } from "../../apis"
 import { useParams } from "react-router-dom"
 import { FaCircleArrowDown } from 'react-icons/fa6'
 import { LuPcCase } from 'react-icons/lu'
@@ -19,7 +19,7 @@ import { formatDateToISO } from '../../utils/helperFunction'
 import { useRef } from 'react'
 import { BsCameraFill } from 'react-icons/bs'
 // import { imageUpload,clientImageUpload } from '../../apis'
-import { clientImageUpload } from '../../apis/upload'
+import { employeeImageUpload } from '../../apis/upload'
 import Loader from '../../components/Common/loader'
 import { validateUploadFile } from '../../utils/helperFunction'
 import { API_BASE_IMG } from '../../apis/upload'
@@ -29,33 +29,11 @@ import { checkPhoneNo,checkNumber } from '../../utils/helperFunction'
 
 
 
-export default function ClientEditProfile() {
+export default function EmployeeEditClient() {
     const state = useContext(AppContext)
     const [saving,setSaving] = useState(false)
     const param = useParams()
     const imgRef = useRef()
-    // const [data, setData] = useState({
-    //     profilePhoto: "",
-    //     consultantName: "",
-    //     consultantCode: "",
-    //     associateWithUs: "",
-    //     fatherName: "",
-    //     primaryEmail: "",
-    //     alternateEmail: "",
-    //     primaryMobileNo: "",
-    //     whatsupNo: "",
-    //     alternateMobileNo: "",
-    //     panNo: "",
-    //     aadhaarNo: "",
-    //     dob: "",
-    //     gender: "",
-    //     address: "",
-    //     state: "",
-    //     district: "",
-    //     city: "",
-    //     pinCode: "",
-    //     about: ""
-    // })
     const UserProfileFormik = useFormik({
         initialValues: {
             profilePhoto: "",
@@ -112,15 +90,10 @@ export default function ClientEditProfile() {
             setSaving(true)
             // console.log("calling formik");
             try {
-                const res = await clientUpdateProfile({...values,aadhaarNo:`${values?.aadhaarNo}`})
-                if (res?.data?.success && res?.data?.token) {
-                    const token = res?.data?.token;
-                    setToken(token)
-                    const details = getJwtDecode(token)
-                    // console.log("details", details);
-                    state?.setMyAppData({ isLogin: true, details: details })
+                const res = await employeeUpdateClient(param?._id,{...values,aadhaarNo:`${values?.aadhaarNo}`})
+                if (res?.data?.success) {
                     toast.success(res?.data?.message)
-                    navigate("/client/profile")
+                    navigate(`/employee/client details/${res?.data?._id}`)
                     setSaving(false)
                 }
             } catch (error) {
@@ -144,7 +117,7 @@ export default function ClientEditProfile() {
         if (param?._id) {
             async function fetch() {
                 try {
-                    const res = await getClientProfile()
+                    const res = await employeeGetClientById(param?._id)
                     // console.log("getClientProfile", res?.data?.data);
                     if (res?.data?.success && res?.data?.data) {
                         // setData({ ...res?.data?.data?.profile })
@@ -163,38 +136,7 @@ export default function ClientEditProfile() {
         }
     }, [param?._id])
 
-    // const handleOnchange = (e) => {
-    //     const { name, value } = e.target
-    //     setData({ ...data, [name]: value })
-    // }
 
-    // console.log("userprofile", UserProfileFormik);
-
-    // const handleSumbit = async (e) => {
-    //     e.preventDefault()
-    //     setLoading(true)
-    //     try {
-    //         const res = await clientUpdateProfile(data)
-    //         if (res?.data?.success && res?.data?.token) {
-    //             const token = res?.data?.token;
-    //             setToken(token)
-    //             const details = getJwtDecode(token)
-    //             console.log("details", details);
-    //             state?.setMyAppData({ isLogin: true, details: details })
-    //             toast.success(res?.data?.message)
-    //             navigate("/client/dashboard")
-    //             setLoading(false)
-    //         }
-    //     } catch (error) {
-    //         if (error && error?.response?.data?.message) {
-    //             toast.error(error?.response?.data?.message)
-    //         } else {
-    //             toast.error("Something went wrong")
-    //         }
-    //         console.log("signup error", error);
-    //         setLoading(false)
-    //     }
-    // }
 
     const handleImage = (e) => {
         imgRef.current.click()
@@ -205,7 +147,7 @@ export default function ClientEditProfile() {
 
             // console.log("files efs", file);
             setUploadPhoto({ status: 1, loading: true, message: "uploading..." })
-            const res = await clientImageUpload(file)
+            const res = await employeeImageUpload(file)
             // setData((data) => ({ ...data, profilePhoto: res?.data?.url }))
             UserProfileFormik.setFieldValue('profilePhoto', res?.data?.url)
             setUploadPhoto({ status: 1, loading: false, message: "uploaded" })
@@ -237,7 +179,7 @@ export default function ClientEditProfile() {
                 <div>
                     <div className="d-flex justify-content-between bg-color-1 text-primary fs-5 px-4 py-3 shadow">
                         <div className="d-flex flex align-items-center gap-3">
-                            <IoArrowBackCircleOutline className="fs-3" onClick={() => navigate('/client/profile')} style={{ cursor: "pointer" }} />
+                            <IoArrowBackCircleOutline className="fs-3" onClick={() => navigate(-1)} style={{ cursor: "pointer" }} />
                             <div className="d-flex flex align-items-center gap-1">
                                 <span>Edit Profile</span>
                                 {/* <span><LuPcCase /></span> */}
@@ -285,7 +227,7 @@ export default function ClientEditProfile() {
                                                 <div className="m-0 row row-cols-12 row-cols-md-3 p-md-5">
                                                     <div className="mb-3 ">
                                                         <label for="name" className={`form-label ${UserProfileFormik?.touched?.consultantName && UserProfileFormik?.errors?.consultantName && "text-danger"}`}>Name*</label>
-                                                        <input type="text" className={`form-control ${UserProfileFormik?.touched?.consultantName && UserProfileFormik?.errors?.consultantName && "border-danger"} `} id="consultantName" name="consultantName" value={UserProfileFormik.values.consultantName}  disabled={true}
+                                                        <input type="text" className={`form-control ${UserProfileFormik?.touched?.consultantName && UserProfileFormik?.errors?.consultantName && "border-danger"} `} id="consultantName" name="consultantName" value={UserProfileFormik.values.consultantName}  onChange={UserProfileFormik.handleChange}
                                                         // onChange={UserProfileFormik.handleChange} 
                                                         />
                                                         {UserProfileFormik?.touched?.consultantName && UserProfileFormik?.errors?.consultantName ? (
@@ -331,7 +273,7 @@ export default function ClientEditProfile() {
                                                
                                                     <div className="mb-3 ">
                                                         <label for="primaryMobileNo" className={`form-label ${UserProfileFormik?.touched?.primaryMobileNo && UserProfileFormik?.errors?.primaryMobileNo && "text-danger"}`}>Mobile No</label>
-                                                        <input type="number" name="primaryMobileNo" value={UserProfileFormik?.values?.primaryMobileNo} disabled  className={`form-control ${UserProfileFormik?.touched?.primaryMobileNo && UserProfileFormik?.errors?.primaryMobileNo && "border-danger"} `} />
+                                                        <input type="text" name="primaryMobileNo" value={UserProfileFormik?.values?.primaryMobileNo} onChange={(e)=>checkPhoneNo(e?.target?.value,12) && UserProfileFormik?.handleChange(e)}  className={`form-control ${UserProfileFormik?.touched?.primaryMobileNo && UserProfileFormik?.errors?.primaryMobileNo && "border-danger"} `} />
                                                         {UserProfileFormik?.touched?.primaryMobileNo && UserProfileFormik?.errors?.primaryMobileNo ? (
                                                             <span className="text-danger">{UserProfileFormik?.errors?.primaryMobileNo}</span>
                                                         ) : null}

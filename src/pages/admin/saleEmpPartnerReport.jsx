@@ -1,4 +1,4 @@
-import { allAdminPartner } from "../../apis"
+import { allAdminPartner,adminViewSaleEmpPartner } from "../../apis"
 import { useState, useEffect } from "react"
 import { toast } from 'react-toastify'
 import { HiMiniEye } from 'react-icons/hi2'
@@ -15,7 +15,7 @@ import { FaCircleArrowDown } from 'react-icons/fa6'
 import { LuPcCase } from 'react-icons/lu'
 import { IoArrowBackCircleOutline } from 'react-icons/io5'
 import ChangeStatusModal from "../../components/Common/changeStatusModal"
-import { useNavigate } from "react-router-dom"
+import { useNavigate, useParams } from "react-router-dom"
 import {BiLeftArrow} from 'react-icons/bi'
 import {BiRightArrow} from 'react-icons/bi'
 import SetStatusOfProfile from "../../components/Common/setStatusModal"
@@ -31,7 +31,8 @@ import { TbReportAnalytics } from "react-icons/tb";
 import loash from 'lodash'
 import { Link } from "react-router-dom"
 
-export default function AllAdminPartner() {
+export default function AdminSaleEmpPartnerReport() {
+  const param = useParams()
   const state = useContext(AppContext)
   const [data, setData] = useState([])
   const navigate = useNavigate()
@@ -50,9 +51,7 @@ export default function AllAdminPartner() {
     setLoading(true)
     try {
       const type =true
-      const res = await allAdminPartner(pageItemLimit, pgNo, searchQuery,type)
-      // console.log("admin all partner res",res);
-      // console.log("allAdminCase", res?.data?.data);
+      const res = await adminViewSaleEmpPartner(param?._id,pageItemLimit, pgNo, searchQuery,type)
       if (res?.data?.success && res?.data?.data) {
         setData([...res?.data?.data])
         setNoOfPartner(res?.data?.noOfPartner)
@@ -69,7 +68,6 @@ export default function AllAdminPartner() {
         deleteToken()
         state?.setMyAppData({ isLogin: false, details:{} })
       }
-      // console.log("allAdminPartner error", error);
     }
   }
 

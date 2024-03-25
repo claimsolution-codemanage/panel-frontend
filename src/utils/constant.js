@@ -116,3 +116,25 @@ export const employeeDesignation = ["Executive","Manager","Head"]
 
 
 export const allMonths = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"]
+
+export const docType =[
+    {label:"Policy copy",value:"Policy copy"},
+    {label:"If port, previous company policy document",value:"Previous company policy document"},
+    {label:"PED declaration",value:"PED declaration"},
+    {label:"Discharge summary",value:"Discharge summary"},
+    {label:"LAB investigation report",value:"LAB investigation report"},
+    {label:"Bills",value:"Bills"},
+    {label:"Doctor- Medical Certificate",value:"Doctor- Medical Certificate"},
+    {label:"Payment receipt",value:"Payment receipt"},
+    {label:"Indoor case paper",value:"Indoor case paper"},
+    {label:"OPD paper",value:"OPD paper"},
+    {label:"Query letter",value:"Query letter"},
+    {label:"Query reply",value:"Query reply"},
+    {label:"ID proof",value:"ID proof"},
+    {label:"Policy holder photograph",value:"Policy holder photograph"},
+    {label:"Claim rejection letter",value:"Claim rejection letter"},
+    {label:"If approach GRO, provide GRO letter",value:"GRO letter"},
+    {label:"If approach IRDA, provide IRDA letter",value:"IRDA letter"},
+    {label: "If approach OMBUDSMAN, provide OMBUDSMAN letter",value: "OMBUDSMAN letter"},
+    {label: "Other",value: "Other"},
+]

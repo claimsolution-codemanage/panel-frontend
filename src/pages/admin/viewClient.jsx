@@ -5,9 +5,7 @@ import { toast } from 'react-toastify'
 import { useNavigate } from 'react-router-dom'
 import { API_BASE_IMG, adminGetPartnerById } from "../../apis"
 import { useParams } from "react-router-dom"
-import { FaCircleArrowDown } from 'react-icons/fa6'
-import { LuPcCase } from 'react-icons/lu'
-import { CiEdit } from 'react-icons/ci'
+import { Link } from "react-router-dom"
 import { IoArrowBackCircleOutline } from 'react-icons/io5'
 import ChangeStatusModal from "../../components/Common/changeStatusModal"
 import Loader from "../../components/Common/loader"
@@ -67,13 +65,14 @@ export default function AdminClientDetails() {
                         </div>
                     </div>
 
-                    {/* <div className="d-flex align-items-center gap-2">
-                   <p className="badge bg-primary mb-1">{data[0]?.isActive ? "Active" : "Unactive"}</p>
-            <div className="d-flex gap-1 badge bg-primary mb-1" onClick={()=>navigate(`/client/edit profile/_id=${data[0]?._id}`)} style={{cursor:"pointer"}}>
+                    <div className="d-flex align-items-center gap-2">
+            <Link className="btn bg-primary text-white" to={`/admin/edit-client/${data[0]?._id}`}>Edit</Link>
+                   {/* <p className="badge bg-primary mb-1">{data[0]?.isActive ? "Active" : "Unactive"}</p> */}
+            {/* <div className="d-flex gap-1 badge bg-primary mb-1" onClick={()=>navigate(`/client/edit profile/_id=${data[0]?._id}`)} style={{cursor:"pointer"}}>
                 <span><CiEdit/></span>
                 <span>Edit</span>
-            </div>
             </div> */}
+            </div>
 
                 </div>
                 <div className="m-2 m-md-5">

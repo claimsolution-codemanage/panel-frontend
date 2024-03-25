@@ -25,12 +25,14 @@ import { AppContext } from "../../App"
 import { useContext} from "react"
 import loash from 'lodash'
 import { Link } from "react-router-dom"
+import {VscGitPullRequestGoToChanges} from 'react-icons/vsc'
  
 export default function EmployeeAllCase() {
   const state = useContext(AppContext)
   const [data, setData] = useState([])
   const empType  = state?.myAppData?.details?.empType
   const navigate = useNavigate()
+  const [isSearch,setIsSearch] = useState(false)
   const [loading, setLoading] = useState(false)
   const [statusType, setStatusType] = useState("")
   const [pageItemLimit, setPageItemLimit] = useState(10)
@@ -83,17 +85,26 @@ export default function EmployeeAllCase() {
     getAllCase()
   }, [pageItemLimit, pgNo, dateRange, statusType, changeStatus])
 
-  useEffect(() => {
-    if(searchQuery){
+
+  useEffect(()=>{
+    if(isSearch){
       let debouncedCall = loash.debounce(function () {
         getAllCase()
-      }, 1000);
-      debouncedCall();
-      return () => {
-        debouncedCall.cancel();
-      };
+        setIsSearch(false)
+    }, 1000);
+    debouncedCall();
+    return () => {
+      debouncedCall.cancel();
+    };
     }
-  }, [searchQuery])
+
+   },[searchQuery,isSearch])
+
+
+   const handleSearchQuery =(value)=>{
+    setIsSearch(true)
+    setSearchQuery(value)
+  }
 
 
   const handlePageClick = (event) => {
@@ -126,7 +137,7 @@ export default function EmployeeAllCase() {
         <div className="col-12 col-md-3">
           <div className="form-control col-4 col-md-4 px-2 d-flex gap-2">
             <span className=""><BsSearch className="text-black" /></span>
-            <input className="w-100" value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} placeholder="Search.." style={{ outline: "none", border: 0 }} />
+            <input className="w-100" value={searchQuery} onChange={(e) => handleSearchQuery(e.target.value)} placeholder="Search.." style={{ outline: "none", border: 0 }} />
           </div>
         </div>
         <div className="col-12 col-md-9">
@@ -195,18 +206,21 @@ export default function EmployeeAllCase() {
             {data.map((item, ind) => <tr key={item._id} className="border-2 text-nowrap border-bottom border-light text-center">
               <th scope="row">{ind + 1}</th>
               <td><span className="d-flex gap-1">
-                <span style={{ cursor: "pointer" }} onClick={() => navigate(`/employee/view case/${item._id}`)}><HiMiniEye className="fs-5 text-dark"/></span> 
-                {empType?.toLowerCase()=="assistant" && <span style={{ cursor: "pointer" }} onClick={() => setChangeStatus({ status: true, details: item })}><CiEdit className="fs-5 text-info"/></span>}
+                <span  style={{ height: 30, width: 30, borderRadius: 30 }} className="cursor-pointer bg-success text-white d-flex align-items-center justify-content-center" onClick={() => navigate(`/employee/view case/${item._id}`)}><HiMiniEye className="fs-5"/></span> 
+                {empType?.toLowerCase()=="operation" && <>
+                <span style={{ height: 30, width: 30, borderRadius: 30 }} className="cursor-pointer bg-warning text-white d-flex align-items-center justify-content-center" onClick={() => setChangeStatus({ status: true, details: item })}><VscGitPullRequestGoToChanges className="fs-5 text-dark"/></span>
+                <Link to={`/employee/edit-case/${item?._id}`} style={{ height: 30, width: 30, borderRadius: 30 }} className="cursor-pointer bg-info text-white d-flex align-items-center justify-content-center"><CiEdit className="fs-5 text-dark"/></Link>
+                </> }
                  </span></td>
               <td className="text-nowrap"><span className={(item?.currentStatus == "reject" || item?.currentStatus == "pending") ? " badge bg-danger text-white" : "badge bg-primary"}>{item?.currentStatus}</span></td>
-              <td className="text-nowrap">
-              {empType?.toLowerCase()=="finance"  && <span>
+              {empType?.toLowerCase()=="finance"  && <td className="text-nowrap">
+              <span>
                 {item?.caseFrom?.toLowerCase()=="client" ?
                 <Link to={`/employee/create-invoice/${item?.clientId}/${item?._id}`}><span className="badge bg-primary" style={{ cursor: "pointer" }}>Create</span></Link>
                 : <span className="badge bg-secondary">Create</span>
                  }
-                </span> }
-              </td>
+                </span> 
+              </td>}
               <td className="text-nowrap">{new Date(item?.createdAt).toLocaleDateString()}</td>
               <td className="text-nowrap">{item?.fileNo}</td>
               <td className="text-nowrap">{item?.name}</td>

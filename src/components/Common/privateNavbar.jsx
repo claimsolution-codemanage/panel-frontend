@@ -194,32 +194,37 @@ export default function PrivateNavbar() {
                     <RxDashboard />
                     <div className=''>Dashboard</div>
                 </Link>
-            {(empType?.toLowerCase() =="assistant".toLowerCase() || empType?.toLowerCase() =="operation".toLowerCase())  && <>
-                <Link to="/employee/all partner" className={`d-flex align-items-center mx-2 px-2 py-2 gap-3 text-white   ${location.pathname.includes("partner") && "active_item"}`}  >
+
+            {(empType?.toLowerCase() =="operation".toLowerCase() || empType?.toLowerCase() =="sales".toLowerCase()) && <>
+            <Link to="/employee/all partner" className={`d-flex align-items-center mx-2 px-2 py-2 gap-3 text-white   ${location.pathname.includes("partner") && !location.pathname.includes("add-partner") && "active_item"}`}  >
+            <RxDashboard />
+            <div className=''>All Partner</div>
+            </Link>
+            </>}
+
+                {/*for sales emp  */}
+            {empType?.toLowerCase() =="sales".toLowerCase()  && <>
+                <Link to="/employee/add-partner" className={`d-flex align-items-center mx-2 px-2 py-2 gap-3 text-white   ${location.pathname.includes("add-partner") && "active_item"}`}  >
                     <RxDashboard />
-                    <div className=''>All Partner</div>
+                    <div className=''>Add Partner</div>
                 </Link>
-                <Link to="/employee/all client" className={`d-flex align-items-center mx-2 px-2 py-2 gap-3 text-white   ${location.pathname.includes("client") && "active_item"}`}  >
+                <Link to="/employee/add-case" className={`d-flex align-items-center mx-2 px-2 py-2 gap-3 text-white   ${location.pathname.includes("add-case") && "active_item"}`}  >
                     <RxDashboard />
-                    <div className=''>All Client</div>
+                    <div className=''>Add Case</div>
                 </Link>
             </>}
 
             {/* for finance employee */}
             {empType?.toLowerCase() =="finance".toLowerCase() && <>
-                {/* <Link to="/employee/create-invoice" className={`d-flex align-items-center mx-2 px-2 py-2 gap-3 text-white   ${location.pathname.includes("/employee/create-invoice") && "active_item"}`}  >
-                    <RxDashboard />
-                    <div className=''>Create Invoice</div>
-                </Link> */}
                 <Link to="/employee/all-invoices" className={`d-flex align-items-center mx-2 px-2 py-2 gap-3 text-white   ${(location.pathname.includes("/employee/all-invoices") || location.pathname.includes("/employee/view-invoice") ) && "active_item"}`}  >
                     <RxDashboard />
                     <div className=''>All Invoices</div>
                 </Link>
             </>}
-            <Link to="/employee/all case" className={`d-flex align-items-center mx-2 px-2 py-2 gap-3 text-white   ${location.pathname.includes("case") && "active_item"}`}  >
+            <Link to="/employee/all case" className={`d-flex align-items-center mx-2 px-2 py-2 gap-3 text-white   ${location.pathname.includes("case") && !location.pathname.includes("add-case") && "active_item"}`}  >
                 <SiReaddotcv />
                     <div className=''>All Case</div>
-                </Link>
+            </Link>
                 <Link to="/employee/reset password" className={`d-flex align-items-center mx-2 px-2 py-2 gap-3 text-white   ${location.pathname == "/employee/reset%20password" && "active_item"}`}  >
                     <RxDashboard />
                     <div className=''>Setting</div>

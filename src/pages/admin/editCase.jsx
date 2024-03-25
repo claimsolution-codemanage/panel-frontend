@@ -13,6 +13,7 @@ import { adminGetCaseById,adminUpdateCaseById,} from "../../apis"
 import Loader from "../../components/Common/loader"
 import { adminAttachementUpload } from "../../apis/upload"
 import {getFormateForDate} from "../../utils/helperFunction"
+import AddNewCaseDocsModal from "../../components/Common/addNewCaseDoc"
 
 
 export default function AdminEditCase() {
@@ -21,6 +22,7 @@ export default function AdminEditCase() {
     const [uploadedFiles,setUploadedFiles] = useState([])
     const [selectPolicyType, setSelectPolicyType] = useState("")
     const [isUpdatedPolicyType,setIsUpdatePolicyType] = useState(false)
+    const [uploadingDocs,setUploadingDocs] = useState(false)
     const [selectComplaintType, setComplaintPolicyType] = useState([])
     const [loading, setLoading] = useState(false)
     const [loadCase,setLoadCase] = useState(false)
@@ -291,7 +293,9 @@ export default function AdminEditCase() {
     // console.log("caseformik",caseDetailsFormik);
 
 
-
+    const handleCaseDocsUploading =(payload)=>{
+        setUploadedFiles([...uploadedFiles,payload])
+    }
 
     return (<>
     {loadCase ? <Loader/> : 
@@ -441,12 +445,13 @@ export default function AdminEditCase() {
                                     <div>
                                     <div className="d-flex gap-3 justify-content-center text-primary text-center fs-4">
                                         <span>Document</span>
-                                        <div>
+                                        <span onClick={()=>setUploadingDocs(true)}  className="bg-primary d-flex justify-content-center align-items-center text-white" style={{ cursor: 'pointer', height: '2rem', width: '2rem', borderRadius: '2rem' }}><IoMdAdd /></span>
+                                        {/* <div>
                                             <span onClick={()=>attachmentRef?.current?.click()}  className="bg-primary d-flex justify-content-center align-items-center text-white" style={{ cursor: 'pointer', height: '2rem', width: '2rem', borderRadius: '2rem' }}><IoMdAdd /></span>
                                             <input type="file"  ref={attachmentRef} style={{display:"none"}} onChange={handleAttachment}  name="" id="" />
-                                        </div>
+                                        </div> */}
                                     </div>
-                                      {uploadAttachement.message=1 ? <p className="text-sucess text-center">{uploadAttachement.message}</p> : <p className="text-danger text-center">{uploadAttachement.message}</p> }  
+                                      {/* {uploadAttachement.message=1 ? <p className="text-sucess text-center">{uploadAttachement.message}</p> : <p className="text-danger text-center">{uploadAttachement.message}</p> }   */}
                                     </div>
                                     <div className="d-flex  gap-5 px-5  align-items-center">
                                                         {uploadedFiles.map(item => <div  className="align-items-center bg-color-7 d-flex flex-column justify-content-center w-25 rounded-3">
@@ -454,7 +459,7 @@ export default function AdminEditCase() {
                                                                 <div className="d-flex justify-content-center bg-color-6 align-items-center fs-4 text-white bg-primary" style={{ height: '3rem', width: '3rem', borderRadius: '3rem' }}>
                                                                     {item?.docFormat == "image" ? <FaFileImage /> : (item?.docFormat == "pdf" ? <FaFilePdf /> : <FaFileWord/>)}
                                                                 </div>
-                                                                    <div>{item?.docFormat}</div>
+                                                                    <div className="fs-5 text-break text-capitalize text-center text-wrap">{item?.docName}</div>
                                                             </div>
                                                           
                                                         </div>
@@ -472,6 +477,7 @@ export default function AdminEditCase() {
                     </div>
                 </form>
             </div>
+            <AddNewCaseDocsModal uploadingDocs={uploadingDocs} setUploadingDocs={setUploadingDocs} handleCaseDocsUploading={handleCaseDocsUploading} attachementUpload={adminAttachementUpload}/>
         </div>}
     </>)
 }

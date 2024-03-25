@@ -110,11 +110,11 @@ export default function EditBankingDetails() {
         try {
 
             // console.log("files efs", file);
-            setUploadPhoto({ status: 1, loading: true, message: "uploading..." })
+            setUploadPhoto({ status: 1, loading: true,type, message: "uploading..." })
             const res = await partnerImageUpload(file)
             
             setData((data) => ({ ...data, [type]: res?.data?.url }))
-                setUploadPhoto({ status: 1, loading: false, message: "uploaded" })
+                setUploadPhoto({ status: 1, loading: false,type, message: "uploaded" })
                 setTimeout(() => {
                     setUploadPhoto({ status: 0, loading: false, message: "" })
                 }, 3000);
@@ -139,7 +139,7 @@ export default function EditBankingDetails() {
         setUploadPhoto({ status: 0, loading: true, message: "" })
         const result = validateUploadFile(e.target.files, 10, "image")
         if (!result?.success) {
-            setUploadPhoto({ status: 0, loading: false, message: result?.message })
+            setUploadPhoto({ status: 0, loading: false,type, message: result?.message })
         } else {
             // console.log("result?.file", result?.file);
             handleUploadFile(result?.file,type)

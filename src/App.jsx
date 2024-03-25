@@ -46,6 +46,10 @@ import AdminForgetPassword from './pages/admin/forgetPassword'
 import AdminResetForgetPassword from './pages/admin/resetForgetPassword'
 import MyAdmins from './pages/admin/SuperAdmin/MyAdmins'
 import AdminViewPartnerReport from './pages/admin/partnerReport'
+import AdminEditClient from './pages/admin/editClient'
+import AdminEditPartner from './pages/admin/editParnter'
+import AdminViewSaleEmpCaseReport from './pages/admin/saleEmpCaseReport'
+import AdminSaleEmpPartnerReport from './pages/admin/saleEmpPartnerReport'
 
 
 
@@ -66,6 +70,13 @@ import EmployeeAllInvoices from './pages/employee/finance/pages/AllInvoices'
 import EmployeeViewInvoice from './pages/employee/finance/pages/ViewInvoice'
 import EmployeeResetForgetPassword from './pages/employee/resetForgetPassword'
 import EmployeeEditInvoice from './pages/employee/finance/pages/editInvoice'
+import EmployeeEditCase from './pages/employee/editCase'
+import EmployeeEditClient from './pages/employee/editClient'
+import EmployeeEditPartner from './pages/employee/editPartner'
+import EmpSaleNewCase from './pages/employee/sales/addCase'
+
+// for sale employee
+import EmployeeAddPartner from './pages/employee/sales/addPartner'
 
 
 // for partner
@@ -89,6 +100,7 @@ import PartnerAfterVerification from './pages/partner/afterVerification'
 import PartnerAcceptTls from './pages/partner/acceptTls'
 import PartnerViewTLS from './pages/partner/viewTls'
 import PartnerServiceAgreement from './pages/partner/ServiceAgreement'
+import AcceptPartnerRequest from './pages/partner/acceptPartnerRequest'
 
 
 // for client routes
@@ -179,6 +191,7 @@ export default function App(){
   <Route path='/partner/signin' element={<PanelTemplate><SignIn/></PanelTemplate>}/>
   <Route path='/partner/signup' element={<PanelTemplate><SignUp/></PanelTemplate>}/>
   <Route path='/partner/email otp verify' element={<PanelTemplate><OtpVerify/></PanelTemplate>}/>
+  <Route path='/partner/accept-request/:tokenId' element={<PanelTemplate><AcceptPartnerRequest/></PanelTemplate>}/>
   <Route path='/partner/send mobile otp' element={<PanelTemplate><PartnerMobileSendOtp/></PanelTemplate>}/>
   <Route path='/partner/forget password' element={<PanelTemplate><PartnerForgetPassword/></PanelTemplate>}/>
   <Route path='/partner/verification completed' element={<PanelTemplate><PartnerAfterVerification/></PanelTemplate>}/>
@@ -224,6 +237,12 @@ export default function App(){
   <Route path='/admin/all trash case' element={<AdminTemplate><AdminTrashCase/></AdminTemplate>}/>
   <Route path='/admin/my-admins' element={<AdminTemplate><MyAdmins/></AdminTemplate>}/>
   <Route path='/admin/view-partner-report/:_id' element={<AdminTemplate><AdminViewPartnerReport/></AdminTemplate>}/>
+  <Route path='/admin/edit-client/:_id'  element={<AdminTemplate><AdminEditClient/></AdminTemplate>}/>
+  <Route path='/admin/edit-partner/:_id'  element={<AdminTemplate><AdminEditPartner/></AdminTemplate>}/>
+  <Route path='/admin/view-employee-case-report/:_id'  element={<AdminTemplate><AdminViewSaleEmpCaseReport/></AdminTemplate>}/>
+  <Route path='/admin/view-employee-partner-report/:_id'  element={<AdminTemplate><AdminSaleEmpPartnerReport/></AdminTemplate>}/>
+
+
 
 
 
@@ -246,6 +265,15 @@ export default function App(){
   <Route path='/employee/all-invoices' element={<EmployeeTemplate><EmployeeAllInvoices/></EmployeeTemplate>}/>
   <Route path='/employee/resetPassword/:verifyToken' sensitive={true} strict={false} element={<PanelTemplate><EmployeeResetForgetPassword/></PanelTemplate>}/>
   <Route path='/employee/edit-invoice/:_id'  element={<EmployeeTemplate><EmployeeEditInvoice/></EmployeeTemplate>}/>
+  <Route path='/employee/edit-case/:_id'  element={<EmployeeTemplate><EmployeeEditCase/></EmployeeTemplate>}/>
+  <Route path='/employee/edit-client/:_id'  element={<EmployeeTemplate><EmployeeEditClient/></EmployeeTemplate>}/>
+  <Route path='/employee/edit-partner/:_id'  element={<EmployeeTemplate><EmployeeEditPartner/></EmployeeTemplate>}/>
+  <Route path='/employee/add-partner'  element={<EmployeeTemplate><EmployeeAddPartner/></EmployeeTemplate>}/>
+  <Route path='/employee/add-case'  element={<EmployeeTemplate><EmpSaleNewCase/></EmployeeTemplate>}/>
+
+
+
+
 
 
 

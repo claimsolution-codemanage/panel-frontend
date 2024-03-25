@@ -17,6 +17,8 @@ import { AiOutlineDelete } from "react-icons/ai";
 import ConfirmationModal from "../../components/Common/confirmationModal";
 import { MdOutlinePublishedWithChanges } from "react-icons/md";
 import EditEmployeeModal from "../../components/editEmployeeModal";
+import { TbReportAnalytics } from "react-icons/tb";
+import { FaUserFriends } from "react-icons/fa";
 
 export default function AllAdminEmployee() {
   const [data, setData] = useState([])
@@ -163,9 +165,11 @@ export default function AllAdminEmployee() {
             {data.map((item, ind) => <tr key={item._id} className="border-2 border-bottom border-light text-center">
               <th scope="row" className="text-nowrap">{ind + 1}</th>
               <td className="text-nowrap"><span className="d-flex justify-content-center align-items-center gap-2">
-                <span className="bg-danger text-white" style={{ cursor: "pointer",height:30,width:30,borderRadius:30 }} onClick={() => setDeleteEmployee({status:true,id:item?._id,text:`Your want to parmanent delete ${item?.fullName} employee`})}><AiOutlineDelete /></span>
-                <span className="bg-warning text-white" style={{ cursor: "pointer",height:30,width:30,borderRadius:30 }} onClick={() => setEmployeeUpdateStatus({ show: true,id:item?._id, details: {fullName:item?.fullName,type:item?.type,designation:item?.designation,mobileNo:item?.mobileNo} })}><CiEdit /></span>
+                <span style={{ cursor: "pointer",height:30,width:30,borderRadius:30 }} className={`${item?.type?.toLowerCase()=="sales" ? "bg-warning" :"bg-secondary" } text-white d-flex align-items-center justify-content-center`} onClick={() => item?.type?.toLowerCase()=="sales" && navigate(`/admin/view-employee-case-report/${item._id}`)}><TbReportAnalytics className="fs-5"/></span>
+                <span style={{ cursor: "pointer",height:30,width:30,borderRadius:30 }} className={`${item?.type?.toLowerCase()=="sales" ? "bg-info" :"bg-secondary" } text-white d-flex align-items-center justify-content-center`} onClick={() => item?.type?.toLowerCase()=="sales" && navigate(`/admin/view-employee-partner-report/${item._id}`)}><FaUserFriends className="fs-5"/></span>
                 <span className="bg-success text-white" style={{ cursor: "pointer",height:30,width:30,borderRadius:30 }} onClick={() => setChangeStatus({ show: true, details: {_id:item._id,currentStatus:item?.isActive,name:item?.fullName} })}><MdOutlinePublishedWithChanges /></span>
+                <span className="bg-warning text-white" style={{ cursor: "pointer",height:30,width:30,borderRadius:30 }} onClick={() => setEmployeeUpdateStatus({ show: true,id:item?._id, details: {fullName:item?.fullName,type:item?.type,designation:item?.designation,mobileNo:item?.mobileNo} })}><CiEdit /></span>
+                <span className="bg-danger text-white" style={{ cursor: "pointer",height:30,width:30,borderRadius:30 }} onClick={() => setDeleteEmployee({status:true,id:item?._id,text:`Your want to parmanent delete ${item?.fullName} employee`})}><AiOutlineDelete /></span>
                 </span></td>
                 
               <td className="text-nowrap"> <span className={`badge ${item?.isActive ? "bg-primary" : "bg-danger"}`}>{item?.isActive ? "Active" : "Unactive"}</span> </td>

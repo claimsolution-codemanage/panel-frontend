@@ -3,14 +3,13 @@ import { allState } from "../../utils/constant"
 import { getClientProfile,adminGetClientById,employeeGetClientById } from "../../apis"
 import {toast} from 'react-toastify'
 import {useNavigate} from 'react-router-dom'
-import { API_BASE_IMG,adminGetPartnerById } from "../../apis"
+import { adminGetPartnerById } from "../../apis"
 import { useParams } from "react-router-dom"
-import {FaCircleArrowDown} from 'react-icons/fa6'
-import {LuPcCase} from 'react-icons/lu'
-import {CiEdit} from 'react-icons/ci'
+import { API_BASE_IMG } from "../../apis/upload"
 import {IoArrowBackCircleOutline} from 'react-icons/io5'
 import ChangeStatusModal from "../../components/Common/changeStatusModal"
 import Loader from "../../components/Common/loader"
+import { Link } from "react-router-dom"
 
 export default function EmployeeClientDetails() {
     const [data,setData] =useState([])
@@ -63,13 +62,14 @@ export default function EmployeeClientDetails() {
                 </div>
             </div>
 
-            {/* <div className="d-flex align-items-center gap-2">
-                   <p className="badge bg-primary mb-1">{data[0]?.isActive ? "Active" : "Unactive"}</p>
-            <div className="d-flex gap-1 badge bg-primary mb-1" onClick={()=>navigate(`/client/edit profile/_id=${data[0]?._id}`)} style={{cursor:"pointer"}}>
+            <div className="d-flex align-items-center gap-2">
+            <Link className="btn bg-primary text-white" to={`/employee/edit-client/${data[0]?._id}`}>Edit</Link>
+                   {/* <p className="badge bg-primary mb-1">{data[0]?.isActive ? "Active" : "Unactive"}</p> */}
+            {/* <div className="d-flex gap-1 badge bg-primary mb-1" onClick={()=>navigate(`/client/edit profile/_id=${data[0]?._id}`)} style={{cursor:"pointer"}}>
                 <span><CiEdit/></span>
                 <span>Edit</span>
-            </div>
             </div> */}
+            </div>
 
             </div>
         <div className="m-2 m-md-5">
@@ -82,7 +82,7 @@ export default function EmployeeClientDetails() {
                             <div className="align-items-center bg-color-1 rounded-2 row shadow m-0">
                                 <div className="col-12 col-md-2 align-items-center badge bg-primary px-4 py-3 d-flex flex-column gap-1">
                             <div className="d-flex align-items-center justify-content-center  bg-color-2" style={{ height: 150, width: 150,borderRadius:150,cursor:"pointer"}}>
-                           <img src={data[0]?.profile?.profilePhoto ? `${data[0]?.profile?.profilePhoto}` :"/Images/home/sign-in.png"} alt="profileImg"  style={{ height: 150, width: 150,borderRadius:150,cursor:"pointer"}} />  
+                           <img src={data[0]?.profile?.profilePhoto ? `${API_BASE_IMG}/${data[0]?.profile?.profilePhoto}` :"/Images/home/sign-in.png"} alt="profileImg"  style={{ height: 150, width: 150,borderRadius:150,cursor:"pointer"}} />  
                         </div>
                         {/* <h5 className="mb-1 text-capitalize text-white">{data[0]?.profile?.consultantName}</h5> */}
                                 </div>
@@ -95,94 +95,77 @@ export default function EmployeeClientDetails() {
                             <div className="border-3 border-primary border-bottom py-2">
                             <h6 className="text-primary text-center fs-3">Profile Details</h6>
                             </div>
-                            <div className="row mt-5">
-                            <div className="mb-2 d-flex align-items-center gap-3 col-12 col-md-4">
+                            <div className="row row-cols-1 row-cols-md-3 mt-4">
+                            <div className="mb-2 d-flex align-items-center gap-3">
                             <h6 className="fw-bold">Name</h6>
                            <p className=" h6 text-capitalize">{data[0]?.profile?.consultantName}</p>
                         </div>
-                        <div className="mb-2 d-flex align-items-center gap-3 col-12 col-md-4">
-                          
-                            <h6 className="fw-bold">Consultant Code</h6>
+                        <div className="mb-2 d-flex align-items-center gap-3">
+                            <h6 className="fw-bold">Customer Code</h6>
                            <p className=" h6 text-capitalize">{data[0]?.profile?.consultantCode}</p>
                         </div>
-                        <div className="mb-2 d-flex align-items-center gap-3 col-12 col-md-4">
+                        <div className="mb-2 d-flex align-items-center gap-3">
                             <h6 className="fw-bold">Associate With Us</h6>
                            <p className=" h6 text-capitalize">{data[0]?.profile?.associateWithUs && new Date(data[0]?.profile?.associateWithUs).toLocaleDateString()}</p>
                         </div>
-                            </div>
-
-                        <div className="row">
-                        <div className="mb-1 d-flex align-items-center gap-3 col-12 col-md-4">
-                            <h6 className="fw-bold">Primary Email</h6>
+                        <div className="mb-1 d-flex align-items-center gap-3">
+                            <h6 className="fw-bold">Email Id</h6>
                            <p className="h6 ">{data[0]?.profile?.primaryEmail}</p>
                         </div>
-                        <div className="mb-1 d-flex align-items-center gap-3 col-12 col-md-4">
-                        
+                        <div className="mb-1 d-flex align-items-center gap-3">
                             <h6 className="fw-bold">Alternate Email</h6>
                            <p className=" h6 ">{ data[0]?.profile?.alternateEmail}</p>
                         </div>
-                        <div className="mb-1 d-flex align-items-center gap-3 col-12 col-md-4">
-                            <h6 className="fw-bold">Primary Mobile No.</h6>
+                        <div className="mb-1 d-flex align-items-center gap-3">
+                            <h6 className="fw-bold">Mobile No.</h6>
                            <p className=" h6 ">{data[0]?.profile?.primaryMobileNo}</p>
                         </div>
-                        </div>
-                        <div className="row">
-                        <div className="mb-1 d-flex align-items-center gap-3 col-12 col-md-4">
+                        {/* <div className="mb-1 d-flex align-items-center gap-3">
                             <h6 className="fw-bold">Alternate Mobile No.</h6>
                            <p className=" h6 text-capitalize">{data[0]?.profile?.alternateMobileNo}</p>
-                        </div>
-                        <div className="mb-2 d-flex align-items-center gap-3 col-12 col-md-4">
-                            <h6 className="fw-bold">Whatsup No.</h6>
+                        </div> */}
+                        <div className="mb-2 d-flex align-items-center gap-3">
+                            <h6 className="fw-bold">Whatsapp No.</h6>
                            <p className=" h6 text-capitalize">{data[0]?.profile?.whatsupNo}</p>
                         </div>
-                        <div className="mb-2 d-flex align-items-center gap-3 col-12 col-md-4">
+                        <div className="mb-2 d-flex align-items-center gap-3">
                             <h6 className="fw-bold">DOB</h6>
                            <p className=" h6 text-capitalize">{data[0]?.profile?.dob && new Date(data[0]?.profile?.dob).toLocaleDateString()}</p>
                         </div>
-                        </div>
-                        <div className="row">
-                        <div className="mb-2 d-flex align-items-center gap-3 col-12 col-md-4">
+                        {/* <div className="mb-2 d-flex align-items-center gap-3">
                     
                             <h6 className="fw-bold">Pan No.</h6>
                            <p className=" h6 text-capitalize">{data[0]?.profile?.panNo}</p>
                         </div>
-                        <div className="mb-1 d-flex align-items-center gap-3 col-12 col-md-4">
+                        <div className="mb-1 d-flex align-items-center gap-3">
                             <h6 className="fw-bold">Aadhaar No.</h6>
                            <p className=" h6 text-capitalize">{data[0]?.profile?.aadhaarNo}</p>
                         </div>
-                        <div className="mb-1 d-flex align-items-center gap-3 col-12 col-md-4">
+                        <div className="mb-1 d-flex align-items-center gap-3">
                             <h6 className="fw-bold">Gender</h6>
                            <p className=" h6 ">{data[0]?.profile?.gender}</p>
-                        </div>
-                        </div>
-                    
-                        
-
-                        <div className="row">
-                        <div className="mb-2 d-flex align-items-center gap-3 col-12 col-md-4">
+                        </div> */}
+                        <div className="mb-2 d-flex align-items-center gap-3">
                             <h6 className="fw-bold">Address</h6>
                            <p className=" h6 text-capitalize">{data[0]?.profile?.address}</p>
                         </div>
-                        <div className="mb-2 d-flex align-items-center gap-3 col-12 col-md-4">
+                        {/* <div className="mb-2 d-flex align-items-center gap-3">
                             <h6 className="fw-bold">District</h6>
                            <p className=" h6 text-capitalize">{data[0]?.profile?.district}</p>
-                        </div>
-                        <div className="mb-2 d-flex align-items-center gap-3 col-12 col-md-4">
+                        </div> */}
+                        <div className="mb-2 d-flex align-items-center gap-3">
                             <h6 className="fw-bold">City</h6>
                            <p className=" h6 text-capitalize">{data[0]?.profile?.city}</p>
                         </div>
-                        </div>
-
-                        <div className="row">
-                        <div className="mb-2 d-flex align-items-center gap-3 col-12 col-md-4">
+                        <div className="mb-2 d-flex align-items-center gap-3">
                            <h6 className="fw-bold">State</h6>
                           <p className=" h6 text-capitalize">{data[0]?.profile?.state}</p>
                        </div>
-                        <div className="mb-2 d-flex align-items-center gap-3 col-12 col-md-4">
+                        <div className="mb-2 d-flex align-items-center gap-3">
                            <h6 className="fw-bold">Pincode</h6>
                           <p className=" h6 text-capitalize">{data[0]?.profile?.pinCode}</p>
                        </div>
-                        </div>
+                            </div>
                         </div>
 
                         </div>

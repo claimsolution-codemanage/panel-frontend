@@ -11,8 +11,6 @@ import { FaFilePdf, FaFileImage } from 'react-icons/fa6'
 import { IoMdAdd } from 'react-icons/io'
 import { adminGetSettingDetails, adminUpdateSettingDetails, adminUploadCompanyClientTls, adminUploadCompanyPartnerTls } from "../../apis"
 import { useRef } from "react"
-import { storage } from "../../utils/firebase"
-import { ref, uploadBytes, getDownloadURL } from 'firebase/storage'
 import { v4 as uuidv4 } from 'uuid';
 import ViewDocs from "../../components/Common/ViewDocs"
 import { checkPhoneNo } from "../../utils/helperFunction"
@@ -231,11 +229,11 @@ export default function AdminAccountSetting() {
                                         <label htmlFor="mobileNo" className="form-label">Mobile No.</label>
                                         <input type="text" name="mobileNo" onWheel={true} value={setting.mobileNo} onChange={(e)=>checkPhoneNo(e?.target?.value) && handleSettingOnchange(e)} className="form-control" />
                                     </div>
-                                    {stateContext?.myAppData?.details?.superAdmin &&
+                                    {/* {stateContext?.myAppData?.details?.superAdmin &&
                                     <div className="my-3">
                                         <label htmlFor="consultantFee" className="form-label">Consultant Fees</label>
                                         <input type="tel" name="consultantFee" value={setting.consultantFee} onChange={(e)=>stateContext?.myAppData?.details?.superAdmin && handleSettingOnchange(e)} className="form-control" />
-                                    </div>}
+                                    </div>} */}
                                  
                                     <div className="d-flex mt-5  justify-content-center">
                                         <div aria-disabled={settingLoader} className={`d-flex align-items-center justify-content-center gap-3 btn btn-primary w-100 ${settingLoader && "disabled"}`} onClick={handleSetting}>

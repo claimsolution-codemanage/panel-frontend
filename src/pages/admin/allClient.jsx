@@ -15,7 +15,7 @@ import { FaCircleArrowDown } from 'react-icons/fa6'
 import { LuPcCase } from 'react-icons/lu'
 import { IoArrowBackCircleOutline } from 'react-icons/io5'
 import ChangeStatusModal from "../../components/Common/changeStatusModal"
-import { useNavigate } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import {BiLeftArrow} from 'react-icons/bi'
 import {BiRightArrow} from 'react-icons/bi'
 import SetStatusOfProfile from "../../components/Common/setStatusModal"
@@ -166,7 +166,7 @@ export default function AllAdminClient() {
               {/* <th scope="col" className="text-nowrap" >DOB</th> */}
               {/* <th scope="col" className="text-nowrap" >Area Of Operation</th> */}
               {/* <th scope="col" className="text-nowrap" >Work Association</th> */}
-              <th scope="col" className="text-nowrap" >Gender</th>
+              {/* <th scope="col" className="text-nowrap" >Gender</th> */}
               <th scope="col" className="text-nowrap" >State</th>
             </tr>
           </thead>
@@ -178,7 +178,7 @@ export default function AllAdminClient() {
               <td className="text-nowrap">
                 <span className="d-flex gap-2"><span style={{ cursor: "pointer",height:30,width:30,borderRadius:30 }} className="bg-primary text-white d-flex align-items-center justify-content-center" onClick={() => navigate(`/admin/client details/${item._id}`)}><HiMiniEye /></span>
                 <span style={{ cursor: "pointer",height:30,width:30,borderRadius:30 }} className="bg-danger text-white d-flex align-items-center justify-content-center" onClick={() => setChangeStatus({ show: true, details: {_id:item._id,currentStatus:item?.isActive,name:item?.profile?.consultantName,recovery:false} })}><AiOutlineDelete /></span>
-                {/* <span style={{ cursor: "pointer",height:30,width:30,borderRadius:30 }} className="bg-danger text-white d-flex align-items-center justify-content-center" onClick={() => setDeleteClient({status:true,id:item?._id,text:`Your want to delete ${item?.profile?.consultantName} client`})}><AiOutlineDelete /></span> */}
+                <Link to={`/admin/edit-client/${item?._id}`} style={{ cursor: "pointer",height:30,width:30,borderRadius:30 }} className="bg-warning text-white d-flex align-items-center justify-content-center" ><CiEdit /></Link>
                 </span></td>
               <td className="text-nowrap">{new Date(item?.profile?.associateWithUs).toLocaleDateString()}</td>
               <td className="text-nowrap">{item?.profile?.consultantName}</td>
@@ -188,7 +188,7 @@ export default function AllAdminClient() {
               {/* <td>{new Date(item?.profile?.dob).toLocaleDateString()}</td> */}
               {/* <td>{item?.profile?.areaOfOperation}</td> */}
               {/* <td>{item?.profile?.workAssociation}</td> */}
-              <td className="text-nowrap">{item?.profile?.gender}</td>
+              {/* <td className="text-nowrap">{item?.profile?.gender}</td> */}
               <td className="text-nowrap">{item?.profile?.state}</td>
             </tr>)}
           </tbody>

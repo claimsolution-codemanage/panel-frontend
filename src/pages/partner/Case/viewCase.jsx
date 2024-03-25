@@ -266,7 +266,7 @@ export default function PartnerViewCase() {
                                                         </div>
                                                     </div>
                                                     <div className="d-flex align-items-center justify-content-center bg-dark gap-5 w-100 p-2 text-primary">
-                                                        <p className="text-center text-nowrap fs-5 text-capitalize">{item?.docName}</p>
+                                                        <p className="fs-5 text-break text-capitalize text-center text-wrap">{item?.docName}</p>
                                                     </div>
                                                 </Link>
                                                 } </> 

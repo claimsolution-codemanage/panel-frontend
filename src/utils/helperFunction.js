@@ -87,9 +87,9 @@ return {success:true,message:`${fileType} is supported!`,file:formData}
   
 
 
-export const checkPhoneNo = (value) => {
+export const checkPhoneNo = (value,digit=10) => {
   if (!isNaN(Number(value))) {
-    if (value.length <= 10) {
+    if (value.length <= digit) {
       return true
     }else{
       return false

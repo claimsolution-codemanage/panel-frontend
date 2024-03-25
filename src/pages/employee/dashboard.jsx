@@ -35,12 +35,16 @@ ChartJS.register(
 import { adminDashboardData,allEmployeeDashboardData } from '../../apis';
 import {toast} from 'react-toastify'
 import { useEffect } from 'react';
-
+import { useContext } from 'react';
+import { AppContext } from '../../App';
 export default function AdminDasboard() {
+  const state = useContext(AppContext)
   const [loading,setLoading] = useState(false)
   const [chartData,setChartData] = useState([]) 
   const [graphData,setGraphData] = useState([]) 
   const [employee,setEmployee] = useState({})
+  const [noOfPartner,setNoOfPartner] = useState(0)
+  const empType  = state?.myAppData?.details?.empType
 
   useEffect(() => {
     async function fetch() {
@@ -57,6 +61,9 @@ export default function AdminDasboard() {
           }
           if(res?.data?.employee){
             setEmployee(res?.data?.employee)
+          }
+          if(res?.data?.noOfPartner){
+            setNoOfPartner(res?.data?.noOfPartner)
           }
           setLoading(false)
 
@@ -140,36 +147,6 @@ export default function AdminDasboard() {
     ],
   };
 
-
-  // const data1 = {  
-  //   labels: chartData[0]?.allCase?.map(data=>{return data?._id}) ,
-  //   // ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
-  //   datasets: [
-  //     {
-  //       label: 'Case',
-  //       data: chartData[0]?.allCase?.map(data=>{return data?.totalCases}),
-  //       backgroundColor: [
-  //         'rgb(255 99 132 / 78%)',
-  //         'rgb(54 162 235 / 76%)',
-  //         'rgb(255 206 86 / 77%)',
-  //         'rgb(75 192 192 / 75%)',
-  //         'rgb(153 102 255 / 74%)',
-  //         'rgb(255 159 64 / 75%)',
-  //       ],
-  //       borderColor: [
-  //         'rgba(255, 99, 132, 1)',
-  //         'rgba(54, 162, 235, 1)',
-  //         'rgba(255, 206, 86, 1)',
-  //         'rgba(75, 192, 192, 1)',
-  //         'rgba(153, 102, 255, 1)',
-  //         'rgba(255, 159, 64, 1)',
-  //       ],
-  //       borderWidth: 1,
-  //     },
-  //   ],
-  // };
-
-  // console.log("data",chartData,graphData);
   return (
     <> 
      {loading?<Loader/> : 
@@ -224,6 +201,28 @@ export default function AdminDasboard() {
                   <div className="bg-primary text-white d-flex align-items-center justify-content-center" style={{width:50,height:50,borderRadius:50}}><CiAlignBottom className='fs-2'/></div>
                   </div></div>
               </div>
+              {empType?.toLowerCase() =="sales".toLowerCase()  && <>
+                  <div className="col-md-3 border-end">
+                <div className="bg-color-1 border-0 border-5 border-primary border-start card mx-1 my-4 p-2 shadow">
+                    <div className='d-flex align-items-center justify-content-around'>
+                  <div className="text-center ">
+                    <h3 className='fw-bold h2'>{chartData[0]?.totalCaseAmount}</h3>
+                    <p className='card-title fs-5 text-primary text-capitalize'>Total Case Amt</p>
+                  </div>
+                  <div className="bg-primary text-white d-flex align-items-center justify-content-center" style={{width:50,height:50,borderRadius:50}}><CiAlignBottom className='fs-2'/></div>
+                  </div></div>
+              </div>
+              <div className="col-md-3 border-end">
+                <div className="bg-color-1 border-0 border-5 border-primary border-start card mx-1 my-4 p-2 shadow">
+                    <div className='d-flex align-items-center justify-content-around'>
+                  <div className="text-center ">
+                    <h3 className='fw-bold h2'>{noOfPartner}</h3>
+                    <p className='card-title fs-5 text-primary text-capitalize'>Total Partner</p>
+                  </div>
+                  <div className="bg-primary text-white d-flex align-items-center justify-content-center" style={{width:50,height:50,borderRadius:50}}><CiAlignBottom className='fs-2'/></div>
+                  </div></div>
+              </div>
+              </>}
               {chartData[0]?.allCase?.map(data=> <div className="col-md-3 border-end">
                 <div className="bg-color-1 border-0 border-5 border-primary border-start card mx-1 my-4 p-2 shadow">
                     <div className='d-flex align-items-center justify-content-around'>

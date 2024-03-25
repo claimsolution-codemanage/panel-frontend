@@ -75,6 +75,11 @@ export const signUp = (data)=>{
  return axios.post(`${API_BASE}/api/partner/signUp`,data)
 }
 
+export const signUpWithRequest = (data)=>{
+  return axios.post(`${API_BASE}/api/partner/acceptRequest`,data)
+ }
+ 
+
 export const verifyOtp = (data)=>{
     setheader()
     return axios.post(`${API_BASE}/api/partner/verifyEmail`,data)
@@ -239,6 +244,11 @@ export const adminViewPartnerReport = (partnerId="",pageItemLimit="",pageNo="",s
   return axios.get(`${API_BASE}/api/admin/adminViewPartnerReport?partnerId=${partnerId}&limit=${pageItemLimit}&pageNo=${pageNo}&search=${searchQuery}&status=${statusType}&startDate=${startDate}&endDate=${endDate}&type=${type}`)
 }
 
+export const adminViewSaleEmpCaseReport = (empSaleId="",pageItemLimit="",pageNo="",searchQuery="",statusType="",startDate="",endDate="",type)=>{
+  setheader()
+  return axios.get(`${API_BASE}/api/admin/adminViewEmpSaleReport?empSaleId=${empSaleId}&limit=${pageItemLimit}&pageNo=${pageNo}&search=${searchQuery}&status=${statusType}&startDate=${startDate}&endDate=${endDate}&type=${type}`)
+}
+
 export const adminGetCaseById = (_id)=>{
   setheader()
   return axios.get(`${API_BASE}/api/admin/viewCaseById?_id=${_id}`)
@@ -273,6 +283,11 @@ export const adminSetCaseIsActive = (_id,status)=>{
 export const allAdminPartner = (pageItemLimit="",pageNo="",searchQuery="",type)=>{
   setheader()
   return axios.get(`${API_BASE}/api/admin/viewAllPartner?limit=${pageItemLimit}&pageNo=${pageNo}&search=${searchQuery}&type=${type}`)
+}
+
+export const adminViewSaleEmpPartner = (empSaleId="",pageItemLimit="",pageNo="",searchQuery="",type)=>{
+  setheader()
+  return axios.get(`${API_BASE}/api/admin/adminViewEmpSalePartnerReport?empSaleId=${empSaleId}&limit=${pageItemLimit}&pageNo=${pageNo}&search=${searchQuery}&type=${type}`)
 }
 
 export const adminGetPartnerById = (_id)=>{
@@ -409,6 +424,28 @@ export const adminUpdateEmployeeById = (id,data)=>{
   setheader()
   return axios.put(`${API_BASE}/api/admin/updateEmployeeAccount?_id=${id}`,data)
 }
+
+
+export const adminUpdateClient = (_id,data)=>{
+  setheader()
+  return axios.put(`${API_BASE}/api/admin/editClient?_id=${_id}`,data)
+}
+
+export const adminUpdatePartnerProfile = (_id,data)=>{
+  setheader()
+  return axios.put(`${API_BASE}/api/admin/updateParnterProfile?_id=${_id}`,data)
+}
+
+export const adminUpdatePartnerBankingDetails = (_id,data)=>{
+  setheader()
+  return axios.put(`${API_BASE}/api/admin/updatePartnerBankingDetails?_id=${_id}`,data)
+}
+
+export const adminDeleteCaseDocById = (query)=>{
+  setheader()
+  return axios.delete(`${API_BASE}/api/admin/deleteCaseDocId?${query}`)
+}
+
 
 
 
@@ -614,6 +651,39 @@ export const employeeAddCaseComment = (data)=>{
   setheader()
   return axios.put(`${API_BASE}/api/employee/addCaseComment`,data)
 }
+
+export const employeeUpdateCaseById = (_id,data)=>{
+  setheader()
+  return axios.put(`${API_BASE}/api/employee/updateCaseById?_id=${_id}`,data)
+}
+
+export const employeeUpdateClient = (_id,data)=>{
+  setheader()
+  return axios.put(`${API_BASE}/api/employee/updateClient?_id=${_id}`,data)
+}
+
+export const employeeUpdatePartnerProfile = (_id,data)=>{
+  setheader()
+  return axios.put(`${API_BASE}/api/employee/updatePartnerProfile?_id=${_id}`,data)
+}
+
+export const employeeUpdatePartnerBankingDetails = (_id,data)=>{
+  setheader()
+  return axios.put(`${API_BASE}/api/employee/updatePartnerBankingDetails?_id=${_id}`,data)
+}
+
+
+//  for sales-emp
+export const salesEmployeeAddPartner = (data)=>{
+  setheader()
+  return axios.post(`${API_BASE}/api/employee/addPartner`,data)
+}
+
+export const salesEmpAddNewCase = (data)=>{
+  setheader()
+  return axios.post(`${API_BASE}/api/employee/sale/addCase`,data)
+}
+
 
 export const financeEmployeeCreateInvoice = (data,clientId,caseId)=>{
   setheader()

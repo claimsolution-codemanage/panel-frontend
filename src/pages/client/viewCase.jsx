@@ -49,10 +49,10 @@ export default function ClientViewCase() {
         } catch (error) {
             if (error && error?.response?.data?.message) {
                 toast.error(error?.response?.data?.message)
-                setLoading(false)
+                // setLoading(false)
             } else {
                 toast.error("Something went wrong")
-                setLoading(false)
+                // setLoading(false)
             }
 
             // console.log("case error", error);
@@ -86,11 +86,9 @@ export default function ClientViewCase() {
                         <div className="">
                             <div className="container-fluid color-4 p-0">
                                 <div className="">
-
                                     <div>
                                         <div className="">
                                             <div className="m-1 m-md-5">
-
                                                 <div className="bg-color-1 my-5 p-3 p-md-5 rounded-2 shadow">
                                                     <div className="border-3 border-primary border-bottom mb-5">
                                                         <div className="d-flex gap-2 align-items-center justify-content-between">
@@ -207,22 +205,22 @@ export default function ClientViewCase() {
                                                                 {/* <span onClick={()=>setViewDocs({status:true,details:item})} style={{ cursor: "pointer" }}><FaEye/></span><span style={{ cursor: "pointer" }}><IoCloudDownloadOutline/></span> */}
                                                             </div>
                                                         </div>
-                                                        : <div to={`${API_BASE_IMG}/${encodeURIComponent(item?.docURL)}`} target="_blank"  style={{ cursor: "pointer" }} className="align-items-center bg-color-7 d-flex flex-column justify-content-center w-25 rounded-3">
+                                                        : <Link to={`${API_BASE_IMG}/${encodeURIComponent(item?.docURL)}`} target="_blank"  style={{ cursor: "pointer" }} className="align-items-center bg-color-7 d-flex flex-column justify-content-center w-25 rounded-3">
                                                         <div className="d-flex flex-column p-4 justify-content-center align-items-center">
                                                             <div className="d-flex justify-content-center bg-color-6 align-items-center fs-4 text-white bg-primary" style={{ height: '3rem', width: '3rem', borderRadius: '3rem' }}>
                                                                 {item?.docType == "image" ? <FaFileImage /> : <FaFilePdf />}
                                                             </div>
                                                         </div>
                                                         <div className="d-flex align-items-center justify-content-center bg-dark gap-5 w-100 p-2 text-primary">
-                                                            <p className="text-center text-nowrap fs-5 text-capitalize">{item?.docName}</p>
+                                                            <p className="fs-5 text-break text-capitalize text-center text-wrap">{item?.docName}</p>
                                                             {/* <span onClick={()=>setViewDocs({status:true,details:item})} style={{ cursor: "pointer" }}><FaEye/></span><span style={{ cursor: "pointer" }}><IoCloudDownloadOutline/></span> */}
                                                         </div>
-                                                    </div> } </>  
+                                                    </Link> } </>  
                                                         )}
                                                     </div>
                                                 </div>
                                                 {/*for complete payment  */}
-                                                {data[0]?.acceptPayment && data[0]?.paymentDetails.filter(payment => payment?.completed == true).length > 0 &&
+                                                {/* {data[0]?.acceptPayment && data[0]?.paymentDetails?.filter(payment => payment?.completed == true).length > 0 &&
                                                     <div className="bg-color-1 my-5 p-3 p-md-5 rounded-2 shadow">
                                                         <div className="border-3 border-primary border-bottom py-2 mb-5">
                                                             <div className="text-primary text-center fs-4">Completed Payment</div>
@@ -240,7 +238,7 @@ export default function ClientViewCase() {
                                                                 </div>)
                                                             }
                                                         </div>
-                                                    </div>}
+                                                    </div>} */}
                                                 {/* for due payment */}
                                                 {/* {data[0]?.acceptPayment && data[0]?.paymentDetails.filter(payment => payment?.completed == false).length > 0 && <div className="bg-color-1 my-5 p-3 p-md-5 rounded-2 shadow">
                                                     <div className="border-3 border-primary border-bottom py-2 mb-5">

@@ -65,7 +65,7 @@ export default function AddCaseCommit({ show,handleCaseCommit,close,id }) {
             <Modal.Footer>
                 <div className="d-flex  justify-content-center">
                     <Button disabled={commitLoading} className={`d-flex align-items-center justify-content-center gap-3 btn btn-primary ${commitLoading && "disabled"}`} onClick={handleCommit}>
-                        {commitLoading ? <span className="spinner-border spinner-border-sm" role="status" aria-hidden={true}></span> : <span> Commit</span>}
+                        {commitLoading ? <span className="spinner-border spinner-border-sm" role="status" aria-hidden={true}></span> : <span> Comment</span>}
                     </Button>
                 </div>
                 {/* <Button className='' onClick={handleShare}><IoIosShareAlt /> Share</Button> */}

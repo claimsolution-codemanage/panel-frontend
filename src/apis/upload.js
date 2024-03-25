@@ -51,3 +51,8 @@ export function setheader(){
     setheader()
     return axios.post(`${API_BASE_IMG}/api/upload/attachment/admin?file=${type}`,formData)
   }
+
+  export const employeeAttachementUpload = (type,formData)=>{
+    setheader()
+    return axios.post(`${API_BASE_IMG}/api/upload/attachment/employee?file=${type}`,formData)
+  }

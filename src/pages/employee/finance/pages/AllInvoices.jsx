@@ -20,6 +20,7 @@ import { CiAlignBottom } from 'react-icons/ci'
 import { FiDownload } from "react-icons/fi";
 import { AiOutlineDelete } from "react-icons/ai";
 import ConfirmationModal from "../../../../components/Common/confirmationModal"
+import PaymentInfo from "../../../../components/Common/paymentInfo";
 
 
 export default function EmployeeAllInvoices() {
@@ -38,6 +39,7 @@ export default function EmployeeAllInvoices() {
   const [pgNo, setPgNo] = useState(1)
   const [changeStatus, setChangeStatus] = useState({ status: false, details: "" })
   const [isActiveInvoice,setIsActiveInvoice] = useState({status:false,details:{}})
+  const [paymentDetails,setPaymentDetails] = useState({status:false,details:{}})
   const [dateRange, setDateRange] = useState([
     {
       startDate: new Date("2023/01/01"),
@@ -255,7 +257,13 @@ export default function EmployeeAllInvoices() {
                     {/* {downloadLoading?._id?.includes(item?._id) && downloadLoading.status ? <span style={{ cursor: "pointer",height:30,width:30,borderRadius:30 }} className="spinner-border spinner-border-sm" role="status" aria-hidden={true}></span> : <span style={{ cursor: "pointer",height:30,width:30,borderRadius:30 }} className="bg-primary text-white d-flex align-items-center justify-content-center" onClick={() => downloadInvoiceById(item?._id)}><FiDownload /></span>}  */}
                     <span style={{ cursor: "pointer", height: 30, width: 30, borderRadius: 30 }} className="bg-danger text-white d-flex align-items-center justify-content-center" onClick={() => setIsActiveInvoice({ status: true, details: { _id: item._id, status: item?.isActive, invoiceNo: item?.invoiceNo} })}><AiOutlineDelete /></span>
                     </span></td>
-                    <td className="text-nowrap"><span className={`badge bg-primary cursor-pointer ${item?.isPaid ? "bg-primary":"bg-success"}`}>{item?.isPaid ? "Paid":"To pay"}</span></td>
+                    <td className="text-nowrap">
+                      {item?.isPaid ?
+                      <span onClick={()=>setPaymentDetails({status:true,details:item})} className={`badge cursor-pointer bg-success`}>Paid</span>
+                    :  <span className={`badge bg-primary`}>To Pay</span>
+                    }
+                     
+                      </td>
                     <td className="text-nowrap">{new Date(item?.createdAt).toLocaleDateString()}</td>
                     <td className="text-nowrap">{item?.invoiceNo}</td>
                     <td className="text-nowrap">{item?.receiver?.name}</td>
@@ -294,6 +302,7 @@ export default function EmployeeAllInvoices() {
           </div>
           {/* {changeStatus?.status && <ChangeStatusModal changeStatus={changeStatus} setChangeStatus={setChangeStatus} handleCaseStatus={employeeChangeCaseStatus} role="invoice" />} */}
           {isActiveInvoice.status && <ConfirmationModal show={isActiveInvoice.status} hide={()=>setIsActiveInvoice({status:false,details:{}})} id={isActiveInvoice.details?._id} handleComfirmation={financeEmployeeUnactiveInvoice} heading={"Are you sure"} text={`You want to remove invoice ${isActiveInvoice.details?.invoiceNo}`}/>}
+          {paymentDetails?.status && <PaymentInfo show={paymentDetails.status} hide={()=>setPaymentDetails({status:false,details:{}})} details={paymentDetails?.details}/>}
         </div>
 
       </div>

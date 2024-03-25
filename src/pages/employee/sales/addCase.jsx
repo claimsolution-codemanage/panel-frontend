@@ -1,24 +1,24 @@
 import { useEffect, useState } from "react"
-import { policyType, generalInsuranceList, healthInsuranceList, LifeInsuranceList,otherInsuranceList } from "../../utils/constant"
-import { clientAddNewCase } from "../../apis"
+import { policyType, generalInsuranceList, healthInsuranceList, LifeInsuranceList,otherInsuranceList } from "../../../utils/constant"
+import { clientAddNewCase,salesEmpAddNewCase } from "../../../apis"
 import { toast } from 'react-toastify'
 import { FaCircleArrowDown } from 'react-icons/fa6'
 import { LuPcCase } from 'react-icons/lu'
 import { CiEdit } from 'react-icons/ci'
 import { IoArrowBackCircleOutline } from 'react-icons/io5'
 import { useNavigate } from "react-router-dom"
-import { insuranceCompany } from "../../utils/constant"
+import { insuranceCompany } from "../../../utils/constant"
 import { isNaN, useFormik } from 'formik'
 import * as yup from 'yup'
-import { allState } from "../../utils/constant"
-import { clientAttachementUpload } from "../../apis/upload"
+import { allState } from "../../../utils/constant"
+import { clientAttachementUpload,employeeAttachementUpload } from "../../../apis/upload"
 import { FaFilePdf, FaFileImage,FaFileWord } from 'react-icons/fa6'
 import { useRef } from "react"
 import { IoMdAdd } from 'react-icons/io'
-import {checkNumber} from '../../utils/helperFunction'
-import AddNewCaseDocsModal from "../../components/Common/addNewCaseDoc"
+import {checkNumber} from '../../../utils/helperFunction'
+import AddNewCaseDocsModal from "../../../components/Common/addNewCaseDoc"
 
-export default function ClientNewCase() {
+export default function EmpSaleNewCase() {
     const [uploadAttachement,setUploadAttachement] = useState({status:0,message:""})
     const [uploadedFiles,setUploadedFiles] = useState([])
     const [uploadingDocs,setUploadingDocs] = useState(false)
@@ -66,6 +66,8 @@ export default function ClientNewCase() {
 
     const caseDetailsFormik = useFormik({
         initialValues: {
+            partnerEmail:"",
+            partnerCode:"",
             name: "",
             fatherName: "",
             email: "",
@@ -86,6 +88,8 @@ export default function ClientNewCase() {
             name: yup.string().max(50,"Name must have maximum 50 characters"),
             fatherName: yup.string().max(50,"Father's name must have maximum 50 characters"),
             email: yup.string().email("Email must be vaild"),
+            partnerEmail: yup.string().email("Partner email must be vaild"),
+            partnerCode:yup.string(),
             mobileNo: yup.string().min(10,"Moblie No must have be 10 digit").max(10,"Moblie No must have be 10 digit").required("Please enter Mobile No."),
             policyType: yup.string(),
             complaintType: yup.string(),
@@ -101,17 +105,15 @@ export default function ClientNewCase() {
         }),
         onSubmit: async (values) => {
             let payLoad = { ...values,caseDocs:uploadedFiles }
-            // console.log("formik values",values,payLoad);
-            // return
             setLoading(true)
             try {
-                const res = await clientAddNewCase(payLoad)
-                // console.log("client new case", res?.data);
+                const res = await salesEmpAddNewCase(payLoad)
                 if (res?.data?.success && res?.data) {
+                    caseDetailsFormik.resetForm()
                     toast.success(res?.data?.message)
                     setLoading(false)
                     if (res?.data?._id) {
-                        navigate(`/client/view case/${res?.data?._id}`)
+                        navigate(`/employee/view case/${res?.data?._id}`)
                     }
                 }
             } catch (error) {
@@ -196,7 +198,7 @@ export default function ClientNewCase() {
         try {
             const formData = new FormData()
             formData.append("attachment",file)
-            const res = await clientAttachementUpload(type,formData)
+            const res = await employeeAttachementUpload(type,formData)
             // console.log("partner", res?.data);
             if (res?.data?.success) {
                 // console.log("response",res?.data);
@@ -236,18 +238,12 @@ export default function ClientNewCase() {
                 if (fileType.includes("image")) {
                     setUploadAttachement({ status: 1, message: "Uploading..." });
                     uploadAttachmentFile(file,"image")
-    
-                    // console.log("Processing image file");
                 } else if (fileType.includes("pdf")) {
                     setUploadAttachement({ status: 1, message: "Uploading..." });
                     uploadAttachmentFile(file,"pdf")
-                    // Process PDF file
-                    // console.log("Processing PDF file");
                 } else if (fileType=="application/vnd.openxmlformats-officedocument.wordprocessingml.document") {
                     setUploadAttachement({ status: 1, message: "Uploading..." });
                     uploadAttachmentFile(file,"word")
-                    // Process Word file
-                    // console.log("Processing Word file");
                 } else {
                     // Unsupported file type
                     setUploadAttachement({ status: 2, message: "File must be image, pdf or word file" });
@@ -256,19 +252,13 @@ export default function ClientNewCase() {
                 setUploadAttachement({ status: 2, message: "Please select a file" });
             }
         };
-
-    // console.log("caseformik",caseDetailsFormik?.errors);
-
-
-
-
-    return (<>
+   return (<>
         <div>
             <div className="d-flex justify-content-between bg-color-1 text-primary fs-5 px-4 py-3 shadow">
                 <div className="d-flex flex align-items-center gap-3">
                     {/* <IoArrowBackCircleOutline className="fs-3" style={{ cursor: 'pointer' }} onClick={() => navigate("/client/dashboard")} /> */}
                     <div className="d-flex flex align-items-center gap-1">
-                        <span>Add New Case</span>
+                        <span>Add Case</span>
                     </div>
                 </div>
             </div>
@@ -277,7 +267,24 @@ export default function ClientNewCase() {
                     <div className="my-3 p-3 p-md-5">
                         <div className="form bg-color-1 p-3 p-md-5 rounded-2 shadow">
                         <div className="border-3 border-primary border-bottom">
-                            <h6 className="text-primary text-center fs-3">Add New Case</h6>
+                            <h6 className="text-primary text-center fs-3">Add Case</h6>
+                        </div>
+                        <div className="h4 mt-4">Partner Details</div>
+                        <div className="row row-cols-md-3 row-cols-1">
+                                       <div className="mb-3 ">
+                                    <label for="partnerEmail" className={`form-label ${caseDetailsFormik?.touched?.partnerEmail && caseDetailsFormik?.touched?.partnerEmail && caseDetailsFormik?.errors?.partnerEmail && "text-danger"}`}>Email</label>
+                                    <input type="text" className={`form-control ${caseDetailsFormik?.touched?.partnerEmail && caseDetailsFormik?.touched?.partnerEmail && caseDetailsFormik?.errors?.partnerEmail && "border-danger"}`} id="partnerEmail" name="partnerEmail" value={caseDetailsFormik?.values?.partnerEmail} onChange={handleChange} />
+                                    {caseDetailsFormik?.touched?.partnerEmail && caseDetailsFormik?.errors?.partnerEmail ? (
+                                        <span className="text-danger">{caseDetailsFormik?.errors?.partnerEmail}</span>
+                                    ) : null}
+                                </div>
+                                <div className="mb-3 ">
+                                    <label for="partnerCode" className={`form-label ${caseDetailsFormik?.touched?.partnerCode && caseDetailsFormik?.touched?.partnerCode && caseDetailsFormik?.errors?.partnerCode && "text-danger"}`}>Consultant Code</label>
+                                    <input type="text" className={`form-control ${caseDetailsFormik?.touched?.partnerCode && caseDetailsFormik?.touched?.partnerCode && caseDetailsFormik?.errors?.partnerCode && "border-danger"}`} id="partnerCode" name="partnerCode" value={caseDetailsFormik?.values?.partnerCode} onChange={handleChange} />
+                                    {caseDetailsFormik?.touched?.partnerCode && caseDetailsFormik?.errors?.partnerCode ? (
+                                        <span className="text-danger">{caseDetailsFormik?.errors?.partnerCode}</span>
+                                    ) : null}
+                                </div>
                         </div>
                         <div className="h4 mt-4">Policy Holder's Details</div>
                             <div className="row row-cols-12 row-cols-md-3">
@@ -442,7 +449,7 @@ export default function ClientNewCase() {
                     </div>
                 </form>
             </div>
-            <AddNewCaseDocsModal uploadingDocs={uploadingDocs} setUploadingDocs={setUploadingDocs} handleCaseDocsUploading={handleCaseDocsUploading} attachementUpload={clientAttachementUpload}/>
+            <AddNewCaseDocsModal uploadingDocs={uploadingDocs} setUploadingDocs={setUploadingDocs} handleCaseDocsUploading={handleCaseDocsUploading} attachementUpload={employeeAttachementUpload}/>
         </div>
     </>)
 }

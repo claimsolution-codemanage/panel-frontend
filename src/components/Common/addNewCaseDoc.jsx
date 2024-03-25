@@ -4,10 +4,11 @@ import { useEffect, useRef, useState } from 'react';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 import { IoMdAdd } from 'react-icons/io'
+import { v4 as uuidv4 } from 'uuid';
 import { FaFilePdf, FaFileImage } from 'react-icons/fa6'
-import { docType } from '../utils/constant';
+import { docType } from '../../utils/constant';
 
-export default function AddDocsModal({ _id, uploadingDocs, setUploadingDocs, handleCaseDocsUploading, attachementUpload }) {
+export default function AddNewCaseDocsModal({uploadingDocs,setUploadingDocs, handleCaseDocsUploading, attachementUpload }) {
     const [data, setData] = useState({
         docDate: new Date().toLocaleDateString(),
         docName: "",
@@ -21,119 +22,23 @@ export default function AddDocsModal({ _id, uploadingDocs, setUploadingDocs, han
     const navigate = useNavigate()
     const [uploadFileName, setUploadFileName] = useState(null)
 
-
-
-    const hangleOnchange = (e) => {
-        const { name, value } = e.target;
-        if (name == "docName") {
-            if (value.length < 25) {
-                setData((data) => ({ ...data, [name]: value }))
-                setLoading({ status: false, code: 0, type: "", message: "" })
-            }
-
-        }
-    }
-
     const handleSumbit = async (e) => {
         e.preventDefault()
-        setLoading({ status: true, code: 1, type: "submit", message: "file add.." })
-        try {
-            const payload ={
-                ...data,
-                docName:otherDocName ? otherDocName : data?.docName
-            }
-            const res = await handleCaseDocsUploading(_id, payload)
-            if (res?.data?.success) {
-                toast.success(res?.data?.message)
-                setData({
-                    docDate: new Date().toLocaleDateString(),
-                    docName: "",
-                    docType: "",
-                    docFormat: "",
-                    docURL: ""
-                })
-                setLoading({ status: false, code: 1, type: "submit", message: res?.data?.message })
-                setUploadingDocs(false)
-                setUploadFileName(null)
-                setTimeout(() => {
-                    setLoading({ status: false, code: 0, type: "", message: "" })
-                }, 3000);
-            }
-        } catch (error) {
-
-            setUploadFileName(null)
-            if (error && error?.response?.data?.message) {
-                setLoading({ status: false, code: 2, type: "submit", message: error?.response?.data?.message })
-                // toast.error(error?.response?.data?.message)
-            } else {
-                // toast.error("Something went wrong")
-                setLoading({ status: false, code: 2, type: "submit", message: "Something went wrong" })
-            }
-            setUploadFileName("")
-            // console.log("adminChangeCaseStatus error", error);
-            setTimeout(() => {
-                setLoading({ status: false, code: 0, type: "", message: "" })
-            }, 3000);
+        const payload ={
+            ...data,
+            docName:otherDocName ? otherDocName : data?.docName
         }
-
+        setUploadFileName(null)
+        handleCaseDocsUploading(payload)
+        setData({
+            docDate: new Date().toLocaleDateString(),
+            docName: "",
+            docType: "",
+            docFormat: "",
+            docURL: ""
+        })
+        setUploadingDocs(false)
     }
-
-    // const handleUploadFile = (file) => {
-    //     setLoading({ status: true, code: 0, type: "uploading", message: "uploading..." })
-    //     //  console.log("loading",data);
-    //     const fileRef = ref(storage, `case-files/${uuidv4()}`)
-    //     uploadBytes(fileRef, file).then(snapshot => {
-    //         getDownloadURL(snapshot.ref).then(url => {
-    //             // console.log("URL", url);
-    //             setData((prevData) => ({ ...prevData, docURL: url }))
-    //             setLoading({ status: false, code: 1, type: "uploading", message: "uploaded" })
-    //         })
-    //     }).catch(error => {
-    //         docRef.current = ""
-    //         // console.log("error", error);
-    //         setLoading({ status: false, code: 2, type: "uploading", message: "Failed to upload file" })
-    //     }
-    //     )
-    // }
-
-    // const handleDocOnChange = async (e) => {
-    //     const file = e.target.files;
-    //     if (file.length != 0) {
-    //         if (file?.length == 1) {
-    //             const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'application/pdf'];
-    //             if (!allowedTypes.includes(file[0].type)) {
-    //                 setLoading({ status: false, code: 2, type: "selecting", message: "file must be jpeg, jpg, png or pdf" })
-    //                 return;
-    //             }
-    //             if (file[0].type == 'application/pdf') {
-    //                 const maxSize = 5 * 1024 * 1024; // 1MB
-    //                 if (file[0].size > maxSize) {
-    //                     setLoading({ status: false, code: 2, type: "selecting", message: "Pdf size must be less than 5MB" })
-    //                     return;
-    //                 }
-    //                 setData((data) => ({ ...data, docType: "pdf", docFormat: file[0].type }))
-    //                 setUploadFileName(file[0].name)
-    //                 handleUploadFile(file[0])
-    //             } else {
-    //                 const maxSize = 1024 * 1024; //1024 * 1024 1MB
-    //                 if (file[0].size > maxSize) {
-    //                     setLoading({ status: false, code: 2, type: "selecting", message: "Image size must be less than 1MB" })
-    //                     return;
-    //                 }
-    //                 setData((data) => ({ ...data, docType: "image", docFormat: file[0].type }))
-    //                 // setData({...data,docType:"image",docFormat:file[0].type})
-    //                 setUploadFileName(file[0].name)
-    //                 handleUploadFile(file[0])
-    //             }
-    //         } else {
-    //             setLoading({ status: false, code: 2, type: "selecting", message: "Allowed one file at a time" })
-    //         }
-    //     } else {
-    //         setLoading({ status: false, code: 2, type: "selecting", message: "File not selected" })
-    //     }
-    // }
-
-
 
     const uploadAttachmentFile = async (file, type) => {
         setLoading({ status: true, code: 0, type: "uploading", message: "uploading..." })
@@ -242,14 +147,14 @@ export default function AddDocsModal({ _id, uploadingDocs, setUploadingDocs, han
                                 </div>
                             </div>
                             <div className="d-flex align-items-center justify-content-center bg-dark gap-5 w-100 p-2 text-primary">
-                                <p className="text-center text-nowrap fs-5 text-capitalize">{data?.docName}</p>
+                                <p className="fs-5 text-break text-capitalize text-center text-wrap">{data?.docName}</p>
                             </div>
                         </div>
                         }
                     </div>
 
                     <p className={`text-center ${loading.code == 2 ? 'text-danger' : 'text-success'}`}>{loading?.message}</p>
-                   {!data?.docURL && data?.docName && (data?.docName?.toLowerCase()!="other" || otherDocName)  && <div className="d-flex justify-content-center gap-3 mb-3">
+                   {!data?.docURL && data?.docName  && (data?.docName?.toLowerCase()!="other" || otherDocName)  && <div className="d-flex justify-content-center gap-3 mb-3">
                         {/* <input type="text" name="docName" className="form-control w-50" max={15} value={data.docName} disabled={loading.status} onChange={hangleOnchange} placeholder='Document Name' /> */}
                         <span onClick={() => !loading.status && docRef.current.click()} className="bg-primary d-flex justify-content-center align-items-center text-white" style={{ cursor: 'pointer', height: '2rem', width: '2rem', borderRadius: '2rem' }}><IoMdAdd /></span>
                         <input type="file" ref={docRef} onChange={handleAttachment} name="caseDoc" hidden={true} id="" />

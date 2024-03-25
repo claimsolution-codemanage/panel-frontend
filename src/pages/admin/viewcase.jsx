@@ -6,7 +6,7 @@ import { useParams } from "react-router-dom"
 import { IoArrowBackCircleOutline } from 'react-icons/io5'
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
-import { adminAddClientPayment, adminUpdateClientCaseFee, adminChangeCaseStatus, adminAddCaseCommit,adminRemoveCaseReference } from "../../apis"
+import { adminDeleteCaseDocById, adminUpdateClientCaseFee, adminChangeCaseStatus, adminAddCaseCommit, adminRemoveCaseReference } from "../../apis"
 import { formatDateToISO } from "../../utils/helperFunction"
 import Loader from "../../components/Common/loader"
 import AddCaseModal from "../../components/Common/addCaseCommit"
@@ -25,6 +25,7 @@ import { API_BASE_IMG } from "../../apis/upload"
 import EditCaseStatusModal from "../../components/Common/EditCaseStatus"
 import { adminEditCaseProcessById } from "../../apis"
 import { getFormateDMYDate } from "../../utils/helperFunction"
+import ConfirmationModal from "../../components/Common/confirmationModal"
 
 export default function AdminViewCase() {
     const [data, setData] = useState([])
@@ -37,7 +38,9 @@ export default function AdminViewCase() {
     const [caseCommitModal, setCaseCommitModal] = useState(false)
     const [viewDocs, setViewDocs] = useState({ status: false, details: {} })
     const [showEditCaseModal, setShowEditCaseModal] = useState({ status: false, details: {} })
-    const [removeCaseReference,setRemoveCaseReference] =  useState({status:false,type:null,loading:false})
+    const [removeCaseReference, setRemoveCaseReference] = useState({ status: false, type: null, loading: false })
+    const [deleteCaseDoc,setDeleteCaseDoc]=useState({status:false,id:null})
+
     const navigate = useNavigate()
     const param = useParams()
 
@@ -68,10 +71,10 @@ export default function AdminViewCase() {
     }
 
     useEffect(() => {
-        if (param?._id && !showEditCaseModal.status && !addCaseReference.show && !removeCaseReference.status) {
+        if (param?._id && !showEditCaseModal.status && !addCaseReference.show && !removeCaseReference.status && !deleteCaseDoc?.status) {
             getCaseById()
         }
-    }, [param, changeStatus, caseCommitModal, showEditCaseModal, addCaseReference,removeCaseReference])
+    }, [param, changeStatus, caseCommitModal, showEditCaseModal, addCaseReference, removeCaseReference ,deleteCaseDoc])
 
 
 
@@ -97,26 +100,26 @@ export default function AdminViewCase() {
         }
     }
 
- const handleRemoveCaseReference =async()=>{
-        if(removeCaseReference?.type){
+    const handleRemoveCaseReference = async () => {
+        if (removeCaseReference?.type) {
             try {
-                setRemoveCaseReference({...removeCaseReference,loading:true})
-                const res = await adminRemoveCaseReference(data[0]?._id,removeCaseReference?.type)
-                if(res?.status==200 && res?.data?.success){
+                setRemoveCaseReference({ ...removeCaseReference, loading: true })
+                const res = await adminRemoveCaseReference(data[0]?._id, removeCaseReference?.type)
+                if (res?.status == 200 && res?.data?.success) {
                     toast.success(res?.data?.message)
 
-                    setRemoveCaseReference({status:false,type:null,loading:false})
+                    setRemoveCaseReference({ status: false, type: null, loading: false })
                 }
             } catch (error) {
-                if(error && error?.response?.data?.message){
+                if (error && error?.response?.data?.message) {
                     toast.error(error?.response?.data?.message)
-                }else{
+                } else {
                     toast.error("Failed to remove case reference")
                 }
-                setRemoveCaseReference({status:false,type:null,loading:false})
+                setRemoveCaseReference({ status: false, type: null, loading: false })
             }
         }
- }
+    }
 
     return (<>
         {loading ? <Loader /> :
@@ -128,7 +131,7 @@ export default function AdminViewCase() {
                                 <IoArrowBackCircleOutline className="fs-3" onClick={() => navigate(-1)} style={{ cursor: "pointer" }} />
                                 <div className="d-flex flex align-items-center gap-1">
                                     <span>View Cases</span>
-                                  
+
                                 </div>
                             </div>
                         </div>
@@ -142,7 +145,7 @@ export default function AdminViewCase() {
                                                     <div className="border-3 border-primary border-bottom mb-5">
                                                         <div className="d-flex align-items-center justify-content-between">
                                                             <h6 className="text-primary text-capitalize text-center fs-3">{data[0]?.caseFrom}</h6>
-                                                            <Link to={data[0]?.caseFrom == "partner" ? `/admin/partner%20details/${data[0]?.partnerId}` : `/admin/client%20details/${data[0]?.clientId}`} className="btn btn-primary">View</Link>
+                                                            {data[0]?.caseFrom != "sale" &&  <Link to={data[0]?.caseFrom == "partner" ? `/admin/partner%20details/${data[0]?.partnerId}` : `/admin/client%20details/${data[0]?.clientId}`} className="btn btn-primary">View</Link>}
                                                         </div>
                                                     </div>
                                                     <div className="row">
@@ -156,16 +159,16 @@ export default function AdminViewCase() {
                                                                 <p className=" h6 text-capitalize">{data[0]?.partnerName}</p>
                                                             </div>
                                                         }
-                                                        <div className="mb-2 d-flex align-items-center gap-3 col-12 col-md-4">
+                                                        {data[0]?.consultantCode && <div className="mb-2 d-flex align-items-center gap-3 col-12 col-md-4">
                                                             <h6 className="fw-bold">{data[0]?.caseFrom?.toLowerCase() == "client" ? "Customer Code" : "Consultant Code"} </h6>
                                                             <p className=" h6 text-capitalize">{data[0]?.consultantCode}</p>
-                                                        </div>
+                                                        </div>}
 
                                                         {data[0]?.caseFrom?.toLowerCase() == "client" && data[0]?.partnerId && <div className="mb-2 d-flex align-items-center gap-3 col-12 col-md-4">
                                                             <h6 className="fw-bold">Reference of partner </h6>
                                                             <Link to={`/admin/partner details/${data[0]?.partnerId}`} className="h6 text-decoration-underline text-capitalize">View</Link>
                                                         </div>}
-                                                    
+
                                                         {data[0]?.caseFrom == "partner" &&
                                                             <div className="mb-2 d-flex align-items-center gap-3 col-12 col-md-12">
                                                                 <h6 className="fw-bold">Mapping Id</h6>
@@ -181,8 +184,8 @@ export default function AdminViewCase() {
                                                         <div className="d-flex gap-2 align-items-center justify-content-between">
                                                             <h6 className="text-primary text-center fs-3">Case Details</h6>
                                                             <div className="d-flex gap-2">
-                                                                <Link to={`/admin/edit%20case/${data[0]?._id}`} className="btn btn-primary">Edit/ Update</Link>
-                                                                {data[0]?.caseFrom != "partner" && (data[0]?.partnerId || data[0]?.empSaleId)  && <button className="btn btn-warning text-white" onClick={() => setRemoveCaseReference({...removeCaseReference,status:true})}>Remove Reference</button>}
+                                                                  <Link to={`/admin/edit%20case/${data[0]?._id}`} className="btn btn-primary">Edit/ Update</Link>
+                                                                {data[0]?.caseFrom != "partner" && (data[0]?.partnerId || data[0]?.empSaleId) && <button className="btn btn-warning text-white" onClick={() => setRemoveCaseReference({ ...removeCaseReference, status: true })}>Remove Reference</button>}
                                                                 {data[0]?.caseFrom != "partner" && <button className="btn btn-success text-white" onClick={() => setAddCaseReference({ show: true, _id: data[0]?._id })}>Add Reference</button>}
                                                             </div>
                                                         </div>
@@ -292,31 +295,30 @@ export default function AdminViewCase() {
                                                         </div>
                                                         <div className="d-flex flex-wrap  gap-5 px-5  align-items-center">
                                                             {data[0]?.caseDocs.map(item =>
-                                                                <>{item?.docType == "image" ?
-                                                                    <div onClick={() => setViewDocs({ status: true, details: item })} style={{ cursor: "pointer" }} className="align-items-center bg-color-7 d-flex flex-column justify-content-center w-25 rounded-3">
+                                                                <>
+                                                                    <div className="align-items-center bg-color-7 d-flex flex-column justify-content-center w-25 rounded-3">
+                                                                    <div className="w-100 p-2">
+                                                                            <div className="dropdown float-end cursor-pointer">
+                                                                            <i className="bi bi-three-dots-vertical" data-bs-toggle="dropdown" aria-expanded="false"></i>
+                                                                            <ul className="dropdown-menu">
+                                                                                <li><div className="dropdown-item">{item?.docType == "image" ? <div onClick={() => setViewDocs({ status: true, details: item })}> View</div> : <Link to={`${API_BASE_IMG}/${encodeURIComponent(item?.docURL)}`} target="_blank">View</Link>}</div></li>
+                                                                                <li><div onClick={()=>setDeleteCaseDoc({status:true,id:`caseId=${data[0]?._id}&docId=${item?._id}`})} className="dropdown-item">Delete</div></li>
+                                                                            </ul>
+                                                                        </div>
+                                                                            </div> 
                                                                         <div className="d-flex flex-column p-4 justify-content-center align-items-center">
                                                                             <div className="d-flex justify-content-center bg-color-6 align-items-center fs-4 text-white bg-primary" style={{ height: '3rem', width: '3rem', borderRadius: '3rem' }}>
                                                                                 {item?.docType == "image" ? <FaFileImage /> : (item?.docType == "pdf" ? <FaFilePdf /> : <FaFileWord />)}
                                                                             </div>
                                                                         </div>
                                                                         <div className="d-flex align-items-center justify-content-center bg-dark gap-5 w-100 p-2 text-primary">
-                                                                            <p className="text-center text-nowrap fs-5 text-capitalize">{item?.docName}</p>
-                                                                            {/* <span onClick={()=>setViewDocs({status:true,details:item})} style={{ cursor: "pointer" }}><FaEye/></span><span style={{ cursor: "pointer" }}><IoCloudDownloadOutline/></span> */}
+                                                                            <p className="text-center text-wrap fs-5 text-capitalize">{item?.docName}</p>
                                                                         </div>
                                                                     </div>
-                                                                    : <Link to={`${API_BASE_IMG}/${encodeURIComponent(item?.docURL)}`} target="_blank" style={{ cursor: "pointer" }} className="align-items-center bg-color-7 d-flex flex-column justify-content-center w-25 rounded-3">
-                                                                        <div className="d-flex flex-column p-4 justify-content-center align-items-center">
-                                                                            <div className="d-flex justify-content-center bg-color-6 align-items-center fs-4 text-white bg-primary" style={{ height: '3rem', width: '3rem', borderRadius: '3rem' }}>
-                                                                                {item?.docType == "image" ? <FaFileImage /> : (item?.docType == "pdf" ? <FaFilePdf /> : <FaFileWord />)}
-                                                                            </div>
-                                                                        </div>
-                                                                        <div className="d-flex align-items-center justify-content-center bg-dark gap-5 w-100 p-2 text-primary">
-                                                                            <p className="text-center text-nowrap fs-5 text-capitalize">{item?.docName}</p>
-                                                                            {/* <span onClick={()=>setViewDocs({status:true,details:item})} style={{ cursor: "pointer" }}><FaEye/></span><span style={{ cursor: "pointer" }}><IoCloudDownloadOutline/></span> */}
-                                                                        </div>
-                                                                    </Link>} </>
+                                                                </>
                                                             )}
                                                         </div>
+
 
                                                         <div className="d-flex row  gap-0  align-items-center"></div>
                                                     </div>}
@@ -396,7 +398,7 @@ export default function AdminViewCase() {
                 {/* {console.log("showEditCaseModal",showEditCaseModal)} */}
                 {showEditCaseModal?.status && <EditCaseStatusModal changeStatus={showEditCaseModal} setChangeStatus={setShowEditCaseModal} handleCaseStatus={adminEditCaseProcessById} role="admin" />}
                 {changeStatus?.status && <ChangeStatusModal changeStatus={changeStatus} setChangeStatus={setChangeStatus} handleCaseStatus={adminChangeCaseStatus} role="admin" />}
-             
+
 
                 {/* for clear case payment */}
                 <Modal
@@ -450,24 +452,24 @@ export default function AdminViewCase() {
                     <Modal.Body className='color-4'>
                         <h4 className='text-danger text-center py-3 fs-3'>Are You Sure ?</h4>
                         <p className='text-primary text-center fs-5'>
-                            Your want to remove the Reference in this case.
+                            Want to remove the Reference in this case.
                         </p>
                         <div className="mb-3 col-12">
-                            <select className="form-select w-100" name="Type" value={removeCaseReference.type} onChange={(e) =>setRemoveCaseReference({...removeCaseReference,type:e?.target?.value}) } >
+                            <select className="form-select w-100" name="Type" value={removeCaseReference.type} onChange={(e) => setRemoveCaseReference({ ...removeCaseReference, type: e?.target?.value })} >
                                 <option value="">--select remove reference type</option>
                                 {data[0]?.partnerId && <option value="partner">Partner</option>}
-                                {data[0]?.empSaleId && <option value="sale-emp">Sale</option> }
+                                {data[0]?.empSaleId && <option value="sale-emp">Sale</option>}
                             </select>
                         </div>
 
                         <div className="d-flex gap-1 flex-reverse">
                             <div className="d-flex  justify-content-center">
-                                <div aria-disabled={removeCaseReference.loading} className={`d-flex align-items-center justify-content-center gap-3 btn btn-primary ${removeCaseReference.loading 
+                                <div aria-disabled={removeCaseReference.loading} className={`d-flex align-items-center justify-content-center gap-3 btn btn-primary ${removeCaseReference.loading
                                     && "disabled"}`} onClick={handleRemoveCaseReference}>
                                     {removeCaseReference.loading ? <span className="spinner-border spinner-border-sm" role="status" aria-hidden={true}></span> : <span>Remove</span>}
                                 </div>
                             </div>
-                            <Button onClick={() => setRemoveCaseReference({status:false,type:null,loading:false})}>Close</Button>
+                            <Button onClick={() => setRemoveCaseReference({ status: false, type: null, loading: false })}>Close</Button>
 
                         </div>
 
@@ -476,6 +478,8 @@ export default function AdminViewCase() {
                 {/* {console.log("addCaseReference", addCaseReference)} */}
                 {caseCommitModal && <AddCaseCommit show={caseCommitModal} id={param?._id} close={() => { setCaseCommitModal(false) }} handleCaseCommit={adminAddCaseCommit} />}
                 {addCaseReference?.show && <AddReferenceModal showAddCaseReference={addCaseReference} hide={() => setAddCaseReference({ show: false, _id: "" })} addReferenceCase={adminAddCaseReference} />}
+                {deleteCaseDoc?.status && <ConfirmationModal show={deleteCaseDoc?.status} hide={()=>setDeleteCaseDoc({status:false,id:null})} id={deleteCaseDoc?.id} handleComfirmation={adminDeleteCaseDocById} heading={"Are you sure?"} text={"Want to permanent delete this doc"}/>}
+                                    
             </div>}
     </>)
 }

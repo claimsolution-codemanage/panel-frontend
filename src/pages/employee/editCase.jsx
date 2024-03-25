@@ -1,32 +1,34 @@
 import { useEffect, useState } from "react"
-import { policyType, generalInsuranceList, healthInsuranceList, LifeInsuranceList,otherInsuranceList } from "../../utils/constant"
-import { clientAddNewCase } from "../../apis"
+import { policyType,allState, generalInsuranceList, healthInsuranceList, LifeInsuranceList,otherInsuranceList } from "../../utils/constant"
 import { toast } from 'react-toastify'
-import { FaCircleArrowDown } from 'react-icons/fa6'
-import { LuPcCase } from 'react-icons/lu'
-import { CiEdit } from 'react-icons/ci'
-import { IoArrowBackCircleOutline } from 'react-icons/io5'
 import { useNavigate } from "react-router-dom"
-import { insuranceCompany } from "../../utils/constant"
 import { isNaN, useFormik } from 'formik'
 import * as yup from 'yup'
-import { allState } from "../../utils/constant"
-import { clientAttachementUpload } from "../../apis/upload"
+import {IoArrowBackCircleOutline} from 'react-icons/io5'
 import { FaFilePdf, FaFileImage,FaFileWord } from 'react-icons/fa6'
 import { useRef } from "react"
 import { IoMdAdd } from 'react-icons/io'
-import {checkNumber} from '../../utils/helperFunction'
+import { useParams } from "react-router-dom"
+import { employeeGetCaseById,adminUpdateCaseById,employeeUpdateCaseById} from "../../apis"
+import Loader from "../../components/Common/loader"
+import { employeeAttachementUpload } from "../../apis/upload"
+import {getFormateForDate} from "../../utils/helperFunction"
 import AddNewCaseDocsModal from "../../components/Common/addNewCaseDoc"
 
-export default function ClientNewCase() {
+
+export default function EmployeeEditCase() {
     const [uploadAttachement,setUploadAttachement] = useState({status:0,message:""})
+    const params = useParams()
     const [uploadedFiles,setUploadedFiles] = useState([])
     const [uploadingDocs,setUploadingDocs] = useState(false)
     const [selectPolicyType, setSelectPolicyType] = useState("")
+    const [isUpdatedPolicyType,setIsUpdatePolicyType] = useState(false)
     const [selectComplaintType, setComplaintPolicyType] = useState([])
     const [loading, setLoading] = useState(false)
+    const [loadCase,setLoadCase] = useState(false)
     const attachmentRef = useRef()
     const navigate = useNavigate()
+    // console.log("params",params?._id);
     const [data, setData] = useState({
         name: "",
         fatherName: "",
@@ -47,17 +49,6 @@ export default function ClientNewCase() {
     const handlePolicyType = (e) => {
         const { name, value } = e.target
         setData({ ...data, [name]: value })
-        setSelectPolicyType(value)
-        if (e.target.value == "Life Insurance") {
-            setComplaintPolicyType([...LifeInsuranceList])
-        } else if (e.target.value == "General Insurance") {
-            setComplaintPolicyType([...generalInsuranceList])
-        } else if (e.target.value == "Health Insurance") {
-            setComplaintPolicyType([...healthInsuranceList])
-        }else{
-            setComplaintPolicyType([...otherInsuranceList])
-        }
-
         // console.log(e.target.value);
     }
 
@@ -92,7 +83,6 @@ export default function ClientNewCase() {
             insuranceCompanyName: yup.string(),
             policyNo: yup.string(),
             address: yup.string(),
-            DOB: yup.string(),
             pinCode: yup.string(),
             claimAmount: yup.string().required("Please Enter your Claim Amount"),
             city: yup.string(),
@@ -100,19 +90,32 @@ export default function ClientNewCase() {
             problemStatement: yup.string(), 
         }),
         onSubmit: async (values) => {
-            let payLoad = { ...values,caseDocs:uploadedFiles }
-            // console.log("formik values",values,payLoad);
-            // return
+            const payLoad ={
+                name:values?.name,
+                fatherName:values?.fatherName,
+                email:values?.email,
+                mobileNo:values?.mobileNo,
+                policyType:values?.policyType,
+                insuranceCompanyName:values?.insuranceCompanyName,
+                complaintType:values?.complaintType,
+                policyNo:values?.policyNo,
+                address:values?.address,
+                DOB:values?.DOB,
+                pinCode:values?.pinCode,
+                claimAmount:values?.claimAmount,
+                city:values?.city,
+                state:values?.state,
+                problemStatement:values?.problemStatement,
+                caseDocs:uploadedFiles,
+            }
             setLoading(true)
             try {
-                const res = await clientAddNewCase(payLoad)
+                const res = await employeeUpdateCaseById(params?._id,payLoad)
                 // console.log("client new case", res?.data);
                 if (res?.data?.success && res?.data) {
                     toast.success(res?.data?.message)
                     setLoading(false)
-                    if (res?.data?._id) {
-                        navigate(`/client/view case/${res?.data?._id}`)
-                    }
+                    navigate(`/employee/view case/${params?._id}`)
                 }
             } catch (error) {
                 if (error && error?.response?.data?.message) {
@@ -129,7 +132,9 @@ export default function ClientNewCase() {
 
     useEffect(()=>{
         const policyType = caseDetailsFormik?.values?.policyType
-        caseDetailsFormik.setFieldValue("complaintType","")
+        if(isUpdatedPolicyType){
+            caseDetailsFormik.setFieldValue("complaintType","")
+        }
         if (policyType == "Life Insurance") {
             setComplaintPolicyType([...LifeInsuranceList])
         } else if (policyType == "General Insurance") {
@@ -196,11 +201,11 @@ export default function ClientNewCase() {
         try {
             const formData = new FormData()
             formData.append("attachment",file)
-            const res = await clientAttachementUpload(type,formData)
+            const res = await employeeAttachementUpload(type,formData)
             // console.log("partner", res?.data);
             if (res?.data?.success) {
                 // console.log("response",res?.data);
-                setUploadedFiles([...uploadedFiles,{fileType:type,url:res?.data?.url}])
+                setUploadedFiles([...uploadedFiles,{docFormat:type,docURL:res?.data?.url}])
                 // toast.success(res?.data?.message)
                 setUploadAttachement({ status: 1, message: res?.data?.message });
                 setTimeout(() => {
@@ -222,9 +227,6 @@ export default function ClientNewCase() {
         }
      }
     
-    const handleCaseDocsUploading =(payload)=>{
-        setUploadedFiles([...uploadedFiles,payload])
-    }
     
     const handleAttachment = async() => {
             const files = attachmentRef?.current?.files;
@@ -257,18 +259,53 @@ export default function ClientNewCase() {
             }
         };
 
-    // console.log("caseformik",caseDetailsFormik?.errors);
+        const getCaseById = async () => {
+            setLoadCase(true)
+            try {
+                const res = await employeeGetCaseById(params?._id)
+                // console.log("case", res?.data?.data);
+                if (res?.data?.success && res?.data?.data) {
+                    caseDetailsFormik.setValues(res?.data?.data)
+                    setUploadedFiles([...res?.data?.data?.caseDocs])
+                    // setData([res?.data?.data])
+                    setLoadCase(false)
+    
+                }
+            } catch (error) {
+                if (error && error?.response?.data?.message) {
+                    toast.error(error?.response?.data?.message)
+                    setLoadCase(false)
+                } else {
+                    toast.error("Something went wrong")
+                    setLoadCase(false)
+                }
+    
+                // console.log("case error", error);
+            }
+        }
+    
+        useEffect(() => {
+            if (params?._id) {
+                getCaseById()
+            }
+        }, [params])
 
+    // console.log("caseformik",caseDetailsFormik);
 
+    
+    const handleCaseDocsUploading =(payload)=>{
+        setUploadedFiles([...uploadedFiles,payload])
+    }
 
 
     return (<>
+    {loadCase ? <Loader/> : 
         <div>
             <div className="d-flex justify-content-between bg-color-1 text-primary fs-5 px-4 py-3 shadow">
                 <div className="d-flex flex align-items-center gap-3">
-                    {/* <IoArrowBackCircleOutline className="fs-3" style={{ cursor: 'pointer' }} onClick={() => navigate("/client/dashboard")} /> */}
+                    <IoArrowBackCircleOutline className="fs-3" style={{ cursor: 'pointer' }} onClick={() => navigate(-1)} />
                     <div className="d-flex flex align-items-center gap-1">
-                        <span>Add New Case</span>
+                        <span>Edit Case</span>
                     </div>
                 </div>
             </div>
@@ -277,10 +314,9 @@ export default function ClientNewCase() {
                     <div className="my-3 p-3 p-md-5">
                         <div className="form bg-color-1 p-3 p-md-5 rounded-2 shadow">
                         <div className="border-3 border-primary border-bottom">
-                            <h6 className="text-primary text-center fs-3">Add New Case</h6>
+                            <h6 className="text-primary text-center fs-3">Edit Case</h6>
                         </div>
-                        <div className="h4 mt-4">Policy Holder's Details</div>
-                            <div className="row row-cols-12 row-cols-md-3">
+                            <div className="row row-cols-12 row-cols-3 mt-4">
                                 <div className="mb-3 ">
                                     <label for="name" className={`form-label ${caseDetailsFormik?.touched?.name && caseDetailsFormik?.touched?.name && caseDetailsFormik?.errors?.name && "text-danger"}`}>Name *</label>
                                     <input type="text" className={`form-control ${caseDetailsFormik?.touched?.name && caseDetailsFormik?.touched?.name && caseDetailsFormik?.errors?.name && "border-danger"}`} id="name" name="name" value={caseDetailsFormik?.values?.name} onChange={handleChange} />
@@ -309,9 +345,10 @@ export default function ClientNewCase() {
                                         <span className="text-danger">{caseDetailsFormik?.errors?.mobileNo}</span>
                                     ) : null}
                                 </div>
-                                          <div className="mb-3 ">
+                                <div className="mb-3 ">
                                     <label for="name" className={`form-label ${caseDetailsFormik?.touched?.DOB && caseDetailsFormik?.touched?.DOB && caseDetailsFormik?.errors?.DOB && "text-danger"}`}>DOB</label>
-                                    <input type="date" className={`form-control ${caseDetailsFormik?.touched?.DOB && caseDetailsFormik?.touched?.DOB && caseDetailsFormik?.errors?.DOB && "border-danger"}`} id="DOB" name="DOB" value={caseDetailsFormik?.values?.DOB} onChange={handleChange} />
+                                    {console.log(getFormateForDate(caseDetailsFormik?.values?.DOB))}
+                                    <input type="date" className={`form-control ${caseDetailsFormik?.touched?.DOB && caseDetailsFormik?.touched?.DOB && caseDetailsFormik?.errors?.DOB && "border-danger"}`} id="DOB" name="DOB" value={getFormateForDate(caseDetailsFormik?.values?.DOB)} onChange={handleChange} />
                                     {caseDetailsFormik?.touched?.DOB && caseDetailsFormik?.errors?.DOB ? (
                                         <span className="text-danger">{caseDetailsFormik?.errors?.DOB}</span>
                                     ) : null}
@@ -332,7 +369,7 @@ export default function ClientNewCase() {
                                 </div>
                                 <div className="mb-3 ">
                                     <label for="policyType" className={`form-label ${caseDetailsFormik?.touched?.policyType && caseDetailsFormik?.errors?.policyType && "text-danger"}`}>Policy Type</label>
-                                    <select className={`form-select ${caseDetailsFormik?.touched?.policyType && caseDetailsFormik?.errors?.policyType && "border-danger"}`} value={caseDetailsFormik?.values?.policyType} name="policyType"  onChange={handleChange} id="policyType" aria-label="Default select example">
+                                    <select className={`form-select ${caseDetailsFormik?.touched?.policyType && caseDetailsFormik?.errors?.policyType && "border-danger"}`} value={caseDetailsFormik?.values?.policyType} name="policyType" onChange={handleChange} id="policyType" aria-label="Default select example">
                                         <option value="">--Select Policy Type</option>
                                         {policyType.map((policy, ind) => <option key={ind} value={policy}>{policy}</option>)}
                                     </select>
@@ -342,7 +379,7 @@ export default function ClientNewCase() {
                                 </div>
                                 <div className="mb-3 ">
                                     <label for="complaintType" className={`form-label ${caseDetailsFormik?.touched?.complaintType && caseDetailsFormik?.errors?.complaintType && "border-danger"}`}>Complaint Type</label>
-                                    <select className={`form-select ${caseDetailsFormik?.touched?.complaintType && caseDetailsFormik?.errors?.complaintType && "border-danger"}`} id="complaintType" name="complaintType" value={caseDetailsFormik?.values?.complaintType} onChange={handleChange} aria-label="Default select example">
+                                    <select className={`form-select ${caseDetailsFormik?.touched?.complaintType && caseDetailsFormik?.errors?.complaintType && "border-danger"}`} id="complaintType" name="complaintType" value={caseDetailsFormik?.values?.complaintType} onChange={(e)=>{handleChange(e);setIsUpdatePolicyType(true)}} aria-label="Default select example">
                                         <option value="">--Select Complaint Type</option>
                                         <option value="Claim Rejection">Claim Rejection</option>
                                         <option value="Claim-Short Payment">Claim-Short Payment</option>
@@ -355,10 +392,10 @@ export default function ClientNewCase() {
                                         <span className="text-danger">{caseDetailsFormik?.errors?.complaintType}</span>
                                     ) : null}
                                 </div>
-                       
+                
                                 <div className="mb-3 ">
                                     <label for="claimAmount" className={`form-label ${caseDetailsFormik?.touched?.claimAmount && caseDetailsFormik?.touched?.claimAmount && caseDetailsFormik?.errors?.claimAmount && "text-danger"}`}>Claim Amount*</label>
-                                    <input type="text" className={`form-control ${caseDetailsFormik?.touched?.claimAmount && caseDetailsFormik?.touched?.claimAmount && caseDetailsFormik?.errors?.claimAmount && "border-danger"}`} id="claimAmount" name="claimAmount" value={caseDetailsFormik?.values?.claimAmount} onChange={(e)=>checkNumber(e) && handleChange(e)} />
+                                    <input type="text" className={`form-control ${caseDetailsFormik?.touched?.claimAmount && caseDetailsFormik?.touched?.claimAmount && caseDetailsFormik?.errors?.claimAmount && "border-danger"}`} id="claimAmount" name="claimAmount" value={caseDetailsFormik?.values?.claimAmount} onChange={handleChange} />
                                     {caseDetailsFormik?.touched?.claimAmount && caseDetailsFormik?.errors?.claimAmount ? (
                                         <span className="text-danger">{caseDetailsFormik?.errors?.claimAmount}</span>
                                     ) : null}
@@ -389,12 +426,13 @@ export default function ClientNewCase() {
                                 </div>
                                 <div className="mb-3 ">
                                     <label for="name" className={`form-label ${caseDetailsFormik?.touched?.pinCode && caseDetailsFormik?.touched?.pinCode && caseDetailsFormik?.errors?.pinCode && "text-danger"}`}>PinCode</label>
-                                    <input type="text" className={`form-control ${caseDetailsFormik?.touched?.pinCode && caseDetailsFormik?.touched?.pinCode && caseDetailsFormik?.errors?.pinCode && "border-danger"}`} id="pinCode" name="pinCode" value={caseDetailsFormik?.values?.pinCode} onChange={(e)=>checkNumber(e) && handleChange(e)} />
+                                    <input type="text" className={`form-control ${caseDetailsFormik?.touched?.pinCode && caseDetailsFormik?.touched?.pinCode && caseDetailsFormik?.errors?.pinCode && "border-danger"}`} id="pinCode" name="pinCode" value={caseDetailsFormik?.values?.pinCode} onChange={handleChange} />
                                     {caseDetailsFormik?.touched?.pinCode && caseDetailsFormik?.errors?.pinCode ? (
                                         <span className="text-danger">{caseDetailsFormik?.errors?.pinCode}</span>
                                     ) : null}
                                 </div>
-                            
+                                
+        
                             </div>
                                 <div className="row">
                                 <div className="mb-3 col-12">
@@ -417,23 +455,21 @@ export default function ClientNewCase() {
                                       {/* {uploadAttachement.message=1 ? <p className="text-sucess text-center">{uploadAttachement.message}</p> : <p className="text-danger text-center">{uploadAttachement.message}</p> }   */}
                                     </div>
                                     <div className="d-flex  gap-5 px-5  align-items-center">
-                                    {uploadedFiles.map(item =>  <div  className="align-items-center bg-color-7 d-flex flex-column justify-content-center w-25 rounded-3">
-                            <div className="d-flex flex-column p-4 justify-content-center align-items-center">
-                                <div className="d-flex justify-content-center bg-color-6 align-items-center fs-4 text-white bg-primary" style={{ height: '3rem', width: '3rem', borderRadius: '3rem' }}>
-                                    {item?.docType == "image" ? <FaFileImage /> : <FaFilePdf />}
+                                                        {uploadedFiles.map(item => <div  className="align-items-center bg-color-7 d-flex flex-column justify-content-center w-25 rounded-3">
+                                                            <div className="d-flex flex-column p-4 justify-content-center align-items-center">
+                                                                <div className="d-flex justify-content-center bg-color-6 align-items-center fs-4 text-white bg-primary" style={{ height: '3rem', width: '3rem', borderRadius: '3rem' }}>
+                                                                    {item?.docFormat == "image" ? <FaFileImage /> : (item?.docFormat == "pdf" ? <FaFilePdf /> : <FaFileWord/>)}
+                                                                </div>
+                                                                    <div className="fs-5 text-break text-capitalize text-center text-wrap">{item?.docName}</div>
+                                                            </div>
+                                                          
+                                                        </div>
+                                                        )}
+                                                    </div>
                                 </div>
-                            </div>
-                            <div className="d-flex align-items-center justify-content-center bg-dark gap-5 w-100 p-2 text-primary">
-                                <p className="fs-5 text-break text-capitalize text-center text-wrap">{item?.docName}</p>
-                            </div>
-                        </div>
-                        )}
-                    </div>
-                                </div>                            
-                    
                             <div className="d-flex  justify-content-center">
                                 <button type="submit" aria-disabled={loading} className={loading ? "d-flex align-items-center justify-content-center gap-3 btn btn-primary w-50 disabled" : "d-flex align-items-center justify-content-center gap-3 btn btn-primary w-50 "}>
-                                    {loading ? <span className="spinner-border spinner-border-sm" role="status" aria-hidden={true}></span> : <span>Add New Case </span>}
+                                    {loading ? <span className="spinner-border spinner-border-sm" role="status" aria-hidden={true}></span> : <span>Save </span>}
                                 </button>
                             </div>
 
@@ -442,7 +478,7 @@ export default function ClientNewCase() {
                     </div>
                 </form>
             </div>
-            <AddNewCaseDocsModal uploadingDocs={uploadingDocs} setUploadingDocs={setUploadingDocs} handleCaseDocsUploading={handleCaseDocsUploading} attachementUpload={clientAttachementUpload}/>
-        </div>
+            <AddNewCaseDocsModal uploadingDocs={uploadingDocs} setUploadingDocs={setUploadingDocs} handleCaseDocsUploading={handleCaseDocsUploading} attachementUpload={employeeAttachementUpload}/>
+        </div>}
     </>)
 }
