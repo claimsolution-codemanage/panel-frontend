@@ -24,7 +24,8 @@ import Loader from "../../components/Common/loader"
 import loash from 'lodash'
 import { AppContext } from "../../App"
 import { useContext } from "react"
-
+import DateSelect from "../../components/Common/DateSelect"
+import { CiFilter } from "react-icons/ci";
  
 export default function EmployeeAllClient() {
   const state = useContext(AppContext)
@@ -38,12 +39,26 @@ export default function EmployeeAllClient() {
   const [noOfClient, setNoOfClient] = useState(0)
   const [pgNo, setPgNo] = useState(1)
   const [changeStatus, setChangeStatus] = useState({show: false, details: "" })
+  const [showCalender, setShowCalender] = useState(false)
+  const [dateRange, setDateRange] = useState(
+    {
+      startDate: new Date("2024/01/01"),
+      endDate: new Date(),
+    });
 
+  const handleReset = () => {
+    setSearchQuery("")
+    setPageItemLimit(5)
+    setDateRange({ startDate: new Date("2024/01/01"), endDate: new Date()})
+    setPgNo(1)
+  }
 
   const getAllClient =async()=>{
     setLoading(true)
     try {
-      const res = await employeeAllClient(pageItemLimit, pgNo, searchQuery)
+      const startDate = dateRange?.startDate ? getFormateDate(dateRange?.startDate) : ""
+      const endDate = dateRange?.endDate ? getFormateDate(dateRange?.endDate) : ""
+      const res = await employeeAllClient(pageItemLimit, pgNo, searchQuery,startDate,endDate)
       // console.log("allAdminClient", res?.data?.data);
       if (res?.data?.success && res?.data?.data) {
         setData([...res?.data?.data])
@@ -98,6 +113,7 @@ export default function EmployeeAllClient() {
   return (<>
   {loading ? <Loader/> : 
     <div>
+        <DateSelect show={showCalender} hide={() => setShowCalender(false)} onFilter={getAllClient} dateRange={dateRange} setDateRange={setDateRange} />
     <div className="d-flex justify-content-between bg-color-1 text-primary fs-5 px-4 py-3 shadow">
         <div className="d-flex flex align-items-center gap-3">
           {/* <IoArrowBackCircleOutline className="fs-3"  onClick={() => navigate("/employee/dashboard")} style={{ cursor: "pointer" }} /> */}
@@ -108,7 +124,7 @@ export default function EmployeeAllClient() {
         </div>
       </div>
 
-      <div className=" m-5 p-4">
+      <div className="m-md-5 p-md-4">
       <div className="bg-color-1 p-3 p-md-5 rounded-2 shadow">
       <div className="d-flex flex gap-2">
        
@@ -116,6 +132,9 @@ export default function EmployeeAllClient() {
             <span className=""><BsSearch className="text-black" /></span>
             <input className="w-100" value={searchQuery} onChange={(e) => handleSearchQuery(e.target.value)} placeholder="Search.." style={{ outline: "none", border: 0 }} />
           </div>
+          <div className="btn btn-primary" onClick={() => setShowCalender(!showCalender)}><CiFilter/></div>
+          <div className="btn btn-primary" onClick={() => handleReset()}>Reset</div>
+        
         
             <div className="">
               <select className="form-select" name="pageItemLimit" value={pageItemLimit} onChange={(e) => setPageItemLimit(e.target.value)} aria-label="Default select example">

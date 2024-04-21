@@ -230,8 +230,8 @@ export default function AddDocsModal({ _id, uploadingDocs, setUploadingDocs, han
                 {docType?.map(type=><option value={type.value}>{type.label}</option>)}
                 </select>
                 {data?.docName?.toLowerCase()=="other" &&<>
-                <input type="text" className="form-control mt-2" placeholder={"Document Name"} value={otherDocName} onChange={(e)=>e?.target?.value?.length<30 && setOtherDocName(e?.target?.value)} />
-                <p>Document name have maximum 30 characters</p>
+                <input type="text" className="form-control mt-2" placeholder={"Document Name"} value={otherDocName} onChange={(e)=>e?.target?.value?.length<60 && setOtherDocName(e?.target?.value)} />
+                <p>Document name have maximum 60 characters</p>
                 </> }
                 </div>
                     <div className="d-flex  gap-5 px-5  align-items-center">

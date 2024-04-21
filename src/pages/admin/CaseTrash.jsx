@@ -34,7 +34,8 @@ import {VscGitPullRequestGoToChanges} from 'react-icons/vsc'
 import { adminSetCaseIsActive } from "../../apis"
 import SetStatusOfProfile from "../../components/Common/setStatusModal"
 import {FaTrashRestoreAlt} from 'react-icons/fa'
-
+import DateSelect from "../../components/Common/DateSelect"
+import { SiMicrosoftexcel } from "react-icons/si";
  
 export default function AdminTrashCase() {
   const [data, setData] = useState([])
@@ -53,18 +54,16 @@ export default function AdminTrashCase() {
   const [isClipBoardCopy,setIsClipBoardCopy] = useState({id:"",copied:false,value:""})
   const [deleteCase,setDeleteCase] = useState({status:false,id:""})
   const [changeisActiveStatus, setChangeIsActiveStatus] = useState({show: false, details: {} })
-  const [dateRange, setDateRange] = useState([
+  const [dateRange, setDateRange] = useState(
     {
-      startDate: new Date("2023/01/01"),
+      startDate: new Date("2024/01/01"),
       endDate: new Date(),
-      key: 'selection'
-    }
-  ]);
+    });
 
   const handleReset = () => {
     setSearchQuery("")
     setPageItemLimit(5)
-    setDateRange([{ startDate: new Date("2023/01/01"), endDate: new Date(), key: 'selection' }])
+    setDateRange({ startDate: new Date("2024/01/01"), endDate: new Date(),})
     setStatusType("")
   }
 
@@ -72,8 +71,8 @@ const getAllCases =async()=>{
   setLoading(true)
   try {
     const type = false
-    const startDate = dateRange[0].startDate ? getFormateDate(dateRange[0].startDate) : ""
-    const endDate = dateRange[0].endDate ? getFormateDate(dateRange[0].endDate) : ""
+    const startDate = dateRange?.startDate ? getFormateDate(dateRange?.startDate) : ""
+    const endDate = dateRange?.endDate ? getFormateDate(dateRange?.endDate) : ""
     // console.log("start", startDate, "end", endDate);
     const res = await allAdminCase(pageItemLimit, pgNo, searchQuery, statusType, startDate, endDate,type)
     // console.log("allAdminCase", res?.data?.data);
@@ -98,7 +97,7 @@ const getAllCases =async()=>{
     if(!deleteCase.status ||!changeisActiveStatus.show ){
       getAllCases()
     }
-  }, [pageItemLimit, pgNo,dateRange, statusType, changeStatus,changeisActiveStatus,deleteCase])
+  }, [pageItemLimit, pgNo,statusType, changeStatus,changeisActiveStatus,deleteCase])
 
   useEffect(()=>{
     if(isSearch){
@@ -171,6 +170,7 @@ const getAllCases =async()=>{
   return (<>
    {loading?<Loader/> :
     <div>
+     <DateSelect show={showCalender} hide={() => setShowCalender(false)} onFilter={getAllCases} dateRange={dateRange} setDateRange={setDateRange} />
     <div className="d-flex justify-content-between bg-color-1 text-primary fs-5 px-4 py-3 shadow">
         <div className="d-flex flex align-items-center gap-3">
           {/* <IoArrowBackCircleOutline className="fs-3"  onClick={() => navigate("/admin/dashboard")} style={{ cursor: "pointer" }} /> */}
@@ -215,23 +215,7 @@ const getAllCases =async()=>{
           </div>
         </div>
       </div>
-      <div className="position-relative">
-        <div className="d-flex align-items-center position-absolute  mt-2 justify-content-center m-0">
-        {showCalender && <DateRange
-                onChange={item => {
-                  setDateRange([item.selection]);
-                  setShowCalender(false);
-                }}
-                editableDateInputs={true}
-                months={1}
-                ranges={dateRange}
-                moveRangeOnFirstSelection={false}
-                direction="horizontal"
-              // preventSnapRefocus={true}
-              // calendarFocus="backwards"
-              />}
-          </div>
-          </div>
+
       <div className="mt-4 overflow-auto">
         <table className="table table-responsive rounded-2 shadow table-borderless">
           <thead>

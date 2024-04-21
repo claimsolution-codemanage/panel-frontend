@@ -1,6 +1,7 @@
 // import {jwtDecode} from 'jwt-decode'
 import {jwtDecode} from 'jwt-decode'
 const mytoken = "insurance_token"
+export const API_BASE_IMG =  `${import.meta.env.VITE_API_BASE_IMG}`
 
 export const getToken =()=>{
     return localStorage.getItem(mytoken)
@@ -18,6 +19,19 @@ export const setToken =(token)=>{
 export const deleteToken = ()=>{
     localStorage.removeItem(mytoken)
 }
+
+export const getCheckStorage =(file)=>{
+  if(file){
+    if(file?.includes("https://firebasestorage.googleapis.com/")){
+      return file
+    }else{
+      return `${API_BASE_IMG}/${file}`
+    }
+  }else{
+    return false
+  }
+}
+
 
 export function formatDateToISO(dateString) {
     const date = new Date(dateString);
@@ -81,7 +95,7 @@ if(file?.fileSize>maxSize) return { success: false, message: `${fileType} must b
 
 
 const formData = new FormData();
-formData.append(fileType, file)
+formData.append("file", file)
 return {success:true,message:`${fileType} is supported!`,file:formData}
 }
   
@@ -103,5 +117,22 @@ export const checkNumber =(e) => {
     return true
   }else{
     return false
+  }
+}
+
+export const invoiceFormatDate = (dateTime,viewDate)=>{
+  if(dateTime){
+      const format = new Date(dateTime)
+      const year = format.getFullYear()
+      const month = format.getMonth()+1 <= 9 ?  `0${format.getMonth() + 1}` : format.getMonth() + 1
+      const date = format.getDate() <=9 ? `0${format.getDate()}` : format.getDate()
+      return viewDate ? `${date}-${month}-${year}` : `${year}-${month}-${date}`
+  }
+  else{
+      const format = new Date()
+      const year = format.getFullYear()
+      const month = format.getMonth()+1 <= 9 ?  `0${format.getMonth() + 1}` : format.getMonth() + 1
+      const date = format.getDate() <=9 ? `0${format.getDate()}` : format.getDate()
+      return viewDate ? `${date}-${month}-${year}` : `${year}-${month}-${date}`
   }
 }

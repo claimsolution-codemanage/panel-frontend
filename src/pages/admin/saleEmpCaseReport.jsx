@@ -18,7 +18,7 @@ import ChangeStatusModal from "../../components/Common/changeStatusModal"
 import { useNavigate } from "react-router-dom"
 import { BiLeftArrow } from 'react-icons/bi'
 import { BiRightArrow } from 'react-icons/bi'
-import { adminChangeCaseStatus, adminShareCaseToEmployee,adminViewPartnerReport,adminViewSaleEmpCaseReport } from "../../apis"
+import { adminChangeCaseStatus, adminShareCaseToEmployee, adminViewPartnerReport, adminViewSaleEmpCaseReport, adminSaleEmpCaseReportDownload } from "../../apis"
 import Loader from "../../components/Common/loader"
 import { IoShareSocialOutline } from "react-icons/io5";
 import { CiFilter } from "react-icons/ci";
@@ -35,6 +35,8 @@ import { adminSetCaseIsActive } from "../../apis"
 import SetStatusOfProfile from "../../components/Common/setStatusModal"
 import { CiAlignBottom } from 'react-icons/ci'
 import { useParams } from "react-router-dom"
+import DateSelect from "../../components/Common/DateSelect"
+import { SiMicrosoftexcel } from "react-icons/si";
 
 export default function AdminViewSaleEmpCaseReport() {
   const [data, setData] = useState([])
@@ -44,7 +46,7 @@ export default function AdminViewSaleEmpCaseReport() {
   const [statusType, setStatusType] = useState("")
   const [pageItemLimit, setPageItemLimit] = useState(10)
   const [showCalender, setShowCalender] = useState(false)
-  const [isSearch,setIsSearch] = useState(false)
+  const [isSearch, setIsSearch] = useState(false)
   const [searchQuery, setSearchQuery] = useState("")
   const [noOfCase, setNoOfCase] = useState(0)
   const [pgNo, setPgNo] = useState(1)
@@ -54,49 +56,77 @@ export default function AdminViewSaleEmpCaseReport() {
   const [isClipBoardCopy, setIsClipBoardCopy] = useState({ id: "", copied: false, value: "" })
   const [deleteCase, setDeleteCase] = useState({ status: false, id: "" })
   const [changeisActiveStatus, setChangeIsActiveStatus] = useState({ show: false, details: {} })
-  const [caseAmt,setCaseAmt] = useState(0)
-  const [userReport,setUserReport] = useState({})
-  const [dateRange, setDateRange] = useState([
-    {
-      startDate: new Date("2023/01/01"),
-      endDate: new Date(),
-      key: 'selection'
-    }
-  ]);
+  const [caseAmt, setCaseAmt] = useState(0)
+  const [userReport, setUserReport] = useState({})
+  const [downloading, setDownloading] = useState(false)
+  const [dateRange, setDateRange] = useState({ startDate: new Date("2024/01/01"), endDate: new Date() });
 
   const handleReset = () => {
     setSearchQuery("")
     setPageItemLimit(5)
-    setDateRange([{ startDate: new Date("2023/01/01"), endDate: new Date(), key: 'selection' }])
+    setDateRange({ startDate: new Date("2024/01/01"), endDate: new Date() })
     setStatusType("")
   }
 
   const getAllCases = async () => {
-    if(param?._id){
-        setLoading(true)
-        try {
-          const type = true
-          const startDate = dateRange[0].startDate ? getFormateDate(dateRange[0].startDate) : ""
-          const endDate = dateRange[0].endDate ? getFormateDate(dateRange[0].endDate) : ""
-          // console.log("start", startDate, "end", endDate);
-          const res = await adminViewSaleEmpCaseReport(param?._id,pageItemLimit, pgNo, searchQuery, statusType, startDate, endDate, type)
-          // console.log("allAdminCase", res?.data?.data);
-          if (res?.data?.success && res?.data?.data) {
-            setData([...res?.data?.data])
-            setNoOfCase(res?.data?.noOfCase)
-            setCaseAmt(res?.data?.totalAmt?.[0]?.totalAmtSum)
-            setUserReport(res?.data?.user)
-            setLoading(false)
-          }
-        } catch (error) {
-          if (error && error?.response?.data?.message) {
-            toast.error(error?.response?.data?.message)
-          } else {
-            toast.error("Something went wrong")
-          }
-          // console.log("allAdminCase error", error);
+    if (param?._id) {
+      setLoading(true)
+      try {
+        const type = true
+        const startDate = dateRange?.startDate ? getFormateDate(dateRange?.startDate) : ""
+        const endDate = dateRange?.endDate ? getFormateDate(dateRange?.endDate) : ""
+        // console.log("start", startDate, "end", endDate);
+        const res = await adminViewSaleEmpCaseReport(param?._id, pageItemLimit, pgNo, searchQuery, statusType, startDate, endDate, type)
+        // console.log("allAdminCase", res?.data?.data);
+        if (res?.data?.success && res?.data?.data) {
+          setData([...res?.data?.data])
+          setNoOfCase(res?.data?.noOfCase)
+          setCaseAmt(res?.data?.totalAmt?.[0]?.totalAmtSum)
+          setUserReport(res?.data?.user)
+          setLoading(false)
         }
+      } catch (error) {
+        if (error && error?.response?.data?.message) {
+          toast.error(error?.response?.data?.message)
+        } else {
+          toast.error("Something went wrong")
+        }
+        // console.log("allAdminCase error", error);
+      }
 
+    }
+  }
+
+  const handleDownload = async () => {
+    try {
+      const type = true
+      const startDate = dateRange.startDate ? getFormateDate(dateRange.startDate) : ""
+      const endDate = dateRange.endDate ? getFormateDate(dateRange.endDate) : ""
+      setDownloading(true)
+      const res = await adminSaleEmpCaseReportDownload(param?._id, searchQuery, statusType, startDate, endDate, type)
+      console.log("res", res);
+      if (res?.status == 200) {
+        const url = window.URL.createObjectURL(new Blob([res.data]));
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'Sales-Case-Report.xlsx'; // Specify the filename here
+        document.body.appendChild(a);
+        a.click();
+        window.URL.revokeObjectURL(url);
+        toast.success("Download the excel")
+        setDownloading(false)
+      } else {
+        setDownloading(false)
+
+      }
+    } catch (error) {
+      console.log("error", error);
+      if (error && error?.response?.data?.message) {
+        toast.error(error?.response?.data?.message)
+      } else {
+        toast.error("Failed to download")
+      }
+      setDownloading(false)
     }
   }
 
@@ -106,24 +136,24 @@ export default function AdminViewSaleEmpCaseReport() {
     if (!deleteCase.status || !changeisActiveStatus.show) {
       getAllCases()
     }
-  }, [pageItemLimit, pgNo, dateRange, statusType, changeStatus, changeisActiveStatus, deleteCase])
+  }, [pageItemLimit, pgNo, statusType, changeStatus, changeisActiveStatus, deleteCase])
 
-  useEffect(()=>{
-    if(isSearch){
+  useEffect(() => {
+    if (isSearch) {
       let debouncedCall = loash.debounce(function () {
         getAllCases()
         setIsSearch(false)
-    }, 1000);
-    debouncedCall();
-    return () => {
-      debouncedCall.cancel();
-    };
+      }, 1000);
+      debouncedCall();
+      return () => {
+        debouncedCall.cancel();
+      };
     }
 
-   },[searchQuery,isSearch])
+  }, [searchQuery, isSearch])
 
 
-   const handleSearchQuery =(value)=>{
+  const handleSearchQuery = (value) => {
     setIsSearch(true)
     setSearchQuery(value)
   }
@@ -179,9 +209,10 @@ export default function AdminViewSaleEmpCaseReport() {
   return (<>
     {loading ? <Loader /> :
       <div>
+        <DateSelect show={showCalender} hide={() => setShowCalender(false)} onFilter={getAllCases} dateRange={dateRange} setDateRange={setDateRange} />
         <div className="d-flex justify-content-between bg-color-1 text-primary fs-5 px-4 py-3 shadow">
           <div className="d-flex flex align-items-center gap-3">
-            <IoArrowBackCircleOutline className="fs-3"  onClick={() => navigate(-1)} style={{ cursor: "pointer" }} />
+            <IoArrowBackCircleOutline className="fs-3" onClick={() => navigate(-1)} style={{ cursor: "pointer" }} />
             <div className="d-flex flex align-items-center gap-1">
               <span>Partner Report</span>
               {/* <span><LuPcCase /></span> */}
@@ -192,7 +223,7 @@ export default function AdminViewSaleEmpCaseReport() {
 
         <div className="mx-5 p-3">
           <div className="row row-cols-1 row-cols-md-2 h-auto">
-          {/* <div className="border-end">
+            {/* <div className="border-end">
               <div className="bg-color-1 border-0 border-5 border-primary border-start card mx-1 my-4 p-2 shadow">
                 <div className='d-flex align-items-center justify-content-around'>
                   <div className="text-center ">
@@ -218,7 +249,7 @@ export default function AdminViewSaleEmpCaseReport() {
               <div className="bg-color-1 border-0 border-5 border-primary border-start card mx-1 my-4 p-2 shadow">
                 <div className='d-flex align-items-center justify-content-around'>
                   <div className="text-center ">
-                    <h3 className='fw-bold h2'>{caseAmt ?caseAmt :0 }</h3>
+                    <h3 className='fw-bold h2'>{caseAmt ? caseAmt : 0}</h3>
                     <p className='card-title fs-5 text-primary text-capitalize'>Total Case Amount</p>
                   </div>
                   {/* <div className="bg-primary text-white d-flex align-items-center justify-content-center" style={{ width: 50, height: 50, borderRadius: 50 }}><CiAlignBottom className='fs-2' /></div> */}
@@ -241,6 +272,8 @@ export default function AdminViewSaleEmpCaseReport() {
                   <div className="col-12 col-md-7 d-flex gap-3">
                     <div className="btn btn-primary fs-5" onClick={() => setShowCalender(!showCalender)}><CiFilter /></div>
                     <div className="btn btn-primary fs-5" onClick={() => handleReset()}>Reset</div>
+                    <button className={`btn btn-primary fs-5 ${downloading && "disabled"}`} disabled={downloading} onClick={() => !downloading && handleDownload()}>{downloading ? <span className="spinner-border-sm"></span> : <SiMicrosoftexcel />}</button>
+
                     {shareCase?.length > 0 && <div className="btn btn-primary fs-5" onClick={() => setCaseShareModal({ status: true, value: shareCase })}><IoShareSocialOutline /></div>}
                   </div>
                   <div className="col-12 col-md-3">
@@ -260,23 +293,6 @@ export default function AdminViewSaleEmpCaseReport() {
                     </select>
                   </div>
                 </div>
-              </div>
-            </div>
-            <div className="position-relative">
-              <div className="d-flex align-items-center position-absolute  mt-2 justify-content-center m-0">
-                {showCalender && <DateRange
-                  onChange={item => {
-                    setDateRange([item.selection]);
-                    setShowCalender(false);
-                  }}
-                  editableDateInputs={true}
-                  months={1}
-                  ranges={dateRange}
-                  moveRangeOnFirstSelection={false}
-                  direction="horizontal"
-                // preventSnapRefocus={true}
-                // calendarFocus="backwards"
-                />}
               </div>
             </div>
             <div className="mt-4 overflow-auto">
@@ -339,7 +355,7 @@ export default function AdminViewSaleEmpCaseReport() {
                 nextLabel={<BiRightArrow />}
                 onPageChange={handlePageClick}
                 pageRangeDisplayed={5}
-                pageCount={Math.ceil(noOfCase / pageItemLimit)||1}
+                pageCount={Math.ceil(noOfCase / pageItemLimit) || 1}
                 previousLabel={<BiLeftArrow />}
                 className="d-flex flex gap-2"
                 pageClassName="border border-primary paginate-li"

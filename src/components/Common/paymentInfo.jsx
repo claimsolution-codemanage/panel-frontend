@@ -24,10 +24,10 @@ export default function PaymentInfo({ show, hide, details }) {
                             <div>Invoice: {details?.invoiceNo}</div>
                             <div>Amount: {details?.totalAmt}</div>
                             <div>Paid Amount: {details?.transactionId?.paidAmount}</div>
-                            <div>Bank Name: {details?.transactionId?.bankName}</div>
+                            {/* <div>Bank Name: {details?.transactionId?.bankName}</div> */}
                             <div>Payment Mode: {details?.transactionId?.paymentMode}</div>
                             <div>Date: {details?.transactionId?.transDate}</div>
-                            <div>SabPaisa TxnId: {details?.transactionId?.sabPaisaTxnId}</div>
+                            <div>TxnId: {details?.transactionId?.sabPaisaTxnId}</div>
 
                         </div>
                     </div>

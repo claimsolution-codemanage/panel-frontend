@@ -25,6 +25,8 @@ import loash from 'lodash'
 import { useContext } from "react"
 import { AppContext } from "../../App"
 import { Link } from "react-router-dom"
+import DateSelect from "../../components/Common/DateSelect"
+import { CiFilter } from "react-icons/ci";
 
  
 export default function EmployeeAllPartner() {
@@ -39,12 +41,27 @@ export default function EmployeeAllPartner() {
   const [noOfPartner, setNoOfPartner] = useState(0)
   const [pgNo, setPgNo] = useState(1)
   const [changeStatus, setChangeStatus] = useState({show: false, details: "" })
+  const [showCalender, setShowCalender] = useState(false)
+  const [dateRange, setDateRange] = useState(
+    {
+      startDate: new Date("2024/01/01"),
+      endDate: new Date(),
+    });
+
+  const handleReset = () => {
+    setSearchQuery("")
+    setPageItemLimit(5)
+    setDateRange({ startDate: new Date("2024/01/01"), endDate: new Date()})
+    setPgNo(1)
+  }
 
 
   const getAllPatner =async()=>{
     setLoading(true)
     try {
-      const res = await employeeAllPartner(pageItemLimit, pgNo, searchQuery)
+      const startDate = dateRange?.startDate ? getFormateDate(dateRange?.startDate) : ""
+      const endDate = dateRange?.endDate ? getFormateDate(dateRange?.endDate) : ""
+      const res = await employeeAllPartner(pageItemLimit, pgNo, searchQuery,startDate,endDate)
       // console.log("allAdminCase", res?.data?.data);
       if (res?.data?.success && res?.data?.data) {
         setData([...res?.data?.data])
@@ -130,6 +147,7 @@ export default function EmployeeAllPartner() {
   return (<>
   {loading ? <Loader/> :
     <div>
+      <DateSelect show={showCalender} hide={() => setShowCalender(false)} onFilter={getAllPatner} dateRange={dateRange} setDateRange={setDateRange} />
     <div className="d-flex justify-content-between bg-color-1 text-primary fs-5 px-4 py-3 shadow">
         <div className="d-flex flex align-items-center gap-3">
           {/* <IoArrowBackCircleOutline className="fs-3"  onClick={() => navigate("/employee/dashboard")} style={{ cursor: "pointer" }} /> */}
@@ -140,7 +158,7 @@ export default function EmployeeAllPartner() {
         </div>
       </div>
 
-      <div className=" m-5 p-4">
+      <div className="m-md-5 p-md-4">
       <div className="bg-color-1 p-3 p-md-5 rounded-2 shadow">
       <div className="d-flex flex gap-2">
        
@@ -148,6 +166,8 @@ export default function EmployeeAllPartner() {
             <span className=""><BsSearch className="text-black" /></span>
             <input className="w-100" value={searchQuery} onChange={(e) => handleSearchQuery(e.target.value)} placeholder="Search.." style={{ outline: "none", border: 0 }} />
           </div>
+          <div className="btn btn-primary" onClick={() => setShowCalender(!showCalender)}><CiFilter/></div>
+          <div className="btn btn-primary" onClick={() => handleReset()}>Reset</div>
         
             <div className="">
               <select className="form-select" name="pageItemLimit" value={pageItemLimit} onChange={(e) => setPageItemLimit(e.target.value)} aria-label="Default select example">
@@ -168,6 +188,7 @@ export default function EmployeeAllPartner() {
               <th scope="col" className="text-nowrap"><th scope="col" >S.no</th></th>
               <th scope="col" className="text-nowrap"><span>Action</span></th>
               <th scope="col" className="text-nowrap">Status</th>
+              {empType?.toLowerCase()=="sales" &&   <th scope="col" className="text-nowrap">Type</th>}
               <th scope="col" className="text-nowrap">Date</th>
               <th scope="col" className="text-nowrap">Full Name</th>
               <th scope="col" className="text-nowrap" >consultantCode</th>
@@ -190,6 +211,7 @@ export default function EmployeeAllPartner() {
               </>}
                 </span></td>
               <td className="text-nowrap"> <span className={`badge ${item?.isActive ? "bg-primary" : "bg-danger"}`}>{item?.isActive ? "Active" : "Unactive"}</span> </td>
+              {empType?.toLowerCase()=="sales" &&   <td  className="text-nowrap"><span className="badge bg-primary">{item?.shareEmployee?.includes(item?.salesId) ? "Added" : "Shared"}</span> </td>}
               <td className="text-nowrap">{new Date(item?.profile?.associateWithUs).toLocaleDateString()}</td>
               <td className="text-nowrap">{item?.profile?.consultantName}</td>
               <td className="text-nowrap">{item?.profile?.consultantCode}</td>

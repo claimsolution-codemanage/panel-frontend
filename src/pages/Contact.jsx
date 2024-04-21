@@ -24,7 +24,7 @@ export default function Contact() {
                   <div className="d-flex gap-2">
                   <i class="bi bi-building fs-5"></i>
                   Adakiya Consultancy Services Pvt. Ltd, <br />
-                  150, Bhavishya Apartment in Nai Basti Road Deoli in the down,
+                  150, Bhavishya Apartment in Nai Basti Road Deoli,
                   Nai Basti Road, Deoli, South Delhi - 110080, India
                   </div>
 

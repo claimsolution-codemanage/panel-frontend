@@ -8,7 +8,7 @@ import * as Yup from 'yup';
 export default function EditItem({ show, onHide,data,id,onSave }) {
     const invoiceItemsFormik = useFormik({
         initialValues:{
-          name:data?.name,
+          // name:data?.name,
           description:data?.description,
           quantity:data?.quantity,
           gstRate:data?.gstRate,
@@ -19,8 +19,8 @@ export default function EditItem({ show, onHide,data,id,onSave }) {
     
         },
         validationSchema: Yup.object().shape({
-          name: Yup.string().required('Item name is required'),
-          description: Yup.string(),
+          // name: Yup.string().required('Item name is required'),
+          description: Yup.string().required('Item description is required'),
           quantity: Yup.number().required('Quantity is required'),
           gstRate: Yup.number().required('GST rate is required'),
           rate:Yup.number(),
@@ -65,14 +65,14 @@ export default function EditItem({ show, onHide,data,id,onSave }) {
           </div>
           <div class="modal-body">
             <form className='row row-cols-12 row-cols-2 p-2'>
-              <div class="form-group px-2">
+              {/* <div class="form-group px-2">
                 <label for="recipient-name" class="col-form-label">Name*:</label>
                 <input type="text" name='name' value={invoiceItemsFormik.values.name} onChange={(e)=>invoiceItemsFormik.handleChange(e)} className={`form-control ${invoiceItemsFormik.errors.name && invoiceItemsFormik.touched.name && "border-danger"}`} id="recipient-name"/>
                 <p className='text-danger'>{invoiceItemsFormik.touched.name && invoiceItemsFormik.errors.name}</p>
               
-              </div>
+              </div> */}
                <div class="form-group px-2">
-                <label for="recipient-name" class="col-form-label">Description:</label>
+                <label for="recipient-name" class="col-form-label">Description*:</label>
                 <input type="text" name='description' value={invoiceItemsFormik.values.description} onChange={(e)=>invoiceItemsFormik.handleChange(e)} className={`form-control ${invoiceItemsFormik.errors.description && invoiceItemsFormik.touched.description && "border-danger"}`} id="recipient-name"/>
                 <p className='text-danger'>{invoiceItemsFormik.touched.description && invoiceItemsFormik.errors.description}</p>
               

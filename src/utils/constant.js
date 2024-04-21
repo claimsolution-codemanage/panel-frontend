@@ -107,7 +107,12 @@ export const partnerType =[
 "Other's"				
 ]
 
-export const caseStatus = ["Pending","Accept","Under Expert Review","Processing","Gro","Ombudsman","Query","Resolve","Reject","Others"];
+export const caseStatus = ["Pending","Accept","Under Expert Review","Processing",
+"Gro","Ombudsman","Query","Resolve","Reject","Others","Ombudsman Hearing date on",
+"Ombudsman hearing done","Ombudsman Award","Ombudsman dismissed/ Refer to legal team",
+"Case file in court"
+];
+
 
 export const insuranceCompany = ["ICICI Bank","Kotak Mahindra Bank","Ujjwala Insurance","Other"]
 
@@ -138,3 +143,8 @@ export const docType =[
     {label: "If approach OMBUDSMAN, provide OMBUDSMAN letter",value: "OMBUDSMAN letter"},
     {label: "Other",value: "Other"},
 ]
+
+
+export const complaintType = [
+    "Claim Rejection","Claim-Short Payment","Claim-Short Payment","Policy Cancel","Misselling & Fraud Case","Other"
+  ]

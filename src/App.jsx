@@ -24,32 +24,32 @@ import PartnerAgreement from './pages/agreements/partner'
 import ClientAgreement from './pages/agreements/client'
 
 // for admin routes
-import AdminSignIn from './pages/admin/signin';
-import AdminSignUp from './pages/admin/signup'
-import AdminDashboard from './pages/admin/dashboard'
-import AdminAccountSetting from './pages/admin/accountSetting'
-import AdminCreateNewEmployee from './pages/admin/createEmployee'
-import AllAdminCase from './pages/admin/allcases'
-import AdminViewCase from './pages/admin/viewcase'
-import AllAdminPartner from './pages/admin/allPartner'
-import AllAdminClient from './pages/admin/allClient'
-import AllAdminEmployee from './pages/admin/allEmployee'
-import AdminPartnerDetails from './pages/admin/partnerDetails'
-import AdminClientDetails from './pages/admin/viewClient'
-import AdminAllJobs from './pages/admin/jobs'
-import AdminEditCase from './pages/admin/editCase'
-import AdminAllComplaint from './pages/admin/allComplaints'
-import AdminTrashPartner from './pages/admin/PartnerTrash'
-import AdminTrashClient from './pages/admin/ClientTrash'
-import AdminTrashCase from './pages/admin/CaseTrash'
-import AdminForgetPassword from './pages/admin/forgetPassword'
-import AdminResetForgetPassword from './pages/admin/resetForgetPassword'
-import MyAdmins from './pages/admin/SuperAdmin/MyAdmins'
-import AdminViewPartnerReport from './pages/admin/partnerReport'
-import AdminEditClient from './pages/admin/editClient'
-import AdminEditPartner from './pages/admin/editParnter'
-import AdminViewSaleEmpCaseReport from './pages/admin/saleEmpCaseReport'
-import AdminSaleEmpPartnerReport from './pages/admin/saleEmpPartnerReport'
+// import AdminSignIn from './pages/admin/signin';
+// import AdminSignUp from './pages/admin/signup'
+// import AdminDashboard from './pages/admin/dashboard'
+// import AdminAccountSetting from './pages/admin/accountSetting'
+// import AdminCreateNewEmployee from './pages/admin/createEmployee'
+// import AllAdminCase from './pages/admin/allcases'
+// import AdminViewCase from './pages/admin/viewcase'
+// import AllAdminPartner from './pages/admin/allPartner'
+// import AllAdminClient from './pages/admin/allClient'
+// import AllAdminEmployee from './pages/admin/allEmployee'
+// import AdminPartnerDetails from './pages/admin/partnerDetails'
+// import AdminClientDetails from './pages/admin/viewClient'
+// import AdminAllJobs from './pages/admin/jobs'
+// import AdminEditCase from './pages/admin/editCase'
+// import AdminAllComplaint from './pages/admin/allComplaints'
+// import AdminTrashPartner from './pages/admin/PartnerTrash'
+// import AdminTrashClient from './pages/admin/ClientTrash'
+// import AdminTrashCase from './pages/admin/CaseTrash'
+// import AdminForgetPassword from './pages/admin/forgetPassword'
+// import AdminResetForgetPassword from './pages/admin/resetForgetPassword'
+// import MyAdmins from './pages/admin/SuperAdmin/MyAdmins'
+// import AdminViewPartnerReport from './pages/admin/partnerReport'
+// import AdminEditClient from './pages/admin/editClient'
+// import AdminEditPartner from './pages/admin/editParnter'
+// import AdminViewSaleEmpCaseReport from './pages/admin/saleEmpCaseReport'
+// import AdminSaleEmpPartnerReport from './pages/admin/saleEmpPartnerReport'
 
 
 
@@ -74,33 +74,37 @@ import EmployeeEditCase from './pages/employee/editCase'
 import EmployeeEditClient from './pages/employee/editClient'
 import EmployeeEditPartner from './pages/employee/editPartner'
 import EmpSaleNewCase from './pages/employee/sales/addCase'
+import EmployeeInvoiceTrash from './pages/employee/finance/pages/InvoiceTrash'
 
 // for sale employee
 import EmployeeAddPartner from './pages/employee/sales/addPartner'
 
 
 // for partner
-import SignUp from './pages/partner/signUp'
-import SignIn from './pages/partner/signIn'
-import OtpVerify from './pages/partner/otpVerify'
-import NewPassword from './pages/partner/newPassword'
-import Dashboard from './pages/partner/dashboard'
-import Profile from './pages/partner/profile'
-import BankDetails from './pages/partner/bankDetails'
-import NewCase from './pages/partner/Case/newCase'
-import PartnerEditCase from './pages/partner/Case/editcase'
-import EditProfile from './pages/partner/editProfile'
-import EditBankingDetails from './pages/partner/editBankDetails'
-import AllPartnerCase from './pages/partner/Case/allCases'
-import PartnerViewCase from './pages/partner/Case/viewCase'
-import PartnerMobileSendOtp from './pages/partner/sendMobileCode'
-import PartnerForgetPassword from './pages/partner/forgetPassword'
-import PartnerResetPassword from './pages/partner/resetPassword'
-import PartnerAfterVerification from './pages/partner/afterVerification'
-import PartnerAcceptTls from './pages/partner/acceptTls'
-import PartnerViewTLS from './pages/partner/viewTls'
-import PartnerServiceAgreement from './pages/partner/ServiceAgreement'
-import AcceptPartnerRequest from './pages/partner/acceptPartnerRequest'
+// import SignUp from './pages/partner/signUp'
+// import SignIn from './pages/partner/signIn'
+// import OtpVerify from './pages/partner/otpVerify'
+// import NewPassword from './pages/partner/newPassword'
+// import Dashboard from './pages/partner/dashboard'
+// import Profile from './pages/partner/profile'
+// import BankDetails from './pages/partner/bankDetails'
+// import NewCase from './pages/partner/Case/newCase'
+// import PartnerEditCase from './pages/partner/Case/editcase'
+// import EditProfile from './pages/partner/editProfile'
+// import EditBankingDetails from './pages/partner/editBankDetails'
+// import AllPartnerCase from './pages/partner/Case/allCases'
+// import PartnerViewCase from './pages/partner/Case/viewCase'
+// import PartnerMobileSendOtp from './pages/partner/sendMobileCode'
+// import PartnerForgetPassword from './pages/partner/forgetPassword'
+// import PartnerResetPassword from './pages/partner/resetPassword'
+// import PartnerAfterVerification from './pages/partner/afterVerification'
+// import PartnerAcceptTls from './pages/partner/acceptTls'
+// import PartnerViewTLS from './pages/partner/viewTls'
+// import PartnerServiceAgreement from './pages/partner/ServiceAgreement'
+// import AcceptPartnerRequest from './pages/partner/acceptPartnerRequest'
+
+import {partnerRoutes} from './Routes/partner'
+import { adminRoutes } from './Routes/admin'
 
 
 // for client routes
@@ -142,7 +146,7 @@ import { useLocation } from 'react-router-dom'
 export default function App(){
   const location = useLocation();
   const [myAppData,setMyAppData] = useState({isLogin:false,details:""})
- console.log("mode",import.meta.env.MODE)
+
 
   useEffect(()=>{
     const token = getToken()
@@ -187,8 +191,13 @@ export default function App(){
     <Route path='*' element={<Error/>}/>
 
 
+
+
   {/* for partner */}
-  <Route path='/partner/signin' element={<PanelTemplate><SignIn/></PanelTemplate>}/>
+  {partnerRoutes?.map(route=>route)}
+  {adminRoutes?.map(route=>route)}
+
+  {/* <Route path='/partner/signin' element={<PanelTemplate><SignIn/></PanelTemplate>}/>
   <Route path='/partner/signup' element={<PanelTemplate><SignUp/></PanelTemplate>}/>
   <Route path='/partner/email otp verify' element={<PanelTemplate><OtpVerify/></PanelTemplate>}/>
   <Route path='/partner/accept-request/:tokenId' element={<PanelTemplate><AcceptPartnerRequest/></PanelTemplate>}/>
@@ -202,12 +211,12 @@ export default function App(){
   <Route path='/partner/edit profile' element={<PartnerTemplate><EditProfile/></PartnerTemplate>}/>
   <Route path='/partner/edit banking details' element={<PartnerTemplate><EditBankingDetails/></PartnerTemplate>}/>
   <Route path='/partner/banking details' element={<PartnerTemplate><BankDetails/></PartnerTemplate>}/>
-  <Route path='/partner/add new case' element={<PartnerTemplate><NewCase/></PartnerTemplate>}/>
+  <Route path='/partner/add new case' element={<PartnerTemplate><NewCase/></PartnerTemplate>}/> */}
   {/* <Route path='/partner/edit case/:_id' element={<PartnerTemplate><PartnerEditCase/></PartnerTemplate>}/> */}
-  <Route path='/partner/all case' element={<PartnerTemplate><AllPartnerCase/></PartnerTemplate>}/>
+  {/* <Route path='/partner/all case' element={<PartnerTemplate><AllPartnerCase/></PartnerTemplate>}/>
   <Route path='/partner/view case/:_id' element={<PartnerTemplate><PartnerViewCase/></PartnerTemplate>}/>
   <Route path='/partner/view tls' element={<PartnerTemplate><PartnerViewTLS/></PartnerTemplate>}/>
-  <Route path='/partner/view service agreement' element={<PartnerTemplate><PartnerServiceAgreement/></PartnerTemplate>}/>
+  <Route path='/partner/view service agreement' element={<PartnerTemplate><PartnerServiceAgreement/></PartnerTemplate>}/> */}
 
 
   
@@ -215,7 +224,7 @@ export default function App(){
 
 
 {/* for admin */}
-  <Route path='/admin/signin' element={<PanelTemplate><AdminSignIn/></PanelTemplate>}/>
+  {/* <Route path='/admin/signin' element={<PanelTemplate><AdminSignIn/></PanelTemplate>}/>
   <Route path='/admin/signup' element={<PanelTemplate><AdminSignUp/></PanelTemplate>}/>
   <Route path='/admin/forget password' element={<PanelTemplate><AdminForgetPassword/></PanelTemplate>}/>
   <Route path='/admin/resetPassword/:verifyToken' sensitive={true} strict={false} element={<PanelTemplate><AdminResetForgetPassword/></PanelTemplate>}/>
@@ -241,7 +250,7 @@ export default function App(){
   <Route path='/admin/edit-partner/:_id'  element={<AdminTemplate><AdminEditPartner/></AdminTemplate>}/>
   <Route path='/admin/view-employee-case-report/:_id'  element={<AdminTemplate><AdminViewSaleEmpCaseReport/></AdminTemplate>}/>
   <Route path='/admin/view-employee-partner-report/:_id'  element={<AdminTemplate><AdminSaleEmpPartnerReport/></AdminTemplate>}/>
-
+ */}
 
 
 
@@ -270,6 +279,8 @@ export default function App(){
   <Route path='/employee/edit-partner/:_id'  element={<EmployeeTemplate><EmployeeEditPartner/></EmployeeTemplate>}/>
   <Route path='/employee/add-partner'  element={<EmployeeTemplate><EmployeeAddPartner/></EmployeeTemplate>}/>
   <Route path='/employee/add-case'  element={<EmployeeTemplate><EmpSaleNewCase/></EmployeeTemplate>}/>
+  <Route path='/employee/all-trash-invoice'  element={<EmployeeTemplate><EmployeeInvoiceTrash/></EmployeeTemplate>}/>
+
 
 
 

@@ -1,8 +1,7 @@
 import axios from 'axios'
-// const API_BASE = "http://localhost:8000"
 const API_BASE = `${import.meta.env.VITE_API_BASE}`
-export const API_BASE_IMG =  `${import.meta.env.VITE_API_BASE_IMG}`
 import { getToken } from '../utils/helperFunction';
+export const API_BASE_IMG =  `${import.meta.env.VITE_API_BASE_IMG}`
 
 
 
@@ -20,39 +19,39 @@ export function setheader(){
 
   export const clientImageUpload = (formData)=>{
     setheader()
-    return axios.post(`${API_BASE_IMG}/api/upload/image/client`,formData)
+    return axios.post(`${API_BASE}/api/client/upload/image`,formData)
   }
   export const partnerImageUpload = (formData)=>{
     setheader()
-    return axios.post(`${API_BASE_IMG}/api/upload/image/partner`,formData)
+    return axios.post(`${API_BASE}/api/partner/upload/image`,formData)
   }
   export const adminImageUpload = (formData)=>{
     setheader()
-    return axios.post(`${API_BASE_IMG}/api/upload/image/admin`,formData)
+    return axios.post(`${API_BASE}/api/admin/upload/image`,formData)
   }
   export const employeeImageUpload = (formData)=>{
     setheader()
-    return axios.post(`${API_BASE_IMG}/api/upload/image/employee`,formData)
+    return axios.post(`${API_BASE}/api/employee/upload/image`,formData)
   }
 
 
   export const partnerAttachementUpload = (type,formData)=>{
     setheader()
-    return axios.post(`${API_BASE_IMG}/api/upload/attachment/partner?file=${type}`,formData)
+    return axios.post(`${API_BASE}/api/partner/upload/attachment`,formData)
   }
 
 
   export const clientAttachementUpload = (type,formData)=>{
     setheader()
-    return axios.post(`${API_BASE_IMG}/api/upload/attachment/client?file=${type}`,formData)
+    return axios.post(`${API_BASE}/api/client/upload/attachment`,formData)
   }
 
   export const adminAttachementUpload = (type,formData)=>{
     setheader()
-    return axios.post(`${API_BASE_IMG}/api/upload/attachment/admin?file=${type}`,formData)
+    return axios.post(`${API_BASE}/api/admin/upload/attachment`,formData)
   }
 
   export const employeeAttachementUpload = (type,formData)=>{
     setheader()
-    return axios.post(`${API_BASE_IMG}/api/upload/attachment/employee?file=${type}`,formData)
+    return axios.post(`${API_BASE}/api/employee/upload/attachment`,formData)
   }

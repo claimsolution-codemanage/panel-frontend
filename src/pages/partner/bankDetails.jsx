@@ -9,6 +9,7 @@ import { IoArrowBackCircleOutline } from 'react-icons/io5'
 import Loader from "../../components/Common/loader";
 import { API_BASE_IMG } from "../../apis/upload";
 import { Link } from "react-router-dom";
+import { getCheckStorage } from "../../utils/helperFunction";
 
 export default function BankDetails() {
     const [loading, setLoading] = useState(false)
@@ -80,7 +81,7 @@ export default function BankDetails() {
                                         </div>
 
                                     </div>
-                                    <div className="m-0 row p-md-5">
+                                    <div className="m-0 row p-0 mt-5">
                                         <div className="mb-3 d-flex align-items-center gap-3 col-12 col-md-4 text-break">
                                             <h6 className="fw-bold">Bank Name</h6>
                                             <p className=" h6 text-capitalize">{data.bankName}</p>
@@ -111,22 +112,26 @@ export default function BankDetails() {
                                         </div>
 
                                     </div>
+                                    <div className="row row-cols-1 row-cols-md-2">
+                                    
                                     <div className="mb-3 d-flex flex-column">
-                                        <label for="chequeImg" className="form-label">Cancelled Cheque:</label>
-                                        {data.cancelledChequeImg ? <Link to={`${API_BASE_IMG}/${data.cancelledChequeImg}`} target="_blank" className="w-100">
-                                            <img style={{ height: 250 }} className="border rounded-2 w-100" src={`${API_BASE_IMG}/${data.cancelledChequeImg}`} alt="gstcopyImg" />
+                                        <label for="chequeImg" className="form-label">Cancelled Cheque</label>
+                                        {data.cancelledChequeImg ? <Link to={getCheckStorage(data.cancelledChequeImg)} target="_blank" className="w-100">
+                                            <img style={{ height: 250 }} className="border rounded-2 w-100" src={getCheckStorage(data.cancelledChequeImg)} alt="gstcopyImg" />
                                         </Link>
-                                            : <img style={{ height: 250 }} className="border rounded-2" src={"/Images/home/cancel-cheque.jpg"} alt="chequeImg" />
+                                            : <img style={{ height: 250 }} className="border rounded-2" src={"/Images/upload.jpeg"} alt="chequeImg" />
                                         }
                                     </div>
 
                                     <div className="mb-3 d-flex flex-column">
                                         <label for="gstImg" className="form-label">GST Copy</label>
-                                        {data.gstCopyImg ? <Link to={`${API_BASE_IMG}/${data.gstCopyImg}`} target="_blank" className="w-100">
-                                            <img style={{ height: 250 }} className="border rounded-2 w-100" src={`${API_BASE_IMG}/${data.gstCopyImg}`} alt="gstcopyImg" />
+                                        {data.gstCopyImg ? <Link to={getCheckStorage(data.gstCopyImg)} target="_blank" className="w-100">
+                                            <img style={{ height: 250 }} className="border rounded-2 w-100" src={getCheckStorage(data.gstCopyImg)} alt="gstcopyImg" />
                                         </Link>
-                                            : <img style={{ height: 250 }} className="border rounded-2" src={"/Images/home/gst-copy.jpg"} alt="gstcopyImg" />
+                                            : <img style={{ height: 250 }} className="border rounded-2" src={"/Images/upload.jpeg"} alt="gstcopyImg" />
                                         }
+                                    </div>
+
                                     </div>
                                 </div>
                             </div>

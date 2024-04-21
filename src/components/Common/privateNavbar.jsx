@@ -143,6 +143,10 @@ export default function PrivateNavbar() {
                     <FaUserTag />
                     <div className=''>All Client</div>
                 </Link>
+                <Link to="/admin/all-invoices" className={`d-flex align-items-center mx-2 px-2 py-2 gap-3 text-white   ${location.pathname.includes("invoice") &&  "active_item"}`}  >
+                    <FaUserTag />
+                    <div className=''>All Invoice</div>
+                </Link>
                 <Link to="/admin/all employee" className={`d-flex align-items-center mx-2 px-2 py-2 gap-3 text-white   ${location.pathname=="/admin/all%20employee" && "active_item"}`}  >
                     <FaUsers />
                     <div className=''>All Employee</div>
@@ -185,15 +189,25 @@ export default function PrivateNavbar() {
                     <FaTrashAlt />
                     <div className=''>Case</div>
                     </Link>
+                    <Link to="/admin/all-trash-invoice" className={`d-flex align-items-center mx-2 px-2 py-2 gap-3 text-white   ${location.pathname == "/admin/all-trash-invoice" && "active_item"}`}  >
+                    <FaTrashAlt />
+                    <div className=''>Invoice</div>
+                    </Link>
                     </div>
                 </div>
             </>}
 
             {myRole == "Employee" && <>
             <Link to="/employee/dashboard" className={`d-flex align-items-center mx-2 px-2 py-2 gap-3 text-white   ${location.pathname.includes("dashboard") && "active_item"}`}  >
-                    <RxDashboard />
-                    <div className=''>Dashboard</div>
-                </Link>
+            <RxDashboard />
+            <div className=''>Dashboard</div>
+            </Link>
+            {(empType?.toLowerCase() =="operation".toLowerCase()) && <>
+            <Link to="/employee/all client" className={`d-flex align-items-center mx-2 px-2 py-2 gap-3 text-white   ${location.pathname.includes("client") && "active_item"}`}  >
+            <RxDashboard />
+            <div className=''>All Client</div>
+            </Link>
+            </>}
 
             {(empType?.toLowerCase() =="operation".toLowerCase() || empType?.toLowerCase() =="sales".toLowerCase()) && <>
             <Link to="/employee/all partner" className={`d-flex align-items-center mx-2 px-2 py-2 gap-3 text-white   ${location.pathname.includes("partner") && !location.pathname.includes("add-partner") && "active_item"}`}  >
@@ -214,17 +228,32 @@ export default function PrivateNavbar() {
                 </Link>
             </>}
 
+            <Link to="/employee/all case" className={`d-flex align-items-center mx-2 px-2 py-2 gap-3 text-white   ${location.pathname.includes("case") && !location.pathname.includes("add-case") && "active_item"}`}  >
+                <SiReaddotcv />
+                    <div className=''>All Case</div>
+            </Link>
             {/* for finance employee */}
             {empType?.toLowerCase() =="finance".toLowerCase() && <>
                 <Link to="/employee/all-invoices" className={`d-flex align-items-center mx-2 px-2 py-2 gap-3 text-white   ${(location.pathname.includes("/employee/all-invoices") || location.pathname.includes("/employee/view-invoice") ) && "active_item"}`}  >
                     <RxDashboard />
                     <div className=''>All Invoices</div>
                 </Link>
+                <div  className={`cursor-pointer`}  >
+                    <div onClick={()=>setShowTrashOption(!showTrashOption)} className='d-flex align-items-center mx-2 px-2 py-2 gap-3 cursor-pointer text-white'>
+                    <FaRegTrashCan />
+                    <div className='d-flex align-items-center gap-5'>
+                        <div className=''>Trash</div>
+                        {showTrashOption ? <IoIosArrowDown/> : <IoIosArrowForward/>}
+                    </div>
+                    </div>
+                    <div className={`px-3 ${!showTrashOption && "d-none"}`}>
+                    <Link to="/employee/all-trash-invoice" className={`d-flex align-items-center mx-2 px-2 py-2 gap-3 text-white   ${location.pathname == "/admin/all-trash-invoice" && "active_item"}`}  >
+                    <FaTrashAlt />
+                    <div className=''>Invoice</div>
+                    </Link>
+                    </div>
+                </div>
             </>}
-            <Link to="/employee/all case" className={`d-flex align-items-center mx-2 px-2 py-2 gap-3 text-white   ${location.pathname.includes("case") && !location.pathname.includes("add-case") && "active_item"}`}  >
-                <SiReaddotcv />
-                    <div className=''>All Case</div>
-            </Link>
                 <Link to="/employee/reset password" className={`d-flex align-items-center mx-2 px-2 py-2 gap-3 text-white   ${location.pathname == "/employee/reset%20password" && "active_item"}`}  >
                     <RxDashboard />
                     <div className=''>Setting</div>

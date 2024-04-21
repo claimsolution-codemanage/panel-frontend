@@ -5,18 +5,19 @@ import { useNavigate } from "react-router-dom";
 import { LuPcCase } from 'react-icons/lu'
 import { CiEdit } from 'react-icons/ci'
 import { IoArrowBackCircleOutline } from 'react-icons/io5'
-import { imageUpload,updatePartnerBankingDetails } from '../../apis';
+import { imageUpload, updatePartnerBankingDetails } from '../../apis';
 import Loader from '../../components/Common/loader';
 import { validateUploadFile } from '../../utils/helperFunction';
 import { partnerImageUpload } from '../../apis/upload';
 import { API_BASE_IMG } from '../../apis/upload';
-import { checkPhoneNo,checkNumber } from "../../utils/helperFunction";
+import { checkPhoneNo, checkNumber } from "../../utils/helperFunction";
+import { getCheckStorage } from '../../utils/helperFunction';
 
 
 export default function EditBankingDetails() {
     const [loading, setLoading] = useState(false)
     const navigate = useNavigate()
-    const [saving,setSaving] = useState(false)
+    const [saving, setSaving] = useState(false)
     const [uploadPhoto, setUploadPhoto] = useState({ type: "", status: 0, loading: false, message: "" })
     const gstRef = useRef()
     const chequeRef = useRef()
@@ -27,8 +28,8 @@ export default function EditBankingDetails() {
         bankBranchName: "",
         gstNo: "",
         panNo: "",
-        ifscCode:"",
-        upiId:"",
+        ifscCode: "",
+        upiId: "",
         cancelledChequeImg: "",
         gstCopyImg: "",
     })
@@ -42,7 +43,7 @@ export default function EditBankingDetails() {
                 const res = await getPartnerBankingDetails()
                 // console.log("bankingDetails", res?.data?.data?.bankingDetails);
                 if (res?.data?.success && res?.data?.data?.bankingDetails) {
-                    setData({...data, ...res?.data?.data?.bankingDetails })
+                    setData({ ...data, ...res?.data?.data?.bankingDetails })
                     setLoading(false)
                 }
             } catch (error) {
@@ -106,55 +107,55 @@ export default function EditBankingDetails() {
     // }
 
 
-    const handleUploadFile = async (file,type) => {
+    const handleUploadFile = async (file, type) => {
         try {
 
             // console.log("files efs", file);
-            setUploadPhoto({ status: 1, loading: true,type, message: "uploading..." })
+            setUploadPhoto({ status: 1, loading: true, type, message: "uploading..." })
             const res = await partnerImageUpload(file)
-            
+
             setData((data) => ({ ...data, [type]: res?.data?.url }))
-                setUploadPhoto({ status: 1, loading: false,type, message: "uploaded" })
-                setTimeout(() => {
-                    setUploadPhoto({ status: 0, loading: false, message: "" })
-                }, 3000);
+            setUploadPhoto({ status: 1, loading: false, type, message: "uploaded" })
+            setTimeout(() => {
+                setUploadPhoto({ status: 0, loading: false, message: "" })
+            }, 3000);
         } catch (error) {
             // console.log("upload error:", error);
             // setUploadPhoto({ status: 0, loading: false, message: })
             if (error && error?.response?.data?.message) {
                 // toast.error(error?.response?.data?.message)
-                setUploadPhoto({ status: 0, loading: false, message: error?.response?.data?.message })
+                setUploadPhoto({ status: 0, loading: false,type, message: error?.response?.data?.message })
                 // setUploadAttachement({ status: 2, message: error?.response?.data?.message });
                 // setLoading(false)
             } else {
                 // toast.error("Something went wrong")
-                setUploadPhoto({ status: 0, loading: false, message: "Failed to upload file" })
+                setUploadPhoto({ status: 0, loading: false,type, message: "Failed to upload file" })
                 // setLoading(false)
             }
         }
     }
 
-    const handleImgOnchange = async (e,type) => {
+    const handleImgOnchange = async (e, type) => {
         const file = e.target.files[0];
         setUploadPhoto({ status: 0, loading: true, message: "" })
         const result = validateUploadFile(e.target.files, 10, "image")
         if (!result?.success) {
-            setUploadPhoto({ status: 0, loading: false,type, message: result?.message })
+            setUploadPhoto({ status: 0, loading: false, type, message: result?.message })
         } else {
             // console.log("result?.file", result?.file);
-            handleUploadFile(result?.file,type)
+            handleUploadFile(result?.file, type)
         }
     }
 
 
-    
+
 
     const handleOnsubmit = async (e) => {
         e.preventDefault()
         // console.log("data", data);
         setSaving(true)
         try {
-            const res = await updatePartnerBankingDetails(data)
+            const res = await updatePartnerBankingDetails("id",data)
             // console.log("partner", res?.data);
             if (res?.data?.success && res?.data) {
                 // setData([res?.data?.data?.profile])
@@ -209,14 +210,14 @@ export default function EditBankingDetails() {
                                         </div>
                                         <div className="mb-3 col-12 col-md-4">
                                             <label for="bankAccountNo" className="form-label">Bank Account No*</label>
-                                            <input type="text" className="form-control" id="bankAccountNo" name="bankAccountNo" value={data.bankAccountNo} onChange={(e)=>checkNumber(e) && handleOnchange(e)} />
+                                            <input type="text" className="form-control" id="bankAccountNo" name="bankAccountNo" value={data.bankAccountNo} onChange={(e) => checkNumber(e) && handleOnchange(e)} />
                                         </div>
                                         <div className="mb-3 col-12 col-md-4">
                                             <label for="bankBranchName" className="form-label">Bank Branch Name*</label>
                                             <input type="text" className="form-control" id="bankBranchName" name="bankBranchName" value={data.bankBranchName} onChange={handleOnchange} />
                                         </div>
                                         <div className="mb-3 col-12 col-md-4">
-                                            <label for="gstNo" className="form-label">GST No*</label>
+                                            <label for="gstNo" className="form-label">GST No</label>
                                             <input type="text" className="form-control" id="gstNo" name="gstNo" value={data.gstNo} onChange={handleOnchange} />
                                         </div>
                                         <div className="mb-3 col-12 col-md-4">
@@ -228,21 +229,30 @@ export default function EditBankingDetails() {
                                             <input type="text" className="form-control" id="ifscCode" name="ifscCode" value={data.ifscCode} onChange={handleOnchange} />
                                         </div>
                                         <div className="mb-3 col-12 col-md-4">
-                                            <label for="panNo" className="form-label">UPI ID/ Number*</label>
+                                            <label for="panNo" className="form-label">UPI ID/ Number</label>
                                             <input type="text" className="form-control" id="upiId" name="upiId" value={data.upiId} onChange={handleOnchange} />
                                         </div>
 
                                     </div>
-                                    <div className="mb-3 d-flex flex-column">
-                                        <label for="chequeImg" className="form-label">Cancelled Cheque {(uploadPhoto.message && uploadPhoto.type == "cancelledChequeImg") && <span className={uploadPhoto.status == 1 ? "text-success" : "text-danger"}>{uploadPhoto.message}</span>}</label>
-                                        {<img style={{ height: 250, cursor: "pointer" }} onClick={() => chequeRef.current.click()} className="border rounded-2" src={data.cancelledChequeImg ? `${API_BASE_IMG}/${data.cancelledChequeImg}` : "/Images/upload.jpeg"} alt="gstcopyImg" />}
-                                        <input type="file" name="chequeImg" ref={chequeRef} id="profilePhoto" hidden={true} onChange={(e) => handleImgOnchange(e, "cancelledChequeImg")} />
-                                    </div>
+                                    <div className='row row-cols-1 row-cols-2'>
+                                        <div className="mb-3 d-flex flex-column">
+                                            <div className='d-flex gap-2 align-items-center justify-content-between'>
+                                                <label for="chequeImg" className="form-label">Cancelled Cheque  {(uploadPhoto.message && uploadPhoto.type == "cancelledChequeImg") && <span className={uploadPhoto.status == 1 ? "text-success" : "text-danger"}>{uploadPhoto.message}</span>}</label>
+                                                <div className='btn btn-primary' onClick={() => chequeRef.current.click()}>Upload</div>
+                                            </div>
+                                            <img style={{ height: 250, }} className="border rounded-2" src={data.cancelledChequeImg ? getCheckStorage(data?.cancelledChequeImg) : "/Images/upload.jpeg"} alt="gstcopyImg" />
+                                            <input type="file" name="chequeImg" ref={chequeRef} id="profilePhoto" hidden={true} onChange={(e) => handleImgOnchange(e, "cancelledChequeImg")} />
+                                        </div>
 
-                                    <div className="mb-3 d-flex flex-column">
-                                        <label for="gstImg" className="form-label">GST Copy {(uploadPhoto.message && uploadPhoto.type == "gstCopyImg") && <span className={uploadPhoto.status == 1 ? "text-success" : "text-danger"}>{uploadPhoto.message}</span>}</label>
-                                        {<img style={{ height: 250, cursor: "pointer" }} onClick={() => gstRef.current.click()} className="border rounded-2" src={data.gstCopyImg ? `${API_BASE_IMG}/${data.gstCopyImg}` : "/Images/upload.jpeg"} alt="gstcopyImg" />}
-                                        <input type="file" name="gstImg" ref={gstRef} id="profilePhoto" hidden={true} onChange={(e) => handleImgOnchange(e, "gstCopyImg")} />
+                                        <div className="mb-3 d-flex flex-column">
+                                            <div className='d-flex gap-2 align-items-center justify-content-between'>
+                                                <label for="gstImg" className="form-label">GST Copy {(uploadPhoto.message && uploadPhoto.type == "gstCopyImg") && <span className={uploadPhoto.status == 1 ? "text-success" : "text-danger"}>{uploadPhoto.message}</span>}</label>
+                                                <div className='btn btn-primary' onClick={() => gstRef.current.click()}>Upload</div>
+                                            </div>
+
+                                            {<img style={{ height: 250, }} className="border rounded-2" src={data.gstCopyImg ? getCheckStorage(data.gstCopyImg) : "/Images/upload.jpeg"} alt="gstcopyImg" />}
+                                            <input type="file" name="gstImg" ref={gstRef} id="profilePhoto" hidden={true} onChange={(e) => handleImgOnchange(e, "gstCopyImg")} />
+                                        </div>
                                     </div>
                                     <div className="d-flex  justify-content-center">
                                         <div aria-disabled={loading || uploadPhoto.loading} className={loading || uploadPhoto.loading ? "d-flex align-items-center justify-content-center gap-3 btn btn-primary w-50 disabled" : "d-flex align-items-center justify-content-center gap-3 btn btn-primary w-50 "} onClick={handleOnsubmit}>

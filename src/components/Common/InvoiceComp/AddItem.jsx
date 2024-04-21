@@ -33,14 +33,14 @@ export default function AddItem({ show, onHide,formik,data, handleChange,onSave 
       </div>
       <div class="modal-body">
         <form className='row row-cols-12 row-cols-2 p-2'>
-          <div class="form-group px-2">
+          {/* <div class="form-group px-2">
             <label for="recipient-name" class="col-form-label">Name*:</label>
             <input type="text" name='name' value={data.name} onChange={(e)=>handleOnChange(e)} className={`form-control ${formik.errors.name && formik.touched.name && "border-danger"}`} id="recipient-name"/>
             <p className='text-danger'>{formik.touched.name && formik.errors.name}</p>
           
-          </div>
+          </div> */}
            <div class="form-group px-2">
-            <label for="recipient-name" class="col-form-label">Description:</label>
+            <label for="recipient-name" class="col-form-label">Description*:</label>
             <input type="text" name='description' value={data.description} onChange={(e)=>handleOnChange(e)} className={`form-control ${formik.errors.description && formik.touched.description && "border-danger"}`} id="recipient-name"/>
             <p className='text-danger'>{formik.touched.description && formik.errors.description}</p>
           
