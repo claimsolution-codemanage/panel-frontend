@@ -1,6 +1,6 @@
 import { adminGetCaseById } from "../../apis"
 import { useParams } from "react-router-dom"
-import { adminDeleteCaseDocById,adminUpdateClientCaseFee,adminEditCaseProcessById,adminChangeCaseStatus, adminAddCaseCommit, adminRemoveCaseReference } from "../../apis"
+import { adminDeleteCaseDocById,adminUpdateClientCaseFee,adminSetCaseDocIsActive,adminEditCaseProcessById,adminChangeCaseStatus, adminAddCaseCommit, adminRemoveCaseReference } from "../../apis"
 import { adminAddCaseReference } from "../../apis"
 import { adminAttachementUpload } from "../../apis/upload"
 import ViewCaseComp from "../../components/Reuse/ViewCaseComp"
@@ -26,6 +26,7 @@ export default function AdminViewCase() {
       deleteReference={adminRemoveCaseReference}
       deleteDoc={adminDeleteCaseDocById}
       addCaseCommit={adminAddCaseCommit}
+      setCaseDocStatus={adminSetCaseDocIsActive}
       />
     </>)
 }

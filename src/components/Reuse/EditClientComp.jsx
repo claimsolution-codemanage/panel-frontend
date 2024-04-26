@@ -30,6 +30,7 @@ export default function EditClient({ id, getClient, updateClient,uploadImg ,role
     const imgRef = useRef()
     const kycPhotoRef = useRef()
     const kycAadhaarRef = useRef()
+    const kycAadhaarBackRef = useRef()
     const kycPanRef = useRef()
     const UserProfileFormik = useFormik({
         initialValues: {
@@ -55,6 +56,7 @@ export default function EditClient({ id, getClient, updateClient,uploadImg ,role
             about: "",
             kycPhoto: "",
             kycAadhaar: "",
+            kycAadhaarBack: "",
             kycPan: "",
         },
         validationSchema: yup.object().shape({
@@ -76,14 +78,21 @@ export default function EditClient({ id, getClient, updateClient,uploadImg ,role
             about: yup.string().max(250, "About must have maximum 250 characters"),
             kycPhoto: yup.string(),
             kycAadhaar: yup.string(),
+            kycAadhaarBack: yup.string(),
             kycPan: yup.string(),
         }),
         onSubmit: async (values) => {
             setSaving(true)
             try {
+                const payload = {
+                    ...values,primaryMobileNo:`${values?.primaryMobileNo}`, aadhaarNo: `${values?.aadhaarNo}` 
+                }
+                if(payload?.kycAadhar){
+                    delete payload?.kycAadhar
+                }
                 const res = role?.toLowerCase() === "client" ?  
-                await updateClient({ ...values,primaryMobileNo:`${values?.primaryMobileNo}`, aadhaarNo: `${values?.aadhaarNo}` }) : 
-                await updateClient(id,{ ...values,primaryMobileNo:`${values?.primaryMobileNo}`, aadhaarNo: `${values?.aadhaarNo}` })
+                await updateClient({ ...payload}) : 
+                await updateClient(id,{ ...payload})
                 if (res?.data?.success) {
                     if (role === "client" && res?.data?.token) {
                         const token = res?.data?.token;
@@ -302,29 +311,37 @@ export default function EditClient({ id, getClient, updateClient,uploadImg ,role
                                                     <div className="border-3 border-primary border-bottom py-2">
                                                     <h6 className="text-primary text-center fs-3">KYC Details</h6>
                                                 </div>
-                                                <div className="m-0 row row-cols-12 row-cols-md-3 p-md-5">
+                                                <div className="m-0 row row-cols-12 row-cols-md-4 p-md-5">
                                                     <div className="mb-3 d-flex gap-2 flex-column">
                                                         <div className='d-flex gap-2 align-items-center justify-content-between'>
                                                         <label htmlFor="kycPhoto" className="form-label text-break">Photo {(uploadPhoto.message && uploadPhoto.type == "kycPhoto") && <span className={uploadPhoto.status == 1 ? "text-success" : "text-danger"}>{uploadPhoto.message}</span>}</label>
                                                         <div className='btn btn-primary' onClick={() => kycPhotoRef.current.click()}>Upload</div>
                                                         </div>
-                                                        {<img style={{height:'300px'}} className="border rounded-2 w-100 img-fluid" src={getCheckStorage(UserProfileFormik?.values?.kycPhoto) ? getCheckStorage(UserProfileFormik?.values?.kycPhoto) : "/Images/upload.jpeg"} alt="kycPhoto" />}
+                                                        {<img style={{height:'200px'}} className="border rounded-2 w-100 img-fluid" src={getCheckStorage(UserProfileFormik?.values?.kycPhoto) ? getCheckStorage(UserProfileFormik?.values?.kycPhoto) : "/Images/upload.jpeg"} alt="kycPhoto" />}
                                                         <input type="file" name="kycPhoto" ref={kycPhotoRef} id="kycPhoto" hidden={true} onChange={(e) => handleImgOnchange(e, e?.target?.name)} />
                                                     </div>
                                                     <div className="mb-3 d-flex gap-2 flex-column">
                                                         <div className='d-flex gap-2 align-items-center justify-content-between'>
-                                                        <label htmlFor="kycAadhar" className="form-label text-break">Aadhaar Card {(uploadPhoto.message && uploadPhoto.type == "kycAadhaar") && <span className={uploadPhoto.status == 1 ? "text-success" : "text-danger"}>{uploadPhoto.message}</span>}</label>
+                                                        <label htmlFor="kycAadhar" className="form-label text-break">Aadhaar Front {(uploadPhoto.message && uploadPhoto.type == "kycAadhaar") && <span className={uploadPhoto.status == 1 ? "text-success" : "text-danger"}>{uploadPhoto.message}</span>}</label>
                                                         <div className='btn btn-primary' onClick={() => kycAadhaarRef.current.click()}>Upload</div>
                                                         </div>
-                                                        {<img style={{height:'300px'}} className="border rounded-2 w-100 img-fluid" src={getCheckStorage(UserProfileFormik?.values?.kycAadhaarRef) ? getCheckStorage(UserProfileFormik?.values?.kycAadhaar) : "/Images/upload.jpeg"} alt="kycAadhar" />}
+                                                        {<img style={{height:'200px'}} className="border rounded-2 w-100 img-fluid" src={getCheckStorage(UserProfileFormik?.values?.kycAadhaar) ? getCheckStorage(UserProfileFormik?.values?.kycAadhaar) : "/Images/upload.jpeg"} alt="kycAadhar" />}
                                                         <input type="file" name="kycAadhaar" ref={kycAadhaarRef} id="kycAadhaar" hidden={true} onChange={(e) => handleImgOnchange(e, e?.target?.name)} />
+                                                    </div>
+                                                    <div className="mb-3 d-flex gap-2 flex-column">
+                                                        <div className='d-flex gap-2 align-items-center justify-content-between'>
+                                                        <label htmlFor="kycAadhaarBack" className="form-label text-break">Aadhaar Back {(uploadPhoto.message && uploadPhoto.type == "kycAadhaarBack") && <span className={uploadPhoto.status == 1 ? "text-success" : "text-danger"}>{uploadPhoto.message}</span>}</label>
+                                                        <div className='btn btn-primary' onClick={() => kycAadhaarBackRef.current.click()}>Upload</div>
+                                                        </div>
+                                                        {<img style={{height:'200px'}} className="border rounded-2 w-100 img-fluid" src={getCheckStorage(UserProfileFormik?.values?.kycAadhaarBack) ? getCheckStorage(UserProfileFormik?.values?.kycAadhaarBack) : "/Images/upload.jpeg"} alt="kycAadhar" />}
+                                                        <input type="file" name="kycAadhaarBack" ref={kycAadhaarBackRef} id="kycAadhaarBack" hidden={true} onChange={(e) => handleImgOnchange(e, e?.target?.name)} />
                                                     </div>
                                                     <div className="mb-3 d-flex gap-2 flex-column">
                                                         <div className='d-flex gap-2 align-items-center justify-content-between'>
                                                         <label htmlFor="kycPan" className="form-label text-break">PAN Card{(uploadPhoto.message && uploadPhoto.type == "kycPan") && <span className={uploadPhoto.status == 1 ? "text-success" : "text-danger"}>{uploadPhoto.message}</span>}</label>
                                                         <div className='btn btn-primary' onClick={() => kycPanRef.current.click()}>Upload</div>
                                                         </div>
-                                                        {<img style={{height:'300px'}} className="border rounded-2 w-100 img-fluid" src={getCheckStorage(UserProfileFormik?.values?.kycPan) ? getCheckStorage(UserProfileFormik?.values?.kycPan) : "/Images/upload.jpeg"} alt="kycPan" />}
+                                                        {<img style={{height:'200px'}} className="border rounded-2 w-100 img-fluid" src={getCheckStorage(UserProfileFormik?.values?.kycPan) ? getCheckStorage(UserProfileFormik?.values?.kycPan) : "/Images/upload.jpeg"} alt="kycPan" />}
                                                         <input type="file" name="kycPan" ref={kycPanRef} id="kycPan" hidden={true} onChange={(e) => handleImgOnchange(e, e?.target?.name)} />
                                                     </div>
                                                 </div>

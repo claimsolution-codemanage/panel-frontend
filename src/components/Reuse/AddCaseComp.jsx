@@ -321,8 +321,9 @@ console.log(caseDetailsFormik.values);
                                         <span onClick={() => setUploadingDocs(true)} className="bg-primary d-flex justify-content-center align-items-center text-white" style={{ cursor: 'pointer', height: '2rem', width: '2rem', borderRadius: '2rem' }}><IoMdAdd /></span>
                                     </div>
                                 </div>
-                                <div className="d-flex  gap-5 px-5  align-items-center">
-                                    {uploadedFiles.map(item => <div className="align-items-center bg-color-7 d-flex flex-column justify-content-center w-25 rounded-3">
+                                <div className="row row-cols-1 row-cols-md-4  align-items-center">
+                                    {uploadedFiles.map(item => <div className="p-2">
+                                    <div className="align-items-center bg-color-7 d-flex flex-column justify-content-center w-100 rounded-3">
                                         <div className="d-flex flex-column p-4 justify-content-center align-items-center">
                                             <div className="d-flex justify-content-center bg-color-6 align-items-center fs-4 text-white bg-primary" style={{ height: '3rem', width: '3rem', borderRadius: '3rem' }}>
                                                 {item?.docType == "image" ? <FaFileImage /> : <FaFilePdf />}
@@ -332,6 +333,7 @@ console.log(caseDetailsFormik.values);
                                             <p className="fs-5 text-break text-capitalize text-center text-wrap">{item?.docName}</p>
                                         </div>
                                     </div>
+                                    </div> 
                                     )}
                                 </div>
                             </div>

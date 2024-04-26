@@ -7,6 +7,10 @@ export default function PartnerViewCase() {
     const param = useParams()
 
     return (<>
-     <ViewCaseComp id={param?._id} getCase={partnerGetCaseById} role={"partner"} addCaseDoc={partnerAddCaseFileById} attachementUpload={partnerAttachementUpload}/>
+     <ViewCaseComp id={param?._id} 
+     getCase={partnerGetCaseById} 
+     role={"partner"} 
+     addCaseDoc={partnerAddCaseFileById} 
+     attachementUpload={partnerAttachementUpload}/>
     </>)
 }

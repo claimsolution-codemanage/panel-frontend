@@ -48,9 +48,9 @@ export default function ClientTemplate({children}){
             // console.log("completed",details.isProfileCompleted);
             // console.log(details);
             if(details?.role=="client"){
-                if(!details?.isProfileCompleted){
-                    navigate(`/client/edit profile/${details?._id}`)
-                }
+                // if(!details?.isProfileCompleted){
+                //     navigate(`/client/edit profile/${details?._id}`)
+                // }
             }else{
                 navigate("/client/signin")
             }

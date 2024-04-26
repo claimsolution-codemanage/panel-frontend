@@ -194,30 +194,38 @@ export default function ViewPartnerComp({viewPartner,id,role,editUrl}) {
                                                     <h6 className="text-primary text-center fs-3">KYC Details</h6>
                                                 </div>
                                             </div>
-                                            <div className="row row-cols-1 row-cols-md-3">
+                                            <div className="row row-cols-1 row-cols-md-4">
                                             <div className="my-3 d-flex flex-column">
                                                 <label for="kycPhoto" className="form-label">Photo</label>
                                                 {data[0]?.profile?.kycPhoto ? <Link to={getCheckStorage(data[0]?.profile?.kycPhoto)} target="_blank" className="w-100">
-                                                    <img style={{ height: 250 }} className="border rounded-2 w-100" src={getCheckStorage(data[0]?.profile?.kycPhoto)} alt="kycPhoto" />
+                                                    <img style={{ height: 200 }} className="border rounded-2 w-100" src={getCheckStorage(data[0]?.profile?.kycPhoto)} alt="kycPhoto" />
                                                 </Link>
-                                                    : <img style={{ height: 250 }} className="border rounded-2" src={"/Images/upload.jpeg"} alt="kycPhoto" />
+                                                    : <img style={{ height: 200 }} className="border rounded-2" src={"/Images/upload.jpeg"} alt="kycPhoto" />
                                                 }
                                             </div>
 
                                             <div className="my-3 d-flex flex-column">
-                                                <label for="kycAadhaar" className="form-label">Aadhaar Card</label>
+                                                <label for="kycAadhaar" className="form-label">Aadhaar Front</label>
                                                 {data[0]?.profile?.kycAadhaar ? <Link to={getCheckStorage(data[0]?.profile?.kycAadhaar)} target="_blank" className="w-100">
-                                                    <img style={{ height: 250 }} className="border rounded-2 w-100" src={getCheckStorage(data[0]?.profile?.kycAadhaar)} alt="kycAadhaar" />
+                                                    <img style={{ height: 200 }} className="border rounded-2 w-100" src={getCheckStorage(data[0]?.profile?.kycAadhaar)} alt="kycAadhaar" />
                                                 </Link>
-                                                    : <img style={{ height: 250 }} className="border rounded-2" src={"/Images/upload.jpeg"} alt="kycPhoto" />
+                                                    : <img style={{ height: 200 }} className="border rounded-2" src={"/Images/upload.jpeg"} alt="kycPhoto" />
+                                                }
+                                            </div>
+                                            <div className="my-3 d-flex flex-column">
+                                                <label for="kycAadhaarBack" className="form-label">Aadhaar Back</label>
+                                                {data[0]?.profile?.kycAadhaarBack ? <Link to={getCheckStorage(data[0]?.profile?.kycAadhaarBack)} target="_blank" className="w-100">
+                                                    <img style={{ height: 200 }} className="border rounded-2 w-100" src={getCheckStorage(data[0]?.profile?.kycAadhaarBack)} alt="kycAadhaarBack" />
+                                                </Link>
+                                                    : <img style={{ height: 200 }} className="border rounded-2" src={"/Images/upload.jpeg"} alt="kycPhoto" />
                                                 }
                                             </div>
                                             <div className="my-3 d-flex flex-column">
                                                 <label for="kycPan" className="form-label">PAN Card</label>
                                                 {data[0]?.profile?.kycPan ? <Link to={getCheckStorage(data[0]?.profile?.kycPan)} target="_blank" className="w-100">
-                                                    <img style={{ height: 250 }} className="border rounded-2 w-100" src={getCheckStorage(data[0]?.profile?.kycPan)} alt="kycPan" />
+                                                    <img style={{ height: 200 }} className="border rounded-2 w-100" src={getCheckStorage(data[0]?.profile?.kycPan)} alt="kycPan" />
                                                 </Link>
-                                                    : <img style={{ height: 250 }} className="border rounded-2" src={"/Images/upload.jpeg"} alt="kycPhoto" />
+                                                    : <img style={{ height: 200 }} className="border rounded-2" src={"/Images/upload.jpeg"} alt="kycPhoto" />
                                                 }
                                             </div>
                                             </div>

@@ -129,10 +129,10 @@ export default function AddNewCaseDocsModal({uploadingDocs,setUploadingDocs, han
                         <span>Allowed only image and pdf file</span>
                     </div>
                     <div className="mb-3 ">
-                <label for="docType" className={`form-label`}>Document Type*</label>
+                <label htmlFor="docType" className={`form-label`}>Document Type*</label>
                 <select className={`form-select `} id="complaintType" name="complaintType" value={data?.docName} onChange={(e)=>setData({...data,docName:e?.target?.value})} aria-label="Default select example">
                 <option value="">--Select Document Type</option>
-                {docType?.map(type=><option value={type.value}>{type.label}</option>)}
+                {docType?.map(type=><option key={type?.value} value={type.value}>{type.label}</option>)}
                 </select>
                 {data?.docName?.toLowerCase()=="other" &&<>
                 <input type="text" className="form-control mt-2" placeholder={"Document Name"} value={otherDocName} onChange={(e)=>e?.target?.value?.length<60 && setOtherDocName(e?.target?.value)} />

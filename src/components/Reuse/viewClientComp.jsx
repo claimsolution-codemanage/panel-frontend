@@ -158,25 +158,31 @@ export default function ViewClientComp({ id, getClient,role,link }) {
                             <div className="border-3 border-primary border-bottom pt-5">
                                 <h6 className="d-flex flex-start text-primary text-center fs-3">KYC Details</h6>
                             </div>
-                            <div className="mt-2 row row-cols-12 row-cols-md-3">
+                            <div className="mt-2 row row-cols-12 row-cols-md-4">
                                 <div className="mb-3 d-flex gap-2 flex-column">
                                     <label htmlFor="kycPhoto" className="form-label text-break fw-bold">Photo</label>
                                     {<Link target="_blank" to={getCheckStorage(data[0]?.profile?.kycPhoto) ? getCheckStorage(data[0]?.profile?.kycPhoto) : "#!"}>
-                                    <img style={{ height: '300px' }} className="border rounded-2 w-100 img-fluid" src={getCheckStorage(data[0]?.profile?.kycPhoto) ? getCheckStorage(data[0]?.profile?.kycPhoto) : "/Images/upload.jpeg"} alt="kycPhoto" />
+                                    <img style={{ height: '200px' }} className="border rounded-2 w-100 img-fluid" src={getCheckStorage(data[0]?.profile?.kycPhoto) ? getCheckStorage(data[0]?.profile?.kycPhoto) : "/Images/upload.jpeg"} alt="kycPhoto" />
                                     </Link>}
                                 </div>
                                 <div className="mb-3 d-flex gap-2 flex-column">
-                                    <label htmlFor="kycAadhar" className="form-label text-break fw-bold">Aadhaar Card</label>
+                                    <label htmlFor="kycAadhar" className="form-label text-break fw-bold">Aadhaar Front</label>
                                     {<Link target="_blank" to={getCheckStorage(data[0]?.profile?.kycAadhaar) ? getCheckStorage(data[0]?.profile?.kycAadhaar) : "#!"}>
-                                    <img style={{ height: '300px' }} className="border rounded-2 w-100 img-fluid" src={getCheckStorage(data[0]?.profile?.kycAadhaar) ? getCheckStorage(data[0]?.profile?.kycAadhar) : "/Images/upload.jpeg"} alt="kycPhoto" />
+                                    <img style={{ height: '200px' }} className="border rounded-2 w-100 img-fluid" src={getCheckStorage(data[0]?.profile?.kycAadhaar) ? getCheckStorage(data[0]?.profile?.kycAadhaar) : "/Images/upload.jpeg"} alt="kycPhoto" />
                                     
                                     </Link>}
-
+                                </div>
+                                <div className="mb-3 d-flex gap-2 flex-column">
+                                    <label htmlFor="kycAadhar" className="form-label text-break fw-bold">Aadhaar Back</label>
+                                    {<Link target="_blank" to={getCheckStorage(data[0]?.profile?.kycAadhaarBack) ? getCheckStorage(data[0]?.profile?.kycAadhaarBack) : "#!"}>
+                                    <img style={{ height: '200px' }} className="border rounded-2 w-100 img-fluid" src={getCheckStorage(data[0]?.profile?.kycAadhaarBack) ? getCheckStorage(data[0]?.profile?.kycAadhaarBack) : "/Images/upload.jpeg"} alt="kycPhoto" />
+                                    
+                                    </Link>}
                                 </div>
                                 <div className="mb-3 d-flex gap-2 flex-column">
                                     <label htmlFor="kycPan" className="form-label text-break fw-bold">Pan Card</label>
                                     {<Link target="_blank" to={getCheckStorage(data[0]?.profile?.kycPan) ? getCheckStorage(data[0]?.profile?.kycPan) : "#!"}>
-                                    <img style={{ height: '300px' }} className="border rounded-2 w-100 img-fluid" src={getCheckStorage(data[0]?.profile?.kycPan) ? getCheckStorage(data[0]?.profile?.kycPan) : "/Images/upload.jpeg"} alt="kycPhoto" />
+                                    <img style={{ height: '200px' }} className="border rounded-2 w-100 img-fluid" src={getCheckStorage(data[0]?.profile?.kycPan) ? getCheckStorage(data[0]?.profile?.kycPan) : "/Images/upload.jpeg"} alt="kycPhoto" />
                                     </Link>}
                                 </div>
                             </div>

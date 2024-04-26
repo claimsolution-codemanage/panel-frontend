@@ -139,7 +139,7 @@ export default function AddDocsModal({ _id, uploadingDocs, setUploadingDocs, han
         setLoading({ status: true, code: 0, type: "uploading", message: "uploading..." })
         try {
             const formData = new FormData()
-            formData.append("attachment", file)
+            formData.append("file", file)
             const res = await attachementUpload(type, formData)
             // console.log("partner", res?.data);
             if (res?.data?.success) {
@@ -242,7 +242,7 @@ export default function AddDocsModal({ _id, uploadingDocs, setUploadingDocs, han
                                 </div>
                             </div>
                             <div className="d-flex align-items-center justify-content-center bg-dark gap-5 w-100 p-2 text-primary">
-                                <p className="text-center text-nowrap fs-5 text-capitalize">{data?.docName}</p>
+                                <p className="text-center text-wrap fs-5 text-capitalize">{data?.docName}</p>
                             </div>
                         </div>
                         }

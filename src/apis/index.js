@@ -308,6 +308,17 @@ export const adminSetCaseIsActive = (_id, status) => {
   return axios.put(`${API_BASE}/api/admin/changeCaseIsActive?_id=${_id}&status=${!status}`)
 }
 
+
+export const adminSetCaseDocIsActive = (_id, status) => {
+  setheader()
+  return axios.put(`${API_BASE}/api/admin/unActiveDoc?_id=${_id}&status=${!status}`)
+}
+
+export const allAdminCaseDoc = (pageItemLimit = "", pageNo = "", searchQuery = "", startDate = "", endDate = "") => {
+  setheader()
+  return axios.get(`${API_BASE}/api/admin/allUnactiveCaseDoc?limit=${pageItemLimit}&pageNo=${pageNo}&search=${searchQuery}&startDate=${startDate}&endDate=${endDate}`)
+}
+
 export const allAdminPartner = (pageItemLimit = "", pageNo = "", searchQuery = "", type, startDate = "", endDate = "") => {
   setheader()
   return axios.get(`${API_BASE}/api/admin/viewAllPartner?limit=${pageItemLimit}&pageNo=${pageNo}&search=${searchQuery}&type=${type}&startDate=${startDate}&endDate=${endDate}`)
@@ -381,9 +392,9 @@ export const adminGetClientById = (_id) => {
   return axios.get(`${API_BASE}/api/admin/ViewClientById?_id=${_id}`)
 }
 
-export const adminGetAllEmployee = (pageItemLimit = "", pageNo = "", searchQuery = "") => {
+export const adminGetAllEmployee = (pageItemLimit = "", pageNo = "", searchQuery = "",type=true) => {
   setheader()
-  return axios.get(`${API_BASE}/api/admin/adminViewAllEmployee?limit=${pageItemLimit}&pageNo=${pageNo}&search=${searchQuery}`)
+  return axios.get(`${API_BASE}/api/admin/adminViewAllEmployee?limit=${pageItemLimit}&pageNo=${pageNo}&search=${searchQuery}&type=${type}`)
 }
 
 export const adminGetNormalEmployee = (pageItemLimit = "", pageNo = "", searchQuery = "") => {
@@ -519,9 +530,9 @@ export const adminUpdatePartnerBankingDetails = (_id, data) => {
   return axios.put(`${API_BASE}/api/admin/updatePartnerBankingDetails?_id=${_id}`, data)
 }
 
-export const adminDeleteCaseDocById = (query) => {
+export const adminDeleteCaseDocById = (id) => {
   setheader()
-  return axios.delete(`${API_BASE}/api/admin/deleteCaseDocId?${query}`)
+  return axios.delete(`${API_BASE}/api/admin/deleteCaseDocId?_id=${id}`)
 }
 
 
@@ -537,7 +548,7 @@ export const adminEditInvoice = (_id, data) => {
 
 export const adminUnactiveInvoice = (_id,type) => {
   setheader()
-  return axios.put(`${API_BASE}/api/admin/unActiveInvoiceById?_id=${_id}&type=${type}`)
+  return axios.put(`${API_BASE}/api/admin/unActiveInvoiceById?_id=${_id}&type=${!type}`)
 }
 
 export const adminDeleteInvoice = (_id,type) => {
@@ -691,6 +702,16 @@ export const clientDashboardData = () => {
 export const partnerDashboardData = () => {
   setheader()
   return axios.get(`${API_BASE}/api/partner/getpartnerDashboard`)
+}
+
+
+export const partnerAllCaseDownload = (searchQuery = "", statusType = "", startDate = "", endDate = "", type) => {
+  setheader()
+  return axios({
+    method: 'GET',
+    url: `${API_BASE}/api/partner/downloadReport?search=${searchQuery}&status=${statusType}&startDate=${startDate}&endDate=${endDate}&type=${type}`,
+    responseType: 'blob',
+  })
 }
 
 
@@ -863,3 +884,13 @@ export const adminRemoveComplaintById = (_id) => {
 }
 
 
+
+
+export const salesAllCaseDownload = (searchQuery = "", statusType = "", startDate = "", endDate = "", type) => {
+  setheader()
+  return axios({
+    method: 'GET',
+    url: `${API_BASE}/api/employee/sale/downloadCaseReport?search=${searchQuery}&status=${statusType}&startDate=${startDate}&endDate=${endDate}&type=${type}`,
+    responseType: 'blob',
+  })
+}

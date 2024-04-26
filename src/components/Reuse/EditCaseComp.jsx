@@ -242,14 +242,17 @@ export default function EditCaseComp({viewCase,updateCase,attachementUpload,addC
                 if (res?.data?.success && res?.data?.data) {
                     caseDetailsFormik.setValues(res?.data?.data)
                     const details =res?.data?.data
-                    if(!policyType?.includes(details?.policyType)){
+                    if(details?.policyType && !policyType?.includes(details?.policyType)){
                         console.log(details?.policyType,details?.complaintType);
                         caseDetailsFormik.setFieldValue("policyType","Other")
                         setOthers((pre)=>{return {...pre,policy:details?.policyType}})
                     }
-                    if(!complaintType?.includes(details?.complaintType)){
+                    if(details?.complaintType && !complaintType?.includes(details?.complaintType)){
                         caseDetailsFormik.setFieldValue("complaintType","Other")
                         setOthers((pre)=>{return{...pre,complaint:details?.complaintType}})
+                    }
+                    if(!details?.DOB){
+                        caseDetailsFormik.setFieldValue("DOB","")
                     }
                     setUploadedFiles([...res?.data?.data?.caseDocs])
                     // setData([res?.data?.data])
@@ -276,10 +279,9 @@ export default function EditCaseComp({viewCase,updateCase,attachementUpload,addC
         }, [id])
 
     const handleCaseDocsUploading =(payload)=>{
-            setUploadedFiles([...uploadedFiles,payload])
+            setUploadedFiles([...uploadedFiles,{...payload,new:true}])
         }
 
-        console.log(caseDetailsFormik?.values,others);
 
 
     return (<>
@@ -460,17 +462,20 @@ export default function EditCaseComp({viewCase,updateCase,attachementUpload,addC
                                         <span onClick={() => setUploadingDocs(true)} className="bg-primary d-flex justify-content-center align-items-center text-white" style={{ cursor: 'pointer', height: '2rem', width: '2rem', borderRadius: '2rem' }}><IoMdAdd /></span>
                                     </div>
                                 </div>
-                                <div className="d-flex  gap-5 px-5  align-items-center">
-                                    {uploadedFiles.map(item => <div className="align-items-center bg-color-7 d-flex flex-column justify-content-center w-25 rounded-3">
+                                <div className="row row-cols-1 row-cols-md-4  align-items-center">
+                                    {uploadedFiles.map(item => <div className="p-2">
+                                    <div key={item?._id} className="align-items-center bg-color-7 d-flex flex-column justify-content-center w-100 rounded-3">
                                         <div className="d-flex flex-column p-4 justify-content-center align-items-center">
                                             <div className="d-flex justify-content-center bg-color-6 align-items-center fs-4 text-white bg-primary" style={{ height: '3rem', width: '3rem', borderRadius: '3rem' }}>
-                                                {item?.docType == "image" ? <FaFileImage /> : <FaFilePdf />}
+                                                {item?.docType == "image" || item?.type == "image" ? <FaFileImage /> : <FaFilePdf />}
+                                               
                                             </div>
                                         </div>
                                         <div className="d-flex align-items-center justify-content-center bg-dark gap-5 w-100 p-2 text-primary">
-                                            <p className="fs-5 text-break text-capitalize text-center text-wrap">{item?.docName}</p>
+                                            <p className="fs-5 text-break text-capitalize text-center text-wrap">{item?.name ?item?.name :item?.docName}</p>
                                         </div>
                                     </div>
+                                    </div> 
                                     )}
                                 </div>
                             </div>

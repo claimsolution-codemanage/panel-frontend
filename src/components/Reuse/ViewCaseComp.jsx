@@ -28,10 +28,11 @@ import { adminEditCaseProcessById } from "../../apis"
 import { getFormateDMYDate } from "../../utils/helperFunction"
 import ConfirmationModal from "../../components/Common/confirmationModal"
 import { getCheckStorage } from "../../utils/helperFunction"
+import SetStatusOfProfile from "../Common/setStatusModal"
 
 export default function ViewCaseComp({id,getCase,role,attachementUpload,addCaseDoc,editUrl,addCaseCommit,
 viewPartner,viewClient,editCaseProcess,addCaseProcess,addReference,deleteReference,deleteDoc,isAddRefence,isAddCaseProcess,isAddCommit,
-isViewProfile
+isViewProfile,setCaseDocStatus
 }) {
     const [data, setData] = useState([])
     const [uploadingDocs, setUploadingDocs] = useState(false)
@@ -46,6 +47,8 @@ isViewProfile
     const [showEditCaseModal, setShowEditCaseModal] = useState({ status: false, details: {} })
     const [removeCaseReference, setRemoveCaseReference] = useState({ status: false, type: null, loading: false })
     const [deleteCaseDoc,setDeleteCaseDoc]=useState({status:false,id:null})
+    const [changeisActiveStatus, setChangeIsActiveStatus] = useState({ show: false, details: {} })
+
 
     const navigate = useNavigate()
     const param = useParams()
@@ -72,10 +75,10 @@ isViewProfile
     }
 
     useEffect(() => {
-        if (id && !showEditCaseModal.status && !addCaseReference.show && !removeCaseReference.status && !deleteCaseDoc?.status) {
+        if (id && !showEditCaseModal.status && !changeisActiveStatus.show && !addCaseReference.show && !removeCaseReference.status && !deleteCaseDoc?.status && !uploadingDocs) {
             getCaseById()
         }
-    }, [id, changeStatus, caseCommitModal, showEditCaseModal, addCaseReference, removeCaseReference ,deleteCaseDoc])
+    }, [id, changeStatus, caseCommitModal, showEditCaseModal, addCaseReference,changeisActiveStatus ,removeCaseReference ,deleteCaseDoc,uploadingDocs])
 
 
 
@@ -121,6 +124,32 @@ isViewProfile
             }
         }
     }
+
+    const commentBy = (comment)=>{
+        if(role?.toLowerCase()=="employee"){
+            return state?.myAppData?.details?._id == comment?.employeeId
+        }else{
+            return state?.myAppData?.details?._id == comment?.adminId
+        }
+    }
+
+    const handleChanges = async (_id, status) => {
+        try {
+          const res = await setCaseDocStatus(_id, status)
+          if (res?.data?.success) {
+            setChangeIsActiveStatus({ show: false, details: {} })
+            toast.success(res?.data?.message)
+    
+          }
+        } catch (error) {
+          if (error && error?.response?.data?.message) {
+            toast.error(error?.response?.data?.message)
+          } else {
+            toast.error("Something went wrong")
+          }
+          // console.log("allAdminCase isActive error", error);
+        }
+      }
 
     return (<>
         {loading ? <Loader /> :
@@ -299,33 +328,34 @@ isViewProfile
                                                         <div className="border-3 border-primary border-bottom py-2 mb-5">
                                                         <div className="d-flex gap-3 justify-content-center text-primary text-center fs-4">
                                                             <span>Document List</span>
-                                                            {(role?.toLowerCase()=="client" && role?.toLowerCase()=="partner") && <div>
+                                                            {(role?.toLowerCase()=="client" || role?.toLowerCase()=="partner") && <div>
                                                                 <span onClick={() => setUploadingDocs(true)} className="bg-primary d-flex justify-content-center align-items-center text-white" style={{ cursor: 'pointer', height: '2rem', width: '2rem', borderRadius: '2rem' }}><IoMdAdd /></span>
                                                             </div>}
                                                         </div></div>
-                                                        <div className="d-flex flex-wrap  gap-5 px-5  align-items-center">
-                                                            {data[0]?.caseDocs.map(item =>
-                                                                <>
-                                                                    <div className="align-items-center bg-color-7 d-flex flex-column justify-content-center w-25 rounded-3">
+                                                        <div className="row row-cols-1 row-cols-md-4 align-items-center">
+                                                            {data[0]?.caseDocs?.map(item =>
+                                                                    <div key={item?._id} className="p-2">
+                                                                    <div  className="align-items-center bg-color-7 d-flex flex-column justify-content-center rounded-3">
                                                                     <div className="w-100 p-2">
                                                                             <div className="dropdown float-end cursor-pointer">
                                                                             <i className="bi bi-three-dots-vertical" data-bs-toggle="dropdown" aria-expanded="false"></i>
                                                                             <ul className="dropdown-menu">
-                                                                                <li><div className="dropdown-item"><Link to={`${getCheckStorage(item?.docURL) ? getCheckStorage(item?.docURL) :"#!"}`} target="_blank">View</Link></div></li>
-                                                                                {role?.toLowerCase()=="admin" &&  <li><div onClick={()=>setDeleteCaseDoc({status:true,id:`caseId=${data[0]?._id}&docId=${item?._id}`})} className="dropdown-item">Delete</div></li>}
+                                                                                <li><div className="dropdown-item"><Link to={`${getCheckStorage(item?.url) ? getCheckStorage(item?.url) :"#!"}`} target="_blank">View</Link></div></li>
+                                                                                {role?.toLowerCase()=="admin" &&  <li><div onClick={()=>setChangeIsActiveStatus({show:true,details:{_id:item?._id,currentStatus:item?.isActive,name:item?.name}})} className="dropdown-item">Delete</div></li>}
+                                                                                {/* {role?.toLowerCase()=="admin" &&  <li><div onClick={()=>setDeleteCaseDoc({status:true,id:`caseId=${data[0]?._id}&docId=${item?._id}`})} className="dropdown-item">Delete</div></li>} */}
                                                                             </ul>
                                                                         </div>
                                                                             </div> 
                                                                         <div className="d-flex flex-column p-4 justify-content-center align-items-center">
                                                                             <div className="d-flex justify-content-center bg-color-6 align-items-center fs-4 text-white bg-primary" style={{ height: '3rem', width: '3rem', borderRadius: '3rem' }}>
-                                                                                {item?.docType == "image" ? <FaFileImage /> : (item?.docType == "pdf" ? <FaFilePdf /> : <FaFileWord />)}
+                                                                                {item?.type == "image" ? <FaFileImage /> : (item?.type == "pdf" ? <FaFilePdf /> : <FaFileWord />)}
                                                                             </div>
                                                                         </div>
                                                                         <div className="d-flex align-items-center justify-content-center bg-dark gap-5 w-100 p-2 text-primary">
-                                                                            <p className="text-center text-wrap fs-5 text-capitalize">{item?.docName}</p>
+                                                                            <p className="text-center text-wrap fs-5 text-capitalize">{item?.name}</p>
                                                                         </div>
                                                                     </div>
-                                                                </>
+                                                                    </div>
                                                             )}
                                                         </div>
 
@@ -356,7 +386,7 @@ isViewProfile
                                                                     </tr>
                                                                 </thead>
                                                                 <tbody>
-                                                                    {data[0]?.processSteps.map((item, ind) => <tr key={item._id} className="border-2 border-bottom border-light text-center">
+                                                                    {data[0]?.processSteps?.map((item, ind) => <tr key={item._id} className="border-2 border-bottom border-light text-center">
                                                                         <th scope="row">{ind + 1}</th>
                                                                         {role?.toLowerCase()=="admin" &&   <td>
                                                                             <span style={{ cursor: "pointer", height: 30, width: 30, borderRadius: 30 }} className="bg-warning text-dark d-flex align-items-center justify-content-center" onClick={() => setShowEditCaseModal({ status: true, details: { caseId: data[0]?._id, processId: item?._id, caseStatus: item?.status, caseRemark: item?.remark, isCurrentStatus: data[0]?.processSteps.length == ind + 1 } })}><CiEdit /></span>
@@ -384,12 +414,12 @@ isViewProfile
                                                         </div>
                                                     </div>
                                                     <div className="d-flex flex-column gap-3">
-                                                        {data[0]?.caseCommit.map(commit => <div className="w-100">
+                                                        {data[0]?.caseCommit?.map(commit => <div key={commit?._id} className="w-100">
                                                             {/* {console.log(data[0]?._id == commit?._id, data[0]?._id, commit?._id)} */}
-                                                            <div className={`${state?.myAppData?.details?._id == commit?._id && "float-end"} w-25`}>
-                                                                <div className={`${state?.myAppData?.details?._id != commit?._id ? "bg-info  w-auto text-dark" : "bg-primary text-white"} p-2 rounded-3`}>
-                                                                    {commit?.commit}</div>
-                                                                <p className="badge bg-warning text-dark m-0">{state?.myAppData?.details?._id == commit?._id ? "you" : commit?.name} | {new Date(commit?.Date).toLocaleDateString()}</p>
+                                                            <div className={`${commentBy(commit) && "float-end"} w-25`}>
+                                                                <div className={`${commentBy(commit)? "bg-info  w-auto text-dark" : "bg-primary text-white"} p-2 rounded-3`}>
+                                                                    {commit?.message}</div>
+                                                                <p className="badge bg-warning text-dark m-0">{commentBy(commit) ? "you" : commit?.name} | {new Date(commit?.date).toLocaleDateString()}</p>
                                                             </div>
                                                         </div>)}
 
@@ -491,6 +521,8 @@ isViewProfile
                 {deleteCaseDoc?.status && <ConfirmationModal show={deleteCaseDoc?.status} hide={()=>setDeleteCaseDoc({status:false,id:null})} id={deleteCaseDoc?.id} handleComfirmation={deleteDoc} heading={"Are you sure?"} text={"Want to permanent delete this doc"}/>}
                 {uploadingDocs && <AddDocsModal _id={data[0]?._id} uploadingDocs={uploadingDocs} setUploadingDocs={setUploadingDocs}
                  handleCaseDocsUploading={addCaseDoc} attachementUpload={attachementUpload} />}
+              {changeisActiveStatus?.show && <SetStatusOfProfile changeStatus={changeisActiveStatus} hide={() => setChangeIsActiveStatus({ show: false, details: {} })} type="Doc" handleChanges={handleChanges} />}
+
                                    
             </div>}
     </>)

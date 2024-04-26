@@ -1,11 +1,11 @@
 import { adminSetEmployeeStatus,adminGetAllEmployee,adminDeleteEmployeeById,adminUpdateEmployeeById } from "../../apis"
 import AllEmployee from "../../components/Reuse/AllEmployee";
 
-export default function AllAdminEmployee() {
+export default function AdminEmployeeTrash() {
   return (<>
  <AllEmployee
   getEmployee={adminGetAllEmployee}
-  isTrash={false}
+  isTrash={true}
   isActive={adminSetEmployeeStatus}
   deleteEmployeeId={adminDeleteEmployeeById}
   updateEmployee={adminUpdateEmployeeById}

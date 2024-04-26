@@ -39,7 +39,7 @@ import { Link } from "react-router-dom"
 
 export default function ViewAllCaseComp({getCases,downloadCase,role,viewUrl,
   caseShare,setStatus,setCaseStatus,editUrl,createInvUrl,
-  isChangeStatus,isEdit,isRemoveCase,isResolvedAmt
+  isChangeStatus,isEdit,isRemoveCase,isResolvedAmt,isDownload
 }) {
   const [data, setData] = useState([])
   const navigate = useNavigate()
@@ -262,7 +262,7 @@ export default function ViewAllCaseComp({getCases,downloadCase,role,viewUrl,
                   <div className="col-12 col-md-7 d-flex gap-3">
                     <div className="btn btn-primary fs-5" onClick={() => setShowCalender(!showCalender)}><CiFilter /></div>
                     <div className="btn btn-primary fs-5" onClick={() => handleReset()}>Reset</div>
-                    {role?.toLowerCase()=="admin" &&  <button className={`btn btn-primary fs-5 ${downloading && "disabled"}`} disabled={downloading} onClick={() => !downloading && handleDownload()}>{downloading ? <span className="spinner-border-sm"></span> : <SiMicrosoftexcel />}</button>}
+                    {isDownload &&  <button className={`btn btn-primary fs-5 ${downloading && "disabled"}`} disabled={downloading} onClick={() => !downloading && handleDownload()}>{downloading ? <span className="spinner-border-md"></span> : <SiMicrosoftexcel />}</button>}
 
                     {role?.toLowerCase()=="admin" && shareCase?.length > 0 && <div className="btn btn-primary fs-5" onClick={() => setCaseShareModal({ status: true, value: shareCase })}><IoShareSocialOutline /></div>}
                   </div>
@@ -349,7 +349,7 @@ export default function ViewAllCaseComp({getCases,downloadCase,role,viewUrl,
                 breakLabel="..."
                 nextLabel={<BiRightArrow />}
                 onPageChange={handlePageClick}
-                pageRangeDisplayed={5}
+                pageRangeDisplayed={3}
                 pageCount={Math.ceil(noOfCase / pageItemLimit) || 1}
                 previousLabel={<BiLeftArrow />}
                 className="d-flex flex gap-2"

@@ -82,7 +82,7 @@ export default function PrivateNavbar() {
             active={location.pathname == "/client/dashboard"}
             path={"/client/dashboard"}
             name={"Dashboard"}
-            disable={!state?.myAppData?.details.isProfileCompleted}
+            disable={false}
             icon={<RxDashboard />}
             />
             <NavItems 
@@ -96,28 +96,28 @@ export default function PrivateNavbar() {
             active={location.pathname == "/client/add%20new%20case"}
             path={'/client/add new case'}
             name={"Add Case"}
-            disable={!state?.myAppData?.details.isProfileCompleted}
+            disable={false}
             icon={<MdOutlineLibraryAdd />}
             />
           <NavItems 
             active={(location.pathname== "/client/all%20case" ||location.pathname.includes("/client/view%20case") ||location.pathname.includes("/client/edit%20case") )}
             path={'/client/all case'}
             name={"All Case"}
-            disable={!state?.myAppData?.details.isProfileCompleted}
+            disable={false}
             icon={<SiReaddotcv />}
             />
             <NavItems 
             active={location.pathname.includes("invoice")}
             path={'/client/all-invoices'}
             name={"My Invoice"}
-            disable={!state?.myAppData?.details.isProfileCompleted}
+            disable={false}
             icon={<MdOutlineLibraryAdd />}
             />
             <NavItems 
             active={(location.pathname== "/client/view%20service%20agreement" )}
             path={'/client/view service agreement'}
             name={"Service Agreement"}
-            disable={!state?.myAppData?.details.isProfileCompleted}
+            disable={false}
             icon={<LuPcCase />}
             />
             </>}
@@ -185,9 +185,17 @@ export default function PrivateNavbar() {
                     <FaTrashAlt />
                     <div className=''>Client</div>
                     </Link>
+                    <Link to="/admin/all-trash-employee" className={`d-flex align-items-center mx-2 px-2 py-2 gap-3 text-white   ${location.pathname == "/admin/all-trash-employee" && "active_item"}`}  >
+                    <FaTrashAlt />
+                    <div className=''>Employee</div>
+                    </Link>
                     <Link to="/admin/all trash case" className={`d-flex align-items-center mx-2 px-2 py-2 gap-3 text-white   ${location.pathname == "/admin/all%20trash%20case" && "active_item"}`}  >
                     <FaTrashAlt />
                     <div className=''>Case</div>
+                    </Link>
+                    <Link to="/admin/all-trash-doc" className={`d-flex align-items-center mx-2 px-2 py-2 gap-3 text-white   ${location.pathname == "/admin/all-trash-doc" && "active_item"}`}  >
+                    <FaTrashAlt />
+                    <div className=''>Document</div>
                     </Link>
                     <Link to="/admin/all-trash-invoice" className={`d-flex align-items-center mx-2 px-2 py-2 gap-3 text-white   ${location.pathname == "/admin/all-trash-invoice" && "active_item"}`}  >
                     <FaTrashAlt />
@@ -238,7 +246,7 @@ export default function PrivateNavbar() {
                     <RxDashboard />
                     <div className=''>All Invoices</div>
                 </Link>
-                <div  className={`cursor-pointer`}  >
+                {/* <div  className={`cursor-pointer`}  >
                     <div onClick={()=>setShowTrashOption(!showTrashOption)} className='d-flex align-items-center mx-2 px-2 py-2 gap-3 cursor-pointer text-white'>
                     <FaRegTrashCan />
                     <div className='d-flex align-items-center gap-5'>
@@ -252,7 +260,7 @@ export default function PrivateNavbar() {
                     <div className=''>Invoice</div>
                     </Link>
                     </div>
-                </div>
+                </div> */}
             </>}
                 <Link to="/employee/reset password" className={`d-flex align-items-center mx-2 px-2 py-2 gap-3 text-white   ${location.pathname == "/employee/reset%20password" && "active_item"}`}  >
                     <RxDashboard />

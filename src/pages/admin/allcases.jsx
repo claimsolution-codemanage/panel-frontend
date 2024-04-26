@@ -17,6 +17,7 @@ export default function AllAdminCase() {
       isChangeStatus={true}
       isRemoveCase={true}
       isAddRefence={true}
+      isDownload={true}
       caseShare={adminShareCaseToEmployee}
       createInvUrl={"/admin/create-invoice/"}
     />

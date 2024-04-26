@@ -1,5 +1,5 @@
 import { employeeAllCase } from "../../apis"
-import { employeeChangeCaseStatus } from "../../apis"
+import { employeeChangeCaseStatus,salesAllCaseDownload } from "../../apis"
 import { AppContext } from "../../App"
 import { useContext} from "react"
 import ViewAllCaseComp from "../../components/Reuse/ViewAllCaseComp"
@@ -11,7 +11,7 @@ export default function EmployeeAllCase() {
   return (<>
       <ViewAllCaseComp
       getCases={employeeAllCase}
-      downloadCase={()=>{}}
+      downloadCase={salesAllCaseDownload}
       role={"employee"}
       setStatus={employeeChangeCaseStatus}
       setCaseStatus={()=>{}}
@@ -21,6 +21,7 @@ export default function EmployeeAllCase() {
       isEdit={empType?.toLowerCase()==="operation"}
       isChangeStatus={empType?.toLowerCase()==="operation"}
       isRemoveCase={false}
+      isDownload={empType?.toLowerCase()==="sales"}
       createInvUrl={empType?.toLowerCase()==="finance" ?  "/employee/create-invoice/" : ""}
     /> 
   </>)

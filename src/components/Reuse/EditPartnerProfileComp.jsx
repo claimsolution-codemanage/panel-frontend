@@ -22,6 +22,7 @@ export default function EditPartnerProfileComp({ getPartner, updateProfile, upda
     const param = useParams()
     const kycPhotoRef = useRef()
     const kycAadhaarRef = useRef()
+    const kycAadhaarBackRef = useRef()
     const kycPanRef = useRef()
     const [bankInfoImg, setBankInfoImg] = useState({ cancelledChequeImg: "", gstCopyImg: "", })
     const [bankDetails, setBankDetails] = useState({
@@ -62,6 +63,7 @@ export default function EditPartnerProfileComp({ getPartner, updateProfile, upda
         about: "",
         kycPhoto: "",
         kycAadhaar: "",
+        kycAadhaarBack: "",
         kycPan: "",
 
     })
@@ -260,7 +262,7 @@ export default function EditPartnerProfileComp({ getPartner, updateProfile, upda
                                     <div className="d-flex flex-column  align-items-center justify-content-center">
                                         <div className="d-flex align-items-center justify-content-center  bg-color-2" style={{ height: 150, width: 150, borderRadius: 150, cursor: "pointer" }} onClick={handleImage}>
                                             {data.profilePhoto ? <img src={getCheckStorage(data.profilePhoto)} alt="profileImg" style={{ height: 150, width: 150, borderRadius: 150, cursor: "pointer" }} /> : <BsCameraFill className="h2 text-white " />}
-                                            <input type="file" name="profilePhoto" ref={imgRef} id="profilePhoto" hidden={true} onChange={(e) => handleImgOnchange(e?.e?.target?.name)} />
+                                            <input type="file" name="profilePhoto" ref={imgRef} id="profilePhoto" hidden={true} onChange={(e) => handleImgOnchange(e,e?.target?.name)} />
                                         </div>
                                         {uploadPhoto.message && <span className={uploadPhoto.status == 1 ? "text-success" : "text-danger"}>{uploadPhoto.message}</span>}
                                     </div>
@@ -373,29 +375,37 @@ export default function EditPartnerProfileComp({ getPartner, updateProfile, upda
                                     <div className="border-3 border-primary border-bottom py-2">
                                         <h6 className="text-primary  fs-3">KYC Details</h6>
                                     </div>
-                                    <div className="m-0 row row-cols-12 row-cols-md-3">
+                                    <div className="m-0 row row-cols-12 row-cols-md-4">
                                         <div className="my-3 d-flex gap-2 flex-column">
                                             <div className='d-flex gap-2 align-items-center justify-content-between'>
                                                 <label htmlFor="kycPhoto" className="form-label text-break">Photo {(uploadPhoto.message && uploadPhoto.type == "kycPhoto") && <span className={uploadPhoto.status == 1 ? "text-success" : "text-danger"}>{uploadPhoto.message}</span>}</label>
                                                 <div className='btn btn-primary' onClick={() => kycPhotoRef.current.click()}>Upload</div>
                                             </div>
-                                            {<img style={{ height: '300px' }} className="border rounded-2 w-100 img-fluid" src={getCheckStorage(data?.kycPhoto) ? getCheckStorage(data?.kycPhoto) : "/Images/upload.jpeg"} alt="kycPhoto" />}
+                                            {<img style={{ height: '200px' }} className="border rounded-2 w-100 img-fluid" src={getCheckStorage(data?.kycPhoto) ? getCheckStorage(data?.kycPhoto) : "/Images/upload.jpeg"} alt="kycPhoto" />}
                                             <input type="file" name="kycPhoto" ref={kycPhotoRef} id="kycPhoto" hidden={true} onChange={(e) => handleImgOnchange(e, e?.target?.name)} />
                                         </div>
                                         <div className="my-3 d-flex gap-2 flex-column">
                                             <div className='d-flex gap-2 align-items-center justify-content-between'>
-                                                <label htmlFor="kycAadhar" className="form-label text-break">Aadhaar Card {(uploadPhoto.message && uploadPhoto.type == "kycAadhaar") && <span className={uploadPhoto.status == 1 ? "text-success" : "text-danger"}>{uploadPhoto.message}</span>}</label>
+                                                <label htmlFor="kycAadhaar" className="form-label text-break">Aadhaar Front {(uploadPhoto.message && uploadPhoto.type == "kycAadhaar") && <span className={uploadPhoto.status == 1 ? "text-success" : "text-danger"}>{uploadPhoto.message}</span>}</label>
                                                 <div className='btn btn-primary' onClick={() => kycAadhaarRef.current.click()}>Upload</div>
                                             </div>
-                                            {<img style={{ height: '300px' }} className="border rounded-2 w-100 img-fluid" src={getCheckStorage(data?.kycAadhaar) ? getCheckStorage(data?.kycAadhaar) : "/Images/upload.jpeg"} alt="kycAadhar" />}
+                                            {<img style={{ height: '200px' }} className="border rounded-2 w-100 img-fluid" src={getCheckStorage(data?.kycAadhaar) ? getCheckStorage(data?.kycAadhaar) : "/Images/upload.jpeg"} alt="kycAadhaar" />}
                                             <input type="file" name="kycAadhaar" ref={kycAadhaarRef} id="kycAadhaar" hidden={true} onChange={(e) => handleImgOnchange(e, e?.target?.name)} />
+                                        </div>
+                                        <div className="my-3 d-flex gap-2 flex-column">
+                                            <div className='d-flex gap-2 align-items-center justify-content-between'>
+                                                <label htmlFor="kycAadhaarBack" className="form-label text-break">Aadhaar Back{(uploadPhoto.message && uploadPhoto.type == "kycAadhaarBack") && <span className={uploadPhoto.status == 1 ? "text-success" : "text-danger"}>{uploadPhoto.message}</span>}</label>
+                                                <div className='btn btn-primary' onClick={() => kycAadhaarBackRef.current.click()}>Upload</div>
+                                            </div>
+                                            {<img style={{ height: '200px' }} className="border rounded-2 w-100 img-fluid" src={getCheckStorage(data?.kycAadhaarBack) ? getCheckStorage(data?.kycAadhaarBack) : "/Images/upload.jpeg"} alt="kycAadhaarBack" />}
+                                            <input type="file" name="kycAadhaarBack" ref={kycAadhaarBackRef} id="kycAadhaarBack" hidden={true} onChange={(e) => handleImgOnchange(e, e?.target?.name)} />
                                         </div>
                                         <div className="my-3 d-flex gap-2 flex-column">
                                             <div className='d-flex gap-2 align-items-center justify-content-between'>
                                                 <label htmlFor="kycPan" className="form-label text-break">PAN Card{(uploadPhoto.message && uploadPhoto.type == "kycPan") && <span className={uploadPhoto.status == 1 ? "text-success" : "text-danger"}>{uploadPhoto.message}</span>}</label>
                                                 <div className='btn btn-primary' onClick={() => kycPanRef.current.click()}>Upload</div>
                                             </div>
-                                            {<img style={{ height: '300px' }} className="border rounded-2 w-100 img-fluid" src={getCheckStorage(data?.kycPan) ? getCheckStorage(data?.kycPan) : "/Images/upload.jpeg"} alt="kycPan" />}
+                                            {<img style={{ height: '200px' }} className="border rounded-2 w-100 img-fluid" src={getCheckStorage(data?.kycPan) ? getCheckStorage(data?.kycPan) : "/Images/upload.jpeg"} alt="kycPan" />}
                                             <input type="file" name="kycPan" ref={kycPanRef} id="kycPan" hidden={true} onChange={(e) => handleImgOnchange(e, e?.target?.name)} />
                                         </div>
                                     </div>
