@@ -83,6 +83,12 @@ export default function AddNewCaseDocsModal({uploadingDocs,setUploadingDocs, han
         if (files && files.length > 0) {
             const file = files[0];
             const fileType = file?.type;
+            const maxSize = 150 * 1024 * 1024;
+            if (file.size > maxSize) {
+            setLoading({ status: false, code: 2, type: "uploading", message: "File must be less than 150Mb" })
+            return
+            }
+
 
             if (fileType.includes("image")) {
                 // setLoading({status:true,code:0,type:"uploading",message:"uploading..."})

@@ -22,6 +22,7 @@ import {toast} from 'react-toastify'
 import loash from 'lodash'
 import { useContext } from 'react'
 import { AppContext } from '../../../App'
+import { getFormateDMYDate } from '../../../utils/helperFunction'
 
 export default function MyAdmins() {
     const [data, setData] = useState([])
@@ -182,7 +183,8 @@ export default function MyAdmins() {
             <tbody>
               {data.map((item, ind) => <tr key={item._id} className="border-2 border-bottom border-light text-center">
                 <th scope="row" className="text-nowrap">{ind + 1}</th>
-                <td className="text-nowrap">{new Date(item?.createdAt).toLocaleDateString()}</td>
+    
+                <td className="text-nowrap">{item?.createdAt && getFormateDMYDate(item?.createdAt)}</td>
                 <td className="text-nowrap">{item?.fullName}</td>
                 <td className="text-nowrap">{item?.email}</td>
                 <td className="text-nowrap">{item?.mobileNo}</td>  
@@ -208,7 +210,9 @@ export default function MyAdmins() {
             breakLabel="..."
             nextLabel={<BiRightArrow/>}
             onPageChange={handlePageClick}
-            pageRangeDisplayed={5}
+            pageRangeDisplayed={4}
+            breakClassName={""}
+            marginPagesDisplayed={1}
             pageCount={Math.ceil(noOfAdmin / pageItemLimit)}
             previousLabel={<BiLeftArrow/>}
             className="d-flex flex gap-2"

@@ -5,6 +5,6 @@ import ViewClientComp from "../../components/Reuse/viewClientComp"
 export default function AdminClientDetails() {
     const param = useParams()
     return (<>
-     <ViewClientComp id={param?._id} getClient={adminGetClientById} link={`/admin/edit-client/${param?._id}`} role="admin"/>
+     <ViewClientComp id={param?._id} getClient={adminGetClientById} isEdit={true} link={`/admin/edit-client/${param?._id}`} role="admin"/>
     </>)
 }

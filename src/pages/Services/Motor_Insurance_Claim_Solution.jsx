@@ -1,8 +1,12 @@
 import './Services.css'
 import { Link } from 'react-router-dom'
+import { Helmet } from "react-helmet";
 export default function Motor_Insurance_Claim_Solution(){
     return(
         <>
+    <Helmet>
+    <link rel="canonical" href="http://claimsolution.in/Motor-Insurance-Claim-Solution" />
+  </Helmet>
             {/*=============== first intro ===============*/}
             <div className="container-fluid">
                 <div className="container-px-5 mt-4 mb-3">

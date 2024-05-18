@@ -197,7 +197,7 @@ export default function ClientDasboard() {
                   </div>
                   </div>
                   </div>
-              {chartData[0]?.allCase?.map(data=> <div className="col-md-3 border-end">
+              {chartData[0]?.allCase?.map(data=> <div key={data?._id} className="col-md-3 border-end">
                 <div className="bg-color-1 border-0 border-5 border-primary border-start card mx-1 my-4 p-2 shadow">
                     <div className='d-flex align-items-center justify-content-around'>
                   <div className="text-center ">

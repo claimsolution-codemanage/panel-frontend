@@ -1,7 +1,11 @@
 import { Link } from "react-router-dom"
+import { Helmet } from "react-helmet";
 export default function Patnership() {
     return (
         <>
+                      <Helmet>
+        <link rel="canonical" href="http://claimsolution.in/partnership" />
+      </Helmet>
             {/* PARTNER para */}
             <div className="container-fluid py-5 color-2">
                 <div className="container-px-5">

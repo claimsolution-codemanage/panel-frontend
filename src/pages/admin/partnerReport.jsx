@@ -304,8 +304,8 @@ export default function AdminViewPartnerReport() {
               <table className="table table-responsive rounded-2 shadow table-borderless">
                 <thead>
                   <tr className="bg-primary text-white text-center">
-                    <th scope="col" className="text-nowrap" ><th scope="col" ></th></th>
-                    <th scope="col" className="text-nowrap" ><th scope="col" >S.no</th></th>
+                    {/* <th scope="col" className="text-nowrap" ><th scope="col" ></th></th> */}
+                    <th scope="col" className="text-nowrap" >S.no</th>
                     <th scope="col" className="text-nowrap" >Current Status</th>
                     <th scope="col" className="text-nowrap">Action</th>
                     {/* <th scope="col" className="text-nowrap" >Reference</th> */}
@@ -322,7 +322,7 @@ export default function AdminViewPartnerReport() {
                 </thead>
                 <tbody>
                   {data.map((item, ind) => <tr key={item._id} className="border-2 border-bottom border-light text-center">
-                    <td className="text-nowrap"><input class="form-check-input" name="shareCase" type="checkbox" checked={shareCase.includes(item?._id)} onChange={(e) => handleShareOnchange(e, item?._id)} id="flexCheckDefault" /></td>
+                    {/* <td className="text-nowrap"><input class="form-check-input" name="shareCase" type="checkbox" checked={shareCase.includes(item?._id)} onChange={(e) => handleShareOnchange(e, item?._id)} id="flexCheckDefault" /></td> */}
                     <th scope="row">{ind + 1}</th>
                     <td className=" text-nowrap"><span className={(item?.currentStatus == "reject" || item?.currentStatus == "pending") ? " badge bg-danger text-white" : "badge bg-primary"}>{item?.currentStatus}</span></td>
                     <td className="text-nowrap">
@@ -359,7 +359,9 @@ export default function AdminViewPartnerReport() {
                 breakLabel="..."
                 nextLabel={<BiRightArrow />}
                 onPageChange={handlePageClick}
-                pageRangeDisplayed={5}
+                pageRangeDisplayed={4}
+                breakClassName={""}
+                marginPagesDisplayed={1}
                 pageCount={Math.ceil(noOfCase / pageItemLimit) || 1}
                 previousLabel={<BiLeftArrow />}
                 className="d-flex flex gap-2"

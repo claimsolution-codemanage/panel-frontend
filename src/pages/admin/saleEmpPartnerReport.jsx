@@ -277,7 +277,7 @@ export default function AdminSaleEmpPartnerReport() {
                 <table className="table table-responsive table-borderless">
                   <thead>
                     <tr className="bg-primary text-white text-center">
-                    <th scope="col" className="text-nowrap" ><th scope="col" ></th></th>
+                    <th scope="col" className="text-nowrap" ></th>
                       <th scope="col" className="text-nowrap"><th scope="col" >S.no</th></th>
                       {/* <th scope="col" className="text-nowrap">Status</th> */}
                       <th scope="col" className="text-nowrap"><span>Action</span></th>
@@ -295,7 +295,7 @@ export default function AdminSaleEmpPartnerReport() {
                   </thead>
                   <tbody>
                     {data.map((item, ind) => <tr key={item._id} className="border-2 border-bottom border-light text-center">
-                    <td className="text-nowrap"><input class="form-check-input" name="removePartner" type="checkbox"  checked={removePartner.includes(item?._id)} onChange={(e) => handleRemoveOnchange(e, item?._id)} id="flexCheckDefault" /></td>
+                   <td className="text-nowrap"> {item?.salesId!=param?._id && <input class={`form-check-input ${item?.salesId==param?._id && "disabled"}`} name="removePartner" type="checkbox" disabled={item?.salesId==param?._id}  checked={removePartner.includes(item?._id)} onChange={(e) => item?.salesId!=param?._id && handleRemoveOnchange(e, item?._id)} id="flexCheckDefault" />} </td>
                       <th scope="row" className="text-nowrap">{ind + 1}</th>
                       {/* <td className="text-nowrap"> <span className={`badge ${item?.isActive ? "bg-primary" : "bg-danger"}`}>{item?.isActive ? "Active" : "Unactive"}</span> </td> */}
                       {/* <td className="text-nowrap"><span className="d-flex align-items-center gap-2"><span style={{ cursor: "pointer" }} onClick={() => navigate(`/admin/partner details/${item._id}`)}><HiMiniEye /></span><span style={{ cursor: "pointer" }} onClick={() => setChangeStatus({ show: true, details: {_id:item._id,currentStatus:item?.isActive} })}><CiEdit /></span></span></td> */}
@@ -309,7 +309,7 @@ export default function AdminSaleEmpPartnerReport() {
                           {/* <span style={{ cursor: "pointer",height:30,width:30,borderRadius:30 }} className="bg-danger text-white d-flex align-items-center justify-content-center" onClick={() => setDeletePartner({status:true,id:item?._id,text:`Your want to delete ${item?.profile?.consultantName} partner`})}><AiOutlineDelete /></span> */}
 
                         </span></td>
-                      <td  className="text-nowrap"><span className="badge bg-primary">{item?.shareEmployee?.includes(item?.salesId) ? "Added" : "Shared"}</span> </td>
+                      <td  className="text-nowrap"><span className="badge bg-primary">{item?.salesId==param?._id ? "Added" : (item?.shareEmployee?.includes(param?._id) ? "Shared" : "others")}</span> </td>
                       <td className="text-nowrap">{new Date(item?.profile?.associateWithUs).toLocaleDateString()}</td>
                       <td className="text-nowrap">{item?.profile?.consultantName}</td>
                       <td className="text-nowrap">{item?.profile?.consultantCode}</td>
@@ -331,7 +331,9 @@ export default function AdminSaleEmpPartnerReport() {
                   breakLabel="..."
                   nextLabel={<BiRightArrow />}
                   onPageChange={handlePageClick}
-                  pageRangeDisplayed={5}
+                  pageRangeDisplayed={4}
+                  breakClassName={""}
+                  marginPagesDisplayed={1}
                   pageCount={Math.ceil(noOfPartner / pageItemLimit) || 1}
                   previousLabel={<BiLeftArrow />}
                   className="d-flex flex gap-2"

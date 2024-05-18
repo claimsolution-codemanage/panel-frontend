@@ -116,7 +116,7 @@ export const caseStatus = ["Pending","Accept","Under Expert Review","Processing"
 
 export const insuranceCompany = ["ICICI Bank","Kotak Mahindra Bank","Ujjwala Insurance","Other"]
 
-export const employeeType = ["Operation","Sales","Legal","Finance","HR","Medical Executive(Doctor)","Civil(Surveyor)"]
+export const employeeType = ["Operation","Branch","Sales","Legal","Finance","HR","Medical Executive(Doctor)","Civil(Surveyor)","Sathi Team"]
 export const employeeDesignation = ["Executive","Manager","Head"]
 
 

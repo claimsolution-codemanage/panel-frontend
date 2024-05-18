@@ -13,10 +13,12 @@ import { useReactToPrint } from 'react-to-print';
 import { toast } from 'react-toastify'
 import { financeEmployeeCreateInvoice } from '../../apis'
 import { useNavigate, useParams } from 'react-router-dom'
+import {ToWords} from 'to-words'
 import { invoiceFormatDate } from '../../utils/helperFunction'
 
 export default function CreateInvoiceComp({createInvoice,clientId,caseId,viewInvoiceUrl}) {
   const navigate = useNavigate()
+  const toWords = new ToWords()
   const printRef = useRef()
   const caseParam = useParams()
   const [loading, setLoading] = useState(false)
@@ -414,6 +416,11 @@ export default function CreateInvoiceComp({createInvoice,clientId,caseId,viewInv
                                 <h4 className="m-0 fw-semibold fs-5">{finalDetails?.totalAmt}</h4>
                               </td>
                             </tr>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td colSpan={10} className="fw-semibold border-0">
+                          {!isNaN(finalDetails?.totalAmt)&& `Total Amount(In words): ${toWords?.convert(Number(finalDetails?.totalAmt),{currency:true,ignoreZeroCurrency:true})}`}  
                           </td>
                         </tr>
                       </tbody>

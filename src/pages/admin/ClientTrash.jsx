@@ -8,7 +8,7 @@ import { DateRangePicker } from 'react-date-range';
 import { DateRange } from 'react-date-range';
 import 'react-date-range/dist/styles.css'; // main style file
 import 'react-date-range/dist/theme/default.css'; // theme css file
-import { getFormateDate } from "../../utils/helperFunction"
+import { getFormateDMYDate, getFormateDate } from "../../utils/helperFunction"
 import ReactPaginate from 'react-paginate';
 import { CiEdit } from 'react-icons/ci'
 import { FaCircleArrowDown } from 'react-icons/fa6'
@@ -180,7 +180,7 @@ export default function AdminTrashClient() {
                 <span style={{ cursor: "pointer",height:30,width:30,borderRadius:30 }} className="bg-success text-white d-flex align-items-center justify-content-center" onClick={() => setChangeStatus({ show: true, details: {_id:item._id,currentStatus:item?.isActive,name:item?.profile?.consultantName,recovery:false} })}><FaTrashRestoreAlt /></span>
                 <span style={{ cursor: "pointer",height:30,width:30,borderRadius:30 }} className="bg-danger text-white d-flex align-items-center justify-content-center" onClick={() => setDeleteClient({status:true,id:item?._id,text:`Your want to permanent delete ${item?.profile?.consultantName} client`})}><AiOutlineDelete /></span>
                 </span></td>
-              <td className="text-nowrap">{new Date(item?.profile?.associateWithUs).toLocaleDateString()}</td>
+              <td className="text-nowrap">{item?.profile?.associateWithUs && getFormateDMYDate(item?.profile?.associateWithUs)}</td>
               <td className="text-nowrap">{item?.profile?.consultantName}</td>
               <td className="text-nowrap">{item?.profile?.consultantCode}</td>
               <td className="text-nowrap">{item?.profile?.primaryEmail}</td>
@@ -202,7 +202,9 @@ export default function AdminTrashClient() {
           breakLabel="..."
           nextLabel={<BiRightArrow/>}
           onPageChange={handlePageClick}
-          pageRangeDisplayed={5}
+          pageRangeDisplayed={4}
+          breakClassName={""}
+          marginPagesDisplayed={1}
           pageCount={Math.ceil(noOfClient / pageItemLimit)||1}
           previousLabel={<BiLeftArrow/>}
           className="d-flex flex gap-2"

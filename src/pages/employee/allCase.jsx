@@ -1,27 +1,32 @@
 import { employeeAllCase } from "../../apis"
-import { employeeChangeCaseStatus,salesAllCaseDownload } from "../../apis"
+import { employeeChangeCaseStatus,salesAllCaseDownload,empOptGetNormalEmployee,empOptShareSaleEmployee } from "../../apis"
 import { AppContext } from "../../App"
 import { useContext} from "react"
 import ViewAllCaseComp from "../../components/Reuse/ViewAllCaseComp"
+import { useParams } from "react-router-dom"
  
 export default function EmployeeAllCase() {
   const state = useContext(AppContext)
+  const param = useParams()
   const empType  = state?.myAppData?.details?.empType
 
   return (<>
       <ViewAllCaseComp
       getCases={employeeAllCase}
+      empId={param?._id ? param?._id :false} 
       downloadCase={salesAllCaseDownload}
       role={"employee"}
       setStatus={employeeChangeCaseStatus}
       setCaseStatus={()=>{}}
       viewUrl={"/employee/view case/"}
       editUrl={"/employee/edit-case/"}
-      caseShare={()=>{}}
       isEdit={empType?.toLowerCase()==="operation"}
       isChangeStatus={empType?.toLowerCase()==="operation"}
       isRemoveCase={false}
-      isDownload={empType?.toLowerCase()==="sales"}
+      isDownload={true}
+      isShare={empType?.toLowerCase()==="operation"}
+      getNormalEmp={empOptGetNormalEmployee}
+      caseShare={empOptShareSaleEmployee}
       createInvUrl={empType?.toLowerCase()==="finance" ?  "/employee/create-invoice/" : ""}
     /> 
   </>)

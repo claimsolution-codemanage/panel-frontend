@@ -234,7 +234,7 @@ export default function EditBankingDetails() {
                                         </div>
 
                                     </div>
-                                    <div className='row row-cols-1 row-cols-2'>
+                                    <div className='row row-cols-1 row-cols-md-2'>
                                         <div className="mb-3 d-flex flex-column">
                                             <div className='d-flex gap-2 align-items-center justify-content-between'>
                                                 <label for="chequeImg" className="form-label">Cancelled Cheque  {(uploadPhoto.message && uploadPhoto.type == "cancelledChequeImg") && <span className={uploadPhoto.status == 1 ? "text-success" : "text-danger"}>{uploadPhoto.message}</span>}</label>

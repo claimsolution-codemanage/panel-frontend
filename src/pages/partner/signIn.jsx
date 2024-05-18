@@ -10,6 +10,7 @@ import { BsEyeSlashFill } from "react-icons/bs";
 import { BsEyeFill } from "react-icons/bs";
 import { useFormik } from 'formik'
 import * as yup from 'yup'
+import { Helmet } from "react-helmet";
 
 export default function SignIn() {
     const [data, setData] = useState({ email: "", password: "" })
@@ -106,6 +107,9 @@ export default function SignIn() {
 
 
     return (<>
+                   <Helmet>
+        <link rel="canonical" href="http://claimsolution.in/partner/signin" />
+      </Helmet>
         <div className="container-fluid p-0">
             <div className="container-px-5 p-0">
                 <div className="">

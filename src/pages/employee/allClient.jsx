@@ -8,7 +8,7 @@ import { DateRangePicker } from 'react-date-range';
 import { DateRange } from 'react-date-range';
 import 'react-date-range/dist/styles.css'; // main style file
 import 'react-date-range/dist/theme/default.css'; // theme css file
-import { getFormateDate } from "../../utils/helperFunction"
+import { getFormateDMYDate, getFormateDate } from "../../utils/helperFunction"
 import ReactPaginate from 'react-paginate';
 import { CiEdit } from 'react-icons/ci'
 import { FaCircleArrowDown } from 'react-icons/fa6'
@@ -152,10 +152,11 @@ export default function EmployeeAllClient() {
         <table className="table table-responsive table-borderless">
           <thead>
             <tr className="bg-primary text-white text-center">
-              <th scope="col" className="text-nowrap"><th scope="col" >S.no</th></th>
+              <th scope="col" className="text-nowrap">S.no</th>
               <th scope="col" className="text-nowrap" ><span>Action</span></th>
-              <th scope="col" className="text-nowrap">Status</th>
+              {/* <th scope="col" className="text-nowrap">Status</th> */}
               <th scope="col" className="text-nowrap">Date</th>
+              <th scope="col" className="text-nowrap">Branch ID</th>
               <th scope="col" className="text-nowrap">Full Name</th>
               <th scope="col" className="text-nowrap" >consultantCode</th>
               <th scope="col" className="text-nowrap" >Email</th>
@@ -173,8 +174,9 @@ export default function EmployeeAllClient() {
               <Link to={`/employee/edit-client/${item?._id}`} style={{ height: 30, width: 30, borderRadius: 30 }} className="cursor-pointer bg-info text-white d-flex align-items-center justify-content-center"><CiEdit className="fs-5 text-dark"/></Link>
               </>}
               </span></td>
-              <td className="text-nowrap"> <span className={`badge ${item?.isActive ? "bg-primary" : "bg-danger"}`}>{item?.isActive ? "Active" : "Unactive"}</span> </td>
-              <td className="text-nowrap">{new Date(item?.profile?.associateWithUs).toLocaleDateString()}</td>
+              {/* <td className="text-nowrap"> <span className={`badge ${item?.isActive ? "bg-primary" : "bg-danger"}`}>{item?.isActive ? "Active" : "Unactive"}</span> </td> */}
+              <td className="text-nowrap">{item?.profile?.associateWithUs && getFormateDMYDate(item?.profile?.associateWithUs)}</td>
+              <td className="text-nowrap">{item?.branchId}</td>
               <td className="text-nowrap">{item?.profile?.consultantName}</td>
               <td className="text-nowrap">{item?.profile?.consultantCode}</td>
               <td className="text-nowrap">{item?.profile?.primaryEmail}</td>
@@ -194,7 +196,9 @@ export default function EmployeeAllClient() {
           breakLabel="..."
           nextLabel={<BiRightArrow/>}
           onPageChange={handlePageClick}
-          pageRangeDisplayed={5}
+          pageRangeDisplayed={4}
+          breakClassName={""}
+          marginPagesDisplayed={1}
           pageCount={Math.ceil(noOfClient / pageItemLimit)||1}
           previousLabel={<BiLeftArrow/>}
           className="d-flex flex gap-2"

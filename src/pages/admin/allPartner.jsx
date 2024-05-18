@@ -8,7 +8,7 @@ import { DateRangePicker } from 'react-date-range';
 import { DateRange } from 'react-date-range';
 import 'react-date-range/dist/styles.css'; // main style file
 import 'react-date-range/dist/theme/default.css'; // theme css file
-import { getFormateDate } from "../../utils/helperFunction"
+import { getFormateDMYDate, getFormateDate } from "../../utils/helperFunction"
 import ReactPaginate from 'react-paginate';
 import { CiEdit } from 'react-icons/ci'
 import { FaCircleArrowDown } from 'react-icons/fa6'
@@ -26,7 +26,7 @@ import { AppContext } from "../../App"
 import { deleteToken } from "../../utils/helperFunction"
 import { AiOutlineDelete } from "react-icons/ai";
 import ConfirmationModal from "../../components/Common/confirmationModal"
-import { adminDeletePartnerById } from "../../apis"
+import { adminDeletePartnerById,adminChangeBranch } from "../../apis"
 import { TbReportAnalytics } from "react-icons/tb";
 import loash from 'lodash'
 import { Link } from "react-router-dom"
@@ -36,6 +36,8 @@ import { CiFilter } from "react-icons/ci";
 import { CiAlignBottom } from 'react-icons/ci'
 import { IoShareSocialOutline } from "react-icons/io5";
 import SharePartnerModal from "../../components/Common/sharePartnerModal"
+import ChangeBranch from "../../components/changeBranch"
+import { VscGitPullRequestGoToChanges } from "react-icons/vsc"
 
 export default function AllAdminPartner() {
   const state = useContext(AppContext)
@@ -53,6 +55,7 @@ export default function AllAdminPartner() {
   const [downloading, setDownloading] = useState(false)
   const [dateRange, setDateRange] = useState({ startDate: new Date("2024/01/01"), endDate: new Date() });
   const [showCalender, setShowCalender] = useState(false)
+  const [changeBranch,setChangeBranch] = useState({loading:false,branchId:null,status:false,_id:null})
   const [sharePartner, setSharePartner] = useState([])
 
 
@@ -136,10 +139,10 @@ export default function AllAdminPartner() {
 
 
   useEffect(() => {
-    if (!deletePartner?.status) {
+    if (!deletePartner?.status && !changeBranch?.status) {
       getAllPartner()
     }
-  }, [pageItemLimit, pgNo, changeStatus, deletePartner])
+  }, [pageItemLimit, pgNo, changeStatus, deletePartner,changeBranch?.status])
 
   useEffect(() => {
     if (isSearch) {
@@ -231,7 +234,7 @@ export default function AllAdminPartner() {
           </div>
         </div>
 
-        <div className="mx-5 mb-5 p-4">
+        <div className="m-0 m-md-5 p-md-4">
           <div className="bg-color-1 p-3 p-md-5 rounded-2 shadow">
             <div className="d-flex flex gap-2">
 
@@ -265,6 +268,7 @@ export default function AllAdminPartner() {
                       {/* <th scope="col" className="text-nowrap">Status</th> */}
                       <th scope="col" className="text-nowrap"><span>Action</span></th>
                       <th scope="col" className="text-nowrap">Date</th>
+                      <th scope="col" className="text-nowrap">Branch ID</th>
                       <th scope="col" className="text-nowrap">Full Name</th>
                       <th scope="col" className="text-nowrap" >consultant Code</th>
                       <th scope="col" className="text-nowrap" >Email</th>
@@ -286,13 +290,14 @@ export default function AllAdminPartner() {
                           <span style={{ cursor: "pointer", height: 30, width: 30, borderRadius: 30 }} className="bg-warning text-white d-flex align-items-center justify-content-center" onClick={() => navigate(`/admin/view-partner-report/${item._id}`)}><TbReportAnalytics className="fs-5" /></span>
                           <Link to={`/admin/edit-partner/${item?._id}`} style={{ height: 30, width: 30, borderRadius: 30 }} className="cursor-pointer bg-info text-white d-flex align-items-center justify-content-center"><CiEdit className="fs-5 text-dark" /></Link>
                           <span style={{ cursor: "pointer", height: 30, width: 30, borderRadius: 30 }} className="bg-primary text-white d-flex align-items-center justify-content-center" onClick={() => navigate(`/admin/partner details/${item._id}`)}><HiMiniEye /></span>
+                          <span style={{ cursor: "pointer", height: 30, width: 30, borderRadius: 30 }} className="bg-success text-white d-flex align-items-center justify-content-center" onClick={() => setChangeBranch({ ...changeBranch,status:true,_id:item?._id,branchId:item?.branchId})}><VscGitPullRequestGoToChanges /></span>
                           <span style={{ cursor: "pointer", height: 30, width: 30, borderRadius: 30 }} className="bg-danger text-white d-flex align-items-center justify-content-center" onClick={() => setChangeStatus({ show: true, details: { _id: item._id, currentStatus: item?.isActive, name: item?.profile?.consultantName, recovery: false } })}><AiOutlineDelete /></span>
 
                           {/* <span style={{ cursor: "pointer",height:30,width:30,borderRadius:30 }} className="bg-danger text-white d-flex align-items-center justify-content-center" onClick={() => setDeletePartner({status:true,id:item?._id,text:`Your want to delete ${item?.profile?.consultantName} partner`})}><AiOutlineDelete /></span> */}
 
                         </span></td>
-
-                      <td className="text-nowrap">{new Date(item?.profile?.associateWithUs).toLocaleDateString()}</td>
+                      <td className="text-nowrap">{item?.profile?.associateWithUs && getFormateDMYDate(item?.profile?.associateWithUs)}</td>
+                      <td className="text-nowrap text-capitalize">{item?.branchId}</td>
                       <td className="text-nowrap">{item?.profile?.consultantName}</td>
                       <td className="text-nowrap">{item?.profile?.consultantCode}</td>
                       <td className="text-nowrap">{item?.profile?.primaryEmail}</td>
@@ -313,7 +318,9 @@ export default function AllAdminPartner() {
                   breakLabel="..."
                   nextLabel={<BiRightArrow />}
                   onPageChange={handlePageClick}
-                  pageRangeDisplayed={5}
+                  pageRangeDisplayed={4}
+                  breakClassName={""}
+                  marginPagesDisplayed={1}
                   pageCount={Math.ceil(noOfPartner / pageItemLimit) || 1}
                   previousLabel={<BiLeftArrow />}
                   className="d-flex flex gap-2"
@@ -331,6 +338,7 @@ export default function AllAdminPartner() {
           {changeStatus?.show && <SetStatusOfProfile changeStatus={changeStatus} hide={() => setChangeStatus({ show: false, details: {} })} type="Partner" handleChanges={handleChanges} />}
           {deletePartner?.status && <ConfirmationModal show={deletePartner?.status} id={deletePartner?.id} hide={() => setDeletePartner({ status: false, id: "" })} heading="Are you sure?" text={deletePartner?.text ? deletePartner?.text : "Your want to delete this partner"} handleComfirmation={adminDeletePartnerById} />}
           {partnerShareModal.status && <SharePartnerModal handleShareCase={adminSharePartnerToSaleEmp} partnerShareModal={partnerShareModal} close={() => { setPatnerShareModal({ value: [], status: false }); setSharePartner([]) }} />}
+          {changeBranch?.status && <ChangeBranch branch={changeBranch}  onBranchChange={setChangeBranch} type="partner" handleBranch={adminChangeBranch}/>}
         </div>
 
       </div>}

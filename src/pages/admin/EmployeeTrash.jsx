@@ -4,6 +4,7 @@ import AllEmployee from "../../components/Reuse/AllEmployee";
 export default function AdminEmployeeTrash() {
   return (<>
  <AllEmployee
+  role={"admin"}
   getEmployee={adminGetAllEmployee}
   isTrash={true}
   isActive={adminSetEmployeeStatus}

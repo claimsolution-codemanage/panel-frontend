@@ -8,7 +8,7 @@ import { DateRangePicker } from 'react-date-range';
 import { DateRange } from 'react-date-range';
 import 'react-date-range/dist/styles.css'; // main style file
 import 'react-date-range/dist/theme/default.css'; // theme css file
-import { getFormateDate } from "../../utils/helperFunction"
+import { getFormateDMYDate, getFormateDate } from "../../utils/helperFunction"
 import ReactPaginate from 'react-paginate';
 import { CiEdit } from 'react-icons/ci'
 import { FaCircleArrowDown } from 'react-icons/fa6'
@@ -151,7 +151,7 @@ export default function AdminAllComplaint() {
                   <tbody>
                     {complaint.map((item, ind) => <tr key={item._id} className="border-2  border-bottom border-light text-center">
                       <th scope="row" className="text-nowrap">{ind + 1}</th>
-                      <td className="text-nowrap">{new Date(item?.createdAt).toLocaleDateString()}</td>
+                      <td className="text-nowrap">{item?.createdAt && getFormateDMYDate(item?.createdAt)}</td>
                       {/* <td className="text-nowrap"> <span className={`badge ${item?.isActive ? "bg-primary" : "bg-danger"}`}>{item?.isActive ? "Active" : "Unactive"}</span> </td> */}
 
                       <td className="text-nowrap">
@@ -181,7 +181,9 @@ export default function AdminAllComplaint() {
                   breakLabel="..."
                   nextLabel={<BiRightArrow />}
                   onPageChange={handlePageClick}
-                  pageRangeDisplayed={5}
+                  pageRangeDisplayed={4}
+                  breakClassName={""}
+                  marginPagesDisplayed={1}
                   pageCount={Math.ceil(noOfComplaint / pageItemLimit) ||1}
                   previousLabel={<BiLeftArrow />}
                   className="d-flex flex gap-2"

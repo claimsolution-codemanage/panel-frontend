@@ -37,6 +37,8 @@ import AdminEditInvoice from "../pages/admin/editInvoice";
 import AdminInvoiceTrash from "../pages/admin/InvoiceTrash";
 import AdminCaseDocTrash from "../pages/admin/caseDocTrash";
 import AdminEmployeeTrash from "../pages/admin/EmployeeTrash";
+import AdminViewEmployee from "../pages/admin/ViewEmployee";
+import AdminViewMySathi from "../pages/admin/viewMySathi";
 
 {/* for admin */}
 export const adminRoutes = [
@@ -64,6 +66,7 @@ export const adminRoutes = [
   <Route path='/admin/view-partner-report/:_id' element={<AdminTemplate><AdminViewPartnerReport/></AdminTemplate>}/>,
   <Route path='/admin/edit-client/:_id'  element={<AdminTemplate><AdminEditClient/></AdminTemplate>}/>,
   <Route path='/admin/edit-partner/:_id'  element={<AdminTemplate><AdminEditPartner/></AdminTemplate>}/>,
+  <Route path='/admin/employee/profile/:_id'  element={<AdminTemplate><AdminViewEmployee/></AdminTemplate>}/>,
   <Route path='/admin/view-employee-case-report/:_id'  element={<AdminTemplate><AdminViewSaleEmpCaseReport/></AdminTemplate>}/>,
   <Route path='/admin/view-employee-partner-report/:_id'  element={<AdminTemplate><AdminSaleEmpPartnerReport/></AdminTemplate>}/>,
   <Route path='/admin/create-invoice/:clientId/:caseId'  element={<AdminTemplate><AdminCreateInvoice/></AdminTemplate>}/>,
@@ -73,5 +76,6 @@ export const adminRoutes = [
   <Route path='/admin/all-trash-invoice'  element={<AdminTemplate><AdminInvoiceTrash/></AdminTemplate>}/>,
   <Route path='/admin/all-trash-doc'  element={<AdminTemplate><AdminCaseDocTrash/></AdminTemplate>}/>,
   <Route path='/admin/all-trash-employee'  element={<AdminTemplate><AdminEmployeeTrash/></AdminTemplate>}/>,
+  <Route path='/admin/view-sathi/:_id'  element={<AdminTemplate><AdminViewMySathi/></AdminTemplate>}/>,
 
 ]

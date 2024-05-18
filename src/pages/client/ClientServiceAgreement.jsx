@@ -22,7 +22,7 @@ export default function ClientServiceAgreement() {
                 title='casedoc'
                 width={loading.width}
                 height={loading.height}
-                frameborder="0"
+                frameBorder="0"
                 name="cboxmain"
                 seamless="seamless"
                 typeof='application/pdf'

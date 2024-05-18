@@ -13,7 +13,7 @@ import PhoneInput from 'react-phone-input-2'
 import 'react-phone-input-2/lib/style.css'
 import { useFormik } from 'formik'
 import * as yup from 'yup'
-
+import { Helmet } from "react-helmet";
 
 
 export default function ClientSignUp() {
@@ -100,6 +100,9 @@ export default function ClientSignUp() {
 
     return (
         <>
+                   <Helmet>
+        <link rel="canonical" href="http://claimsolution.in/client/signup" />
+      </Helmet>
             <div className="py-5 mt-auto mt-md-0">
                 <div className="container-px-5 ">
                     <div className="">

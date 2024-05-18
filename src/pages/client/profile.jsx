@@ -9,7 +9,7 @@ export default function ClientProfile() {
 
     return (<>
             <div>
-                <ViewClientComp id={id} getClient={getClientProfile} link={`/client/edit profile/${id}`} role="client"/>
+                <ViewClientComp id={id} getClient={getClientProfile} isEdit={true} link={`/client/edit profile/${id}`} role="client"/>
             </div>
     </>)
 }

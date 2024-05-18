@@ -55,29 +55,29 @@ import ClientAgreement from './pages/agreements/client'
 
 
 // for employee routes
-import EmployeeDasboard from './pages/employee/dashboard'
-import EmployeeSignIn from './pages/employee/signin'
-import EmployeeForgetPassword from './pages/employee/forgetPassword'
-import EmployeeAllCase from './pages/employee/allCase'
-import EmployeeViewCase from './pages/employee/viewCase'
-import EmployeeAllClient from './pages/employee/allClient'
-import EmployeeClientDetails from './pages/employee/viewClient'
-import EmployeeAllPartner from './pages/employee/allPartner'
-import EmployeePartnerDetails from './pages/employee/viewPartner'
-import EmployeeResetPassword from './pages/employee/resetPassword'
-import EmployeeCreateInvoice from './pages/employee/finance/pages/CreateInvoice'
-import EmployeeAllInvoices from './pages/employee/finance/pages/AllInvoices'
-import EmployeeViewInvoice from './pages/employee/finance/pages/ViewInvoice'
-import EmployeeResetForgetPassword from './pages/employee/resetForgetPassword'
-import EmployeeEditInvoice from './pages/employee/finance/pages/editInvoice'
-import EmployeeEditCase from './pages/employee/editCase'
-import EmployeeEditClient from './pages/employee/editClient'
-import EmployeeEditPartner from './pages/employee/editPartner'
-import EmpSaleNewCase from './pages/employee/sales/addCase'
-import EmployeeInvoiceTrash from './pages/employee/finance/pages/InvoiceTrash'
+// import EmployeeDasboard from './pages/employee/dashboard'
+// import EmployeeSignIn from './pages/employee/signin'
+// import EmployeeForgetPassword from './pages/employee/forgetPassword'
+// import EmployeeAllCase from './pages/employee/allCase'
+// import EmployeeViewCase from './pages/employee/viewCase'
+// import EmployeeAllClient from './pages/employee/allClient'
+// import EmployeeClientDetails from './pages/employee/viewClient'
+// import EmployeeAllPartner from './pages/employee/allPartner'
+// import EmployeePartnerDetails from './pages/employee/viewPartner'
+// import EmployeeResetPassword from './pages/employee/resetPassword'
+// import EmployeeCreateInvoice from './pages/employee/finance/pages/CreateInvoice'
+// import EmployeeAllInvoices from './pages/employee/finance/pages/AllInvoices'
+// import EmployeeViewInvoice from './pages/employee/finance/pages/ViewInvoice'
+// import EmployeeResetForgetPassword from './pages/employee/resetForgetPassword'
+// import EmployeeEditInvoice from './pages/employee/finance/pages/editInvoice'
+// import EmployeeEditCase from './pages/employee/editCase'
+// import EmployeeEditClient from './pages/employee/editClient'
+// import EmployeeEditPartner from './pages/employee/editPartner'
+// import EmpSaleNewCase from './pages/employee/sales/addCase'
+// import EmployeeInvoiceTrash from './pages/employee/finance/pages/InvoiceTrash'
 
 // for sale employee
-import EmployeeAddPartner from './pages/employee/sales/addPartner'
+// import EmployeeAddPartner from './pages/employee/sales/addPartner'
 
 
 // for partner
@@ -105,6 +105,8 @@ import EmployeeAddPartner from './pages/employee/sales/addPartner'
 
 import {partnerRoutes} from './Routes/partner'
 import { adminRoutes } from './Routes/admin'
+import { employeeRoutes } from './Routes/employee'
+import { clientRoutes } from './Routes/client'
 
 
 // for client routes
@@ -163,6 +165,7 @@ export default function App(){
   }, [location.pathname]);
 
   // console.log("myapp",myAppData);
+
   
   
   return(<>
@@ -182,7 +185,6 @@ export default function App(){
     <Route path='/career' element={<PublicTemplate><Career/></PublicTemplate>} />
     <Route path='/partnership' element={<PublicTemplate><Patnership/></PublicTemplate>} />
     <Route path='/policy' element={<PublicTemplate><Policy/></PublicTemplate>} />
-    <Route path='/login' element={<Login/>}/>
     <Route path='/feedback' element={<PublicTemplate><Feedback/></PublicTemplate>}/>
     <Route path='/terms-and-condition' element={<PublicTemplate><TermsAndCondition/></PublicTemplate>}/>
     <Route path='/partner/service agreement' element={<PublicTemplate><PartnerAgreement/></PublicTemplate>}/>
@@ -194,8 +196,13 @@ export default function App(){
 
 
   {/* for partner */}
-  {partnerRoutes?.map(route=>route)}
-  {adminRoutes?.map(route=>route)}
+  {/* {employeeRoutes?.map(route=>route)} */}
+  {/* {partnerRoutes?.map(route=>route)} */}
+  {/* {adminRoutes?.map(route=>route)} */}
+  {...employeeRoutes}
+  {...partnerRoutes}
+  {...adminRoutes}
+  {...clientRoutes}
 
   {/* <Route path='/partner/signin' element={<PanelTemplate><SignIn/></PanelTemplate>}/>
   <Route path='/partner/signup' element={<PanelTemplate><SignUp/></PanelTemplate>}/>
@@ -259,7 +266,7 @@ export default function App(){
 
 
   {/* for employee */}
-  <Route path='/employee/signin' element={<PanelTemplate><EmployeeSignIn/></PanelTemplate>}/>
+  {/* <Route path='/employee/signin' element={<PanelTemplate><EmployeeSignIn/></PanelTemplate>}/>
   <Route path='/employee/forget password' element={<PanelTemplate><EmployeeForgetPassword/></PanelTemplate>}/>
   <Route path='/employee/dashboard' element={<EmployeeTemplate><EmployeeDasboard/></EmployeeTemplate>}/>
   <Route path='/employee/reset password' element={<EmployeeTemplate><EmployeeResetPassword/></EmployeeTemplate>}/>
@@ -278,7 +285,7 @@ export default function App(){
   <Route path='/employee/edit-client/:_id'  element={<EmployeeTemplate><EmployeeEditClient/></EmployeeTemplate>}/>
   <Route path='/employee/edit-partner/:_id'  element={<EmployeeTemplate><EmployeeEditPartner/></EmployeeTemplate>}/>
   <Route path='/employee/add-partner'  element={<EmployeeTemplate><EmployeeAddPartner/></EmployeeTemplate>}/>
-  <Route path='/employee/add-case'  element={<EmployeeTemplate><EmpSaleNewCase/></EmployeeTemplate>}/>
+  <Route path='/employee/add-case'  element={<EmployeeTemplate><EmpSaleNewCase/></EmployeeTemplate>}/> */}
   {/* <Route path='/employee/all-trash-invoice'  element={<EmployeeTemplate><EmployeeInvoiceTrash/></EmployeeTemplate>}/> */}
 
 
@@ -292,7 +299,7 @@ export default function App(){
 
 
   {/* for client */}
-  <Route path='/client/signin' element={<PanelTemplate><ClientSignIn/></PanelTemplate>}/>
+  {/* <Route path='/client/signin' element={<PanelTemplate><ClientSignIn/></PanelTemplate>}/>
   <Route path='/client/signup' element={<PanelTemplate><ClientSignUp/></PanelTemplate>}/>
   <Route path='/client/email otp verify' element={<PanelTemplate><ClientOtpVerify/></PanelTemplate>}/>
   <Route path='/client/send mobile otp' element={<PanelTemplate><ClientMobileSendOtp/></PanelTemplate>}/>
@@ -306,11 +313,11 @@ export default function App(){
   <Route path='/client/add new case' element={<ClientTemplate><ClientNewCase/></ClientTemplate>}/>
   <Route path='/client/all case' element={<ClientTemplate><ClientViewAllCase/></ClientTemplate>}/>
   <Route path='/client/view case/:_id' element={<ClientTemplate><ClientViewCase/></ClientTemplate>}/>
-  {/* <Route path='/client/edit case/:_id' element={<ClientTemplate><ClientEditCase/></ClientTemplate>}/> */}
   <Route path='/client/view tls' element={<ClientTemplate><ClientViewTLS/></ClientTemplate>}/>
   <Route path='/client/view service agreement' element={<ClientTemplate><ClientServiceAgreement/></ClientTemplate>}/>
   <Route path='/client/view-invoice/:_id' element={<ClientTemplate><ClientViewInvoice/></ClientTemplate>}/>
-  <Route path='/client/all-invoices' element={<ClientTemplate><ClientAllInvoice/></ClientTemplate>}/>
+  <Route path='/client/all-invoices' element={<ClientTemplate><ClientAllInvoice/></ClientTemplate>}/> */}
+  {/* <Route path='/client/edit case/:_id' element={<ClientTemplate><ClientEditCase/></ClientTemplate>}/> */}
 
 
 

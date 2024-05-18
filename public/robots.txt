@@ -1,0 +1,7 @@
+User-agent: *
+Disallow: /partner/
+Disallow: /client/
+Disallow: /admin/
+Disallow: /employee/
+
+Sitemap: https://claimsolution.in/sitemap.xml

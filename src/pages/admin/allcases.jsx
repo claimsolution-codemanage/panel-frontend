@@ -1,5 +1,5 @@
 import { allAdminCase } from "../../apis"
-import { adminChangeCaseStatus, adminShareCaseToEmployee, adminAllCaseDownload } from "../../apis"
+import { adminChangeCaseStatus, adminShareCaseToEmployee, adminAllCaseDownload,adminGetNormalEmployee } from "../../apis"
 import { adminSetCaseIsActive } from "../../apis"
 import ViewAllCaseComp from "../../components/Reuse/ViewAllCaseComp"
 
@@ -18,6 +18,8 @@ export default function AllAdminCase() {
       isRemoveCase={true}
       isAddRefence={true}
       isDownload={true}
+      isShare={true}
+      getNormalEmp={adminGetNormalEmployee}
       caseShare={adminShareCaseToEmployee}
       createInvUrl={"/admin/create-invoice/"}
     />

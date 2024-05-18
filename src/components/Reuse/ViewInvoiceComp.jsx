@@ -8,10 +8,12 @@ import { AppContext } from "../../App"
 import { useContext,useRef } from "react"
 import { useReactToPrint } from 'react-to-print';
 import { invoiceFormatDate } from "../../utils/helperFunction"
+import {ToWords} from 'to-words'
 
 
 
 export default function ViewInvoiceComp({getInvoice,id}) {
+  const toWords = new ToWords()
     const state = useContext(AppContext)
     const invoiceRef = useRef()
     const empType  = state?.myAppData?.details?.empType
@@ -72,8 +74,8 @@ export default function ViewInvoiceComp({getInvoice,id}) {
                 </div>
                 <div onClick={handlePrint} className="btn btn-primary cursor-pointer">Print/ Download</div>
             </div>
-            <div  className="container my-5 w-100">
-        <div className="row">
+            <div  className="container my-5 mx-0 mx-md-auto w-100">
+        <div className="row m-0 p-0">
           <div ref={invoiceRef} className="col-lg-12">
             <div className="card">
               <div className="card-body">
@@ -248,6 +250,11 @@ export default function ViewInvoiceComp({getInvoice,id}) {
                                 <h4 className="m-0 fw-semibold fs-5">{data?.totalAmt}</h4>
                               </td>
                             </tr>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td colSpan={10} className="fw-semibold border-0">
+                           {!isNaN(data?.totalAmt) && `Total Amount(In words): ${toWords?.convert(Number(data?.totalAmt),{currency:true,ignoreZeroCurrency:true})}`}  
                           </td>
                         </tr>
                       </tbody>

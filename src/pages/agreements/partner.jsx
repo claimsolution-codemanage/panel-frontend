@@ -1,8 +1,12 @@
 import React from 'react'
+import { Helmet } from "react-helmet";
 
 export default function PartnerAgreement() {
   return (
     <>
+            <Helmet>
+        <link rel="canonical" href="http://claimsolution.in/partner/service agreement" />
+      </Helmet>
     <div className="container-px-5 px-5">
     <p className='h3 py-4 mt-5 fw-bold text-center'>Agreement Terms &amp; Conditions</p>
 <p>This business support agreement is between <strong>"The Partner/User/You" </strong>(which means you and includes your successors, legal representatives, and allowed assigns) as the <strong>First Part</strong>.</p>

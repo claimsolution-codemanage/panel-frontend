@@ -47,6 +47,6 @@ export default function Profile() {
 
 
     return (<>
-    <ViewPartnerComp id={1} viewPartner={getPartnerProfile} role={"partner"} editUrl={"/partner/edit profile"}/>
+    <ViewPartnerComp id={1} viewPartner={getPartnerProfile} isEdit={true} role={"partner"} editUrl={"/partner/edit profile"}/>
     </>)
 }

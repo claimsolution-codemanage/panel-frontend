@@ -8,7 +8,7 @@ import { DateRangePicker } from 'react-date-range';
 import { DateRange } from 'react-date-range';
 import 'react-date-range/dist/styles.css'; // main style file
 import 'react-date-range/dist/theme/default.css'; // theme css file
-import { getFormateDate } from "../../utils/helperFunction"
+import { getFormateDMYDate, getFormateDate } from "../../utils/helperFunction"
 import ReactPaginate from 'react-paginate';
 import { CiEdit } from 'react-icons/ci'
 import { FaCircleArrowDown } from 'react-icons/fa6'
@@ -19,7 +19,7 @@ import { Link, useNavigate } from "react-router-dom"
 import { BiLeftArrow } from 'react-icons/bi'
 import { BiRightArrow } from 'react-icons/bi'
 import SetStatusOfProfile from "../../components/Common/setStatusModal"
-import { adminSetClientStatus, allAdminClient,adminAllClientDownload } from "../../apis"
+import { adminSetClientStatus, allAdminClient,adminAllClientDownload,adminChangeBranch } from "../../apis"
 import Loader from "../../components/Common/loader"
 import loash from 'lodash'
 import { adminDeleteClientById } from "../../apis"
@@ -29,6 +29,8 @@ import DateSelect from "../../components/Common/DateSelect"
 import { SiMicrosoftexcel } from "react-icons/si";
 import { CiFilter } from "react-icons/ci";
 import { CiAlignBottom } from 'react-icons/ci'
+import ChangeBranch from "../../components/changeBranch"
+import { VscGitPullRequestGoToChanges } from "react-icons/vsc"
 
 
 export default function AllAdminClient() {
@@ -45,6 +47,7 @@ export default function AllAdminClient() {
   const [downloading, setDownloading] = useState(false)
 const [dateRange, setDateRange] = useState({ startDate: new Date("2024/01/01"), endDate: new Date() });
 const [showCalender, setShowCalender] = useState(false)
+const [changeBranch,setChangeBranch] = useState({loading:false,branchId:null,status:false,_id:null})
 
 
   const getAllClients = async () => {
@@ -71,10 +74,10 @@ const [showCalender, setShowCalender] = useState(false)
   }
 
   useEffect(() => {
-    if (!deleteClient?.status) {
+    if (!deleteClient?.status && !changeBranch?.status) {
       getAllClients()
     }
-  }, [pageItemLimit, pgNo, changeStatus, deleteClient])
+  }, [pageItemLimit, pgNo, changeStatus, deleteClient,changeBranch?.status])
 
   useEffect(() => {
     if (isSearch) {
@@ -176,7 +179,7 @@ const [showCalender, setShowCalender] = useState(false)
           </div>
         </div>
 
-        <div className="mx-5 p-3">
+        <div className="m-0 m-md-5 p-md-4">
           <div className="">
             <div className=" border-end">
               <div className="bg-color-1 border-0 border-5 border-primary border-start card mx-1 my-4 p-2 shadow">
@@ -192,7 +195,7 @@ const [showCalender, setShowCalender] = useState(false)
         </div>
 
 
-        <div className=" mx-5 mb-5 p-4">
+        <div className="m-0 m-md-5 p-md-4">
           <div className="bg-color-1 p-3 p-md-5 rounded-2 shadow">
             <div className="d-flex flex gap-2">
 
@@ -220,10 +223,11 @@ const [showCalender, setShowCalender] = useState(false)
                 <table className="table table-responsive table-borderless">
                   <thead>
                     <tr className="bg-primary text-white text-center">
-                      <th scope="col" className="text-nowrap"><th scope="col" >S.no</th></th>
+                      <th scope="col" className="text-nowrap">S.no</th>
                       {/* <th scope="col" className="text-nowrap">Status</th> */}
                       <th scope="col" className="text-nowrap" ><span>Action</span></th>
                       <th scope="col" className="text-nowrap">Date</th>
+                      <th scope="col" className="text-nowrap">Branch ID</th>
                       <th scope="col" className="text-nowrap">Full Name</th>
                       <th scope="col" className="text-nowrap" >consultant Code</th>
                       <th scope="col" className="text-nowrap" >Email</th>
@@ -242,10 +246,12 @@ const [showCalender, setShowCalender] = useState(false)
                       {/* <td className="text-nowrap"><span className="d-flex align-items-center gap-2"><span style={{ cursor: "pointer" }} onClick={() => navigate(`/admin/client details/${item._id}`)}><HiMiniEye /></span><span style={{ cursor: "pointer" }} onClick={() => setChangeStatus({ show: true, details: {_id:item._id,currentStatus:item?.isActive} })}><CiEdit /></span></span></td> */}
                       <td className="text-nowrap">
                         <span className="d-flex gap-2"><span style={{ cursor: "pointer", height: 30, width: 30, borderRadius: 30 }} className="bg-primary text-white d-flex align-items-center justify-content-center" onClick={() => navigate(`/admin/client details/${item._id}`)}><HiMiniEye /></span>
-                          <span style={{ cursor: "pointer", height: 30, width: 30, borderRadius: 30 }} className="bg-danger text-white d-flex align-items-center justify-content-center" onClick={() => setChangeStatus({ show: true, details: { _id: item._id, currentStatus: item?.isActive, name: item?.profile?.consultantName, recovery: false } })}><AiOutlineDelete /></span>
                           <Link to={`/admin/edit-client/${item?._id}`} style={{ cursor: "pointer", height: 30, width: 30, borderRadius: 30 }} className="bg-warning text-white d-flex align-items-center justify-content-center" ><CiEdit /></Link>
+                          <span style={{ cursor: "pointer", height: 30, width: 30, borderRadius: 30 }} className="bg-success text-white d-flex align-items-center justify-content-center" onClick={() => setChangeBranch({ ...changeBranch,status:true,_id:item?._id,branchId:item?.branchId})}><VscGitPullRequestGoToChanges /></span>
+                          <span style={{ cursor: "pointer", height: 30, width: 30, borderRadius: 30 }} className="bg-danger text-white d-flex align-items-center justify-content-center" onClick={() => setChangeStatus({ show: true, details: { _id: item._id, currentStatus: item?.isActive, name: item?.profile?.consultantName, recovery: false } })}><AiOutlineDelete /></span>
                         </span></td>
-                      <td className="text-nowrap">{new Date(item?.profile?.associateWithUs).toLocaleDateString()}</td>
+                      <td className="text-nowrap">{item?.profile?.associateWithUs && getFormateDMYDate(item?.profile?.associateWithUs)}</td>
+                      <td className="text-nowrap">{item?.branchId}</td>
                       <td className="text-nowrap">{item?.profile?.consultantName}</td>
                       <td className="text-nowrap">{item?.profile?.consultantCode}</td>
                       <td className="text-nowrap">{item?.profile?.primaryEmail}</td>
@@ -267,7 +273,9 @@ const [showCalender, setShowCalender] = useState(false)
                   breakLabel="..."
                   nextLabel={<BiRightArrow />}
                   onPageChange={handlePageClick}
-                  pageRangeDisplayed={5}
+                  pageRangeDisplayed={4}
+                  breakClassName={""}
+                  marginPagesDisplayed={1}
                   pageCount={Math.ceil(noOfClient / pageItemLimit) || 1}
                   previousLabel={<BiLeftArrow />}
                   className="d-flex flex gap-2"
@@ -284,6 +292,7 @@ const [showCalender, setShowCalender] = useState(false)
           </div>
           {changeStatus?.show && <SetStatusOfProfile changeStatus={changeStatus} hide={() => setChangeStatus({ show: false, details: {} })} type="Client" handleChanges={handleChanges} />}
           {deleteClient?.status && <ConfirmationModal show={deleteClient?.status} id={deleteClient?.id} hide={() => setDeleteClient({ status: false, id: "" })} heading="Are you sure?" text={deleteClient?.text ? deleteClient?.text : "Your want to delete this client"} handleComfirmation={adminDeleteClientById} />}
+          {changeBranch?.status && <ChangeBranch branch={changeBranch}  onBranchChange={setChangeBranch} type="client" handleBranch={adminChangeBranch}/>}
 
         </div>
 

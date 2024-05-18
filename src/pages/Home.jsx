@@ -5,6 +5,7 @@ import { addComplaint } from '../apis';
 import { toast } from 'react-toastify'
 import CountUp from 'react-countup';
 import ScrollTrigger from 'react-scroll-trigger';
+import { Helmet } from "react-helmet";
 
 import { useEffect, useState } from 'react'
 export default function Home() {
@@ -66,6 +67,9 @@ export default function Home() {
 
   return (
     <>
+      <Helmet>
+        <link rel="canonical" href="http://claimsolution.in/" />
+      </Helmet>
 
       {/* <!--popup form Start--> */}
       <div id="myModal" className={`modal ${showPopUpForm && "show"} fade popup-right-side-form`} tabindex="-1" aria-labelledby="exampleModalLabel" aria-modal="true" role="dialog" style={{ display: showPopUpForm && "block" }}>
@@ -309,7 +313,7 @@ export default function Home() {
                 {/* <img src="" alt="" />
                 <div className="color-1 fs-3 text-center">demo</div> */}
                 <div>
-                   <ScrollTrigger onEnter={() => setIsScrollCount(true)} onExit={() => setIsScrollCount(false)}>
+                  <ScrollTrigger onEnter={() => setIsScrollCount(true)} onExit={() => setIsScrollCount(false)}>
                     <p class="color-1 h1 text-center js-count-up fw-bold" data-value="2500">
                       {isScrollCount && <CountUp
                         start={0}
@@ -332,7 +336,7 @@ export default function Home() {
                 {/* <img src="" alt="" />
                 <div className="color-1 fs-3 text-center">demo</div> */}
                 <div>
-                   <ScrollTrigger onEnter={() => setIsScrollCount(true)} onExit={() => setIsScrollCount(false)}>
+                  <ScrollTrigger onEnter={() => setIsScrollCount(true)} onExit={() => setIsScrollCount(false)}>
                     <p class="color-1 h1 fw-bold text-center js-count-up" data-value="2500">
                       {isScrollCount && <CountUp
                         start={0}
@@ -355,7 +359,7 @@ export default function Home() {
                 {/* <img src="" alt="" />
                 <div className="color-1 fs-3 text-center">demo</div> */}
                 <div>
-                   <ScrollTrigger onEnter={() => setIsScrollCount(true)} onExit={() => setIsScrollCount(false)}>
+                  <ScrollTrigger onEnter={() => setIsScrollCount(true)} onExit={() => setIsScrollCount(false)}>
                     <p class="h1 fw-bold color-1 text-center js-count-up" data-value="2500">
                       {isScrollCount && <CountUp
                         start={0}

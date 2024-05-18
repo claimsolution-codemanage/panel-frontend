@@ -8,7 +8,7 @@ import { DateRangePicker } from 'react-date-range';
 import { DateRange } from 'react-date-range';
 import 'react-date-range/dist/styles.css'; // main style file
 import 'react-date-range/dist/theme/default.css'; // theme css file
-import { getFormateDate } from "../../utils/helperFunction"
+import { getFormateDMYDate, getFormateDate } from "../../utils/helperFunction"
 import ReactPaginate from 'react-paginate';
 import { CiEdit } from 'react-icons/ci'
 import { FaCircleArrowDown } from 'react-icons/fa6'
@@ -299,12 +299,14 @@ export default function AdminViewSaleEmpCaseReport() {
               <table className="table table-responsive rounded-2 shadow table-borderless">
                 <thead>
                   <tr className="bg-primary text-white text-center">
-                    <th scope="col" className="text-nowrap" ><th scope="col" ></th></th>
+                    {/* <th scope="col" className="text-nowrap" ><th scope="col" ></th></th> */}
                     <th scope="col" className="text-nowrap" ><th scope="col" >S.no</th></th>
                     <th scope="col" className="text-nowrap" >Current Status</th>
                     <th scope="col" className="text-nowrap">Action</th>
                     {/* <th scope="col" className="text-nowrap" >Reference</th> */}
                     <th scope="col" className="text-nowrap" >Date</th>
+                    <th scope="col" className="text-nowrap" >From</th> 
+                    <th scope="col" className="text-nowrap" >Branch ID</th>
                     <th scope="col" className="text-nowrap" >File No</th>
                     <th scope="col" className="text-nowrap"  >Name</th>
                     <th scope="col" className="text-nowrap"  >Email</th>
@@ -317,7 +319,7 @@ export default function AdminViewSaleEmpCaseReport() {
                 </thead>
                 <tbody>
                   {data.map((item, ind) => <tr key={item._id} className="border-2 border-bottom border-light text-center">
-                    <td className="text-nowrap"><input class="form-check-input" name="shareCase" type="checkbox" checked={shareCase.includes(item?._id)} onChange={(e) => handleShareOnchange(e, item?._id)} id="flexCheckDefault" /></td>
+                    {/* <td className="text-nowrap"><input class="form-check-input" name="shareCase" type="checkbox" checked={shareCase.includes(item?._id)} onChange={(e) => handleShareOnchange(e, item?._id)} id="flexCheckDefault" /></td> */}
                     <th scope="row">{ind + 1}</th>
                     <td className=" text-nowrap"><span className={(item?.currentStatus == "reject" || item?.currentStatus == "pending") ? " badge bg-danger text-white" : "badge bg-primary"}>{item?.currentStatus}</span></td>
                     <td className="text-nowrap">
@@ -333,7 +335,9 @@ export default function AdminViewSaleEmpCaseReport() {
                         <span>{(isClipBoardCopy?.id == item?._id && isClipBoardCopy?.copied) ? <BsClipboardCheck className="text-primary fs-4" /> : <BsClipboard />} </span>
                       </CopyToClipboard>}
                     </td> */}
-                    <td className="text-nowrap">{new Date(item?.createdAt).toLocaleDateString()}</td>
+                    <td className="text-nowrap">{item?.createdAt && getFormateDMYDate(item?.createdAt)}</td>
+                 <td className="text-nowrap text-capitalize">{item?.caseFrom}</td>
+                  <td className="text-nowrap text-capitalize">{item?.branchId}</td>
                     <td className="text-nowrap">{item?.fileNo}</td>
                     <td className="text-nowrap">{item?.name}</td>
                     <td className="text-nowrap">{item?.email}</td>
@@ -354,7 +358,9 @@ export default function AdminViewSaleEmpCaseReport() {
                 breakLabel="..."
                 nextLabel={<BiRightArrow />}
                 onPageChange={handlePageClick}
-                pageRangeDisplayed={5}
+                pageRangeDisplayed={4}
+                breakClassName={""}
+                marginPagesDisplayed={1}
                 pageCount={Math.ceil(noOfCase / pageItemLimit) || 1}
                 previousLabel={<BiLeftArrow />}
                 className="d-flex flex gap-2"

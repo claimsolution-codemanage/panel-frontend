@@ -12,6 +12,7 @@ import { useParams } from "react-router-dom"
 import Loader from "../../components/Common/loader"
 import AddNewCaseDocsModal from "../Common/addNewCaseDoc"
 import { complaintType } from "../../utils/constant"
+import {checkNumber,checkPhoneNo} from '../../utils/helperFunction'
 
 export default function EditCaseComp({viewCase,updateCase,attachementUpload,addCase,role,successUrl,id}) {
     const [uploadAttachement,setUploadAttachement] = useState({status:0,message:""})
@@ -262,7 +263,7 @@ export default function EditCaseComp({viewCase,updateCase,attachementUpload,addC
             } catch (error) {
                 if (error && error?.response?.data?.message) {
                     toast.error(error?.response?.data?.message)
-                    setLoadCase(false)
+                    // setLoadCase(false)
                 } else {
                     toast.error("Something went wrong")
                     // setLoadCase(false)

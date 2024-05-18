@@ -11,6 +11,7 @@ import { BsEyeFill } from "react-icons/bs";
 import { getJwtDecode } from '../../utils/helperFunction'
 import { useFormik } from 'formik'
 import * as yup from 'yup'
+import { Helmet } from "react-helmet";
 
 
 export default function ClientSignIn() {
@@ -95,6 +96,9 @@ export default function ClientSignIn() {
 
     return (
         <>
+           <Helmet>
+        <link rel="canonical" href="http://claimsolution.in/client/signin" />
+      </Helmet>
             <div className=" py-5">
                 <div className="container-px-5">
                     <div className="">

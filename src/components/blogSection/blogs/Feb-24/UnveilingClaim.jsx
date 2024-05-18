@@ -1,8 +1,12 @@
 import React from 'react'
+import { Helmet } from "react-helmet";
 
 export default function UnveilingClaim() {
   return (
 <div>
+<Helmet>
+        <link rel="canonical" href="http://claimsolution.in/blog/Unveiling the Mystery Behind Rejected Health Insurance Claims: Discover Solutions at ClaimSolution.in" />
+      </Helmet>
   <h1>
     <strong>
       Unveiling the Mystery Behind Rejected Health Insurance Claims: Discover

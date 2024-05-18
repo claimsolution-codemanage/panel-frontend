@@ -7,7 +7,7 @@ import { getCheckStorage } from "../../utils/helperFunction"
 import { Link } from "react-router-dom"
 import { IoArrowBackCircleOutline } from 'react-icons/io5'
 
-export default function ViewClientComp({ id, getClient,role,link }) {
+export default function ViewClientComp({ id, getClient,role,link,isEdit }) {
     const [data, setData] = useState([])
     const [loading, setLoading] = useState(false)
     const navigate = useNavigate()
@@ -26,10 +26,10 @@ export default function ViewClientComp({ id, getClient,role,link }) {
                 } catch (error) {
                     if (error && error?.response?.data?.message) {
                         toast.error(error?.response?.data?.message)
-                        setLoading(false)
+                        // setLoading(false)
                     } else {
                         toast.error("Something went wrong")
-                        setLoading(false)
+                        // setLoading(false)
                     }
                 }
             }
@@ -65,7 +65,7 @@ export default function ViewClientComp({ id, getClient,role,link }) {
                                 <div className="d-flex gap-5 justify-content-between">
                                     <h6 className="text-primary text-center fs-3">Profile Details</h6>
                                     <div className="d-flex align-items-center gap-2">
-                                        {!(role?.toLowerCase()=="client" && data[0]?.isProfileCompleted) &&  <div className="d-flex gap-1 btn btn-primary mb-1" onClick={() => navigate(link)} style={{ cursor: "pointer" }}>
+                                        {(isEdit && !(role?.toLowerCase()=="client" && data[0]?.isProfileCompleted)) &&  <div className="d-flex gap-1 btn btn-primary mb-1" onClick={() => navigate(link)} style={{ cursor: "pointer" }}>
                                             <span><CiEdit /></span>
                                             <span>Edit/ Fill</span>
                                         </div>

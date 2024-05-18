@@ -4,7 +4,7 @@ import { HiMiniEye } from 'react-icons/hi2'
 import { BsSearch } from 'react-icons/bs'
 import 'react-date-range/dist/styles.css'; // main style file
 import 'react-date-range/dist/theme/default.css'; // theme css file
-import { getFormateDate } from "../../utils/helperFunction"
+import { getFormateDMYDate, getFormateDate } from "../../utils/helperFunction"
 import ReactPaginate from 'react-paginate';
 import { Link, useNavigate } from "react-router-dom"
 import { BiLeftArrow } from 'react-icons/bi'
@@ -185,9 +185,10 @@ export default function CaseDocTrash({getAllDoc,isActive,deleteDoc,isTrash,isDel
                   <tr className="bg-primary text-white text-center">
                     <th scope="col" className="text-nowrap" >S.no</th>
                     <th scope="col" className="text-nowrap">Action</th>
-                    <th scope="col" className="text-nowrap">Type</th>
                     <th scope="col" className="text-nowrap" >Date</th>
-                    <th scope="col" className="text-nowrap"  >Name</th>
+                    <th scope="col" className="text-nowrap">Type</th>
+                    <th scope="col" className="text-nowrap">Name</th>
+                    <th scope="col" className="text-nowrap"  >Doc name</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -200,10 +201,11 @@ export default function CaseDocTrash({getAllDoc,isActive,deleteDoc,isTrash,isDel
 
                     </span>
                     </td>
+                    <td className="text-nowrap">{item?.createdAt && getFormateDMYDate(item?.createdAt)}</td>
                     <td className="text-nowrap">
                     <span  className={`badge bg-primary`}>{item?.type}</span>
                     </td>
-                    <td className="text-nowrap">{new Date(item?.createdAt).toLocaleDateString()}</td>
+                    <td className="text-nowrap">{item?.caseId?.name}</td>
                     <td className="text-nowrap">{item?.name}</td>
                   </tr>)}
                 </tbody>
@@ -217,7 +219,9 @@ export default function CaseDocTrash({getAllDoc,isActive,deleteDoc,isTrash,isDel
                 breakLabel="..."
                 nextLabel={<BiRightArrow />}
                 onPageChange={handlePageClick}
-                pageRangeDisplayed={5}
+                pageRangeDisplayed={4}
+                breakClassName={""}
+                marginPagesDisplayed={1}
                 pageCount={Math.ceil(noOfDoc / pageItemLimit) || 1}
                 previousLabel={<BiLeftArrow />}
                 className="d-flex flex gap-2"

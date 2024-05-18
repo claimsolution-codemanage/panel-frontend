@@ -1,6 +1,11 @@
+import { Helmet } from "react-helmet";
+
 export default function Contact() {
   return (
     <>
+          <Helmet>
+        <link rel="canonical" href="http://claimsolution.in/contact-us" />
+      </Helmet>
       {/* Contact Us */}
       <div className="container-fluid pt-3 pb-5 color-2">
         <div className=" mt-3">

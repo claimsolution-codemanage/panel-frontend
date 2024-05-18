@@ -1,6 +1,10 @@
+import { Helmet } from "react-helmet";
 export default function TermsAndCondition(){
     return(
         <>
+        <Helmet>
+        <link rel="canonical" href="http://claimsolution.in/terms-and-condition" />
+      </Helmet>
             <div className="container-fluid py-5">
                 <div className="container-px-5">
                 <>

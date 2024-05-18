@@ -10,6 +10,10 @@ export default function EmployeePartnerDetails() {
     const param = useParams()
 
     return (<>
-        <ViewPartnerComp id={param?._id} viewPartner={employeeGetPartnerById} role={"employee"} editUrl={"/employee/edit-partner/"}/>
+        <ViewPartnerComp id={param?._id} 
+        isEdit={empType?.toLowerCase()=="operation"}
+        viewPartner={employeeGetPartnerById}
+         role={"employee"} 
+        editUrl={"/employee/edit-partner/"}/>
     </>)
 }

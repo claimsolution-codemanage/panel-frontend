@@ -22,6 +22,7 @@ import { CiEdit } from 'react-icons/ci'
 import { AiOutlineDelete } from "react-icons/ai";
 import SetStatusOfProfile from "../Common/setStatusModal";
 import {FaTrashRestoreAlt} from 'react-icons/fa'
+import { getFormateDMYDate } from "../../utils/helperFunction";
 
 export default function AllInvoiceComp({viewAllInvoice,payInvoice,viewInvoiceUrl,role,
   isEdit,isDelete,editInvoiceUrl,unactiveInvoice,isTrash,deleteInvoice}) {
@@ -171,7 +172,7 @@ export default function AllInvoiceComp({viewAllInvoice,payInvoice,viewInvoiceUrl
           </div>
         </div>
 
-        <div className="mx-5 p-3">
+        <div className="m-0 m-md-5 p-md-4">
           <div className="row row-cols-1 row-cols-md-2">
             <div className="border-end">
               <div className="bg-color-1 border-0 border-5 border-primary border-start card mx-1 my-4 p-2 shadow">
@@ -202,7 +203,7 @@ export default function AllInvoiceComp({viewAllInvoice,payInvoice,viewInvoiceUrl
         </form>}
     
 
-        <div className="mx-5 p-3">
+        <div className="m-0 m-md-5 p-md-4">
           <div className="bg-color-1 p-3 p-md-5 rounded-2 shadow">
             <div className="row p-0 mb-2">
               <div className="col-12 col-md-3">
@@ -241,6 +242,7 @@ export default function AllInvoiceComp({viewAllInvoice,payInvoice,viewInvoiceUrl
                     <th scope="col" className="text-nowrap">Action</th>
                     <th scope="col" className="text-nowrap">Type</th>
                     <th scope="col" className="text-nowrap" >Date</th>
+                     {role?.toLowerCase()!="client" && <th scope="col" className="text-nowrap" >Branch ID</th>}
                     <th scope="col" className="text-nowrap" >Invoice</th>
                     <th scope="col" className="text-nowrap"  >Name</th>
                     <th scope="col" className="text-nowrap"  >Email</th>
@@ -272,7 +274,8 @@ export default function AllInvoiceComp({viewAllInvoice,payInvoice,viewInvoiceUrl
                       }
 
                     </td>
-                    <td className="text-nowrap">{new Date(item?.createdAt).toLocaleDateString()}</td>
+                    <td className="text-nowrap">{item?.createdAt && getFormateDMYDate(item?.createdAt)}</td>
+                    {role?.toLowerCase()!="client" && <td className="text-nowrap">{item?.branchId}</td>}
                     <td className="text-nowrap">{item?.invoiceNo}</td>
                     <td className="text-nowrap">{item?.receiver?.name}</td>
                     <td className="text-nowrap">{item?.receiver?.email}</td>
@@ -291,7 +294,9 @@ export default function AllInvoiceComp({viewAllInvoice,payInvoice,viewInvoiceUrl
                 breakLabel="..."
                 nextLabel={<BiRightArrow />}
                 onPageChange={handlePageClick}
-                pageRangeDisplayed={5}
+                pageRangeDisplayed={4}
+                breakClassName={""}
+                marginPagesDisplayed={1}
                 pageCount={Math.ceil(noOfInvoice / pageItemLimit) || 1}
                 previousLabel={<BiLeftArrow />}
                 className="d-flex flex gap-2"

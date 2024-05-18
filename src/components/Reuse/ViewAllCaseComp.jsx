@@ -7,7 +7,7 @@ import { caseStatus } from "../../utils/constant"
 import { DateRange } from 'react-date-range';
 import 'react-date-range/dist/styles.css'; // main style file
 import 'react-date-range/dist/theme/default.css'; // theme css file
-import { getFormateDate } from "../../utils/helperFunction"
+import { getFormateDMYDate, getFormateDate } from "../../utils/helperFunction"
 import ReactPaginate from 'react-paginate';
 import { CiEdit } from 'react-icons/ci'
 import { FaCircleArrowDown } from 'react-icons/fa6'
@@ -39,7 +39,8 @@ import { Link } from "react-router-dom"
 
 export default function ViewAllCaseComp({getCases,downloadCase,role,viewUrl,
   caseShare,setStatus,setCaseStatus,editUrl,createInvUrl,
-  isChangeStatus,isEdit,isRemoveCase,isResolvedAmt,isDownload
+  isChangeStatus,isEdit,isRemoveCase,isResolvedAmt,isDownload,
+  empId,id,isShare,getNormalEmp
 }) {
   const [data, setData] = useState([])
   const navigate = useNavigate()
@@ -72,7 +73,7 @@ export default function ViewAllCaseComp({getCases,downloadCase,role,viewUrl,
     setStatusType("")
   }
 
-  console.log("daterange", dateRange)
+  // console.log("daterange", dateRange)
 
   const getAllCases = async () => {
     setLoading(true)
@@ -81,7 +82,7 @@ export default function ViewAllCaseComp({getCases,downloadCase,role,viewUrl,
       const startDate = dateRange.startDate ? getFormateDate(dateRange.startDate) : ""
       const endDate = dateRange.endDate ? getFormateDate(dateRange.endDate) : ""
       // console.log("start", startDate, "end", endDate);
-      const res = await getCases(pageItemLimit, pgNo, searchQuery, statusType, startDate, endDate, type)
+      const res = await getCases(pageItemLimit, pgNo, searchQuery, statusType, startDate, endDate, type,empId,id)
       // console.log("allAdminCase", res?.data?.data);
       if (res?.data?.success && res?.data?.data) {
         setData([...res?.data?.data])
@@ -108,7 +109,7 @@ export default function ViewAllCaseComp({getCases,downloadCase,role,viewUrl,
       const startDate = dateRange.startDate ? getFormateDate(dateRange.startDate) : ""
       const endDate = dateRange.endDate ? getFormateDate(dateRange.endDate) : ""
       setDownloading(true)
-      const res = await downloadCase(searchQuery, statusType, startDate, endDate, type)
+      const res = await downloadCase(searchQuery, statusType, startDate, endDate, type,empId,id)
       console.log("res", res);
       if (res?.status == 200) {
         const url = window.URL.createObjectURL(new Blob([res.data]));
@@ -213,7 +214,7 @@ export default function ViewAllCaseComp({getCases,downloadCase,role,viewUrl,
         </div>
 
         <div className="mx-5 p-3">
-        {(role?.toLowerCase()=="admin" || role?.toLowerCase()=="partner") && <div className={`row row-cols-1 ${isResolvedAmt ? "row-cols-md-3" : "row-cols-md-2"} `}>
+        {(role?.toLowerCase()=="admin" || role?.toLowerCase()=="client" || role?.toLowerCase()=="partner") && <div className={`row row-cols-1 ${isResolvedAmt ? "row-cols-md-3" : "row-cols-md-2"} `}>
             <div className="border-end">
               <div className="bg-color-1 border-0 border-5 border-primary border-start card mx-1 my-4 p-2 shadow">
                 <div className='d-flex align-items-center justify-content-around'>
@@ -264,7 +265,7 @@ export default function ViewAllCaseComp({getCases,downloadCase,role,viewUrl,
                     <div className="btn btn-primary fs-5" onClick={() => handleReset()}>Reset</div>
                     {isDownload &&  <button className={`btn btn-primary fs-5 ${downloading && "disabled"}`} disabled={downloading} onClick={() => !downloading && handleDownload()}>{downloading ? <span className="spinner-border-md"></span> : <SiMicrosoftexcel />}</button>}
 
-                    {role?.toLowerCase()=="admin" && shareCase?.length > 0 && <div className="btn btn-primary fs-5" onClick={() => setCaseShareModal({ status: true, value: shareCase })}><IoShareSocialOutline /></div>}
+                    {isShare && shareCase?.length > 0 && <div className="btn btn-primary fs-5" onClick={() => setCaseShareModal({ status: true, value: shareCase })}><IoShareSocialOutline /></div>}
                   </div>
                   <div className="col-12 col-md-3">
                     <select className="form-select" name="caseStaus" value={statusType} onChange={(e) => setStatusType(e.target.value)} aria-label="Default select example">
@@ -289,14 +290,17 @@ export default function ViewAllCaseComp({getCases,downloadCase,role,viewUrl,
               <table className="table table-responsive rounded-2 shadow table-borderless">
                 <thead>
                   <tr className="bg-primary text-white text-center">
-                  {role?.toLowerCase()=="admin" &&  <th scope="col" className="text-nowrap" ><th scope="col" ></th></th>}
-                    <th scope="col" className="text-nowrap" ><th scope="col" >S.no</th></th>
+                  {isShare &&  <th scope="col" className="text-nowrap" ></th>}
+                    <th scope="col" className="text-nowrap" >S.no</th>
                     <th scope="col" className="text-nowrap" >Current Status</th>
                     <th scope="col" className="text-nowrap">Action</th>
                     {createInvUrl  && <th scope="col" className="text-nowrap">Invoice</th>}
                     {/* <th scope="col" className="text-nowrap" >Reference</th> */}
                     <th scope="col" className="text-nowrap" >Date</th>
-                   {role?.toLowerCase()=="admin" && <th scope="col" className="text-nowrap" >From</th> }
+                   {(role?.toLowerCase()!="client" && role?.toLowerCase()!="partner" ) && <th scope="col" className="text-nowrap" >From</th> }
+                   {(role?.toLowerCase()!="client" && role?.toLowerCase()!="partner" ) && <th scope="col" className="text-nowrap" >Partner Name</th> }
+                   {/* {(role?.toLowerCase()!="client" && role?.toLowerCase()!="partner" ) && <th scope="col" className="text-nowrap" >Partner Consultant Code</th> } */}
+                   {role?.toLowerCase()!="client" && <th scope="col" className="text-nowrap" >Branch ID</th> }
                     <th scope="col" className="text-nowrap" >File No</th>
                     <th scope="col" className="text-nowrap"  >Name</th>
                     <th scope="col" className="text-nowrap"  >Email</th>
@@ -309,7 +313,7 @@ export default function ViewAllCaseComp({getCases,downloadCase,role,viewUrl,
                 </thead>
                 <tbody>
                   {data.map((item, ind) => <tr key={item._id} className="border-2 border-bottom border-light text-center">
-                    {role?.toLowerCase()=="admin" &&<td className="text-nowrap"><input className="form-check-input" name="shareCase" type="checkbox" checked={shareCase.includes(item?._id)} onChange={(e) => handleShareOnchange(e, item?._id)} id="flexCheckDefault" /></td>}
+                    {isShare &&<td className="text-nowrap"><input className="form-check-input" name="shareCase" type="checkbox" checked={shareCase.includes(item?._id)} onChange={(e) => handleShareOnchange(e, item?._id)} id="flexCheckDefault" /></td>}
                     <th scope="row">{ind + 1}</th>
                     <td className=" text-nowrap"><span className={(item?.currentStatus == "reject" || item?.currentStatus == "pending") ? " badge bg-danger text-white" : "badge bg-primary"}>{item?.currentStatus}</span></td>
                     <td className="text-nowrap">
@@ -327,8 +331,11 @@ export default function ViewAllCaseComp({getCases,downloadCase,role,viewUrl,
                  }
                 </span> 
               </td>}
-                    <td className="text-nowrap">{new Date(item?.createdAt).toLocaleDateString()}</td>
-                   {role?.toLowerCase()=="admin" && <td className="text-nowrap text-capitalize">{item?.caseFrom}</td>}
+                    <td className="text-nowrap">{item?.createdAt && getFormateDMYDate(item?.createdAt)}</td>
+                   {(role?.toLowerCase()!="client" && role?.toLowerCase()!="partner" ) && <td className="text-nowrap text-capitalize">{item?.caseFrom}</td>}
+                   {(role?.toLowerCase()!="client" && role?.toLowerCase()!="partner" ) && <td className="text-nowrap text-capitalize" >{item?.partnerName || "-"}</td> }
+                   {/* {(role?.toLowerCase()!="client" && role?.toLowerCase()!="partner" ) && <td className="text-nowrap text-capitalize" >{item?.partnerCode || "-"}</td> } */}
+                   {role?.toLowerCase()!="client" && <td className="text-nowrap text-capitalize">{item?.branchId}</td>}
                     <td className="text-nowrap">{item?.fileNo}</td>
                     <td className="text-nowrap">{item?.name}</td>
                     <td className="text-nowrap">{item?.email}</td>
@@ -349,10 +356,12 @@ export default function ViewAllCaseComp({getCases,downloadCase,role,viewUrl,
                 breakLabel="..."
                 nextLabel={<BiRightArrow />}
                 onPageChange={handlePageClick}
-                pageRangeDisplayed={3}
+                pageRangeDisplayed={4}
                 pageCount={Math.ceil(noOfCase / pageItemLimit) || 1}
                 previousLabel={<BiLeftArrow />}
                 className="d-flex flex gap-2"
+                breakClassName={""}
+                marginPagesDisplayed={1}
                 pageClassName="border border-primary paginate-li"
                 previousClassName="paginate-li bg-color-3"
                 nextClassName="paginate-li bg-color-3"
@@ -364,7 +373,7 @@ export default function ViewAllCaseComp({getCases,downloadCase,role,viewUrl,
 
           </div>
           {changeStatus?.status && <ChangeStatusModal changeStatus={changeStatus} setChangeStatus={setChangeStatus} handleCaseStatus={setStatus} role="admin" />}
-          {caseShareModal?.status && <ShareCaseModal handleShareCase={caseShare} caseShareModal={caseShareModal} close={() => { setCaseShareModal({ value: [], status: false }); setShareCase([]) }} />}
+          {caseShareModal?.status && <ShareCaseModal handleShareCase={caseShare} caseShareModal={caseShareModal} getNoramlEmp={getNormalEmp} close={() => { setCaseShareModal({ value: [], status: false }); setShareCase([]) }} />}
           {/* {deleteCase?.status && <ConfirmationModal show={deleteCase?.status} id={deleteCase?.id} hide={()=>setDeleteCase({status:false,id:""})} heading="Are you sure?" text="Your want to delete this case" handleComfirmation={adminDeleteCaseById}/>}  */}
           {changeisActiveStatus?.show && <SetStatusOfProfile changeStatus={changeisActiveStatus} hide={() => setChangeIsActiveStatus({ show: false, details: {} })} type="Case" handleChanges={handleChanges} />}
 

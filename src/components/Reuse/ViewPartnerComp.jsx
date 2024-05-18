@@ -13,7 +13,7 @@ import { API_BASE_IMG } from "../../apis/upload"
 import { CiEdit } from 'react-icons/ci'
 import { getCheckStorage } from "../../utils/helperFunction"
 
-export default function ViewPartnerComp({viewPartner,id,role,editUrl}) {
+export default function ViewPartnerComp({viewPartner,id,role,editUrl,isEdit}) {
     const [data, setData] = useState([])
     const [loading, setLoading] = useState(false)
     const [changeStatus, setChangeStatus] = useState({ status: false, details: {} })
@@ -58,7 +58,7 @@ export default function ViewPartnerComp({viewPartner,id,role,editUrl}) {
                         </div>
                     </div>
                 </div>
-                <div className=" m-5">
+                <div className="m-0 m-md-5 p-md-4">
                     <div className="container-fluid color-4 p-0">
                         <div className="">
 
@@ -83,10 +83,10 @@ export default function ViewPartnerComp({viewPartner,id,role,editUrl}) {
                                                     <h6 className="text-primary text-center fs-3">Profile Details</h6>
                                                     <div className="d-flex align-items-center gap-2">
                                                   
-                                                    <Link to={role?.toLowerCase()==="partner" ? editUrl : `${editUrl}${data[0]?._id}`} className="d-flex gap-1 btn btn-primary mb-1" style={{ cursor: "pointer" }}>
+                                                  {isEdit && <Link to={role?.toLowerCase()==="partner" ? editUrl : `${editUrl}${data[0]?._id}`} className="d-flex gap-1 btn btn-primary mb-1" style={{ cursor: "pointer" }}>
                                                     <span><CiEdit /></span>
                                                     <span>Edit/ Fill</span>
-                                                </Link>
+                                                </Link>}
                                                      {role?.toLowerCase()==="admin" && <div onClick={() => setAdminTag({ status: true, details: { _id: data[0]?._id, profileTag: data[0]?.profileTag } })} className="d-flex gap-3 btn btn-primary align-items-center"><FaTags /> Add/Edit Tag</div> }
                                                     </div>
                                                 </div>

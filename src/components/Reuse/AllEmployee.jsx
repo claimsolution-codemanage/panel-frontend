@@ -20,7 +20,12 @@ import EditEmployeeModal from "../../components/editEmployeeModal";
 import { TbReportAnalytics } from "react-icons/tb";
 import { FaUserFriends } from "react-icons/fa";
 import {FaTrashRestoreAlt} from 'react-icons/fa'
-export default function AllEmployee({getEmployee,isTrash,isActive,deleteEmployeeId,updateEmployee}) {
+import { employeeType } from "../../utils/constant";
+import { getFormateDMYDate } from "../../utils/helperFunction";
+import { FaUserTag } from "react-icons/fa6";
+import { SiMicrosoftexcel } from "react-icons/si";
+export default function AllEmployee({page,empId,getEmployee,isTrash,isActive,deleteEmployeeId,
+  updateEmployee,role,caseUrl,partnerUrl,isedit,viewSathiUrl,isDownload,getDownload}) {
   const [data, setData] = useState([])
   const navigate = useNavigate()
   const [loading, setLoading] = useState(false)
@@ -32,13 +37,15 @@ export default function AllEmployee({getEmployee,isTrash,isActive,deleteEmployee
   const [changeStatus, setChangeStatus] = useState({show: false, details: "" })
   const [employeeUpdateStatus, setEmployeeUpdateStatus] = useState({show: false,id:null, details: {} })
   const [deleteEmployee,setDeleteEmployee] = useState({status:false,id:"",text:""})
+  const [empType,setEmpType] = useState('')
+  const [downloading, setDownloading] = useState(false)
 
 
 
   const getAllEmployees =async()=>{
     setLoading(true)
     try {
-      const res = await getEmployee(pageItemLimit, pgNo, searchQuery,!isTrash)
+      const res = await getEmployee(pageItemLimit, pgNo, searchQuery,!isTrash,empType,empId||"")
       // console.log("adminGetAllEmployee", res?.data?.data);
       if (res?.data?.success && res?.data?.data) {
         setData([...res?.data?.data]) 
@@ -55,11 +62,13 @@ export default function AllEmployee({getEmployee,isTrash,isActive,deleteEmployee
   }
 }
 
+
+
   useEffect(() => {
     if(!deleteEmployee?.status && !employeeUpdateStatus?.show){
       getAllEmployees()
     }
-  }, [pageItemLimit, pgNo,changeStatus,deleteEmployee?.status,employeeUpdateStatus?.show])
+  }, [pageItemLimit, pgNo,changeStatus,deleteEmployee?.status,employeeUpdateStatus?.show,empType])
 
   useEffect(()=>{
     if(isSearch){
@@ -79,6 +88,37 @@ export default function AllEmployee({getEmployee,isTrash,isActive,deleteEmployee
    const handleSearchQuery =(value)=>{
     setIsSearch(true)
     setSearchQuery(value)
+  }
+
+  const handleDownload = async () => {
+    try {
+      const type = true
+      setDownloading(true)
+      const res = await getDownload(pageItemLimit, pgNo, searchQuery,!isTrash,empType,empId||"")
+      console.log("res", res);
+      if (res?.status == 200) {
+        const url = window.URL.createObjectURL(new Blob([res.data]));
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'sathi.xlsx'; // Specify the filename here
+        document.body.appendChild(a);
+        a.click();
+        window.URL.revokeObjectURL(url);
+        toast.success("Download the excel")
+        setDownloading(false)
+      } else {
+        setDownloading(false)
+
+      }
+    } catch (error) {
+      console.log("error", error);
+      if (error && error?.response?.data?.message) {
+        toast.error(error?.response?.data?.message)
+      } else {
+        toast.error("Failed to download")
+      }
+      setDownloading(false)
+    }
   }
 
 
@@ -119,20 +159,27 @@ export default function AllEmployee({getEmployee,isTrash,isActive,deleteEmployee
         <div className="d-flex flex align-items-center gap-3">
           {/* <IoArrowBackCircleOutline className="fs-3"  onClick={() => navigate("/admin/dashboard")} style={{ cursor: "pointer" }} /> */}
           <div className="d-flex flex align-items-center gap-1">
-            <span>All Employee</span>
+            <span>{page ? page : "All Employee"}</span>
             {/* <span><LuPcCase /></span> */}
           </div>
         </div>
       </div>
 
-      <div className=" m-5 p-4">
+      <div className="m-0 m-md-5 p-md-4">
       <div className="bg-color-1 p-3 p-md-5 rounded-2 shadow">
-      <div className="d-flex flex gap-2">
+      <div className="d-flex flex align-items-center gap-2">
        
           <div className="form-control px-2 d-flex gap-2">
             <span className=""><BsSearch className="text-black" /></span>
             <input className="w-100" value={searchQuery} onChange={(e) => handleSearchQuery(e.target.value)} placeholder="Search.." style={{ outline: "none", border: 0 }} />
           </div>
+          {role?.toLowerCase()=="admin" && <div className="">
+              <select className="form-select" name="empType" value={empType} onChange={(e) => setEmpType(e.target.value)} aria-label="Default select example">
+                <option value="">--Department--</option>
+                {employeeType?.map(type=><option key={type} value={type}>{type}</option>)}
+              </select>
+        </div>}
+        {isDownload &&  <button className={`btn btn-primary fs-5 ${downloading && "disabled"}`} disabled={downloading} onClick={() => !downloading && handleDownload()}>{downloading ? <span className="spinner-border-md"></span> : <SiMicrosoftexcel />}</button>}
         
             <div className="">
               <select className="form-select" name="pageItemLimit" value={pageItemLimit} onChange={(e) => setPageItemLimit(e.target.value)} aria-label="Default select example">
@@ -153,6 +200,9 @@ export default function AllEmployee({getEmployee,isTrash,isActive,deleteEmployee
               <th scope="col" className="text-nowrap"><th scope="col" >S.no</th></th>
              <th scope="col" className="text-nowrap" ><span>Action</span></th>
              {/* <th scope="col" className="text-nowrap">Status</th> */}
+             <th scope="col" className="text-nowrap">Emp ID</th>
+             <th scope="col" className="text-nowrap">Branch ID</th>
+             {page?.toLowerCase()=="sathi team" && <th scope="col" className="text-nowrap">Type</th>}
               <th scope="col" className="text-nowrap">Date</th>
               <th scope="col" className="text-nowrap" >Department</th> 
               <th scope="col" className="text-nowrap" >Designation</th> 
@@ -165,15 +215,20 @@ export default function AllEmployee({getEmployee,isTrash,isActive,deleteEmployee
             {data.map((item, ind) => <tr key={item._id} className="border-2 border-bottom border-light text-center">
               <th scope="row" className="text-nowrap">{ind + 1}</th>
               <td className="text-nowrap"><span className="d-flex justify-content-center align-items-center gap-2">
-                {!isTrash && <span style={{ cursor: "pointer",height:30,width:30,borderRadius:30 }} className={`${item?.type?.toLowerCase()=="sales" ? "bg-warning" :"bg-secondary" } text-white d-flex align-items-center justify-content-center`} onClick={() => item?.type?.toLowerCase()=="sales" && navigate(`/admin/view-employee-case-report/${item._id}`)}><TbReportAnalytics className="fs-5"/></span>}
-                {!isTrash && <span style={{ cursor: "pointer",height:30,width:30,borderRadius:30 }} className={`${item?.type?.toLowerCase()=="sales" ? "bg-info" :"bg-secondary" } text-white d-flex align-items-center justify-content-center`} onClick={() => item?.type?.toLowerCase()=="sales" && navigate(`/admin/view-employee-partner-report/${item._id}`)}><FaUserFriends className="fs-5"/></span>}
-                {!isTrash && <span className="bg-warning text-white" style={{ cursor: "pointer",height:30,width:30,borderRadius:30 }} onClick={() => setEmployeeUpdateStatus({ show: true,id:item?._id, details: {fullName:item?.fullName,type:item?.type,designation:item?.designation,mobileNo:item?.mobileNo} })}><CiEdit /></span>}
-                <span className={`${!isTrash ? "bg-danger" :"bg-success"}  text-white`} style={{ cursor: "pointer",height:30,width:30,borderRadius:30 }} onClick={() => setChangeStatus({ show: true, details: {_id:item._id,currentStatus:item?.isActive,name:item?.fullName} })}>{isTrash ? <FaTrashRestoreAlt/> :<AiOutlineDelete />} </span>
-                {isTrash && <span className="bg-danger text-white" style={{ cursor: "pointer",height:30,width:30,borderRadius:30 }} onClick={() => setDeleteEmployee({status:true,id:item?._id,text:`Your want to parmanent delete ${item?.fullName} employee`})}><AiOutlineDelete /></span>}
+                {!isTrash && <span style={{ cursor: "pointer",height:30,width:30,borderRadius:30 }} className={`bg-primary text-white d-flex align-items-center justify-content-center`} onClick={() =>navigate(`${caseUrl}${item._id}`)}><TbReportAnalytics className="fs-5"/></span>}
+                {!isTrash && <span style={{ cursor: "pointer",height:30,width:30,borderRadius:30 }} className={`${(item?.type?.toLowerCase()=="sales" ||item?.type?.toLowerCase()=="branch" ||item?.type?.toLowerCase()=="sathi team") ? "bg-info" :"bg-secondary" } text-white d-flex align-items-center justify-content-center`} onClick={() => (item?.type?.toLowerCase()=="sales" ||item?.type?.toLowerCase()=="branch" ||item?.type?.toLowerCase()=="sathi team") && navigate(`${partnerUrl}${item._id}`)}><FaUserFriends className="fs-5"/></span>}
+                {!isTrash && isedit && <span className="bg-warning text-white" style={{ cursor: "pointer",height:30,width:30,borderRadius:30 }} onClick={() => setEmployeeUpdateStatus({ show: true,id:item?._id, details: {fullName:item?.fullName,type:item?.type,designation:item?.designation,mobileNo:item?.mobileNo,branchId:item?.branchId} })}><CiEdit /></span>}
+                {!isTrash && viewSathiUrl && (item?.type?.toLowerCase()=="sales" ||item?.type?.toLowerCase()=="branch") && <span className="bg-warning text-white" style={{ cursor: "pointer",height:30,width:30,borderRadius:30 }} onClick={()=>navigate(`${viewSathiUrl}${item._id}`)}><FaUserTag /></span>}
+                {role?.toLowerCase()=="admin" && <span className={`${!isTrash ? "bg-danger" :"bg-success"}  text-white`} style={{ cursor: "pointer",height:30,width:30,borderRadius:30 }} onClick={() => setChangeStatus({ show: true, details: {_id:item._id,currentStatus:item?.isActive,name:item?.fullName} })}>{isTrash ? <FaTrashRestoreAlt/> :<AiOutlineDelete />} </span>}
+                {isTrash && role?.toLowerCase()=="admin" && <span className="bg-danger text-white" style={{ cursor: "pointer",height:30,width:30,borderRadius:30 }} onClick={() => setDeleteEmployee({status:true,id:item?._id,text:`Your want to parmanent delete ${item?.fullName} employee`})}><AiOutlineDelete /></span>}
                 </span></td>
                 
-              {/* <td className="text-nowrap"> <span className={`badge ${item?.isActive ? "bg-primary" : "bg-danger"}`}>{item?.isActive ? "Active" : "Unactive"}</span> </td> */}
-              <td className="text-nowrap">{new Date(item?.createdAt).toLocaleDateString()}</td>
+              <td className="text-nowrap ">{item?.empId}</td> 
+         
+              {page?.toLowerCase()=="sathi team" && <td className="text-nowrap"><span className="badge bg-primary">{item?.referEmpId==empId ? "Added" : "Other"}</span> </td> }
+              {/* <td className="text-nowrap"> <span className={`badge ${item?.isActive ? "bg-primary" : "bg-danger"}`}>{iem?.isActive ? "Active" : "Unactive"}</span> </td> */}
+              <td className="text-nowrap">{item?.branchId}</td>
+              <td className="text-nowrap">{item?.createdAt && getFormateDMYDate(item?.createdAt)}</td>
               <td className="text-nowrap text-capitalize">{item?.type}</td> 
               <td className="text-nowrap text-capitalize">{item?.designation}</td> 
               <td className="text-nowrap">{item?.fullName}</td>
@@ -191,7 +246,9 @@ export default function AllEmployee({getEmployee,isTrash,isActive,deleteEmployee
           breakLabel="..."
           nextLabel={<BiRightArrow/>}
           onPageChange={handlePageClick}
-          pageRangeDisplayed={5}
+          pageRangeDisplayed={4}
+          breakClassName={""}
+          marginPagesDisplayed={1}
           pageCount={Math.ceil(noOfEmployee / pageItemLimit) ||1}
           previousLabel={<BiLeftArrow/>}
           className="d-flex flex gap-2"

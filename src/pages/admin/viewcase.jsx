@@ -14,6 +14,7 @@ export default function AdminViewCase() {
       role={"admin"}  
       attachementUpload={adminAttachementUpload}
       editUrl={"/admin/edit%20case/"} 
+      viewEmp={"/admin/employee/profile/"}  
       viewPartner={"/admin/partner%20details/"}
       viewClient={"/admin/client%20details/"}
       isViewProfile={true}

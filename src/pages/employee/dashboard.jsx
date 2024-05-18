@@ -195,18 +195,17 @@ export default function AdminDasboard() {
                 <div className="bg-color-1 border-0 border-5 border-primary border-start card mx-1 my-4 p-2 shadow">
                     <div className='d-flex align-items-center justify-content-around'>
                   <div className="text-center ">
-                    <h3 className='fw-bold h2'>{chartData[0]?.totalCase}</h3>
+                    <h3 className='fw-bold h2'>{chartData[0]?.totalCase ? chartData[0]?.totalCase :0}</h3>
                     <p className='card-title fs-5 text-primary text-capitalize'>Total Case</p>
                   </div>
                   <div className="bg-primary text-white d-flex align-items-center justify-content-center" style={{width:50,height:50,borderRadius:50}}><CiAlignBottom className='fs-2'/></div>
                   </div></div>
               </div>
-              {empType?.toLowerCase() =="sales".toLowerCase()  && <>
                   <div className="col-md-3 border-end">
                 <div className="bg-color-1 border-0 border-5 border-primary border-start card mx-1 my-4 p-2 shadow">
                     <div className='d-flex align-items-center justify-content-around'>
                   <div className="text-center ">
-                    <h3 className='fw-bold h2'>{chartData[0]?.totalCaseAmount}</h3>
+                    <h3 className='fw-bold h2'>{chartData[0]?.totalCaseAmount ?chartData[0]?.totalCaseAmount:0}</h3>
                     <p className='card-title fs-5 text-primary text-capitalize'>Total Case Amt</p>
                   </div>
                   <div className="bg-primary text-white d-flex align-items-center justify-content-center" style={{width:50,height:50,borderRadius:50}}><CiAlignBottom className='fs-2'/></div>
@@ -222,7 +221,7 @@ export default function AdminDasboard() {
                   <div className="bg-primary text-white d-flex align-items-center justify-content-center" style={{width:50,height:50,borderRadius:50}}><CiAlignBottom className='fs-2'/></div>
                   </div></div>
               </div>
-              </>}
+              
               {chartData[0]?.allCase?.map(data=> <div className="col-md-3 border-end">
                 <div className="bg-color-1 border-0 border-5 border-primary border-start card mx-1 my-4 p-2 shadow">
                     <div className='d-flex align-items-center justify-content-around'>

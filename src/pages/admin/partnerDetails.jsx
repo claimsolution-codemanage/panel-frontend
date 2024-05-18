@@ -5,6 +5,6 @@ import { useNavigate, useParams } from "react-router-dom";
 export default function AdminPartnerDetails() {
     const param = useParams()
     return (<>
-    <ViewPartnerComp id={param?._id} viewPartner={adminGetPartnerById} role={"admin"} editUrl={"/admin/edit-partner/"}/>
+    <ViewPartnerComp id={param?._id} viewPartner={adminGetPartnerById} isEdit={true} role={"admin"} editUrl={"/admin/edit-partner/"}/>
     </>)
 }

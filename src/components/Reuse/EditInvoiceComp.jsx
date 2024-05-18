@@ -16,9 +16,11 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { IoArrowBackCircleOutline } from 'react-icons/io5'
 import Loader from '../Common/loader'
 import { invoiceFormatDate } from '../../utils/helperFunction'
+import {ToWords} from 'to-words'
 
 export default function EditInvoiceComp({getInvoice,id,editInvoice,allInvoiceUrl}) {
   const printRef = useRef()
+  const toWords = new ToWords()
   const param = useParams()
   const navigate = useNavigate()
   const [loading, setLoading] = useState(false)
@@ -450,6 +452,11 @@ useEffect(() => {
                                 <h4 className="m-0 fw-semibold fs-5">{finalDetails?.totalAmt}</h4>
                               </td>
                             </tr>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td colSpan={10} className="fw-semibold border-0">
+                          {!isNaN(finalDetails?.totalAmt)&& `Total Amount(In words): ${toWords?.convert(Number(finalDetails?.totalAmt),{currency:true,ignoreZeroCurrency:true})}`}  
                           </td>
                         </tr>
                       </tbody>

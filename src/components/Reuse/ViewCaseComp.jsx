@@ -32,7 +32,7 @@ import SetStatusOfProfile from "../Common/setStatusModal"
 
 export default function ViewCaseComp({id,getCase,role,attachementUpload,addCaseDoc,editUrl,addCaseCommit,
 viewPartner,viewClient,editCaseProcess,addCaseProcess,addReference,deleteReference,deleteDoc,isAddRefence,isAddCaseProcess,isAddCommit,
-isViewProfile,setCaseDocStatus
+isViewProfile,setCaseDocStatus,viewEmp
 }) {
     const [data, setData] = useState([])
     const [uploadingDocs, setUploadingDocs] = useState(false)
@@ -165,19 +165,19 @@ isViewProfile,setCaseDocStatus
                                 </div>
                             </div>
                         </div>
-                        <div className=" m-md-5">
+                        <div className="m-0 m-md-5 p-md-4">
                             <div className="container-fluid color-4 p-0">
                                 <div className="">
                                     <div>
                                         <div className="">
                                             <div className="">
-                                                {(role?.toLowerCase()!=="client" || role?.toLowerCase()!=="partner") &&
+                                                {(role?.toLowerCase()!=="client" && role?.toLowerCase()!=="partner") &&
                                                 <div className="bg-color-1 my-3 p-2 p-5 rounded-2 shadow">
                                                     <div className="border-3 border-primary border-bottom mb-5">
                                                         <div className="d-flex align-items-center justify-content-between">
                                                             <h6 className="text-primary text-capitalize text-center fs-3">{data[0]?.caseFrom}</h6>
-                                                            {console.log(isViewProfile,"isViewProfile")}
-                                                            {isViewProfile && data[0]?.caseFrom != "sale" &&  <Link to={data[0]?.caseFrom == "partner" ? `${viewPartner}${data[0]?.partnerId}` : `${viewClient}${data[0]?.clientId}`} className="btn btn-primary">View</Link>}
+                                                          
+                                                            {isViewProfile && <Link to={data[0]?.caseFrom == "partner" ? `${viewPartner}${data[0]?.partnerId}` :( data[0]?.caseFrom == "client" ? `${viewClient}${data[0]?.clientId}` : `${viewEmp}${data[0]?.empSaleId}`)} className="btn btn-primary">View</Link>}
                                                         </div>
                                                     </div>
                                                     <div className="row">
@@ -196,15 +196,19 @@ isViewProfile,setCaseDocStatus
                                                             <p className=" h6 text-capitalize">{data[0]?.consultantCode}</p>
                                                         </div>}
 
-                                                        {data[0]?.caseFrom?.toLowerCase() == "client" && data[0]?.partnerId && <div className="mb-2 d-flex align-items-center gap-3 col-12 col-md-4">
+                                                        {data[0]?.partnerId && <div className="mb-2 d-flex align-items-center gap-3 col-12 col-md-4">
                                                             <h6 className="fw-bold">Reference of partner </h6>
-                                                            <Link to={`/admin/partner details/${data[0]?.partnerId}`} className="h6 text-decoration-underline text-capitalize">View</Link>
+                                                            <Link to={`${viewPartner}${data[0]?.partnerId}`} className="h6 text-decoration-underline text-capitalize">View</Link>
+                                                        </div>}
+                                                        {data[0]?.empSaleId && <div className="mb-2 d-flex align-items-center gap-3 col-12 col-md-4">
+                                                            <h6 className="fw-bold">Reference of employee</h6>
+                                                            <Link to={`${viewEmp}${data[0]?.empSaleId}`} className="h6 text-decoration-underline text-capitalize">View</Link>
                                                         </div>}
 
-                                                        {data[0]?.caseFrom == "partner" &&
+                                                        {data[0]?.caseFrom != "client" &&
                                                             <div className="mb-2 d-flex align-items-center gap-3 col-12 col-md-12">
                                                                 <h6 className="fw-bold">Mapping Id</h6>
-                                                                <p className=" h6 text-break">partnerId={data[0]?.partnerId}&partnerCaseId={data[0]?._id}</p>
+                                                                <p className=" h6 text-break">{data[0]?.caseFrom=="partner" ? `partnerId=${data[0]?.partnerId}` : `empSaleId=${data[0]?.empSaleId}`}&{data[0]?.caseFrom=="partner" ? "partnerCaseId" : "empSaleCaseId"}={data[0]?._id}</p>
                                                             </div>
                                                         }
 
@@ -218,10 +222,10 @@ isViewProfile,setCaseDocStatus
                                                             {editUrl && <div className="d-flex gap-2">
                                                                   <Link to={`${editUrl}${data[0]?._id}`} className="btn btn-primary">Edit/ Update</Link>
                                                               
-                                                              {role?.toLowerCase()==="admin" && <>
+                                                              {isAddRefence && <>
                                                             
-                                                               {data[0]?.caseFrom != "partner" && (data[0]?.partnerId || data[0]?.empSaleId) && <button className="btn btn-warning text-white" onClick={() => setRemoveCaseReference({ ...removeCaseReference, status: true })}>Remove Reference</button>}
-                                                                {data[0]?.caseFrom != "partner" && <button className="btn btn-success text-white" onClick={() => setAddCaseReference({ show: true, _id: data[0]?._id })}>Add Reference</button>}
+                                                               {data[0]?.caseFrom == "client" && (data[0]?.partnerReferenceCaseDetails || data[0]?.empSaleReferenceCaseDetails) && <button className="btn btn-warning text-white" onClick={() => setRemoveCaseReference({ ...removeCaseReference, status: true })}>Remove Reference</button>}
+                                                                {data[0]?.caseFrom == "client" && <button className="btn btn-success text-white" onClick={() => setAddCaseReference({ show: true, _id: data[0]?._id })}>Add Reference</button>}
                                                                 </>}
                                                             </div> }
                                                         </div>
@@ -377,7 +381,7 @@ isViewProfile,setCaseDocStatus
                                                             <table className="table table-responsive table-borderless">
                                                                 <thead className="">
                                                                     <tr className="bg-primary text-white text-center">
-                                                                        <th scope="col" className="text-nowrap"><th scope="col" >S.no</th></th>
+                                                                        <th scope="col" className="text-nowrap">S.no</th>
                                                                         {role?.toLowerCase()=="admin" &&  <th scope="col" className="text-nowrap" >Edit</th>}
                                                                         <th scope="col" className="text-nowrap">Date</th>
                                                                         <th scope="col" className="text-nowrap">Status</th>
@@ -497,8 +501,8 @@ isViewProfile,setCaseDocStatus
                         <div className="mb-3 col-12">
                             <select className="form-select w-100" name="Type" value={removeCaseReference.type} onChange={(e) => setRemoveCaseReference({ ...removeCaseReference, type: e?.target?.value })} >
                                 <option value="">--select remove reference type</option>
-                                {data[0]?.partnerId && <option value="partner">Partner</option>}
-                                {data[0]?.empSaleId && <option value="sale-emp">Sale</option>}
+                                {data[0]?.partnerReferenceCaseDetails && <option value="partner">Partner</option>}
+                                {data[0]?.empSaleReferenceCaseDetails && <option value="sale-emp">Sale</option>}
                             </select>
                         </div>
 

@@ -64,7 +64,7 @@ export default function BankDetails() {
                     </div> */}
 
                 </div>
-                <div className="m-2 m-md-5">
+                <div className="m-0 m-md-5">
                     <div className="container-fluid color-4 p-0">
                         <div className=" color-4 bg-color-7">
                             <div className="">

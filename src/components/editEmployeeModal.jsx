@@ -11,12 +11,19 @@ export default function EditEmployeeModal({ id, hide, show, handleComfirmation,d
     const [loading, setLoading] = useState(false)
 
     const employeeUpdateFormik = useFormik({
-        initialValues: { fullName: details?.fullName, type: details?.type, designation: details?.designation, mobileNo: details?.mobileNo },
+        initialValues: { 
+            fullName: details?.fullName, 
+            type: details?.type, 
+            designation: details?.designation, 
+            mobileNo: details?.mobileNo,
+            branchId:details?.branchId
+         },
         validationSchema: yup.object().shape({
             fullName: yup.string().required("FullName is required"),
             type: yup.string().required("Employee department is required"),
             designation: yup.string().required("Employee designation is required"),
             mobileNo: yup.string().required("Employee mobile No is required"),
+            branchId: yup.string().required("Employee branch ID is required"),
         }),
         onSubmit: async (values) => {
             setLoading(true)
@@ -51,8 +58,12 @@ export default function EditEmployeeModal({ id, hide, show, handleComfirmation,d
                 <div className='p-3'>
                     <form onSubmit={employeeUpdateFormik.handleSubmit} className="">
                         <div className="my-3">
-                            <input type="text" name="fullName" value={employeeUpdateFormik?.values?.fullName} onChange={employeeUpdateFormik.handleChange} className={`form-control ${employeeUpdateFormik?.touched?.fullName && employeeUpdateFormik?.errors?.fullName && "error"}`} placeholder="Your FullName" />
+                            <input type="text" name="fullName" value={employeeUpdateFormik?.values?.fullName} onChange={employeeUpdateFormik.handleChange} className={`form-control ${employeeUpdateFormik?.touched?.fullName && employeeUpdateFormik?.errors?.fullName && "error"}`} placeholder="Employee FullName" />
                             <p className="text-danger">{employeeUpdateFormik?.touched?.fullName && employeeUpdateFormik?.errors?.fullName}</p>
+                        </div>
+                        <div className="my-3">
+                            <input type="text" name="branchId" value={employeeUpdateFormik?.values?.branchId} onChange={employeeUpdateFormik.handleChange} className={`form-control ${employeeUpdateFormik?.touched?.branchId && employeeUpdateFormik?.errors?.branchId && "error"}`} placeholder="Employee branchId" />
+                            <p className="text-danger">{employeeUpdateFormik?.touched?.branchId && employeeUpdateFormik?.errors?.branchId}</p>
                         </div>
 
                         <div className="mb-3">

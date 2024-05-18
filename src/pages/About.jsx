@@ -1,8 +1,12 @@
 // import style from './about.module.css'
 // import { Link } from "react-router-dom"
+import { Helmet } from "react-helmet";
 export default function About() {
   return (
     <>
+      <Helmet>
+        <link rel="canonical" href="http://claimsolution.in/about-us" />
+      </Helmet>
 
       {/* First part */}
       <div className="container-fluid mb-3 pt-5">
@@ -27,7 +31,7 @@ export default function About() {
           <div className="row row-cols-1 row-cols-md-4 g-3">
             <div className="">
               <div className="card h-100 rounded-5 bg-color-1 color-2 card-zoom-in-out-box">
-              <img className="card-img-top" src="Images/about-us/our-mission.png" alt="Our Mission"/>
+                <img className="card-img-top" src="Images/about-us/our-mission.png" alt="Our Mission" />
                 <div className="card-body">
                   <h5 className="card-title fw-bold text-center"> Our Mission </h5>
                   <p className="card-text">The mission we have at Claimsolution.in is simple: we want to connect the gap between policyholders and insurance providers. Our purpose is to provide individuals who have been targeted by unfair claim denials or policy cancellations with fair treatment and fast resolution. </p>
@@ -36,7 +40,7 @@ export default function About() {
             </div>
             <div className="">
               <div className="card h-100 rounded-5 bg-color-1 color-2 card-zoom-in-out-box card-zoom-in-out-box">
-              <img className="card-img-top" src="Images/about-us/our-values.png" alt="Our Values"/>
+                <img className="card-img-top" src="Images/about-us/our-values.png" alt="Our Values" />
                 <div className="card-body">
                   <h5 className="card-title fw-bold text-center"> Our Values </h5>
                   <p className="card-text">Our service is built on transparency, honesty, and devotion. In every engagement, we stress open communication and respect the highest ethical standards. Every part of our work is guided by our dedication to justice. </p>
@@ -45,7 +49,7 @@ export default function About() {
             </div>
             <div className="">
               <div className="card h-100 rounded-5 bg-color-1 color-2 card-zoom-in-out-box">
-              <img className="card-img-top" src="Images/about-us/expertise-and-experience.png" alt="Expertise and Experience"/>
+                <img className="card-img-top" src="Images/about-us/expertise-and-experience.png" alt="Expertise and Experience" />
                 <div className="card-body">
                   <h5 className="card-title fw-bold text-center"> Expertise and Experience </h5>
                   <p className="card-text">Our team is made up of specialists who have a great deal with insurance claim processes. We handle difficulties with an in-depth knowledge of the industry to give effective solutions suited to the specific demands of each situation.</p>
@@ -54,7 +58,7 @@ export default function About() {
             </div>
             <div className="">
               <div className="card h-100 rounded-5 bg-color-1 color-2 card-zoom-in-out-box">
-              <img className="card-img-top" src="Images/about-us/advocacy-for-your-rights.png" alt="Advocacy for Your Rights"/>
+                <img className="card-img-top" src="Images/about-us/advocacy-for-your-rights.png" alt="Advocacy for Your Rights" />
                 <div className="card-body">
                   <h5 className="card-title fw-bold text-center"> Advocacy for Your Rights </h5>
                   <p className="card-text"> We step in as support for your rights when insurance companies unjustly reject claims or cancel policies without a valid explanation. Our objective is to provide each policyholder with fair treatment and a just settlement.</p>
@@ -63,7 +67,7 @@ export default function About() {
             </div>
             <div className="">
               <div className="card h-100 rounded-5 bg-color-1 color-2 card-zoom-in-out-box">
-              <img className="card-img-top" src="Images/about-us/client-centric-approach.png" alt="Client-Centric Approach"/>
+                <img className="card-img-top" src="Images/about-us/client-centric-approach.png" alt="Client-Centric Approach" />
                 <div className="card-body">
                   <h5 className="card-title fw-bold text-center"> Client-Centric Approach </h5>
                   <p className="card-text">Our primary focus is your pleasure. We take a client-centric approach, adapting our services to your individual requirements. We specialize on creating solutions that prioritize your well-being, whether you're an individual policyholder or a collaborative partner. </p>
@@ -72,7 +76,7 @@ export default function About() {
             </div>
             <div className="">
               <div className="card h-100 rounded-5 bg-color-1 color-2 card-zoom-in-out-box">
-              <img className="card-img-top" src="Images/about-us/nationwide-presence.png" alt="Nationwide Presence"/>
+                <img className="card-img-top" src="Images/about-us/nationwide-presence.png" alt="Nationwide Presence" />
                 <div className="card-body">
                   <h5 className="card-title fw-bold text-center"> Nationwide Presence </h5>
                   <p className="card-text"> Our services are available across India and are based in  Delhi. Claimsolution.in is here to assist you wherever you are, delivering our dedication to justice and fairness to policyholders nationwide. </p>

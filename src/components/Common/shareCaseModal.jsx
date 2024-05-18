@@ -14,7 +14,7 @@ import { BiRightArrow } from 'react-icons/bi'
 
 
 
-export default function ShareCaseModal({ caseShareModal,handleShareCase ,close }) {
+export default function ShareCaseModal({ caseShareModal,handleShareCase ,close,getNoramlEmp }) {
     const [data,setData] = useState([])
     const [loading,setLoading] = useState(true)
     const [shareLoading,setShareLoading] = useState(false)
@@ -27,7 +27,7 @@ export default function ShareCaseModal({ caseShareModal,handleShareCase ,close }
         async function fetch() {
           setLoading(true)
           try {
-            const res = await adminGetNormalEmployee()
+            const res = await getNoramlEmp()
             // console.log("adminGetAllEmployee", res?.data?.data);
             if (res?.data?.success && res?.data?.data) {
               setData([...res?.data?.data])
@@ -104,17 +104,24 @@ export default function ShareCaseModal({ caseShareModal,handleShareCase ,close }
                         {data.map((item, ind) =><button type="button" onClick={()=>handleSelectEmployee(item?._id)} className={`list-group-item list-group-item-action ${selectEmployee.includes(item?._id) && "active border border-white"}`}  aria-current="true">
                             <div className=''>
                             <h6 className='fs-5 text-capitalize'>{item?.fullName}</h6>
-                            <span className="badge bg-warning text-dark m-0">{item?.type}</span>
+                            <div className='d-flex gap-2'>
+                            <span className="badge bg-warning text-dark text-break m-0">{item?.branchId}</span>
+                            <span className="badge bg-warning text-dark text-break m-0">{item?.type}</span>
+                            <span className="badge bg-warning text-dark text-break m-0">{item?.designation}</span>
+                            </div>
                             </div>
                             </button>
                         )}
                         </div>
+                        {data?.length>0  && 
                         <div className="d-flex flex align-items-center justify-content-center mt-3">
                                 <ReactPaginate
                                     breakLabel="..."
                                     nextLabel={<BiRightArrow />}
                                     onPageChange={handlePageClick}
-                                    pageRangeDisplayed={5}
+                                    pageRangeDisplayed={4}
+                                    breakClassName={""}
+                                    marginPagesDisplayed={1}
                                     pageCount={Math.ceil(noOfEmployee / pageItemLimit) || 1}
                                     previousLabel={<BiLeftArrow />}
                                     className="d-flex flex gap-2"
@@ -125,7 +132,7 @@ export default function ShareCaseModal({ caseShareModal,handleShareCase ,close }
                                     forcePage={pageNo > 0 ? pageNo - 1 : 0}
                                     renderOnZeroPageCount={null}
                                 />
-                            </div>
+                            </div>}
                     </div>
                 </div>
 

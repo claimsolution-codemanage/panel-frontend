@@ -12,7 +12,7 @@ import 'react-phone-input-2/lib/style.css'
 
 
 export default function AdminCreateNewEmployee() {
-    const [data, setData] = useState({ fullName: "", email: "", mobileNo: "" ,type:"",designation:"" })
+    const [data, setData] = useState({ fullName: "", email: "",empId:"" ,branchId:"",mobileNo: "" ,type:"",designation:"" })
     const [loading, setLoading] = useState(false)
     const navigate = useNavigate()
     // const state = useContext(AppContext)
@@ -60,7 +60,7 @@ export default function AdminCreateNewEmployee() {
                     <div className="color-4 mx-auto p-5 w-75">
                         <div className="align-items-center bg-color-1 p-5 rounded-2 row shadow m-0">
                             <div className="border-3 border-primary border-bottom py-2">
-                                <h6 className="text-primary text-center h1">Add New Employee</h6>
+                                <h6 className="text-primary text-center h3">Add New Employee</h6>
                             </div>
                             <div className="">
                                 <div className="my-3">
@@ -71,10 +71,12 @@ export default function AdminCreateNewEmployee() {
                                     {/* <label htmlFor="email" className="form-label">Email</label> */}
                                     <input type="email" name="email" placeholder = "Email" value={data.email} onChange={hangleOnchange} className="form-control"  />
                                 </div>
-                                {/* <div className="mb-3">
-                                   
-                                    <input type="number" name="mobileNo" placeholder="Mobile No." value={data.mobileNo} onChange={hangleOnchange} className="form-control" />
-                                </div> */}
+                                <div className="my-3">
+                                    <input type="text" name="empId" placeholder="Employee ID" value={data.empId} onChange={hangleOnchange} className="form-control" id="empId" />
+                                </div>
+                                <div className="my-3">
+                                    <input type="text" name="branchId" placeholder="Employee branch ID" value={data.branchId} onChange={hangleOnchange} className="form-control" id="branchId" />
+                                </div>
                                 
                         <div className="mb-3">
                            <PhoneInput

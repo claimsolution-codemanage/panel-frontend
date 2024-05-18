@@ -8,7 +8,7 @@ import { DateRangePicker } from 'react-date-range';
 import { DateRange } from 'react-date-range';
 import 'react-date-range/dist/styles.css'; // main style file
 import 'react-date-range/dist/theme/default.css'; // theme css file
-import { getFormateDate } from "../../utils/helperFunction"
+import { getFormateDMYDate, getFormateDate } from "../../utils/helperFunction"
 import ReactPaginate from 'react-paginate';
 import { CiEdit } from 'react-icons/ci'
 import { FaCircleArrowDown } from 'react-icons/fa6'
@@ -254,7 +254,7 @@ const getAllCases =async()=>{
               <span>{(isClipBoardCopy?.id==item?._id && isClipBoardCopy?.copied) ? <BsClipboardCheck/>  : <BsClipboard/>} </span>
               </CopyToClipboard> }
               </td> */}
-              <td className="text-nowrap">{new Date(item?.createdAt).toLocaleDateString()}</td>
+              <td className="text-nowrap">{item?.createdAt && getFormateDMYDate(item?.createdAt)}</td>
               <td className="text-nowrap">{item?.fileNo}</td>
               <td className="text-nowrap">{item?.name}</td>
               <td className="text-nowrap">{item?.email}</td>
@@ -275,7 +275,9 @@ const getAllCases =async()=>{
           breakLabel="..."
           nextLabel={<BiRightArrow/>}
           onPageChange={handlePageClick}
-          pageRangeDisplayed={5}
+          pageRangeDisplayed={4}
+          breakClassName={""}
+          marginPagesDisplayed={1}
           pageCount={Math.ceil(noOfCase / pageItemLimit)||1}
           previousLabel={<BiLeftArrow/>}
           className="d-flex flex gap-2"
