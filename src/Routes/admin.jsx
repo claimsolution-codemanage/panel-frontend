@@ -39,6 +39,7 @@ import AdminCaseDocTrash from "../pages/admin/caseDocTrash";
 import AdminEmployeeTrash from "../pages/admin/EmployeeTrash";
 import AdminViewEmployee from "../pages/admin/ViewEmployee";
 import AdminViewMySathi from "../pages/admin/viewMySathi";
+import AdminRejectCase from '../pages/admin/allRejectCase'
 
 {/* for admin */}
 export const adminRoutes = [
@@ -77,5 +78,7 @@ export const adminRoutes = [
   <Route path='/admin/all-trash-doc'  element={<AdminTemplate><AdminCaseDocTrash/></AdminTemplate>}/>,
   <Route path='/admin/all-trash-employee'  element={<AdminTemplate><AdminEmployeeTrash/></AdminTemplate>}/>,
   <Route path='/admin/view-sathi/:_id'  element={<AdminTemplate><AdminViewMySathi/></AdminTemplate>}/>,
+  <Route path='/admin/reject-cases'  element={<AdminTemplate><AdminRejectCase/></AdminTemplate>}/>,
+
 
 ]

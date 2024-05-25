@@ -9,6 +9,7 @@ export default function AdminViewMySathi() {
   return (<>
 {param?._id && 
  <AllEmployee
+ isBack={true}
  empId={param?._id}
  page={"Sathi Team"}
  role={"admin"}

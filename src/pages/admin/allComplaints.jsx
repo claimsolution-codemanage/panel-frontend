@@ -30,7 +30,7 @@ import { adminRemoveComplaintById } from "../../apis"
 export default function AdminAllComplaint() {
   const state = useContext(AppContext)
   const navigate = useNavigate()
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(true)
   const [viewComplaintModal, setViewComplaintModal] = useState({ status: false, details: {} })
   const [pageItemLimit, setPageItemLimit] = useState(10)
   const [searchQuery, setSearchQuery] = useState("")
@@ -74,6 +74,8 @@ export default function AdminAllComplaint() {
       let debouncedCall = loash.debounce(function () {
         getAllComplaint()
         setIsSearch(false)
+        setPageItemLimit(5)
+        setPgNo(1)
     }, 1000);
     debouncedCall();
     return () => {
@@ -109,8 +111,8 @@ export default function AdminAllComplaint() {
           </div>
         </div>
 
-        <div className=" m-5 p-4">
-          <div className="bg-color-1 p-3 p-md-5 rounded-2 shadow">
+        <div className=" m-md-5 p-md-4">
+          <div className="bg-color-1 p-2 p-md-3 p-md-5 rounded-2 shadow">
             <div className="d-flex flex gap-2">
 
               <div className="form-control px-2 d-flex gap-2">
@@ -134,7 +136,7 @@ export default function AdminAllComplaint() {
                 <table className="table table-responsive table-borderless">
                   <thead>
                     <tr className="bg-primary text-white text-center">
-                      <th scope="col" className="text-nowrap"><th scope="col" >S.no</th></th>
+                      <th scope="col" className="text-nowrap"><th scope="col" >SL No</th></th>
                       <th scope="col" className="text-nowrap">Date</th>
                       <th scope="col" className="text-nowrap"><span>Action</span></th>
                       <th scope="col" className="text-nowrap">Name</th>

@@ -322,13 +322,13 @@ export default function EditPartnerProfileComp({ getPartner, updateProfile, upda
                                         <label for="dob" className="form-label">DOB</label>
                                         <input type="date" name="dob" value={data.dob ? formatDateToISO(data.dob) : ''} onChange={handleOnchange} className="form-control" id="dob" aria-describedby="dob" />
                                     </div>
-                                    <div className="mb-3 col-12 col-md-4">
+                                    {/* <div className="mb-3 col-12 col-md-4">
                                         <label for="panNo" className="form-label">PAN No</label>
                                         <input type="text" name="panNo" value={data.panNo} onChange={handleOnchange} className="form-control" id="panNo" aria-describedby="panNo" />
-                                    </div>
+                                    </div> */}
                                     <div className="mb-3 col-12 col-md-4">
                                         <label for="aadhaarNo" className="form-label">Aadhaar No</label>
-                                        <input type="text" name="aadhaarNo" value={data.aadhaarNo} onChange={(e) => checkNumber(e) && handleOnchange(e)} className="form-control" id="aadhaarNo" aria-describedby="aadhaarNo" />
+                                        <input type="text" name="aadhaarNo" value={data.aadhaarNo} onChange={(e) => checkPhoneNo(e?.target?.value,12) && handleOnchange(e)} className="form-control" id="aadhaarNo" aria-describedby="aadhaarNo" />
                                     </div>
 
                                     <div className="mb-3 col-12 col-md-4">
@@ -369,7 +369,7 @@ export default function EditPartnerProfileComp({ getPartner, updateProfile, upda
                                     </div>
                                     <div className="mb-3 col-12 col-md-4">
                                         <label for="pinCode" className="form-label">Pincode</label>
-                                        <input type="text" name="pinCode" value={data.pinCode} onChange={(e) => checkNumber(e) && handleOnchange(e)} className="form-control" id="pinCode" aria-describedby="pinCode" />
+                                        <input type="text" name="pinCode" value={data.pinCode} onChange={(e) => checkPhoneNo(e?.target?.value,6) && handleOnchange(e)} className="form-control" id="pinCode" aria-describedby="pinCode" />
                                     </div>
                                   
                                     <div className="border-3 border-primary border-bottom py-2">

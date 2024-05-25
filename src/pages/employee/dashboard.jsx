@@ -168,7 +168,7 @@ export default function AdminDasboard() {
                     <div className="border-3 border-primary border-bottom py-2">
                             <h6 className="h1 fw-bold">Welcome to your Dashboard</h6>
                             </div>
-                        <div className='row row-cols-1 row-cols-3 mt-2'>
+                        <div className='row row-cols-1 row-cols-md-3 mt-2'>
                           <div className='d-flex align-items-center gap-2'>
                             <p className='fs-6 fw-bold'>FullName:</p>
                             <p className='text-break'>{employee?.fullName}</p>

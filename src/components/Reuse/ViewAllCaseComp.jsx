@@ -40,11 +40,11 @@ import { Link } from "react-router-dom"
 export default function ViewAllCaseComp({getCases,downloadCase,role,viewUrl,
   caseShare,setStatus,setCaseStatus,editUrl,createInvUrl,
   isChangeStatus,isEdit,isRemoveCase,isResolvedAmt,isDownload,
-  empId,id,isShare,getNormalEmp
+  empId,id,isShare,getNormalEmp,isBack,isReject
 }) {
   const [data, setData] = useState([])
   const navigate = useNavigate()
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(true)
   const [statusType, setStatusType] = useState("")
   const [pageItemLimit, setPageItemLimit] = useState(10)
   const [showCalender, setShowCalender] = useState(false)
@@ -82,7 +82,7 @@ export default function ViewAllCaseComp({getCases,downloadCase,role,viewUrl,
       const startDate = dateRange.startDate ? getFormateDate(dateRange.startDate) : ""
       const endDate = dateRange.endDate ? getFormateDate(dateRange.endDate) : ""
       // console.log("start", startDate, "end", endDate);
-      const res = await getCases(pageItemLimit, pgNo, searchQuery, statusType, startDate, endDate, type,empId,id)
+      const res = await getCases(pageItemLimit, pgNo, searchQuery, statusType, startDate, endDate, type,empId,id,isReject)
       // console.log("allAdminCase", res?.data?.data);
       if (res?.data?.success && res?.data?.data) {
         setData([...res?.data?.data])
@@ -109,7 +109,7 @@ export default function ViewAllCaseComp({getCases,downloadCase,role,viewUrl,
       const startDate = dateRange.startDate ? getFormateDate(dateRange.startDate) : ""
       const endDate = dateRange.endDate ? getFormateDate(dateRange.endDate) : ""
       setDownloading(true)
-      const res = await downloadCase(searchQuery, statusType, startDate, endDate, type,empId,id)
+      const res = await downloadCase(searchQuery, statusType, startDate, endDate, type,empId,id,isReject)
       console.log("res", res);
       if (res?.status == 200) {
         const url = window.URL.createObjectURL(new Blob([res.data]));
@@ -148,6 +148,8 @@ export default function ViewAllCaseComp({getCases,downloadCase,role,viewUrl,
       let debouncedCall = loash.debounce(function () {
         getAllCases()
         setIsSearch(false)
+        setPgNo(1)
+        setPageItemLimit(5)
       }, 1000);
       debouncedCall();
       return () => {
@@ -208,6 +210,7 @@ export default function ViewAllCaseComp({getCases,downloadCase,role,viewUrl,
           <div className="d-flex flex align-items-center gap-3">
             {/* <IoArrowBackCircleOutline className="fs-3"  onClick={() => navigate("/admin/dashboard")} style={{ cursor: "pointer" }} /> */}
             <div className="d-flex flex align-items-center gap-1">
+            {isBack && <IoArrowBackCircleOutline className="fs-3" onClick={() => navigate(-1)} style={{ cursor: "pointer" }} />} 
               <span>All Case</span>
             </div>
           </div>
@@ -291,31 +294,31 @@ export default function ViewAllCaseComp({getCases,downloadCase,role,viewUrl,
                 <thead>
                   <tr className="bg-primary text-white text-center">
                   {isShare &&  <th scope="col" className="text-nowrap" ></th>}
-                    <th scope="col" className="text-nowrap" >S.no</th>
-                    <th scope="col" className="text-nowrap" >Current Status</th>
+                    <th scope="col" className="text-nowrap" >SL No</th>
                     <th scope="col" className="text-nowrap">Action</th>
                     {createInvUrl  && <th scope="col" className="text-nowrap">Invoice</th>}
-                    {/* <th scope="col" className="text-nowrap" >Reference</th> */}
+                   {role?.toLowerCase()!="client" && role?.toLowerCase()!="partner" && <th scope="col" className="text-nowrap" >Branch ID</th> }
+                    <th scope="col" className="text-nowrap" >Current Status</th>
                     <th scope="col" className="text-nowrap" >Date</th>
-                   {(role?.toLowerCase()!="client" && role?.toLowerCase()!="partner" ) && <th scope="col" className="text-nowrap" >From</th> }
+                    {/* <th scope="col" className="text-nowrap" >Reference</th> */}
+                   {(role?.toLowerCase()!="client" && role?.toLowerCase()!="partner" ) && <th scope="col" className="text-nowrap" >Case From</th> }
+                   {(role?.toLowerCase()!="client" && role?.toLowerCase()!="partner" ) && <th scope="col" className="text-nowrap" >Team Added by</th> }
                    {(role?.toLowerCase()!="client" && role?.toLowerCase()!="partner" ) && <th scope="col" className="text-nowrap" >Partner Name</th> }
                    {/* {(role?.toLowerCase()!="client" && role?.toLowerCase()!="partner" ) && <th scope="col" className="text-nowrap" >Partner Consultant Code</th> } */}
-                   {role?.toLowerCase()!="client" && <th scope="col" className="text-nowrap" >Branch ID</th> }
-                    <th scope="col" className="text-nowrap" >File No</th>
-                    <th scope="col" className="text-nowrap"  >Name</th>
-                    <th scope="col" className="text-nowrap"  >Email</th>
-                    <th scope="col" className="text-nowrap"  >Mobile No.</th>
+                    <th scope="col" className="text-nowrap"  >Case Name</th>
+                    <th scope="col" className="text-nowrap"  >Mobile No</th>
+                    <th scope="col" className="text-nowrap"  >Email Id</th>
+                    <th scope="col" className="text-nowrap"  >Claim Amount</th>
                     <th scope="col" className="text-nowrap"  >Policy No</th>
+                    <th scope="col" className="text-nowrap" >File No</th>
                     <th scope="col" className="text-nowrap"  >Policy Type</th>
                     <th scope="col" className="text-nowrap"  >complaint Type</th>
-                    <th scope="col" className="text-nowrap"  >Claim Amount</th>
                   </tr>
                 </thead>
                 <tbody>
                   {data.map((item, ind) => <tr key={item._id} className="border-2 border-bottom border-light text-center">
                     {isShare &&<td className="text-nowrap"><input className="form-check-input" name="shareCase" type="checkbox" checked={shareCase.includes(item?._id)} onChange={(e) => handleShareOnchange(e, item?._id)} id="flexCheckDefault" /></td>}
                     <th scope="row">{ind + 1}</th>
-                    <td className=" text-nowrap"><span className={(item?.currentStatus == "reject" || item?.currentStatus == "pending") ? " badge bg-danger text-white" : "badge bg-primary"}>{item?.currentStatus}</span></td>
                     <td className="text-nowrap">
                       <span className="d-flex gap-2"><span style={{ cursor: "pointer", height: 30, width: 30, borderRadius: 30 }} className="bg-primary text-white d-flex align-items-center justify-content-center" onClick={() => navigate(`${viewUrl}${item._id}`)}><HiMiniEye /></span>
                       {isEdit && <span style={{ cursor: "pointer", height: 30, width: 30, borderRadius: 30 }} className="bg-warning text-dark d-flex align-items-center justify-content-center" onClick={() => navigate(`${editUrl}${item._id}`)}><CiEdit /></span>}
@@ -331,19 +334,21 @@ export default function ViewAllCaseComp({getCases,downloadCase,role,viewUrl,
                  }
                 </span> 
               </td>}
+                   {role?.toLowerCase()!="client" && role?.toLowerCase()!="partner" && <td className="text-nowrap">{item?.branchId}</td>}
+                    <td className=" text-nowrap"><span className={(item?.currentStatus == "reject" || item?.currentStatus == "pending") ? " badge bg-danger text-white" : "badge bg-primary"}>{item?.currentStatus}</span></td>
                     <td className="text-nowrap">{item?.createdAt && getFormateDMYDate(item?.createdAt)}</td>
                    {(role?.toLowerCase()!="client" && role?.toLowerCase()!="partner" ) && <td className="text-nowrap text-capitalize">{item?.caseFrom}</td>}
+                   {(role?.toLowerCase()!="client" && role?.toLowerCase()!="partner" ) && <td className="text-nowrap text-capitalize" >{item?.empSaleName || "-"}</td> }
                    {(role?.toLowerCase()!="client" && role?.toLowerCase()!="partner" ) && <td className="text-nowrap text-capitalize" >{item?.partnerName || "-"}</td> }
                    {/* {(role?.toLowerCase()!="client" && role?.toLowerCase()!="partner" ) && <td className="text-nowrap text-capitalize" >{item?.partnerCode || "-"}</td> } */}
-                   {role?.toLowerCase()!="client" && <td className="text-nowrap text-capitalize">{item?.branchId}</td>}
-                    <td className="text-nowrap">{item?.fileNo}</td>
                     <td className="text-nowrap">{item?.name}</td>
-                    <td className="text-nowrap">{item?.email}</td>
                     <td className="text-nowrap">{item?.mobileNo}</td>
+                    <td className="text-nowrap">{item?.email}</td>
+                    <td className="text-nowrap">{item?.claimAmount}</td>
                     <td className="text-nowrap">{item?.policyNo}</td>
+                    <td className="text-nowrap">{item?.fileNo}</td>
                     <td className="text-nowrap">{item?.policyType}</td>
                     <td className="text-nowrap">{item?.complaintType}</td>
-                    <td className="text-nowrap">{item?.claimAmount}</td>
                   </tr>)}
                 </tbody>
               </table>

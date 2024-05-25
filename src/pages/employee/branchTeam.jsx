@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import { empGetAllEmployee } from '../../apis'
+import { empGetAllEmployee,empDownloadAllEmp } from '../../apis'
 import { AppContext } from '../../App'
 import { useContext } from 'react'
 import { useNavigate } from 'react-router-dom'
@@ -20,13 +20,15 @@ export default function EmpBranchTeam() {
     return (
         <>
             {isAccess && <AllEmployee
-                page={""}
+                page={"Branch Team"}
                 empId={""}
                 role={"employee"}
                 caseUrl={"/employee/all case/"}
                 partnerUrl={"/employee/all partner/"}
                 viewSathiUrl={"/employee/view-sathi/"}
                 isedit={false}
+                isDownload={true}
+                getDownload={empDownloadAllEmp}
                 getEmployee={empGetAllEmployee}
                 isTrash={false}
                 isActive={() => { }}

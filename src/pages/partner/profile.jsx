@@ -14,7 +14,7 @@ import ViewPartnerComp from "../../components/Reuse/ViewPartnerComp"
 
 export default function Profile() {
     const [data, setData] = useState([])
-    const [loading, setLoading] = useState(false)
+    const [loading, setLoading] = useState(true)
     const navigate = useNavigate()
 
     useEffect(() => {

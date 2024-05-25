@@ -15,7 +15,7 @@ import Loader from "../../components/Common/loader"
 export default function AdminAllJobs() {
   const [data, setData] = useState([])
   const navigate = useNavigate()
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(true)
   const [showJobModal,setShowModal] = useState(false)
   const [showJobRemoveModal,setJobRemoveModal] = useState({status:false,loading:false,id:""})
 

@@ -42,7 +42,7 @@ export default function AdminViewSaleEmpCaseReport() {
   const [data, setData] = useState([])
   const param = useParams()
   const navigate = useNavigate()
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(true)
   const [statusType, setStatusType] = useState("")
   const [pageItemLimit, setPageItemLimit] = useState(10)
   const [showCalender, setShowCalender] = useState(false)
@@ -214,7 +214,7 @@ export default function AdminViewSaleEmpCaseReport() {
           <div className="d-flex flex align-items-center gap-3">
             <IoArrowBackCircleOutline className="fs-3" onClick={() => navigate(-1)} style={{ cursor: "pointer" }} />
             <div className="d-flex flex align-items-center gap-1">
-              <span>Partner Report</span>
+              <span>All Case</span>
               {/* <span><LuPcCase /></span> */}
             </div>
           </div>
@@ -300,28 +300,30 @@ export default function AdminViewSaleEmpCaseReport() {
                 <thead>
                   <tr className="bg-primary text-white text-center">
                     {/* <th scope="col" className="text-nowrap" ><th scope="col" ></th></th> */}
-                    <th scope="col" className="text-nowrap" ><th scope="col" >S.no</th></th>
-                    <th scope="col" className="text-nowrap" >Current Status</th>
+                    <th scope="col" className="text-nowrap" ><th scope="col" >SL No</th></th>
                     <th scope="col" className="text-nowrap">Action</th>
+                   {<th scope="col" className="text-nowrap" >Branch ID</th> }
+                    <th scope="col" className="text-nowrap" >Current Status</th>
                     {/* <th scope="col" className="text-nowrap" >Reference</th> */}
                     <th scope="col" className="text-nowrap" >Date</th>
-                    <th scope="col" className="text-nowrap" >From</th> 
-                    <th scope="col" className="text-nowrap" >Branch ID</th>
-                    <th scope="col" className="text-nowrap" >File No</th>
-                    <th scope="col" className="text-nowrap"  >Name</th>
-                    <th scope="col" className="text-nowrap"  >Email</th>
-                    <th scope="col" className="text-nowrap"  >Mobile No.</th>
+                   { <th scope="col" className="text-nowrap" >Case From</th> }
+                   { <th scope="col" className="text-nowrap" >Team Added by</th> }
+                   { <th scope="col" className="text-nowrap" >Partner Name</th> }
+                   {/* {(role?.toLowerCase()!="client" && role?.toLowerCase()!="partner" ) && <th scope="col" className="text-nowrap" >Partner Consultant Code</th> } */}
+                    <th scope="col" className="text-nowrap"  >Case Name</th>
+                    <th scope="col" className="text-nowrap"  >Mobile No</th>
+                    <th scope="col" className="text-nowrap"  >Email Id</th>
+                    <th scope="col" className="text-nowrap"  >Claim Amount</th>
                     <th scope="col" className="text-nowrap"  >Policy No</th>
+                    <th scope="col" className="text-nowrap" >File No</th>
                     <th scope="col" className="text-nowrap"  >Policy Type</th>
                     <th scope="col" className="text-nowrap"  >complaint Type</th>
-                    <th scope="col" className="text-nowrap"  >Claim Amount</th>
                   </tr>
                 </thead>
                 <tbody>
                   {data.map((item, ind) => <tr key={item._id} className="border-2 border-bottom border-light text-center">
                     {/* <td className="text-nowrap"><input class="form-check-input" name="shareCase" type="checkbox" checked={shareCase.includes(item?._id)} onChange={(e) => handleShareOnchange(e, item?._id)} id="flexCheckDefault" /></td> */}
                     <th scope="row">{ind + 1}</th>
-                    <td className=" text-nowrap"><span className={(item?.currentStatus == "reject" || item?.currentStatus == "pending") ? " badge bg-danger text-white" : "badge bg-primary"}>{item?.currentStatus}</span></td>
                     <td className="text-nowrap">
                       <span className="d-flex gap-2"><span style={{ cursor: "pointer", height: 30, width: 30, borderRadius: 30 }} className="bg-primary text-white d-flex align-items-center justify-content-center" onClick={() => navigate(`/admin/view case/${item._id}`)}><HiMiniEye /></span>
                         <span style={{ cursor: "pointer", height: 30, width: 30, borderRadius: 30 }} className="bg-warning text-dark d-flex align-items-center justify-content-center" onClick={() => navigate(`/admin/edit%20case/${item._id}`)}><CiEdit /></span>
@@ -333,19 +335,23 @@ export default function AdminViewSaleEmpCaseReport() {
                       {item?.caseFrom == "partner" && item?.partnerId && <CopyToClipboard text={isClipBoardCopy?.value}
                         onCopy={() => { setIsClipBoardCopy(()=>{ return { id: item?._id, copied: true, value: `partnerId=${item?.partnerId}&partnerCaseId=${item?._id}` }}); }}>
                         <span>{(isClipBoardCopy?.id == item?._id && isClipBoardCopy?.copied) ? <BsClipboardCheck className="text-primary fs-4" /> : <BsClipboard />} </span>
-                      </CopyToClipboard>}
-                    </td> */}
-                    <td className="text-nowrap">{item?.createdAt && getFormateDMYDate(item?.createdAt)}</td>
-                 <td className="text-nowrap text-capitalize">{item?.caseFrom}</td>
-                  <td className="text-nowrap text-capitalize">{item?.branchId}</td>
-                    <td className="text-nowrap">{item?.fileNo}</td>
+                        </CopyToClipboard>}
+                      </td> */}
+                   {<td className="text-nowrap">{item?.branchId}</td>}
+                      <td className=" text-nowrap"><span className={(item?.currentStatus == "reject" || item?.currentStatus == "pending") ? " badge bg-danger text-white" : "badge bg-primary"}>{item?.currentStatus}</span></td>
+                              <td className="text-nowrap">{item?.createdAt && getFormateDMYDate(item?.createdAt)}</td>
+                   {<td className="text-nowrap text-capitalize">{item?.caseFrom}</td>}
+                   {<td className="text-nowrap text-capitalize" >{item?.empSaleName || "-"}</td> }
+                   {<td className="text-nowrap text-capitalize" >{item?.partnerName || "-"}</td> }
+                   {/* {(role?.toLowerCase()!="client" && role?.toLowerCase()!="partner" ) && <td className="text-nowrap text-capitalize" >{item?.partnerCode || "-"}</td> } */}
                     <td className="text-nowrap">{item?.name}</td>
-                    <td className="text-nowrap">{item?.email}</td>
                     <td className="text-nowrap">{item?.mobileNo}</td>
+                    <td className="text-nowrap">{item?.email}</td>
+                    <td className="text-nowrap">{item?.claimAmount}</td>
                     <td className="text-nowrap">{item?.policyNo}</td>
+                    <td className="text-nowrap">{item?.fileNo}</td>
                     <td className="text-nowrap">{item?.policyType}</td>
                     <td className="text-nowrap">{item?.complaintType}</td>
-                    <td className="text-nowrap">{item?.claimAmount}</td>
                   </tr>)}
                 </tbody>
               </table>

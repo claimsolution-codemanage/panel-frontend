@@ -64,7 +64,7 @@ export default function AdminTemplate({children}){
     return(<>
        <div className="container-fluid">
             <div className="contanter row" style={{height:'100vh'}}>
-                <div className="d-md-none col-12 p-3 bg-color-4 d-flex justify-content-between"><span></span> <span onClick={()=>setView(!view)}>{view ? <RxCrossCircled className="fs-3"/>:<RxHamburgerMenu className="fs-3"/>} </span> </div>
+                <div className="d-md-none col-12 p-3 bg-primary d-flex justify-content-between"><span></span> <span className="text-white" onClick={()=>setView(!view)}>{view ? <RxCrossCircled className="fs-3"/>:<RxHamburgerMenu className="fs-3"/>} </span> </div>
                 <div className={`${view ? "d-md-block" : "d-none d-md-block"} bg-primary col-md-2 p-0`} style={{height:'100vh', overflowY:'auto'}}><PrivateNavbar/></div>
                {loading ? <Loader/> : <div className={`${view && "d-none" } col-12 col-md-10 p-0 bg-color-7 color-4`} style={{height:'100vh', overflowY:'auto'}}>{children}</div>
 }

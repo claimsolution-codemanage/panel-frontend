@@ -8,7 +8,7 @@ import { allState } from "../../utils/constant"
 import { FaFilePdf, FaFileImage, FaFileWord } from 'react-icons/fa6'
 import { useRef } from "react"
 import { IoMdAdd } from 'react-icons/io'
-import { checkNumber } from '../../utils/helperFunction'
+import { checkNumber, checkPhoneNo } from '../../utils/helperFunction'
 import { MdOutlineCancel } from "react-icons/md";
 import AddNewCaseDocsModal from "../../components/Common/addNewCaseDoc"
 
@@ -109,17 +109,33 @@ export default function AddCaseComp({ addCase, uploadAttachment, successUrl,role
     })
 
     useEffect(() => {
-        if (caseDetailsFormik?.values?.policyType?.toLowerCase() == "other" || caseDetailsFormik?.values?.complaintType?.toLowerCase() == "other") {
-            if (!others.policy || !others.complaint) {
-                setError(true)
-            } else {
-                setError(false)
+        if(caseDetailsFormik?.values?.policyType?.toLowerCase() == "other" || caseDetailsFormik?.values?.complaintType?.toLowerCase() == "other"){
+            if(caseDetailsFormik?.values?.policyType?.toLowerCase() == "other"){
+                if (!others.policy) {
+                    setError(true)
+                } else {
+                    setError(false)
+                }
             }
-
-        } else {
+            if(caseDetailsFormik?.values?.complaintType?.toLowerCase() == "other"){
+                if (!others.complaint) {
+                  setError(true)
+                } else {
+                    if(caseDetailsFormik?.values?.policyType?.toLowerCase() == "other"){
+                        !others.policy ? setError(true) : setError(false)
+                    }else{
+                        setError(false)
+                    }
+                }
+            }
+            
+        }else{
             setError(false)
         }
+        
     }, [others, caseDetailsFormik?.values])
+
+    console.log("eroor--",error);
 
     // useEffect(()=>{
     //     const policyType = caseDetailsFormik?.values?.policyType
@@ -285,7 +301,7 @@ export default function AddCaseComp({ addCase, uploadAttachment, successUrl,role
                                     <label htmlFor="otherPolicyType" className={`form-label`}>Other Policy Type*</label>
                                     <input type="text" className={`form-control`} id="otherPolicyType" name="otherPolicyType" value={others?.policy} onChange={(e) => setOthers({ ...others, policy: e?.target?.value })} />
                                     {caseDetailsFormik?.values?.policyType?.toLowerCase() == "other" && !others?.policy && error ? (
-                                        <span className="text-danger">Other policy Type required</span>
+                                        <span className="text-danger">Other policy type required</span>
                                     ) : null}
                                 </div>}
                                 <div className="mb-3 ">
@@ -307,7 +323,7 @@ export default function AddCaseComp({ addCase, uploadAttachment, successUrl,role
                                     <label htmlFor="othercomplaintType" className={`form-label`}>Other Complaint Type*</label>
                                     <input type="text" className={`form-control`} id="otherPolicyType" name="otherPolicyType" value={others?.complaint} onChange={(e) => setOthers({ ...others, complaint: e?.target?.value })} />
                                     {caseDetailsFormik?.values?.complaintType?.toLowerCase() == "other" && !others?.complaint && error ? (
-                                        <span className="text-danger">Other complaint Type required</span>
+                                        <span className="text-danger">Other complaint type required</span>
                                     ) : null}
                                 </div>}
 
@@ -344,7 +360,7 @@ export default function AddCaseComp({ addCase, uploadAttachment, successUrl,role
                                 </div>
                                 <div className="mb-3 ">
                                     <label htmlFor="name" className={`form-label ${caseDetailsFormik?.touched?.pinCode && caseDetailsFormik?.touched?.pinCode && caseDetailsFormik?.errors?.pinCode && "text-danger"}`}>PinCode</label>
-                                    <input type="text" className={`form-control ${caseDetailsFormik?.touched?.pinCode && caseDetailsFormik?.touched?.pinCode && caseDetailsFormik?.errors?.pinCode && "border-danger"}`} id="pinCode" name="pinCode" value={caseDetailsFormik?.values?.pinCode} onChange={(e) => checkNumber(e) && handleChange(e)} />
+                                    <input type="text" className={`form-control ${caseDetailsFormik?.touched?.pinCode && caseDetailsFormik?.touched?.pinCode && caseDetailsFormik?.errors?.pinCode && "border-danger"}`} id="pinCode" name="pinCode" value={caseDetailsFormik?.values?.pinCode} onChange={(e) => checkPhoneNo(e?.target?.value,6) && handleChange(e)} />
                                     {caseDetailsFormik?.touched?.pinCode && caseDetailsFormik?.errors?.pinCode ? (
                                         <span className="text-danger">{caseDetailsFormik?.errors?.pinCode}</span>
                                     ) : null}

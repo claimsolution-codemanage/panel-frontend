@@ -22,11 +22,11 @@ export default function DateSelect({show,hide,onFilter,dateRange,setDateRange}) 
                     <div className='d-flex align-items-center justify-content-between gap-2'>
                     <div className="">
                         <div>Start Date</div>
-                        <DatePicker className='form-control' selected={dateRange?.startDate} onChange={(date) => setDateRange({...dateRange,startDate:date})}/>
+                        <DatePicker className='form-control' selected={dateRange?.startDate} dateFormat={"dd-MM-YYYY"} onChange={(date) => setDateRange({...dateRange,startDate:date})}/>
                     </div>
                     <div className="">
                         <div>End Date</div>
-                        <DatePicker className='form-control' selected={dateRange?.endDate} onChange={(date) => setDateRange({...dateRange,endDate:date})}/>
+                        <DatePicker className='form-control' selected={dateRange?.endDate}  dateFormat={"dd-MM-YYYY"} onChange={(date) => setDateRange({...dateRange,endDate:date})}/>
                     </div>
                     </div>
                 </div>

@@ -24,7 +24,7 @@ export default function EditCaseComp({viewCase,updateCase,attachementUpload,addC
     const [isUpdatedPolicyType,setIsUpdatePolicyType] = useState(false)
     const [selectComplaintType, setComplaintPolicyType] = useState([])
     const [loading, setLoading] = useState(false)
-    const [loadCase,setLoadCase] = useState(false)
+    const [loadCase,setLoadCase] = useState(true)
     const [uploadingDocs, setUploadingDocs] = useState(false)
     const attachmentRef = useRef()
     const navigate = useNavigate()
@@ -128,17 +128,43 @@ export default function EditCaseComp({viewCase,updateCase,attachementUpload,addC
     })
 
     useEffect(() => {
-        if (caseDetailsFormik?.values?.policyType?.toLowerCase() == "other" || caseDetailsFormik?.values?.complaintType?.toLowerCase() == "other") {
-            if (!others.policy || !others.complaint) {
-                setError(true)
-            } else {
-                setError(false)
+        if(caseDetailsFormik?.values?.policyType?.toLowerCase() == "other" || caseDetailsFormik?.values?.complaintType?.toLowerCase() == "other"){
+            if(caseDetailsFormik?.values?.policyType?.toLowerCase() == "other"){
+                if (!others.policy) {
+                    setError(true)
+                } else {
+                    setError(false)
+                }
             }
-
-        } else {
+            if(caseDetailsFormik?.values?.complaintType?.toLowerCase() == "other"){
+                if (!others.complaint) {
+                  setError(true)
+                } else {
+                    if(caseDetailsFormik?.values?.policyType?.toLowerCase() == "other"){
+                        !others.policy ? setError(true) : setError(false)
+                    }else{
+                        setError(false)
+                    }
+                }
+            }
+            
+        }else{
             setError(false)
         }
+
+        // if (caseDetailsFormik?.values?.policyType?.toLowerCase() == "other" || caseDetailsFormik?.values?.complaintType?.toLowerCase() == "other") {
+        //     if (!others.policy || !others.complaint) {
+        //         setError(true)
+        //     } else {
+        //         setError(false)
+        //     }
+
+        // } else {
+        //     setError(false)
+        // }
     }, [others, caseDetailsFormik?.values])
+
+    console.log("error---",error);
 
     // useEffect(()=>{
     //     const policyType = caseDetailsFormik?.values?.policyType
@@ -441,7 +467,7 @@ export default function EditCaseComp({viewCase,updateCase,attachementUpload,addC
                                 </div>
                                 <div className="mb-3 ">
                                     <label for="name" className={`form-label ${caseDetailsFormik?.touched?.pinCode && caseDetailsFormik?.touched?.pinCode && caseDetailsFormik?.errors?.pinCode && "text-danger"}`}>PinCode</label>
-                                    <input type="text" className={`form-control ${caseDetailsFormik?.touched?.pinCode && caseDetailsFormik?.touched?.pinCode && caseDetailsFormik?.errors?.pinCode && "border-danger"}`} id="pinCode" name="pinCode" value={caseDetailsFormik?.values?.pinCode} onChange={(e) => checkNumber(e) && handleChange(e)} />
+                                    <input type="text" className={`form-control ${caseDetailsFormik?.touched?.pinCode && caseDetailsFormik?.touched?.pinCode && caseDetailsFormik?.errors?.pinCode && "border-danger"}`} id="pinCode" name="pinCode" value={caseDetailsFormik?.values?.pinCode} onChange={(e) => checkPhoneNo(e?.target?.value,6) && handleChange(e)} />
                                     {caseDetailsFormik?.touched?.pinCode && caseDetailsFormik?.errors?.pinCode ? (
                                         <span className="text-danger">{caseDetailsFormik?.errors?.pinCode}</span>
                                     ) : null}

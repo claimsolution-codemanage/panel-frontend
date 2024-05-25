@@ -12,6 +12,7 @@ export default function EmployeeAllCase() {
 
   return (<>
       <ViewAllCaseComp
+      isBack={param?._id ? true :false}
       getCases={employeeAllCase}
       empId={param?._id ? param?._id :false} 
       downloadCase={salesAllCaseDownload}

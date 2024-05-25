@@ -21,6 +21,7 @@ export default function EmpViewMySathi() {
     return (
         <>
             {isAccess && param?._id && <AllEmployee
+            isBack={true}
                 page={"Sathi Team"}
                 empId={param?._id}
                 isDownload={true}

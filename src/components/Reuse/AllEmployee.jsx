@@ -24,11 +24,12 @@ import { employeeType } from "../../utils/constant";
 import { getFormateDMYDate } from "../../utils/helperFunction";
 import { FaUserTag } from "react-icons/fa6";
 import { SiMicrosoftexcel } from "react-icons/si";
+import { IoArrowBackCircleOutline } from "react-icons/io5";
 export default function AllEmployee({page,empId,getEmployee,isTrash,isActive,deleteEmployeeId,
-  updateEmployee,role,caseUrl,partnerUrl,isedit,viewSathiUrl,isDownload,getDownload}) {
+  updateEmployee,role,caseUrl,partnerUrl,isedit,viewSathiUrl,isDownload,getDownload,isBack}) {
   const [data, setData] = useState([])
   const navigate = useNavigate()
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(true)
   const [pageItemLimit, setPageItemLimit] = useState(10)
   const [searchQuery, setSearchQuery] = useState("")
   const [isSearch,setIsSearch] = useState(false)
@@ -75,6 +76,8 @@ export default function AllEmployee({page,empId,getEmployee,isTrash,isActive,del
       let debouncedCall = loash.debounce(function () {
         getAllEmployees()
         setIsSearch(false)
+        setPageItemLimit(5)
+        setPgNo(1)
     }, 1000);
     debouncedCall();
     return () => {
@@ -100,7 +103,7 @@ export default function AllEmployee({page,empId,getEmployee,isTrash,isActive,del
         const url = window.URL.createObjectURL(new Blob([res.data]));
         const a = document.createElement('a');
         a.href = url;
-        a.download = 'sathi.xlsx'; // Specify the filename here
+        a.download = `${page}.xlsx`; // Specify the filename here
         document.body.appendChild(a);
         a.click();
         window.URL.revokeObjectURL(url);
@@ -159,6 +162,7 @@ export default function AllEmployee({page,empId,getEmployee,isTrash,isActive,del
         <div className="d-flex flex align-items-center gap-3">
           {/* <IoArrowBackCircleOutline className="fs-3"  onClick={() => navigate("/admin/dashboard")} style={{ cursor: "pointer" }} /> */}
           <div className="d-flex flex align-items-center gap-1">
+          {isBack && <IoArrowBackCircleOutline className="fs-3" onClick={() => navigate(-1)} style={{ cursor: "pointer" }} />} 
             <span>{page ? page : "All Employee"}</span>
             {/* <span><LuPcCase /></span> */}
           </div>
@@ -197,18 +201,19 @@ export default function AllEmployee({page,empId,getEmployee,isTrash,isActive,del
         <table className="table table-responsive table-borderless">
           <thead>
             <tr className="bg-primary text-white text-center">
-              <th scope="col" className="text-nowrap"><th scope="col" >S.no</th></th>
+              <th scope="col" className="text-nowrap">SL No</th>
              <th scope="col" className="text-nowrap" ><span>Action</span></th>
-             {/* <th scope="col" className="text-nowrap">Status</th> */}
-             <th scope="col" className="text-nowrap">Emp ID</th>
              <th scope="col" className="text-nowrap">Branch ID</th>
-             {page?.toLowerCase()=="sathi team" && <th scope="col" className="text-nowrap">Type</th>}
               <th scope="col" className="text-nowrap">Date</th>
+             <th scope="col" className="text-nowrap">Team Added by</th>
+              <th scope="col" className="text-nowrap">Employee Name</th>
+             <th scope="col" className="text-nowrap">Emp Id</th>
+              <th scope="col" className="text-nowrap" >Mobile No</th>
+              <th scope="col" className="text-nowrap" >Email Id</th>
               <th scope="col" className="text-nowrap" >Department</th> 
               <th scope="col" className="text-nowrap" >Designation</th> 
-              <th scope="col" className="text-nowrap">Full Name</th>
-              <th scope="col" className="text-nowrap" >Email</th>
-              <th scope="col" className="text-nowrap" >Mobile No</th>
+             {/* <th scope="col" className="text-nowrap">Status</th> */}
+             {/* {page?.toLowerCase()=="sathi team" && <th scope="col" className="text-nowrap">Type</th>} */}
             </tr>
           </thead>
           <tbody>
@@ -223,17 +228,19 @@ export default function AllEmployee({page,empId,getEmployee,isTrash,isActive,del
                 {isTrash && role?.toLowerCase()=="admin" && <span className="bg-danger text-white" style={{ cursor: "pointer",height:30,width:30,borderRadius:30 }} onClick={() => setDeleteEmployee({status:true,id:item?._id,text:`Your want to parmanent delete ${item?.fullName} employee`})}><AiOutlineDelete /></span>}
                 </span></td>
                 
-              <td className="text-nowrap ">{item?.empId}</td> 
-         
-              {page?.toLowerCase()=="sathi team" && <td className="text-nowrap"><span className="badge bg-primary">{item?.referEmpId==empId ? "Added" : "Other"}</span> </td> }
-              {/* <td className="text-nowrap"> <span className={`badge ${item?.isActive ? "bg-primary" : "bg-danger"}`}>{iem?.isActive ? "Active" : "Unactive"}</span> </td> */}
               <td className="text-nowrap">{item?.branchId}</td>
               <td className="text-nowrap">{item?.createdAt && getFormateDMYDate(item?.createdAt)}</td>
+              <td className="text-nowrap">{(item?.referEmpId?.fullName && item?.referEmpId?.type) ? `${item?.referEmpId?.fullName} | ${item?.referEmpId?.type} | ${item?.referEmpId?.designation}` : "-"}</td>
+              <td className="text-nowrap">{item?.fullName}</td>
+              <td className="text-nowrap ">{item?.empId}</td> 
+              <td className="text-nowrap">{item?.mobileNo}</td>
+              <td className="text-nowrap">{item?.email}</td>
               <td className="text-nowrap text-capitalize">{item?.type}</td> 
               <td className="text-nowrap text-capitalize">{item?.designation}</td> 
-              <td className="text-nowrap">{item?.fullName}</td>
-              <td className="text-nowrap">{item?.email}</td>
-              <td className="text-nowrap">{item?.mobileNo}</td>
+              {/* {page?.toLowerCase()=="sathi team" && <td className="text-nowrap"><span className="badge bg-primary">{item?.referEmpId==empId ? "Added" : "Other"}</span> </td> } */}
+         
+              {/* <td className="text-nowrap"> <span className={`badge ${item?.isActive ? "bg-primary" : "bg-danger"}`}>{iem?.isActive ? "Active" : "Unactive"}</span> </td> */}
+              {/* <td className="text-nowrap">{item?.branchId}</td> */}
             </tr>)}
           </tbody>
         </table>

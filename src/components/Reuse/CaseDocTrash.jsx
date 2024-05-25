@@ -26,7 +26,7 @@ export default function CaseDocTrash({getAllDoc,isActive,deleteDoc,isTrash,isDel
   const state = useContext(AppContext)
   const [data, setData] = useState([])
   const navigate = useNavigate()
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(true)
   const [isReset, setReset] = useState(true)
   const [pageItemLimit, setPageItemLimit] = useState(10)
   const [showCalender, setShowCalender] = useState(false)
@@ -102,6 +102,8 @@ export default function CaseDocTrash({getAllDoc,isActive,deleteDoc,isTrash,isDel
     if (searchQuery) {
       let debouncedCall = loash.debounce(function () {
         getViewUnactiveDoc()
+        setPageItemLimit(5)
+        setPgNo(1)
       }, 1000);
       debouncedCall();
       return () => {
@@ -183,7 +185,7 @@ export default function CaseDocTrash({getAllDoc,isActive,deleteDoc,isTrash,isDel
               <table className="table table-responsive rounded-2 shadow table-borderless">
                 <thead>
                   <tr className="bg-primary text-white text-center">
-                    <th scope="col" className="text-nowrap" >S.no</th>
+                    <th scope="col" className="text-nowrap" >SL No</th>
                     <th scope="col" className="text-nowrap">Action</th>
                     <th scope="col" className="text-nowrap" >Date</th>
                     <th scope="col" className="text-nowrap">Type</th>

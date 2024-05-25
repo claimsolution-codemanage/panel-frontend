@@ -36,7 +36,7 @@ import { VscGitPullRequestGoToChanges } from "react-icons/vsc"
 export default function AllAdminClient() {
   const [data, setData] = useState([])
   const navigate = useNavigate()
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(true)
   const [pageItemLimit, setPageItemLimit] = useState(10)
   const [searchQuery, setSearchQuery] = useState("")
   const [isSearch, setIsSearch] = useState(false)
@@ -84,6 +84,8 @@ const [changeBranch,setChangeBranch] = useState({loading:false,branchId:null,sta
       let debouncedCall = loash.debounce(function () {
         getAllClients()
         setIsSearch(false)
+        setPageItemLimit(5)
+        setPgNo(1)
       }, 1000);
       debouncedCall();
       return () => {
@@ -223,20 +225,21 @@ const [changeBranch,setChangeBranch] = useState({loading:false,branchId:null,sta
                 <table className="table table-responsive table-borderless">
                   <thead>
                     <tr className="bg-primary text-white text-center">
-                      <th scope="col" className="text-nowrap">S.no</th>
+                      <th scope="col" className="text-nowrap">SL No</th>
                       {/* <th scope="col" className="text-nowrap">Status</th> */}
                       <th scope="col" className="text-nowrap" ><span>Action</span></th>
-                      <th scope="col" className="text-nowrap">Date</th>
                       <th scope="col" className="text-nowrap">Branch ID</th>
-                      <th scope="col" className="text-nowrap">Full Name</th>
-                      <th scope="col" className="text-nowrap" >consultant Code</th>
-                      <th scope="col" className="text-nowrap" >Email</th>
-                      <th scope="col" className="text-nowrap" >Mobile No.</th>
+                      <th scope="col" className="text-nowrap">Associate With Us</th>
+                      <th scope="col" className="text-nowrap">Cient Name</th>
+                      <th scope="col" className="text-nowrap" >Client Code</th>
+                      <th scope="col" className="text-nowrap" >Mobile No</th>
+                      <th scope="col" className="text-nowrap" >Email Id</th>
+                      <th scope="col" className="text-nowrap" >City</th>
+                      <th scope="col" className="text-nowrap" >State</th>
                       {/* <th scope="col" className="text-nowrap" >DOB</th> */}
                       {/* <th scope="col" className="text-nowrap" >Area Of Operation</th> */}
                       {/* <th scope="col" className="text-nowrap" >Work Association</th> */}
                       {/* <th scope="col" className="text-nowrap" >Gender</th> */}
-                      <th scope="col" className="text-nowrap" >State</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -250,17 +253,18 @@ const [changeBranch,setChangeBranch] = useState({loading:false,branchId:null,sta
                           <span style={{ cursor: "pointer", height: 30, width: 30, borderRadius: 30 }} className="bg-success text-white d-flex align-items-center justify-content-center" onClick={() => setChangeBranch({ ...changeBranch,status:true,_id:item?._id,branchId:item?.branchId})}><VscGitPullRequestGoToChanges /></span>
                           <span style={{ cursor: "pointer", height: 30, width: 30, borderRadius: 30 }} className="bg-danger text-white d-flex align-items-center justify-content-center" onClick={() => setChangeStatus({ show: true, details: { _id: item._id, currentStatus: item?.isActive, name: item?.profile?.consultantName, recovery: false } })}><AiOutlineDelete /></span>
                         </span></td>
-                      <td className="text-nowrap">{item?.profile?.associateWithUs && getFormateDMYDate(item?.profile?.associateWithUs)}</td>
                       <td className="text-nowrap">{item?.branchId}</td>
+                      <td className="text-nowrap">{item?.profile?.associateWithUs && getFormateDMYDate(item?.profile?.associateWithUs)}</td>
                       <td className="text-nowrap">{item?.profile?.consultantName}</td>
                       <td className="text-nowrap">{item?.profile?.consultantCode}</td>
-                      <td className="text-nowrap">{item?.profile?.primaryEmail}</td>
                       <td className="text-nowrap">{item?.profile?.primaryMobileNo}</td>
+                      <td className="text-nowrap">{item?.profile?.primaryEmail}</td>
+                      <td className="text-nowrap">{item?.profile?.city}</td>
+                      <td className="text-nowrap">{item?.profile?.state}</td>
                       {/* <td>{new Date(item?.profile?.dob).toLocaleDateString()}</td> */}
                       {/* <td>{item?.profile?.areaOfOperation}</td> */}
                       {/* <td>{item?.profile?.workAssociation}</td> */}
                       {/* <td className="text-nowrap">{item?.profile?.gender}</td> */}
-                      <td className="text-nowrap">{item?.profile?.state}</td>
                     </tr>)}
                   </tbody>
                 </table>

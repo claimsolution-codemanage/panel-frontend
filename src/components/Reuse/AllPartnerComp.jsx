@@ -40,11 +40,11 @@ import ChangeBranch from "../changeBranch"
 import { VscGitPullRequestGoToChanges } from "react-icons/vsc"
 
 export default function AllPartnerComp({empId,getPartner,editUrl,viewUrl,showType,isShare,partnerShare,
-    isTrash,unactive,isDelete,isDownload,downloadPartner,role,reportUrl,isChangeBranch,handleBrachChange}) {
+    isTrash,unactive,isDelete,isDownload,downloadPartner,role,reportUrl,isChangeBranch,handleBrachChange,isBack}) {
   const state = useContext(AppContext)
   const [data, setData] = useState([])
   const navigate = useNavigate()
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(true)
   const [pageItemLimit, setPageItemLimit] = useState(10)
   const [searchQuery, setSearchQuery] = useState("")
   const [isSearch, setIsSearch] = useState(false)
@@ -150,6 +150,8 @@ export default function AllPartnerComp({empId,getPartner,editUrl,viewUrl,showTyp
       let debouncedCall = loash.debounce(function () {
         getAllPartner()
         setIsSearch(false)
+        setPageItemLimit(5)
+        setPgNo(1)
       }, 1000);
       debouncedCall();
       return () => {
@@ -214,6 +216,7 @@ export default function AllPartnerComp({empId,getPartner,editUrl,viewUrl,showTyp
           <div className="d-flex flex align-items-center gap-3">
             {/* <IoArrowBackCircleOutline className="fs-3"  onClick={() => navigate("/admin/dashboard")} style={{ cursor: "pointer" }} /> */}
             <div className="d-flex flex align-items-center gap-1">
+            {isBack && <IoArrowBackCircleOutline className="fs-3" onClick={() => navigate(-1)} style={{ cursor: "pointer" }} />} 
               <span>All Partner</span>
               {/* <span><LuPcCase /></span> */}
             </div>
@@ -265,20 +268,21 @@ export default function AllPartnerComp({empId,getPartner,editUrl,viewUrl,showTyp
                   <thead>
                     <tr className="bg-primary text-white text-center">
                     {isShare && <th scope="col" className="text-nowrap" ></th>}
-                      <th scope="col" className="text-nowrap"><th scope="col" >S.no</th></th>
+                      <th scope="col" className="text-nowrap"><th scope="col" >SL No</th></th>
                       {/* <th scope="col" className="text-nowrap">Status</th> */}
+                      
                       <th scope="col" className="text-nowrap"><span>Action</span></th>
-                      <th scope="col" className="text-nowrap"><span>Branch Id</span></th>
-                      {showType && <th scope="col" className="text-nowrap"><span>Type</span></th> }
-                      <th scope="col" className="text-nowrap">Date</th>
-                      <th scope="col" className="text-nowrap">Full Name</th>
-                      <th scope="col" className="text-nowrap" >consultant Code</th>
-                      <th scope="col" className="text-nowrap" >Email</th>
+                      <th scope="col" className="text-nowrap">Branch ID</th>
+                      {showType && <th scope="col" className="text-nowrap">Team Added by</th>}
+                      <th scope="col" className="text-nowrap">Partner Name</th>
                       <th scope="col" className="text-nowrap" >Mobile No</th>
-                      <th scope="col" className="text-nowrap" >DOB</th>
-                      <th scope="col" className="text-nowrap" >Area Of Operation</th>
+                      <th scope="col" className="text-nowrap" >Email Id</th>
+                      <th scope="col" className="text-nowrap" >consultant Code</th>
+                      <th scope="col" className="text-nowrap">Assoicate With Us</th>
                       <th scope="col" className="text-nowrap" >Work Association</th>
-                      <th scope="col" className="text-nowrap" >State</th>
+                      <th scope="col" className="text-nowrap" >Area Of Operation</th>
+                      {/* <th scope="col" className="text-nowrap" >DOB</th>
+                      <th scope="col" className="text-nowrap" >State</th> */}
                     </tr>
                   </thead>
                   <tbody>
@@ -299,16 +303,16 @@ export default function AllPartnerComp({empId,getPartner,editUrl,viewUrl,showTyp
 
                         </span></td>
                       <td className="text-nowrap">{item?.branchId}</td>
-                       {showType && <td  className="text-nowrap"><span className="badge bg-primary">{((empId && item?.salesId==empId) || state?.myAppData?.details?._id==item?.salesId) ? "Added" : (( item?.shareEmployee?.includes(empId || state?.myAppData?.details?._id)) ? "Shared" : "Other")}</span> </td>}
-                      <td className="text-nowrap">{item?.profile?.associateWithUs && getFormateDMYDate(item?.profile?.associateWithUs)}</td>
+                      {showType &&  <td className="text-nowrap text-capitalize">{(item?.salesId?.type && item?.salesId?.fullName) ? `${item?.salesId?.fullName} | ${item?.salesId?.type} | ${item?.salesId?.designation}` : "-"}</td>}
                       <td className="text-nowrap">{item?.profile?.consultantName}</td>
-                      <td className="text-nowrap">{item?.profile?.consultantCode}</td>
-                      <td className="text-nowrap">{item?.profile?.primaryEmail}</td>
                       <td className="text-nowrap">{item?.profile?.primaryMobileNo}</td>
-                      <td className="text-nowrap">{new Date(item?.profile?.dob).toLocaleDateString()}</td>
+                      <td className="text-nowrap">{item?.profile?.primaryEmail}</td>
+                      <td className="text-nowrap">{item?.profile?.consultantCode}</td>
+                       <td className="text-nowrap">{item?.profile?.associateWithUs && getFormateDMYDate(item?.profile?.associateWithUs)}</td>
                       <td className="text-nowrap">{item?.profile?.areaOfOperation}</td>
                       <td className="text-nowrap">{item?.profile?.workAssociation}</td>
-                      <td className="text-nowrap">{item?.profile?.state}</td>
+                      {/* <td className="text-nowrap">{item?.profile?.state}</td>
+                      <td className="text-nowrap">{item?.profile?.dob && getFormateDMYDate(item?.profile?.dob)}</td> */}
                     </tr>)}
                   </tbody>
                 </table>

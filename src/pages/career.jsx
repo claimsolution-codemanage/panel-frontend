@@ -20,7 +20,7 @@ export default function Career(){
           }
         } catch (error) {
           if (error && error?.response?.data?.message) {
-            toast.error(error?.response?.data?.message)
+            // toast.error(error?.response?.data?.message)
           } else {
             toast.error("Something went wrong")
           }
@@ -142,9 +142,8 @@ return(
 
             <div className="container-fluid bg-color-1  pt-3 pb-3">
                 <div className="container-px-5 my-3">                    
-                    {loading ? <Loader/> : 
+                    {!loading && data?.length>0 &&
                      <div className="row py-4">
-                        {data?.length>0 ?
                     <div className="col-12 p-0">
                         <div className="color-4 mx-auto">
                             <div className="align-items-center bg-color-1 p-5 rounded-2 row m-0">
@@ -177,15 +176,10 @@ return(
                                     </div>
                                     </div>)} 
                                 </div> 
-                                <p className="text-center my-4"><Link to="#"> Apply Now </Link> 	or     Email us hr@claimsolution.in</p>                      
+                                <p className="text-center my-4">Email us hr@claimsolution.in</p>                      
                             </div>
                         </div>
-                    </div> :
-                    <div className="d-flex flex-column align-items-center justify-content-center">
-                        <p className="fs-4 color-2  fw-bold">Comming Soon ...</p> 
-                        <p>Jobs</p>
                     </div>
-                    }
                 </div>}
                 </div>
             </div>

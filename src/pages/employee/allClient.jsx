@@ -19,13 +19,15 @@ import { Link, useNavigate } from "react-router-dom"
 import {BiLeftArrow} from 'react-icons/bi'
 import {BiRightArrow} from 'react-icons/bi'
 import SetStatusOfProfile from "../../components/Common/setStatusModal"
-import { adminSetClientStatus,employeeAllClient } from "../../apis"
+import { adminSetClientStatus,employeeAllClient,empClientDownload } from "../../apis"
 import Loader from "../../components/Common/loader"
 import loash from 'lodash'
 import { AppContext } from "../../App"
 import { useContext } from "react"
 import DateSelect from "../../components/Common/DateSelect"
 import { CiFilter } from "react-icons/ci";
+import { SiMicrosoftexcel } from "react-icons/si"
+
  
 export default function EmployeeAllClient() {
   const state = useContext(AppContext)
@@ -33,13 +35,14 @@ export default function EmployeeAllClient() {
   const [data, setData] = useState([])
   const navigate = useNavigate()
   const [isSearch,setIsSearch] = useState(false)
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(true)
   const [pageItemLimit, setPageItemLimit] = useState(10)
   const [searchQuery, setSearchQuery] = useState("")
   const [noOfClient, setNoOfClient] = useState(0)
   const [pgNo, setPgNo] = useState(1)
   const [changeStatus, setChangeStatus] = useState({show: false, details: "" })
   const [showCalender, setShowCalender] = useState(false)
+  const [downloading, setDownloading] = useState(false)
   const [dateRange, setDateRange] = useState(
     {
       startDate: new Date("2024/01/01"),
@@ -84,6 +87,8 @@ export default function EmployeeAllClient() {
     if(isSearch){
       let debouncedCall = loash.debounce(function () {
         getAllClient()
+        setPgNo(1)
+        setPageItemLimit(5)
         setIsSearch(false)
     }, 1000);
     debouncedCall();
@@ -108,7 +113,37 @@ export default function EmployeeAllClient() {
   };
 
 
-  // console.log("data", data);
+  const handleDownload = async () => {
+    try {
+      const type = true
+      const startDate = dateRange.startDate ? getFormateDate(dateRange.startDate) : ""
+      const endDate = dateRange.endDate ? getFormateDate(dateRange.endDate) : ""
+      setDownloading(true)
+      const res = await empClientDownload(searchQuery,startDate,endDate)
+      if (res?.status == 200) {
+        const url = window.URL.createObjectURL(new Blob([res.data]));
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'Clients.xlsx'; // Specify the filename here
+        document.body.appendChild(a);
+        a.click();
+        window.URL.revokeObjectURL(url);
+        toast.success("Download the excel")
+        setDownloading(false)
+      } else {
+        setDownloading(false)
+
+      }
+    } catch (error) {
+      console.log("error", error);
+      if (error && error?.response?.data?.message) {
+        toast.error(error?.response?.data?.message)
+      } else {
+        toast.error("Failed to download")
+      }
+      setDownloading(false)
+    }
+  }
 
   return (<>
   {loading ? <Loader/> : 
@@ -134,6 +169,7 @@ export default function EmployeeAllClient() {
           </div>
           <div className="btn btn-primary" onClick={() => setShowCalender(!showCalender)}><CiFilter/></div>
           <div className="btn btn-primary" onClick={() => handleReset()}>Reset</div>
+          <button className={`btn btn-primary fs-5 ${downloading && "disabled"}`} disabled={downloading} onClick={() => !downloading && handleDownload()}>{downloading ? <span className="spinner-border-sm"></span> : <SiMicrosoftexcel />}</button>
         
         
             <div className="">
@@ -152,17 +188,16 @@ export default function EmployeeAllClient() {
         <table className="table table-responsive table-borderless">
           <thead>
             <tr className="bg-primary text-white text-center">
-              <th scope="col" className="text-nowrap">S.no</th>
+              <th scope="col" className="text-nowrap">SL No</th>
               <th scope="col" className="text-nowrap" ><span>Action</span></th>
-              {/* <th scope="col" className="text-nowrap">Status</th> */}
-              <th scope="col" className="text-nowrap">Date</th>
               <th scope="col" className="text-nowrap">Branch ID</th>
-              <th scope="col" className="text-nowrap">Full Name</th>
-              <th scope="col" className="text-nowrap" >consultantCode</th>
-              <th scope="col" className="text-nowrap" >Email</th>
-              <th scope="col" className="text-nowrap" >Mobile No.</th>
-              {/* <th scope="col" className="text-nowrap" >Gender</th> */}
-              <th scope="col" className="text-nowrap" >State</th>
+                      <th scope="col" className="text-nowrap">Associate With Us</th>
+                      <th scope="col" className="text-nowrap">Cient Name</th>
+                      <th scope="col" className="text-nowrap" >Client Code</th>
+                      <th scope="col" className="text-nowrap" >Mobile No</th>
+                      <th scope="col" className="text-nowrap" >Email Id</th>
+                      <th scope="col" className="text-nowrap" >City</th>
+                      <th scope="col" className="text-nowrap" >State</th>
             </tr>
           </thead>
           <tbody>
@@ -174,15 +209,16 @@ export default function EmployeeAllClient() {
               <Link to={`/employee/edit-client/${item?._id}`} style={{ height: 30, width: 30, borderRadius: 30 }} className="cursor-pointer bg-info text-white d-flex align-items-center justify-content-center"><CiEdit className="fs-5 text-dark"/></Link>
               </>}
               </span></td>
-              {/* <td className="text-nowrap"> <span className={`badge ${item?.isActive ? "bg-primary" : "bg-danger"}`}>{item?.isActive ? "Active" : "Unactive"}</span> </td> */}
-              <td className="text-nowrap">{item?.profile?.associateWithUs && getFormateDMYDate(item?.profile?.associateWithUs)}</td>
               <td className="text-nowrap">{item?.branchId}</td>
+              <td className="text-nowrap">{item?.profile?.associateWithUs && getFormateDMYDate(item?.profile?.associateWithUs)}</td>
               <td className="text-nowrap">{item?.profile?.consultantName}</td>
               <td className="text-nowrap">{item?.profile?.consultantCode}</td>
-              <td className="text-nowrap">{item?.profile?.primaryEmail}</td>
               <td className="text-nowrap">{item?.profile?.primaryMobileNo}</td>
-              {/* <td className="text-nowrap">{item?.profile?.gender}</td> */}
+              <td className="text-nowrap">{item?.profile?.primaryEmail}</td>
+              <td className="text-nowrap">{item?.profile?.city}</td>
               <td className="text-nowrap">{item?.profile?.state}</td>
+              {/* <td className="text-nowrap">{item?.profile?.gender}</td> */}
+              {/* <td className="text-nowrap"> <span className={`badge ${item?.isActive ? "bg-primary" : "bg-danger"}`}>{item?.isActive ? "Active" : "Unactive"}</span> </td> */}
               
             </tr>)}
           </tbody>

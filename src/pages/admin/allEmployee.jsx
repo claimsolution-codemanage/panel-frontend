@@ -1,9 +1,11 @@
-import { adminSetEmployeeStatus,adminGetAllEmployee,adminDeleteEmployeeById,adminUpdateEmployeeById } from "../../apis"
+import { adminSetEmployeeStatus,adminGetAllEmployee,adminDeleteEmployeeById,adminUpdateEmployeeById,adminDownloadAllEmp } from "../../apis"
 import AllEmployee from "../../components/Reuse/AllEmployee";
 
 export default function AllAdminEmployee() {
   return (<>
  <AllEmployee
+ page={"All Employee"}
+ isBack={false}
  role={"admin"}
  caseUrl={"/admin/view-employee-case-report/"}
  partnerUrl={"/admin/view-employee-partner-report/"}
@@ -11,6 +13,8 @@ export default function AllAdminEmployee() {
   isedit={true}
   getEmployee={adminGetAllEmployee}
   isTrash={false}
+  isDownload={true}
+  getDownload={adminDownloadAllEmp}
   isActive={adminSetEmployeeStatus}
   deleteEmployeeId={adminDeleteEmployeeById}
   updateEmployee={adminUpdateEmployeeById}

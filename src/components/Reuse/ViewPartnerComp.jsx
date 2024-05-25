@@ -91,101 +91,101 @@ export default function ViewPartnerComp({viewPartner,id,role,editUrl,isEdit}) {
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div className="row mt-5">
-                                                <div className="mb-2 d-flex align-items-center gap-3 col-12 col-md-4">
+                                            <div className="row row-cols-12 row-cols-md-3 mt-5">
+                                                <div className="mb-2 d-flex align-items-center gap-3">
                                                     <h6 className="fw-bold">Name</h6>
                                                     <p className=" h6 text-capitalize">{data[0]?.profile?.consultantName}</p>
                                                 </div>
-                                                <div className="mb-2 d-flex align-items-center gap-3 col-12 col-md-4">
-
+                                                <div className="mb-2 d-flex align-items-center gap-3">
                                                     <h6 className="fw-bold">Consultant Code</h6>
                                                     <p className=" h6 text-capitalize">{data[0]?.profile?.consultantCode}</p>
                                                 </div>
-                                                <div className="mb-2 d-flex align-items-center gap-3 col-12 col-md-4">
+                                                <div className="mb-2 d-flex align-items-center gap-3">
                                                     <h6 className="fw-bold">Associate With Us</h6>
                                                     <p className=" h6 text-capitalize">{data[0]?.profile?.associateWithUs && new Date(data[0]?.profile?.associateWithUs).toLocaleDateString()}</p>
                                                 </div>
-                                            </div>
-
-                                            <div className="row">
-                                                <div className="mb-1 d-flex align-items-center gap-3 col-12 col-md-4">
+                                                <div className="mb-1 d-flex align-items-center gap-3">
                                                     <h6 className="fw-bold">Primary Email</h6>
                                                     <p className="h6 ">{data[0]?.profile?.primaryEmail}</p>
                                                 </div>
-                                                <div className="mb-1 d-flex align-items-center gap-3 col-12 col-md-4">
+                                                <div className="mb-1 d-flex align-items-center gap-3">
 
                                                     <h6 className="fw-bold">Alternative Email</h6>
                                                     <p className=" h6 ">{data[0]?.profile?.alternateEmail}</p>
                                                 </div>
-                                                <div className="mb-1 d-flex align-items-center gap-3 col-12 col-md-4">
+                                                <div className="mb-1 d-flex align-items-center gap-3">
                                                     <h6 className="fw-bold">Primary Mobile No</h6>
                                                     <p className=" h6 ">{data[0]?.profile?.primaryMobileNo}</p>
                                                 </div>
-                                            </div>
-                                            <div className="row">
-                                                <div className="mb-1 d-flex align-items-center gap-3 col-12 col-md-4">
+                                                <div className="mb-1 d-flex align-items-center gap-3">
                                                     <h6 className="fw-bold">Alternative Mobile No</h6>
                                                     <p className=" h6 text-capitalize">{data[0]?.profile?.alternateMobileNo}</p>
                                                 </div>
-                                                <div className="mb-2 d-flex align-items-center gap-3 col-12 col-md-4">
+                                                <div className="mb-2 d-flex align-items-center gap-3">
                                                     <h6 className="fw-bold">Whatsapp No</h6>
                                                     <p className=" h6 text-capitalize">{data[0]?.profile?.whatsupNo}</p>
                                                 </div>
-                                                <div className="mb-2 d-flex align-items-center gap-3 col-12 col-md-4">
+                                                <div className="mb-2 d-flex align-items-center gap-3">
                                                     <h6 className="fw-bold">DOB</h6>
                                                     <p className=" h6 text-capitalize">{data[0]?.profile?.dob && new Date(data[0]?.profile?.dob).toLocaleDateString()}</p>
                                                 </div>
-                                            </div>
-                                            <div className="row">
-                                                <div className="mb-2 d-flex align-items-center gap-3 col-12 col-md-4">
-
-                                                    <h6 className="fw-bold">PAN No</h6>
-                                                    <p className=" h6 text-capitalize">{data[0]?.profile?.panNo}</p>
-                                                </div>
-                                                <div className="mb-1 d-flex align-items-center gap-3 col-12 col-md-4">
+                                                <div className="mb-1 d-flex align-items-center gap-3">
                                                     <h6 className="fw-bold">Aadhaar No</h6>
                                                     <p className=" h6 text-capitalize">{data[0]?.profile?.aadhaarNo}</p>
                                                 </div>
-                                                <div className="mb-1 d-flex align-items-center gap-3 col-12 col-md-4">
+                                                <div className="mb-1 d-flex align-items-center gap-3">
                                                     <h6 className="fw-bold">Gender</h6>
                                                     <p className=" h6 ">{data[0]?.profile?.gender}</p>
                                                 </div>
+                                            <div className="mb-2 d-flex align-items-center gap-3">
+                                                <h6 className="fw-bold">Area Of Operation</h6>
+                                                <p className=" h6 text-capitalize">{data[0]?.profile?.areaOfOperation}</p>
                                             </div>
-                                            <div className="row">
-                                                <div className="mb-2 d-flex align-items-center gap-3 col-12 col-md-4">
-                                                    <h6 className="fw-bold">Area Of Operation</h6>
-                                                    <p className=" h6 text-capitalize">{data[0]?.profile?.areaOfOperation}</p>
-                                                </div>
-                                                <div className="mb-2 d-flex align-items-center gap-3 col-12 col-md-4">
-                                                    <h6 className="fw-bold">Work Association</h6>
-                                                    <p className=" h6 text-capitalize">{data[0]?.profile?.workAssociation}</p>
-                                                </div>
+                                            <div className="mb-2 d-flex align-items-center gap-3">
+                                                <h6 className="fw-bold">Work Association</h6>
+                                                <p className=" h6 text-capitalize">{data[0]?.profile?.workAssociation}</p>
                                             </div>
-
-                                            <div className="row">
-                                                <div className="mb-2 d-flex align-items-center gap-3 col-12 col-md-4">
+                                                <div className="mb-2 d-flex align-items-center gap-3">
                                                     <h6 className="fw-bold">District</h6>
                                                     <p className=" h6 text-capitalize">{data[0]?.profile?.district}</p>
                                                 </div>
-                                                <div className="mb-2 d-flex align-items-center gap-3 col-12 col-md-4">
+                                                <div className="mb-2 d-flex align-items-center gap-3">
                                                     <h6 className="fw-bold">City</h6>
                                                     <p className=" h6 text-capitalize">{data[0]?.profile?.city}</p>
                                                 </div>
-                                                <div className="mb-2 d-flex align-items-center gap-3 col-12 col-md-4">
+                                                <div className="mb-2 d-flex align-items-center gap-3">
                                                     <h6 className="fw-bold">State</h6>
                                                     <p className=" h6 text-capitalize">{data[0]?.profile?.state}</p>
                                                 </div>
-                                            </div>
-
-                                            <div className="row">
-                                                <div className="mb-2 d-flex align-items-center gap-3 col-12 col-md-4">
+                                                <div className="mb-2 d-flex align-items-center gap-3">
                                                     <h6 className="fw-bold">Pincode</h6>
                                                     <p className=" h6 text-capitalize">{data[0]?.profile?.pinCode}</p>
                                                 </div>
-                                                {role?.toLowerCase()!=="partner" && <div className="mb-2 d-flex text-break align-items-center gap-3 col-12 col-md-4">
+                                                {role?.toLowerCase()!=="partner" && <div className="mb-2 d-flex text-break align-items-center gap-3">
                                                     <h6 className="fw-bold">Profile Tag</h6>
                                                     <p className=" h6 text-capitalize">{data[0]?.profileTag}</p>
                                                 </div> }
+
+                                            </div>
+
+                                            <div className="row">
+                                            </div>
+                                            <div className="row">
+                                            </div>
+                                            <div className="row">
+                                                {/* <div className="mb-2 d-flex align-items-center gap-3">
+
+                                                    <h6 className="fw-bold">PAN No</h6>
+                                                    <p className=" h6 text-capitalize">{data[0]?.profile?.panNo}</p>
+                                                </div> */}
+                                            </div>
+                                            <div className="row">
+                                            </div>
+
+                                            <div className="row">
+                                            </div>
+
+                                            <div className="row">
                                             </div>
                                         </div>
                                         <div className="bg-color-1 my-5 p-3 p-md-5 rounded-2 shadow">

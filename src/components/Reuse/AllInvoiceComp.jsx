@@ -31,7 +31,7 @@ export default function AllInvoiceComp({viewAllInvoice,payInvoice,viewInvoiceUrl
   const [tranactionLoading, setTransactionLoading] = useState({ status: false, id: null })
   const empType = state?.myAppData?.details?.empType
   const navigate = useNavigate()
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(true)
   const [downloadLoading, setDownloadLoading] = useState({ status: false, data: [], _id: [] })
   const [statusType, setStatusType] = useState("")
   const [pageItemLimit, setPageItemLimit] = useState(10)
@@ -129,6 +129,8 @@ export default function AllInvoiceComp({viewAllInvoice,payInvoice,viewInvoiceUrl
     if (searchQuery) {
       let debouncedCall = loash.debounce(function () {
         getViewAllInvoice()
+        setPageItemLimit(5)
+        setPgNo(1)
       }, 1000);
       debouncedCall();
       return () => {
@@ -238,7 +240,7 @@ export default function AllInvoiceComp({viewAllInvoice,payInvoice,viewInvoiceUrl
               <table className="table table-responsive rounded-2 shadow table-borderless">
                 <thead>
                   <tr className="bg-primary text-white text-center">
-                    <th scope="col" className="text-nowrap" >S.no</th>
+                    <th scope="col" className="text-nowrap" >SL No</th>
                     <th scope="col" className="text-nowrap">Action</th>
                     <th scope="col" className="text-nowrap">Type</th>
                     <th scope="col" className="text-nowrap" >Date</th>

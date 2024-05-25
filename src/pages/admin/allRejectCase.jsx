@@ -3,7 +3,7 @@ import { adminChangeCaseStatus, adminShareCaseToEmployee, adminAllCaseDownload,a
 import { adminSetCaseIsActive } from "../../apis"
 import ViewAllCaseComp from "../../components/Reuse/ViewAllCaseComp"
 
-export default function AllAdminCase() {
+export default function AdminRejectCase() {
   return (<>
     <ViewAllCaseComp
     isBack={false}
@@ -14,16 +14,16 @@ export default function AllAdminCase() {
       setCaseStatus={adminSetCaseIsActive}
       viewUrl={"/admin/view case/"}
       editUrl={"/admin/edit%20case/"}
-      isEdit={true}
+      isEdit={false}
       isChangeStatus={true}
       isRemoveCase={true}
       isAddRefence={true}
       isDownload={true}
       isShare={true}
-      isReject={false}
+      isReject={true}
       getNormalEmp={adminGetNormalEmployee}
       caseShare={adminShareCaseToEmployee}
-      createInvUrl={"/admin/create-invoice/"}
+      // createInvUrl={"/admin/create-invoice/"}
     />
   </>)
 }

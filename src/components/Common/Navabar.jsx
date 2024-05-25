@@ -4,6 +4,10 @@ export default function Navbar2(){
     function languageTranslator(){
         new google.translate.TranslateElement({pageLanguage: 'en'}, 'google_translate_element');
     }
+
+    const handleMobileMenu = ()=>{
+        document.getElementById("mobileBtn")?.click()
+    }
     return(
         <>
             <div className="bg-color-4 container-fluid d-md-block d-none py-2">
@@ -23,12 +27,12 @@ export default function Navbar2(){
                     <Link to="/" className="nav__logo">
                         <img src="/Images/icons/company-logo.png" height={70} alt="Company logo" loading="lazy" />
                     </Link>
-                    <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <button className="navbar-toggler" id="mobileBtn" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                     <span className="navbar-toggler-icon"></span>
                     </button>
                     <div className="collapse navbar-collapse flex-grow-0 " id="navbarSupportedContent">
                         <ul className="navbar-nav d-flex gap-2 me-auto mb-2 mb-lg-0">
-                            <li className="nav-item">  
+                            <li className="nav-item" onClick={handleMobileMenu}>  
                                 <Link to="/" className="nav__link  fw-bold" >
                                     Home
                                 </Link>
@@ -39,31 +43,31 @@ export default function Navbar2(){
                                Services
                             </a>
                                 <ul className="dropdown-menu">
-                                    <li>
-                                        <Link to="/Health-insurance-claim-solution" className="dropdown__link bg-color-1">
+                                    <li onClick={handleMobileMenu}>
+                                        <Link to="/Health-insurance-claim-solution" className="dropdown__link bg-color-1" >
                                             Health insurance claim solution
                                         </Link>
                                     </li>
-                                    <li>                   
-                                        <Link to="/Motor-Insurance-Claim-Solution" className="dropdown__link bg-color-1">
+                                    <li onClick={handleMobileMenu}>                   
+                                        <Link to="/Motor-Insurance-Claim-Solution" className="dropdown__link bg-color-1" >
                                             Motor insurance claim solution
                                         </Link>
                                     </li>
                                     {/* <li><hr className="dropdown-divider" /></li> */}
-                                    <li>
-                                        <Link to="/Life-Insurance-Claim-Solution" className="dropdown__link bg-color-1">
+                                    <li onClick={handleMobileMenu}>
+                                        <Link to="/Life-Insurance-Claim-Solution" className="dropdown__link bg-color-1" >
                                         Life Insurance Claim Solution
                                         </Link>
                                     </li>
-                                    <li>
+                                    <li onClick={handleMobileMenu}>
                                         <Link to="/General-Insurance-Claim-Solution" className="dropdown__link bg-color-1">
                                         General Insurance Claim Solution
                                         </Link>
                                     </li>
                                 </ul>
                             </li>
-                            <li className="nav-item">  
-                                <Link to="/about-us" className="nav__link  fw-bold" >
+                            <li className="nav-item" onClick={handleMobileMenu}>  
+                                <Link to="/about-us" className="nav__link  fw-bold">
                                     About Us
                                 </Link>
                             </li>
@@ -85,22 +89,22 @@ export default function Navbar2(){
                                     </li>
                                 </ul>
                             </li> */}
-                            <li className="nav-item">
-                                <Link to="/partnership" className=" fw-bold nav__link">
+                            <li className="nav-item" onClick={handleMobileMenu}>
+                                <Link to="/partnership" className=" fw-bold nav__link" >
                                 PartnerShip
                                 </Link>
                             </li>
-                            <li className="nav-item">
-                                <Link to="/blogs" target='_blank'  className=" fw-bold nav__link">
+                            <li className="nav-item" onClick={handleMobileMenu}>
+                                <Link to="/blogs" target='_blank'  className=" fw-bold nav__link" >
                                 Blogs
                                 </Link>
                             </li>
-                            <li className="nav-item">
-                                <Link to="/career" className=" fw-bold nav__link">
+                            <li className="nav-item" onClick={handleMobileMenu}>
+                                <Link to="/career" className=" fw-bold nav__link" >
                                 Career
                                 </Link>
                             </li>
-                            <li className="nav-item">
+                            <li className="nav-item" onClick={handleMobileMenu}>
                                 <Link to="/contact-us" className=" fw-bold nav__link">
                                 Contact Us
                                 </Link>
@@ -110,7 +114,7 @@ export default function Navbar2(){
                                 Employee
                                 </Link>
                             </li> */}
-                            <Link to="/client/signin" target='_blank'>
+                            <Link to="/client/signin" target='_blank' onClick={handleMobileMenu}>
                                 <li className="nav-item btn bg-color-4 text-white d-flex gap-2">
                                     <i className='bi bi-box-arrow-in-right'></i>
                                     Login

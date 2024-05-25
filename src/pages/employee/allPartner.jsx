@@ -11,6 +11,7 @@ export default function EmployeeAllPartner() {
   const empType  = state?.myAppData?.details?.empType
   return (<>
       <AllPartnerComp 
+      isBack={param?._id ? true :false}
       role={"employee"}
       empId={param?._id ? param?._id :false} 
       isShare={false}
@@ -21,7 +22,7 @@ export default function EmployeeAllPartner() {
       reportUrl={'/employee/partner-report/'}
       viewUrl={'/employee/partner details/'}
       isDownload={true}
-      showType={empType?.toLowerCase()!="operation" &&  empType?.toLowerCase()!="finance"}
+      showType={true}
       // showType={true}
       downloadPartner={empDownloadAllPartner}
       partnerShare={()=>{}}

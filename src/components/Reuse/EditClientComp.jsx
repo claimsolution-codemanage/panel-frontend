@@ -24,7 +24,7 @@ export default function EditClient({ id, getClient, updateClient,uploadImg ,role
     const state = useContext(AppContext)
     console.log("state",state?.myAppData?.details?.role);
     const [saving, setSaving] = useState(false)
-    const [loading, setLoading] = useState(false)
+    const [loading, setLoading] = useState(true)
     const navigate = useNavigate()
     const [uploadPhoto, setUploadPhoto] = useState({ status: 0,type:"", loading: false, message: "" })
     const imgRef = useRef()
@@ -302,7 +302,7 @@ export default function EditClient({ id, getClient, updateClient,uploadImg ,role
                                                     </div>
                                                     <div className="mb-3 ">
                                                         <label htmlFor="pinCode" className={`form-label ${UserProfileFormik?.touched?.pinCode && UserProfileFormik?.errors?.pinCode && "text-danger"}`}>Pincode</label>
-                                                        <input type="text" name="pinCode" value={UserProfileFormik?.values?.pinCode} onChange={(e) => checkNumber(e) && UserProfileFormik.handleChange(e)} className={`form-control ${UserProfileFormik?.touched?.pinCode && UserProfileFormik?.errors?.pinCode && "border-danger"} `} />
+                                                        <input type="text" name="pinCode" value={UserProfileFormik?.values?.pinCode} onChange={(e) => checkPhoneNo(e?.target?.value,6) && UserProfileFormik.handleChange(e)} className={`form-control ${UserProfileFormik?.touched?.pinCode && UserProfileFormik?.errors?.pinCode && "border-danger"} `} />
                                                         {UserProfileFormik?.touched?.pinCode && UserProfileFormik?.errors?.pinCode ? (
                                                             <span className="text-danger">{UserProfileFormik?.errors?.pinCode}</span>
                                                         ) : null}

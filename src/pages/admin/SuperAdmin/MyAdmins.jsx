@@ -29,7 +29,7 @@ export default function MyAdmins() {
     const state = useContext(AppContext)
 
     const navigate = useNavigate()
-    const [loading, setLoading] = useState(false)
+    const [loading, setLoading] = useState(true)
     const [pageItemLimit, setPageItemLimit] = useState(10)
     const [searchQuery, setSearchQuery] = useState("")
     const [noOfAdmin, setNoOfAdmin] = useState(0)
@@ -171,7 +171,7 @@ export default function MyAdmins() {
           <table className="table table-responsive table-borderless">
             <thead>
               <tr className="bg-primary text-white text-center">
-                <th scope="col" className="text-nowrap"><th scope="col" >S.no</th></th>
+                <th scope="col" className="text-nowrap"><th scope="col" >SL No</th></th>
                 <th scope="col" className="text-nowrap">Date</th>
                 <th scope="col" className="text-nowrap">Full Name</th>
                 <th scope="col" className="text-nowrap" >Email</th>

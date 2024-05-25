@@ -234,16 +234,16 @@ export const adminCreateNewEmployee = (data) => {
   return axios.post(`${API_BASE}/api/admin/createEmployeeAccount`, data)
 }
 
-export const allAdminCase = (pageItemLimit = "", pageNo = "", searchQuery = "", statusType = "", startDate = "", endDate = "", type) => {
+export const allAdminCase = (pageItemLimit = "", pageNo = "", searchQuery = "", statusType = "", startDate = "", endDate = "", type,empId,id,isReject) => {
   setheader()
-  return axios.get(`${API_BASE}/api/admin/viewAllCase?limit=${pageItemLimit}&pageNo=${pageNo}&search=${searchQuery}&status=${statusType}&startDate=${startDate}&endDate=${endDate}&type=${type}`)
+  return axios.get(`${API_BASE}/api/admin/viewAllCase?limit=${pageItemLimit}&pageNo=${pageNo}&search=${searchQuery}&status=${statusType}&startDate=${startDate}&endDate=${endDate}&type=${type}&isReject=${isReject}`)
 }
 
-export const adminAllCaseDownload = (searchQuery = "", statusType = "", startDate = "", endDate = "", type) => {
+export const adminAllCaseDownload = (searchQuery = "", statusType = "", startDate = "", endDate = "", type,empId,id,isReject) => {
   setheader()
   return axios({
     method: 'GET',
-    url: `${API_BASE}/api/admin/download/allcase?search=${searchQuery}&status=${statusType}&startDate=${startDate}&endDate=${endDate}&type=${type}`,
+    url: `${API_BASE}/api/admin/download/allcase?search=${searchQuery}&status=${statusType}&startDate=${startDate}&endDate=${endDate}&type=${type}&isReject=${isReject}`,
     responseType: 'blob',
   })
 }
@@ -420,6 +420,16 @@ export const adminGetEmpProfile = (_id) => {
 export const adminGetAllEmployee = (pageItemLimit = "", pageNo = "", searchQuery = "",type=true,empType) => {
   setheader()
   return axios.get(`${API_BASE}/api/admin/adminViewAllEmployee?limit=${pageItemLimit}&pageNo=${pageNo}&search=${searchQuery}&type=${type}&empType=${empType}`)
+}
+
+
+export const adminDownloadAllEmp = (pageItemLimit = "", pageNo = "", searchQuery = "",type=true,empType) => {
+  setheader()
+  return axios({
+    method: 'GET',
+    url: `${API_BASE}/api/admin/download/allEmployee?limit=${pageItemLimit}&pageNo=${pageNo}&search=${searchQuery}&type=${type}&empType=${empType}`,
+    responseType: 'blob',
+  })
 }
 
 export const adminGetNormalEmployee = (pageItemLimit = "", pageNo = "", searchQuery = "") => {
@@ -856,6 +866,15 @@ export const employeeUpdatePartnerBankingDetails = (_id, data) => {
   return axios.put(`${API_BASE}/api/employee/updatePartnerBankingDetails?_id=${_id}`, data)
 }
 
+export const empClientDownload = (searchQuery = "",startDate,endDate) => {
+  setheader()
+  return axios({
+    method: 'GET',
+    url: `${API_BASE}/api/employee/download/allClient?search=${searchQuery}&startDate=${startDate}&endDate=${endDate}`,
+    responseType: 'blob',
+  })
+}
+
 
 //  for sales-emp
 export const salesEmployeeAddPartner = (data) => {
@@ -1011,4 +1030,13 @@ export const empOptGetNormalEmployee = (pageItemLimit = "", pageNo = "", searchQ
 export const empOptShareSaleEmployee = (data) => {
   setheader()
   return axios.put(`${API_BASE}/api/employee/operation/shareCase`, data)
+}
+
+export const empDownloadAllEmp = (pageItemLimit = "", pageNo = "", searchQuery = "",type=true) => {
+  setheader()
+  return axios({
+    method: 'GET',
+    url: `${API_BASE}/api/employee/download/allEmployee?limit=${pageItemLimit}&pageNo=${pageNo}&search=${searchQuery}&type=${type}`,
+    responseType: 'blob',
+  })
 }

@@ -3,7 +3,6 @@ import { IoArrowBackCircleOutline } from 'react-icons/io5'
 import { useEffect, useState } from "react";
 import Loader from "./loader";
 import { API_BASE_IMG } from '../../apis/upload';
-import DocViewer from "react-doc-viewer";
 export default function ViewDocs({hide,details,type}){
     const [loading,setLoading] = useState({status:true,height:"0%",width:"0%"})
     const [pdfUrl, setPdfUrl] = useState('');

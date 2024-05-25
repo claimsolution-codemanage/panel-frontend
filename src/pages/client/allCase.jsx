@@ -5,6 +5,7 @@ import ViewAllCaseComp from "../../components/Reuse/ViewAllCaseComp"
 export default function ClientViewAllCase() {
   return (<>
   <ViewAllCaseComp 
+  isBack={false}
   getCases={clientViewAllCase} 
   downloadCase={()=>{}} 
   role={"client"} 

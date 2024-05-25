@@ -1,8 +1,8 @@
 import { RxDashboard } from 'react-icons/rx'
-import { BsFillPersonLinesFill } from 'react-icons/bs'
-import { RiBankLine } from 'react-icons/ri'
-import { SiReaddotcv } from 'react-icons/si'
-import { MdOutlineLibraryAdd } from 'react-icons/md'
+import { BsFillPersonLinesFill, BsPostcard } from 'react-icons/bs'
+import { RiAdminFill, RiBankLine, RiTeamLine } from 'react-icons/ri'
+import { SiMicrosoftteams, SiReaddotcv } from 'react-icons/si'
+import { MdOutlineCancelPresentation, MdOutlineLibraryAdd, MdOutlinePostAdd } from 'react-icons/md'
 import { IoLogOutOutline,IoSettingsOutline } from 'react-icons/io5'
 import { Link } from 'react-router-dom'
 import { AppContext } from '../../App'
@@ -16,10 +16,11 @@ import { useNavigate } from 'react-router-dom'
 import { NavItems } from './NavItems'
 import { LuPcCase } from 'react-icons/lu'
 import {IoIosArrowDown, IoIosArrowForward} from 'react-icons/io'
-import {FaRegTrashCan,FaUserPlus} from 'react-icons/fa6'
+import {FaFileInvoice, FaFileInvoiceDollar, FaRegTrashCan,FaUserPlus} from 'react-icons/fa6'
 import {FaTrashAlt,FaUserFriends,FaUserTag,FaUsers} from 'react-icons/fa'
 import {GrCompliance} from 'react-icons/gr'
-import { CgNotes } from "react-icons/cg";
+import { CgNotes, CgProfile } from "react-icons/cg";
+import { TbFileInvoice, } from 'react-icons/tb'
 
 
 export default function PrivateNavbar() {
@@ -112,7 +113,7 @@ export default function PrivateNavbar() {
             path={'/client/all-invoices'}
             name={"My Invoice"}
             disable={false}
-            icon={<MdOutlineLibraryAdd />}
+            icon={<FaFileInvoice />}
             />
             <NavItems 
             active={(location.pathname== "/client/view%20service%20agreement" )}
@@ -128,7 +129,7 @@ export default function PrivateNavbar() {
                     <RxDashboard />
                     <div className=''>Dashboard</div>
                 </Link>
-                <Link to="/admin/all case" className={`d-flex align-items-center mx-2 px-2 py-2 gap-3 text-white   ${location.pathname.includes("case") && !location.pathname.includes("trash") && "active_item"}`}  >
+                <Link to="/admin/all case" className={`d-flex align-items-center mx-2 px-2 py-2 gap-3 text-white   ${location.pathname.includes("case") && !location.pathname.includes("/admin/reject-cases") && !location.pathname.includes("trash") && "active_item"}`}  >
                 <SiReaddotcv />
                     <div className=''>All Case</div>
                 </Link>
@@ -145,7 +146,7 @@ export default function PrivateNavbar() {
                     <div className=''>All Client</div>
                 </Link>
                 <Link to="/admin/all-invoices" className={`d-flex align-items-center mx-2 px-2 py-2 gap-3 text-white   ${location.pathname.includes("invoice") &&  "active_item"}`}  >
-                    <FaUserTag />
+                    <FaFileInvoice />
                     <div className=''>All Invoice</div>
                 </Link>
                 <Link to="/admin/all employee" className={`d-flex align-items-center mx-2 px-2 py-2 gap-3 text-white   ${(location.pathname=="/admin/all%20employee" || location.pathname.includes("/admin/employee/profile")) && "active_item"}`}  >
@@ -157,13 +158,17 @@ export default function PrivateNavbar() {
                     <div className=''>Add Employee</div>
                 </Link>
                 {state?.myAppData?.details?.superAdmin && <Link to="/admin/my-admins" className={`d-flex align-items-center mx-2 px-2 py-2 gap-3 text-white   ${location.pathname == "/admin/my-admins" && "active_item"}`}  >
-                    <FaUserPlus />
+                    <RiAdminFill />
                     <div className=''>My Admins</div>
                 </Link>}
 
                 <Link to="/admin/all job" className={`d-flex align-items-center mx-2 px-2 py-2 gap-3 text-white   ${location.pathname == "/admin/all%20job" && "active_item"}`}  >
-                    <RxDashboard />
+                    <MdOutlinePostAdd />
                     <div className=''>My Jobs</div>
+                </Link>
+                <Link to="/admin/reject-cases" className={`d-flex align-items-center mx-2 px-2 py-2 gap-3 text-white   ${location.pathname.includes("/admin/reject-cases") && "active_item"}`}  >
+                    <MdOutlineCancelPresentation />
+                    <div className=''>Reject Case</div>
                 </Link>
                 <Link to="/admin/account setting" className={`d-flex align-items-center mx-2 px-2 py-2 gap-3 text-white   ${location.pathname == "/admin/account%20setting" && "active_item"}`}  >
                     <IoSettingsOutline />
@@ -212,7 +217,7 @@ export default function PrivateNavbar() {
             <div className=''>Dashboard</div>
             </Link>
             <Link to="/employee/profile" className={`d-flex align-items-center mx-2 px-2 py-2 gap-3 text-white   ${location.pathname.includes("profile") && "active_item"}`}  >
-            <RxDashboard />
+            <CgProfile />
             <div className=''>Profile</div>
             </Link>
             {(empType?.toLowerCase() =="operation") && <>
@@ -250,18 +255,18 @@ export default function PrivateNavbar() {
             </Link>
             {(empType?.toLowerCase() =="sales" || empType?.toLowerCase() =="branch") && <>
             <Link to="/employee/add-sathi-team" className={`d-flex align-items-center mx-2 px-2 py-2 gap-3 text-white   ${location.pathname.includes("/employee/add-sathi-team") && "active_item"}`}  >
-             <RxDashboard />
+             <RiTeamLine />
              <div className=''>Add Sathi Team</div>
          </Link>
             <Link to="/employee/branch-team" className={`d-flex align-items-center mx-2 px-2 py-2 gap-3 text-white   ${(location.pathname.includes("branch-team") || location?.pathname?.includes("view-sathi")) && "active_item"}`}  >
-             <RxDashboard />
+             <SiMicrosoftteams />
              <div className=''>Branch Team</div>
          </Link>
             </>  }
             {/* for finance employee */}
             {empType?.toLowerCase() =="finance".toLowerCase() && <>
                 <Link to="/employee/all-invoices" className={`d-flex align-items-center mx-2 px-2 py-2 gap-3 text-white   ${(location.pathname.includes("/employee/all-invoices") || location.pathname.includes("/employee/view-invoice") ) && "active_item"}`}  >
-                    <RxDashboard />
+                    <FaFileInvoice />
                     <div className=''>All Invoices</div>
                 </Link>
                 {/* <div  className={`cursor-pointer`}  >

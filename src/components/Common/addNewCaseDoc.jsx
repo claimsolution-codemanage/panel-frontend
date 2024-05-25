@@ -37,6 +37,7 @@ export default function AddNewCaseDocsModal({uploadingDocs,setUploadingDocs, han
             docFormat: "",
             docURL: ""
         })
+        setOtherDocName("")
         setUploadingDocs(false)
     }
 

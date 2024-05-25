@@ -8,7 +8,7 @@ import { DateRangePicker } from 'react-date-range';
 import { DateRange } from 'react-date-range';
 import 'react-date-range/dist/styles.css'; // main style file
 import 'react-date-range/dist/theme/default.css'; // theme css file
-import { getFormateDate } from "../../utils/helperFunction"
+import { getFormateDMYDate, getFormateDate } from "../../utils/helperFunction"
 import ReactPaginate from 'react-paginate';
 import { CiEdit } from 'react-icons/ci'
 import { FaCircleArrowDown } from 'react-icons/fa6'
@@ -41,7 +41,7 @@ export default function AdminSaleEmpPartnerReport() {
   const state = useContext(AppContext)
   const [data, setData] = useState([])
   const navigate = useNavigate()
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(true)
   const [pageItemLimit, setPageItemLimit] = useState(10)
   const [searchQuery, setSearchQuery] = useState("")
   const [isSearch, setIsSearch] = useState(false)
@@ -228,6 +228,7 @@ export default function AdminSaleEmpPartnerReport() {
           <div className="d-flex flex align-items-center gap-3">
             {/* <IoArrowBackCircleOutline className="fs-3"  onClick={() => navigate("/admin/dashboard")} style={{ cursor: "pointer" }} /> */}
             <div className="d-flex flex align-items-center gap-1">
+            { <IoArrowBackCircleOutline className="fs-3" onClick={() => navigate(-1)} style={{ cursor: "pointer" }} />} 
               <span>All Partner</span>
               {/* <span><LuPcCase /></span> */}
             </div>
@@ -278,19 +279,20 @@ export default function AdminSaleEmpPartnerReport() {
                   <thead>
                     <tr className="bg-primary text-white text-center">
                     <th scope="col" className="text-nowrap" ></th>
-                      <th scope="col" className="text-nowrap"><th scope="col" >S.no</th></th>
+                      <th scope="col" className="text-nowrap"><th scope="col" >SL No</th></th>
                       {/* <th scope="col" className="text-nowrap">Status</th> */}
                       <th scope="col" className="text-nowrap"><span>Action</span></th>
-                      <th scope="col" className="text-nowrap">Type</th>
-                      <th scope="col" className="text-nowrap">Date</th>
-                      <th scope="col" className="text-nowrap">Full Name</th>
-                      <th scope="col" className="text-nowrap" >consultant Code</th>
-                      <th scope="col" className="text-nowrap" >Email</th>
+                      <th scope="col" className="text-nowrap">Branch ID</th>
+                      <th scope="col" className="text-nowrap">Team Added by</th>
+                      <th scope="col" className="text-nowrap">Partner Name</th>
                       <th scope="col" className="text-nowrap" >Mobile No</th>
-                      <th scope="col" className="text-nowrap" >DOB</th>
-                      <th scope="col" className="text-nowrap" >Area Of Operation</th>
+                      <th scope="col" className="text-nowrap" >Email Id</th>
+                      <th scope="col" className="text-nowrap" >consultant Code</th>
+                      <th scope="col" className="text-nowrap">Associate With Us</th>
                       <th scope="col" className="text-nowrap" >Work Association</th>
-                      <th scope="col" className="text-nowrap" >State</th>
+                      <th scope="col" className="text-nowrap" >Area Of Operation</th>
+                      {/* <th scope="col" className="text-nowrap" >DOB</th>
+                      <th scope="col" className="text-nowrap" >State</th> */}
                     </tr>
                   </thead>
                   <tbody>
@@ -309,16 +311,17 @@ export default function AdminSaleEmpPartnerReport() {
                           {/* <span style={{ cursor: "pointer",height:30,width:30,borderRadius:30 }} className="bg-danger text-white d-flex align-items-center justify-content-center" onClick={() => setDeletePartner({status:true,id:item?._id,text:`Your want to delete ${item?.profile?.consultantName} partner`})}><AiOutlineDelete /></span> */}
 
                         </span></td>
-                      <td  className="text-nowrap"><span className="badge bg-primary">{item?.salesId==param?._id ? "Added" : (item?.shareEmployee?.includes(param?._id) ? "Shared" : "others")}</span> </td>
-                      <td className="text-nowrap">{new Date(item?.profile?.associateWithUs).toLocaleDateString()}</td>
+                      <td className="text-nowrap">{item?.branchId}</td>
+                      <td className="text-nowrap text-capitalize">{(item?.salesId?.type && item?.salesId?.fullName) ? `${item?.salesId?.fullName} | ${item?.salesId?.type} | ${item?.salesId?.designation}` : "-"}</td>
                       <td className="text-nowrap">{item?.profile?.consultantName}</td>
-                      <td className="text-nowrap">{item?.profile?.consultantCode}</td>
-                      <td className="text-nowrap">{item?.profile?.primaryEmail}</td>
                       <td className="text-nowrap">{item?.profile?.primaryMobileNo}</td>
-                      <td className="text-nowrap">{new Date(item?.profile?.dob).toLocaleDateString()}</td>
-                      <td className="text-nowrap">{item?.profile?.areaOfOperation}</td>
+                      <td className="text-nowrap">{item?.profile?.primaryEmail}</td>
+                      <td className="text-nowrap">{item?.profile?.consultantCode}</td>
+                        <td className="text-nowrap">{item?.profile?.associateWithUs && getFormateDMYDate(item?.profile?.associateWithUs)}</td>
                       <td className="text-nowrap">{item?.profile?.workAssociation}</td>
-                      <td className="text-nowrap">{item?.profile?.state}</td>
+                      <td className="text-nowrap">{item?.profile?.areaOfOperation}</td>
+                      {/* <td className="text-nowrap">{item?.profile?.state}</td>
+                      <td className="text-nowrap">{new Date(item?.profile?.dob).toLocaleDateString()}</td> */}
                     </tr>)}
                   </tbody>
                 </table>

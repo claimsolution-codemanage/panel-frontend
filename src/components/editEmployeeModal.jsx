@@ -9,6 +9,7 @@ import * as yup from 'yup'
 
 export default function EditEmployeeModal({ id, hide, show, handleComfirmation,details }) {
     const [loading, setLoading] = useState(false)
+    console.log("details",details);
 
     const employeeUpdateFormik = useFormik({
         initialValues: { 
@@ -79,18 +80,18 @@ export default function EditEmployeeModal({ id, hide, show, handleComfirmation,d
                             ) : null}
                         </div>
                         <div className="mb-3">
-                                    <select className="form-select" name="type" value={employeeUpdateFormik.values?.type} onChange={employeeUpdateFormik.handleChange} aria-label="Default select example">
+                                    <select className="form-select" name="type" value={employeeUpdateFormik.values?.type?.toLowerCase()} onChange={employeeUpdateFormik.handleChange} aria-label="Default select example">
                                         <option value="">--Select employee department</option>
-                                        {employeeType?.map(employee => <option key={employee} value={employee}>{employee}</option>)}
+                                        {employeeType?.map(employee => <option key={employee} value={employee?.toLowerCase()}>{employee}</option>)}
                                     </select>
                                     {employeeUpdateFormik?.touched?.type && employeeUpdateFormik?.errors?.type ? (
                                 <span className="text-danger">{employeeUpdateFormik?.errors?.type}</span>
                             ) : null}
                                 </div>
                                 <div className="mb-3">
-                                    <select className="form-select" name="designation" value={employeeUpdateFormik.values?.designation} onChange={employeeUpdateFormik.handleChange} aria-label="Default select example">
+                                    <select className="form-select" name="designation" value={employeeUpdateFormik.values?.designation?.toLowerCase()} onChange={employeeUpdateFormik.handleChange} aria-label="Default select example">
                                         <option value="">--Select employee designation</option>
-                                        {employeeDesignation?.map(designation => <option key={designation} value={designation}>{designation}</option>)}
+                                        {employeeDesignation?.map(designation => <option key={designation} value={designation?.toLowerCase()}>{designation}</option>)}
                                     </select>
                                     {employeeUpdateFormik?.touched?.designation && employeeUpdateFormik?.errors?.designation ? (
                                 <span className="text-danger">{employeeUpdateFormik?.errors?.designation}</span>
