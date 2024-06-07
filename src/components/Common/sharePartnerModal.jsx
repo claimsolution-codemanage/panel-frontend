@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from 'react';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 import { IoMdAdd } from 'react-icons/io'
-import { adminGetAllEmployee, adminGetSaleEmployee } from '../../apis';
+import { adminGetAllEmployee, adminGetSaleEmployee, } from '../../apis';
 import HashLoader from "react-spinners/HashLoader";
 import { IoIosShareAlt } from "react-icons/io";
 import ReactPaginate from 'react-paginate';
@@ -14,7 +14,7 @@ import { BiRightArrow } from 'react-icons/bi'
 
 
 
-export default function SharePartnerModal({ partnerShareModal, handleShareCase, close }) {
+export default function SharePartnerModal({ partnerShareModal, handleShareCase, close,getSaleEmp }) {
     const [data, setData] = useState([])
     const [loading, setLoading] = useState(true)
     const [shareLoading, setShareLoading] = useState(false)
@@ -27,7 +27,7 @@ export default function SharePartnerModal({ partnerShareModal, handleShareCase, 
         async function fetch() {
             setLoading(true)
             try {
-                const res = await adminGetSaleEmployee(pageItemLimit, pageNo, searchQuery)
+                const res = await getSaleEmp(pageItemLimit, pageNo, searchQuery)
                 // console.log("adminGetAllEmployee", res?.data?.data);
                 if (res?.data?.success && res?.data?.data) {
                     setData([...res?.data?.data])

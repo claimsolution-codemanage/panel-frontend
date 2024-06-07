@@ -1,6 +1,6 @@
 import React from 'react'
 import AllInvoiceComp from '../../components/Reuse/AllInvoiceComp'
-import { adminViewAllInvoice,adminUnactiveInvoice } from '../../apis'
+import { adminViewAllInvoice,adminUnactiveInvoice,adminPaidInvoice } from '../../apis'
 
 export default function AdminAllInvoice() {
   return (
@@ -12,6 +12,8 @@ export default function AdminAllInvoice() {
     isEdit={true}
     isDelete={true}
     isTrash={false}
+    paidAccess={true}
+    handlePaid={adminPaidInvoice}
     editInvoiceUrl={"/admin/edit-invoice/"}
     unactiveInvoice={adminUnactiveInvoice}
     />

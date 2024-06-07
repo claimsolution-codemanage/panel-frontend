@@ -23,9 +23,11 @@ import { AiOutlineDelete } from "react-icons/ai";
 import SetStatusOfProfile from "../Common/setStatusModal";
 import {FaTrashRestoreAlt} from 'react-icons/fa'
 import { getFormateDMYDate } from "../../utils/helperFunction";
+import EditInvoiceStatusModal from "../Common/EditInvoiceStatus";
+import { MdCurrencyRupee } from "react-icons/md";
 
 export default function AllInvoiceComp({viewAllInvoice,payInvoice,viewInvoiceUrl,role,
-  isEdit,isDelete,editInvoiceUrl,unactiveInvoice,isTrash,deleteInvoice}) {
+  isEdit,isDelete,editInvoiceUrl,unactiveInvoice,isTrash,deleteInvoice,paidAccess,handlePaid}) {
   const state = useContext(AppContext)
   const [data, setData] = useState([])
   const [tranactionLoading, setTransactionLoading] = useState({ status: false, id: null })
@@ -44,6 +46,7 @@ export default function AllInvoiceComp({viewAllInvoice,payInvoice,viewInvoiceUrl
   const [isActiveInvoice, setIsActiveInvoice] = useState({ status: false, details: {} })
   const [paymentDetails, setPaymentDetails] = useState({ status: false, details: {} })
   const [checkOutDetails, setCheckOutDetails] = useState({ status: false, encData: null, clientCode: null })
+  const [changeInvoiceStatus, setChangeInvoiceStatus] = useState({status:false,_id:null})
 
   const [dateRange, setDateRange] = useState(
     {
@@ -120,10 +123,10 @@ export default function AllInvoiceComp({viewAllInvoice,payInvoice,viewInvoiceUrl
   }, [pageItemLimit, pgNo,])
 
   useEffect(() => {
-    if (!isActiveInvoice.status ||!changeStatus?.show) {
+    if (!isActiveInvoice.status ||!changeStatus?.show || !changeInvoiceStatus?.status) {
       getViewAllInvoice()
     }
-  }, [isActiveInvoice,changeStatus])
+  }, [isActiveInvoice,changeStatus,changeInvoiceStatus])
 
   useEffect(() => {
     if (searchQuery) {
@@ -261,6 +264,7 @@ export default function AllInvoiceComp({viewAllInvoice,payInvoice,viewInvoiceUrl
                     {isEdit &&!isTrash && !item?.isPaid && <span style={{ cursor: "pointer",height:30,width:30,borderRadius:30 }} className="bg-success text-white d-flex align-items-center justify-content-center" onClick={() => navigate(`${editInvoiceUrl}${item._id}`)}><CiEdit /></span>}
                     {isDelete && !item?.isPaid && <span style={{ cursor: "pointer", height: 30, width: 30, borderRadius: 30 }} className={`${isTrash ? "bg-success" :"bg-danger"}  text-white d-flex align-items-center justify-content-center`} onClick={() =>setChangeStatus({ show: true, details: { _id: item._id, currentStatus: item?.isActive, name: item?.invoiceNo, recovery: false } })}>{isTrash ? <FaTrashRestoreAlt/> : <AiOutlineDelete />} </span>}
                     {isTrash && !item?.isPaid && <span style={{ cursor: "pointer", height: 30, width: 30, borderRadius: 30 }} className={`bg-danger  text-white d-flex align-items-center justify-content-center`} onClick={() =>setIsActiveInvoice({ status: true, details: { _id: item._id,invoiceNo:item?.invoiceNo} })}><AiOutlineDelete /> </span>}
+                    {!isTrash && paidAccess && !item?.isPaid && <span style={{ cursor: "pointer",height:30,width:30,borderRadius:30 }} className="bg-success text-white d-flex align-items-center justify-content-center" onClick={() => setChangeInvoiceStatus({status:true,_id:item._id})}><MdCurrencyRupee /></span>}
 
                     </span>
                     </td>
@@ -316,6 +320,8 @@ export default function AllInvoiceComp({viewAllInvoice,payInvoice,viewInvoiceUrl
         {changeStatus?.show && <SetStatusOfProfile changeStatus={changeStatus} hide={() => setChangeStatus({ show: false, details: {} })} type="Invoice" handleChanges={handleChanges} />}
         {isActiveInvoice.status && <ConfirmationModal show={isActiveInvoice.status} hide={()=>setIsActiveInvoice({status:false,details:{}})} id={isActiveInvoice.details?._id} handleComfirmation={deleteInvoice} heading={"Are you sure"} text={`You want to permanent delete invoice ${isActiveInvoice.details?.invoiceNo}`}/>}
         {paymentDetails?.status && <PaymentInfo show={paymentDetails.status} hide={() => setPaymentDetails({ status: false, details: {} })} details={paymentDetails?.details} />}
+        {changeInvoiceStatus?.status && <EditInvoiceStatusModal changeInvoiceStatus={changeInvoiceStatus} setChangeInvoiceStatus={setChangeInvoiceStatus} handleInvoiceStatus={handlePaid} />}
+
       </div >
     }
   </>)

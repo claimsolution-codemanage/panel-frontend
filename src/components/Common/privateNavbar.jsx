@@ -264,7 +264,7 @@ export default function PrivateNavbar() {
          </Link>
             </>  }
             {/* for finance employee */}
-            {empType?.toLowerCase() =="finance".toLowerCase() && <>
+            {(empType?.toLowerCase() =="operation" || empType?.toLowerCase() =="finance") && <>
                 <Link to="/employee/all-invoices" className={`d-flex align-items-center mx-2 px-2 py-2 gap-3 text-white   ${(location.pathname.includes("/employee/all-invoices") || location.pathname.includes("/employee/view-invoice") ) && "active_item"}`}  >
                     <FaFileInvoice />
                     <div className=''>All Invoices</div>

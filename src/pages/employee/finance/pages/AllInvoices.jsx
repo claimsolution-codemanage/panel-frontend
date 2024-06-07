@@ -1,8 +1,12 @@
-import {financeEmployeeViewAllInvoice,financeEmployeeUnactiveInvoice } from "../../../../apis"
+import { useContext } from "react";
+import { AppContext } from "../../../../App";
+import {financeEmployeeViewAllInvoice,financeEmployeeUnactiveInvoice,empOperationPaidInvoice } from "../../../../apis"
 import AllInvoiceComp from "../../../../components/Reuse/AllInvoiceComp";
 
 
 export default function EmployeeAllInvoices() {
+  const state = useContext(AppContext)
+  const empType  = state?.myAppData?.details?.empType
   return (<>
       <AllInvoiceComp
     viewAllInvoice={financeEmployeeViewAllInvoice}
@@ -10,6 +14,8 @@ export default function EmployeeAllInvoices() {
     viewInvoiceUrl={"/employee/view-invoice/"}
     role={"employee"}
     isEdit={true}
+    paidAccess={empType?.toLowerCase()==="operation"}
+    handlePaid={empOperationPaidInvoice}
     isDelete={true}
     isTrash={false}
     editInvoiceUrl={"/employee/edit-invoice/"}

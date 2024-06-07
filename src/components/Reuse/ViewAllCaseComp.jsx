@@ -66,6 +66,7 @@ export default function ViewAllCaseComp({getCases,downloadCase,role,viewUrl,
 
 
 
+
   const handleReset = () => {
     setSearchQuery("")
     setPageItemLimit(5)

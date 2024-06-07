@@ -3,6 +3,7 @@ import axios from 'axios'
 // dotenv.config()
 // const API_BASE = "http://localhost:8000"
 const API_BASE = `${import.meta.env.VITE_API_BASE}`
+
 // const API_IMAGE_UPLOAD =  `${import.meta.env.VITE_API_IMAGE_UPLOAD}`
 import { deleteToken } from '../utils/helperFunction';
 // const API_BASE = `${import.meta.env.VITE_API_BASE}`
@@ -581,6 +582,12 @@ export const adminEditInvoice = (_id, data) => {
   return axios.put(`${API_BASE}/api/admin/editInvoiceById?_id=${_id}`, data)
 }
 
+
+export const adminPaidInvoice = (data) => {
+  setheader()
+  return axios.put(`${API_BASE}/api/admin/paidInvoiceById`, data)
+}
+
 export const adminUnactiveInvoice = (_id,type) => {
   setheader()
   return axios.put(`${API_BASE}/api/admin/unActiveInvoiceById?_id=${_id}&type=${!type}`)
@@ -905,7 +912,7 @@ export const financeEmployeeEditInvoice = (_id, data) => {
 
 export const financeEmployeeUnactiveInvoice = (_id, type) => {
   setheader()
-  return axios.put(`${API_BASE}/api/employee/finance/unActiveInvoiceById?_id=${_id}&type=${type}`)
+  return axios.put(`${API_BASE}/api/employee/finance/unActiveInvoiceById?_id=${_id}&type=${!type}`)
 }
 
 export const financeEmployeeRemoveInvoice = (_id) => {
@@ -1016,6 +1023,10 @@ export const empOperationChangeBranch = (data) => {
   return axios.put(`${API_BASE}/api/employee/operation/change-branch`,data)
 }
 
+export const empOperationPaidInvoice = (data) => {
+  setheader()
+  return axios.put(`${API_BASE}/api/employee/finance/paidInvoiceById`,data)
+}
 
 export const getEmpProfile = (_id) => {
   setheader()
@@ -1039,4 +1050,15 @@ export const empDownloadAllEmp = (pageItemLimit = "", pageNo = "", searchQuery =
     url: `${API_BASE}/api/employee/download/allEmployee?limit=${pageItemLimit}&pageNo=${pageNo}&search=${searchQuery}&type=${type}`,
     responseType: 'blob',
   })
+}
+
+export const empOpSharePartnerToSaleEmp = (data) => {
+  setheader()
+  return axios.put(`${API_BASE}/api/employee/operation/addSharePartner`, data)
+}
+
+
+export const empOpGetSaleEmp = (pageItemLimit = "", pageNo = "", searchQuery = "") => {
+  setheader()
+  return axios.get(`${API_BASE}/api/employee/opeation/sale-employee?limit=${pageItemLimit}&pageNo=${pageNo}&search=${searchQuery}`)
 }

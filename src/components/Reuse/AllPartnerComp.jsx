@@ -40,7 +40,7 @@ import ChangeBranch from "../changeBranch"
 import { VscGitPullRequestGoToChanges } from "react-icons/vsc"
 
 export default function AllPartnerComp({empId,getPartner,editUrl,viewUrl,showType,isShare,partnerShare,
-    isTrash,unactive,isDelete,isDownload,downloadPartner,role,reportUrl,isChangeBranch,handleBrachChange,isBack}) {
+    isTrash,unactive,isDelete,isDownload,downloadPartner,role,reportUrl,isChangeBranch,handleBrachChange,isBack,getSaleEmp}) {
   const state = useContext(AppContext)
   const [data, setData] = useState([])
   const navigate = useNavigate()
@@ -344,7 +344,7 @@ export default function AllPartnerComp({empId,getPartner,editUrl,viewUrl,showTyp
           </div>
           {changeStatus?.show && <SetStatusOfProfile changeStatus={changeStatus} hide={() => setChangeStatus({ show: false, details: {} })} type="Partner" handleChanges={handleChanges} />}
           {deletePartner?.status && <ConfirmationModal show={deletePartner?.status} id={deletePartner?.id} hide={() => setDeletePartner({ status: false, id: "" })} heading="Are you sure?" text={deletePartner?.text ? deletePartner?.text : "Your want to delete this partner"} handleComfirmation={adminDeletePartnerById} />}
-          {partnerShareModal.status && <SharePartnerModal handleShareCase={partnerShare} partnerShareModal={partnerShareModal} close={() => { setPatnerShareModal({ value: [], status: false }); setSharePartner([]) }} />}
+          {partnerShareModal.status && <SharePartnerModal handleShareCase={partnerShare} partnerShareModal={partnerShareModal} close={() => { setPatnerShareModal({ value: [], status: false }); setSharePartner([]) }} getSaleEmp={getSaleEmp}/>}
           {changeBranch?.status && <ChangeBranch branch={changeBranch}  onBranchChange={setChangeBranch} type="partner" handleBranch={handleBrachChange}/>}
         </div>
 

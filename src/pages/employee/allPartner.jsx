@@ -1,4 +1,4 @@
-import { employeeAllPartner,empDownloadAllPartner,empOperationChangeBranch } from "../../apis"
+import { employeeAllPartner,empDownloadAllPartner,empOperationChangeBranch,empOpGetSaleEmp,empOpSharePartnerToSaleEmp } from "../../apis"
 import { useContext } from "react"
 import { AppContext } from "../../App"
 import AllPartnerComp from "../../components/Reuse/AllPartnerComp"
@@ -14,7 +14,7 @@ export default function EmployeeAllPartner() {
       isBack={param?._id ? true :false}
       role={"employee"}
       empId={param?._id ? param?._id :false} 
-      isShare={false}
+      isShare={!param?._id && empType?.toLowerCase()=="operation"}
       isTrash={false}
       isDelete={false}
       getPartner={employeeAllPartner} 
@@ -25,7 +25,8 @@ export default function EmployeeAllPartner() {
       showType={true}
       // showType={true}
       downloadPartner={empDownloadAllPartner}
-      partnerShare={()=>{}}
+      partnerShare={param?._id ? ()=>{} : empOpSharePartnerToSaleEmp}
+      getSaleEmp={empOpGetSaleEmp}
       isChangeBranch={empType?.toLowerCase()=="operation"}
       handleBrachChange={empOperationChangeBranch}
       unactive={()=>{}}

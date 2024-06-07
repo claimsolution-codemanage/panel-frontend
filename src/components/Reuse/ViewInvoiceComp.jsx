@@ -196,12 +196,20 @@ export default function ViewInvoiceComp({getInvoice,id}) {
                           <td colSpan={1} className="text-end">{item?.quantity && item.quantity !== 0 ? item?.amt * item.quantity : item?.amt}</td>
                         </tr>)}
                         {/* end tr */}
-
-
+                      </tbody>
+                    </table>
+                  </div>
+                  <div className="table-responsive">
+                    <table className="table align-middle table-nowrap table-centered mb-0">
+                      <thead>
+                        <tr>                          
+                        </tr>
+                      </thead>
+                      <tbody>
                         <tr>
                           <td colSpan={10}>
                             <tr>
-                              <td className="border-0">
+                              <td >
                                 <strong>Terms & conditions: </strong>
                                 <p>1. Goods once sold shall not be taken back.</p>
                                 <p>2. Delayed payments shall carry an interest @24% p.a</p>
@@ -260,7 +268,6 @@ export default function ViewInvoiceComp({getInvoice,id}) {
                       </tbody>
                     </table>
                   </div>
-
                 </div>
               </div>
             </div>

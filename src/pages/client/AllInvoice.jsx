@@ -7,6 +7,8 @@ export default function ClientAllInvoice() {
   <AllInvoiceComp 
   role={"client"}
   viewInvoiceUrl={"/client/view-invoice/"}
+  paidAccess={false}
+  handlePaid={()=>{}}
   viewAllInvoice={clientViewAllInvoice} 
   payInvoice={clientPayInvoiceById}/>
   </>)

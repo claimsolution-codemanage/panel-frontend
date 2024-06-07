@@ -1,4 +1,4 @@
-import { allAdminPartner, adminAllPartnerDownload } from "../../apis"
+import { allAdminPartner, adminAllPartnerDownload, adminGetSaleEmployee } from "../../apis"
 import { useState, useEffect } from "react"
 import { toast } from 'react-toastify'
 import { HiMiniEye } from 'react-icons/hi2'
@@ -339,7 +339,7 @@ export default function AllAdminPartner() {
           </div>
           {changeStatus?.show && <SetStatusOfProfile changeStatus={changeStatus} hide={() => setChangeStatus({ show: false, details: {} })} type="Partner" handleChanges={handleChanges} />}
           {deletePartner?.status && <ConfirmationModal show={deletePartner?.status} id={deletePartner?.id} hide={() => setDeletePartner({ status: false, id: "" })} heading="Are you sure?" text={deletePartner?.text ? deletePartner?.text : "Your want to delete this partner"} handleComfirmation={adminDeletePartnerById} />}
-          {partnerShareModal.status && <SharePartnerModal handleShareCase={adminSharePartnerToSaleEmp} partnerShareModal={partnerShareModal} close={() => { setPatnerShareModal({ value: [], status: false }); setSharePartner([]) }} />}
+          {partnerShareModal.status && <SharePartnerModal handleShareCase={adminSharePartnerToSaleEmp} partnerShareModal={partnerShareModal} close={() => { setPatnerShareModal({ value: [], status: false }); setSharePartner([]) }} getSaleEmp={adminGetSaleEmployee}/>}
           {changeBranch?.status && <ChangeBranch branch={changeBranch}  onBranchChange={setChangeBranch} type="partner" handleBranch={adminChangeBranch}/>}
         </div>
 
