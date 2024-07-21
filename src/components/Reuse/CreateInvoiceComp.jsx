@@ -206,9 +206,9 @@ export default function CreateInvoiceComp({createInvoice,clientId,caseId,viewInv
           if (res?.data?.success && res.status==200) {
             toast.success(res?.data?.message)
             setLoading(false)
-          }
-          if(res?.data?._id){
-            navigate(`${viewInvoiceUrl}${res?.data?._id}`)
+            if(res?.data?._id){
+              navigate(`${viewInvoiceUrl}${res?.data?._id}`)
+            }
           }
         } catch (error) {
           setLoading(false)

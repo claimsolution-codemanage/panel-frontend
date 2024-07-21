@@ -343,7 +343,7 @@ export default function AdminViewPartnerReport() {
                       </CopyToClipboard>}
                     </td> */}
                    {<td className="text-nowrap">{item?.branchId}</td>}
-                    <td className=" text-nowrap"><span className={(item?.currentStatus == "reject" || item?.currentStatus == "pending") ? " badge bg-danger text-white" : "badge bg-primary"}>{item?.currentStatus}</span></td>
+                    <td className=" text-nowrap"><span className={(item?.currentStatus?.toLowerCase() == "reject" ? "badge bg-danger text-white" : (item?.currentStatus?.toLowerCase() == "pending" ?  "badge bg-warning" : (item?.currentStatus?.toLowerCase() == "resolve" ? "badge bg-success" :"badge bg-primary") ))}>{item?.currentStatus}</span></td>
                     <td className="text-nowrap">{item?.createdAt && getFormateDMYDate(item?.createdAt)}</td>
                    {<td className="text-nowrap text-capitalize">{item?.caseFrom}</td>}
                    {<td className="text-nowrap text-capitalize" >{item?.empSaleName || "-"}</td> }
