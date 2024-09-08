@@ -13,7 +13,7 @@ import ReactPaginate from 'react-paginate';
 import { CiEdit } from 'react-icons/ci'
 import { FaCircleArrowDown } from 'react-icons/fa6'
 import { LuPcCase } from 'react-icons/lu'
-import { IoArrowBackCircleOutline } from 'react-icons/io5'
+import { IoArrowBackCircleOutline, IoNewspaperOutline } from 'react-icons/io5'
 import ChangeStatusModal from "../../components/Common/changeStatusModal"
 import { useNavigate, useParams } from "react-router-dom"
 import { BiLeftArrow } from 'react-icons/bi'
@@ -220,6 +220,13 @@ export default function AdminSaleEmpPartnerReport() {
     }
   }
 
+  const filter = {
+    pageItemLimit,
+    pgNo,
+    searchQuery,
+    dateRange
+  }
+
   return (<>
     {loading ? <Loader /> :
       <div>
@@ -305,6 +312,7 @@ export default function AdminSaleEmpPartnerReport() {
                         <span className="d-flex gap-2">
                           <span style={{ cursor: "pointer", height: 30, width: 30, borderRadius: 30 }} className="bg-warning text-white d-flex align-items-center justify-content-center" onClick={() => navigate(`/admin/view-partner-report/${item._id}`)}><TbReportAnalytics className="fs-5" /></span>
                           <Link to={`/admin/edit-partner/${item?._id}`} style={{ height: 30, width: 30, borderRadius: 30 }} className="cursor-pointer bg-info text-white d-flex align-items-center justify-content-center"><CiEdit className="fs-5 text-dark" /></Link>
+                           <Link to={`/admin/statment/partner/${item?._id}`} state={{filter,back:location?.pathname,path:location?.pathname}}  style={{ cursor: "pointer", height: 30, width: 30, borderRadius: 30 }} className="bg-primary text-white d-flex align-items-center justify-content-center"><IoNewspaperOutline /></Link>
                           <span style={{ cursor: "pointer", height: 30, width: 30, borderRadius: 30 }} className="bg-primary text-white d-flex align-items-center justify-content-center" onClick={() => navigate(`/admin/partner details/${item._id}`)}><HiMiniEye /></span>
                           {/* {item?.salesId?._id!=param?._id && <span style={{ cursor: "pointer", height: 30, width: 30, borderRadius: 30 }} className="bg-danger text-white d-flex align-items-center justify-content-center" onClick={() => setChangeStatus({ show: true, details: { _id: item._id, currentStatus: item?.isActive, name: item?.profile?.consultantName, recovery: false } })}><AiOutlineDelete /></span>} */}
 

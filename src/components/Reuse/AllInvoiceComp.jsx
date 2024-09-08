@@ -6,7 +6,7 @@ import 'react-date-range/dist/styles.css'; // main style file
 import 'react-date-range/dist/theme/default.css'; // theme css file
 import { getFormateDate } from "../../utils/helperFunction"
 import ReactPaginate from 'react-paginate';
-import { useNavigate } from "react-router-dom"
+import { useLocation, useNavigate } from "react-router-dom"
 import { BiLeftArrow } from 'react-icons/bi'
 import { BiRightArrow } from 'react-icons/bi'
 import Loader from "../../components/Common/loader";
@@ -29,6 +29,7 @@ import { MdCurrencyRupee } from "react-icons/md";
 export default function AllInvoiceComp({viewAllInvoice,payInvoice,viewInvoiceUrl,role,
   isEdit,isDelete,editInvoiceUrl,unactiveInvoice,isTrash,deleteInvoice,paidAccess,handlePaid}) {
   const state = useContext(AppContext)
+  const location = useLocation()
   const [data, setData] = useState([])
   const [tranactionLoading, setTransactionLoading] = useState({ status: false, id: null })
   const empType = state?.myAppData?.details?.empType
@@ -36,12 +37,12 @@ export default function AllInvoiceComp({viewAllInvoice,payInvoice,viewInvoiceUrl
   const [loading, setLoading] = useState(true)
   const [downloadLoading, setDownloadLoading] = useState({ status: false, data: [], _id: [] })
   const [statusType, setStatusType] = useState("")
-  const [pageItemLimit, setPageItemLimit] = useState(10)
+  const [pageItemLimit, setPageItemLimit] = useState(location?.pathname==location?.state?.path && location?.state?.filter?.pageItemLimit ? location?.state?.filter?.pageItemLimit :10)
   const [showCalender, setShowCalender] = useState(false)
-  const [searchQuery, setSearchQuery] = useState("")
+  const [searchQuery, setSearchQuery] = useState(location?.pathname==location?.state?.path && location?.state?.filter?.searchQuery ? location?.state?.filter?.searchQuery :"")
   const [noOfInvoice, setNoOfInvoice] = useState(0)
   const [totalInvoiceAmt, setTotalInvoiceAmt] = useState(0)
-  const [pgNo, setPgNo] = useState(1)
+  const [pgNo, setPgNo] = useState(location?.pathname==location?.state?.path && location?.state?.filter?.pgNo ? location?.state?.filter?.pgNo :1)
   const [changeStatus, setChangeStatus] = useState({ status: false, details: "" })
   const [isActiveInvoice, setIsActiveInvoice] = useState({ status: false, details: {} })
   const [paymentDetails, setPaymentDetails] = useState({ status: false, details: {} })
@@ -49,7 +50,8 @@ export default function AllInvoiceComp({viewAllInvoice,payInvoice,viewInvoiceUrl
   const [changeInvoiceStatus, setChangeInvoiceStatus] = useState({status:false,_id:null})
 
   const [dateRange, setDateRange] = useState(
-    {
+    location?.pathname==location?.state?.path && location?.state?.filter?.dateRange ?
+     location?.state?.filter?.dateRange : {
       startDate: new Date("2024/01/01"),
       endDate: new Date(),
     }
@@ -149,7 +151,7 @@ export default function AllInvoiceComp({viewAllInvoice,payInvoice,viewInvoiceUrl
 
   const handleChanges = async (_id, status) => {
     try {
-      const res = await unactiveInvoice(_id, status)
+      const res = await unactiveInvoice(_id, !status)
       if (res?.data?.success) {
         setChangeStatus({ show: false, details: {} })
         toast.success(res?.data?.message)
@@ -162,6 +164,13 @@ export default function AllInvoiceComp({viewAllInvoice,payInvoice,viewInvoiceUrl
         toast.error("Something went wrong")
       }
     }}
+
+    const filter = {
+      pageItemLimit,
+      pgNo,
+      searchQuery,
+      dateRange
+    }
 
   return (<>
     {loading ? <Loader /> :
@@ -260,8 +269,8 @@ export default function AllInvoiceComp({viewAllInvoice,payInvoice,viewInvoiceUrl
                   {data.map((item, ind) => <tr key={ind} className="border-2 text-nowrap border-bottom border-light text-center">
                     <th scope="row">{ind + 1}</th>
                     <td><span className="d-flex gap-2">
-                      <span style={{ cursor: "pointer", height: 30, width: 30, borderRadius: 30 }} className="bg-warning text-white d-flex align-items-center justify-content-center" onClick={() => navigate(`${viewInvoiceUrl}${item._id}`)}><HiMiniEye /></span>
-                    {isEdit &&!isTrash && !item?.isPaid && <span style={{ cursor: "pointer",height:30,width:30,borderRadius:30 }} className="bg-success text-white d-flex align-items-center justify-content-center" onClick={() => navigate(`${editInvoiceUrl}${item._id}`)}><CiEdit /></span>}
+                      <span style={{ cursor: "pointer", height: 30, width: 30, borderRadius: 30 }} className="bg-warning text-white d-flex align-items-center justify-content-center" onClick={() => navigate(`${viewInvoiceUrl}${item._id}`,{state:{filter,back:location?.pathname,path:location?.pathname}})}><HiMiniEye /></span>
+                    {isEdit &&!isTrash && !item?.isPaid && <span style={{ cursor: "pointer",height:30,width:30,borderRadius:30 }} className="bg-success text-white d-flex align-items-center justify-content-center" onClick={() => navigate(`${editInvoiceUrl}${item._id}`,{state:{filter,back:location?.pathname,path:location?.pathname}})}><CiEdit /></span>}
                     {isDelete && !item?.isPaid && <span style={{ cursor: "pointer", height: 30, width: 30, borderRadius: 30 }} className={`${isTrash ? "bg-success" :"bg-danger"}  text-white d-flex align-items-center justify-content-center`} onClick={() =>setChangeStatus({ show: true, details: { _id: item._id, currentStatus: item?.isActive, name: item?.invoiceNo, recovery: false } })}>{isTrash ? <FaTrashRestoreAlt/> : <AiOutlineDelete />} </span>}
                     {isTrash && !item?.isPaid && <span style={{ cursor: "pointer", height: 30, width: 30, borderRadius: 30 }} className={`bg-danger  text-white d-flex align-items-center justify-content-center`} onClick={() =>setIsActiveInvoice({ status: true, details: { _id: item._id,invoiceNo:item?.invoiceNo} })}><AiOutlineDelete /> </span>}
                     {!isTrash && paidAccess && !item?.isPaid && <span style={{ cursor: "pointer",height:30,width:30,borderRadius:30 }} className="bg-success text-white d-flex align-items-center justify-content-center" onClick={() => setChangeInvoiceStatus({status:true,_id:item._id})}><MdCurrencyRupee /></span>}

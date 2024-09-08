@@ -6,12 +6,23 @@ import Loader from "../../components/Common/loader"
 import { getCheckStorage } from "../../utils/helperFunction"
 import { Link } from "react-router-dom"
 import { IoArrowBackCircleOutline } from 'react-icons/io5'
+import { useLocation } from "react-router-dom"
 
 export default function ViewClientComp({ id, getClient,role,link,isEdit }) {
     const [data, setData] = useState([])
     const [loading, setLoading] = useState(false)
+    const location = useLocation()
     const navigate = useNavigate()
 
+
+    const handleBack = () => {
+        if(location?.state?.filter && location?.state?.back){
+            navigate(location?.state?.back,{state:{...location?.state,back:location?.pathname}});
+        }else{
+            navigate(-1)
+        }
+      };
+    
     useEffect(() => {
         async function fetch() {
             setLoading(true)
@@ -41,7 +52,7 @@ export default function ViewClientComp({ id, getClient,role,link,isEdit }) {
             <div>
                 <div className="d-flex justify-content-between bg-color-1 text-primary fs-5 px-4 py-3 shadow">
                     <div className="d-flex flex align-items-center gap-3">
-                    {role?.toLowerCase()!=="client" && <IoArrowBackCircleOutline className="fs-3" onClick={() => navigate(-1)} style={{ cursor: "pointer" }} />}
+                    {role?.toLowerCase()!=="client" && <IoArrowBackCircleOutline className="fs-3" onClick={handleBack} style={{ cursor: "pointer" }} />}
                         <div className="d-flex flex align-items-center gap-1">
                             <span>View Profile</span>
                         </div>

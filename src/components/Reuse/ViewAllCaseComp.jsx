@@ -14,7 +14,7 @@ import { FaCircleArrowDown } from 'react-icons/fa6'
 import { LuPcCase } from 'react-icons/lu'
 import { IoArrowBackCircleOutline } from 'react-icons/io5'
 import ChangeStatusModal from "../../components/Common/changeStatusModal"
-import { useNavigate } from "react-router-dom"
+import { useLocation, useNavigate } from "react-router-dom"
 import { BiLeftArrow } from 'react-icons/bi'
 import { BiRightArrow } from 'react-icons/bi'
 import { adminChangeCaseStatus, adminShareCaseToEmployee, adminAllCaseDownload } from "../../apis"
@@ -44,13 +44,14 @@ export default function ViewAllCaseComp({getCases,downloadCase,role,viewUrl,
 }) {
   const [data, setData] = useState([])
   const navigate = useNavigate()
+  const location = useLocation()
   const [loading, setLoading] = useState(true)
-  const [statusType, setStatusType] = useState("")
-  const [pageItemLimit, setPageItemLimit] = useState(10)
+  const [statusType, setStatusType] = useState(location?.pathname==location?.state?.path && location?.state?.filter?.statusType ? location?.state?.filter?.statusType :"")
+  const [pageItemLimit, setPageItemLimit] = useState(location?.pathname==location?.state?.path && location?.state?.filter?.pageItemLimit ? location?.state?.filter?.pageItemLimit :10)
   const [showCalender, setShowCalender] = useState(false)
-  const [searchQuery, setSearchQuery] = useState("")
+  const [searchQuery, setSearchQuery] = useState(location?.pathname==location?.state?.path && location?.state?.filter?.searchQuery ? location?.state?.filter?.searchQuery :"")
   const [noOfCase, setNoOfCase] = useState(0)
-  const [pgNo, setPgNo] = useState(1)
+  const [pgNo, setPgNo] = useState(location?.pathname==location?.state?.path && location?.state?.filter?.pgNo ? location?.state?.filter?.pgNo :1)
   const [changeStatus, setChangeStatus] = useState({ status: false, details: "" })
   const [shareCase, setShareCase] = useState([])
   const [isSearch, setIsSearch] = useState(false)
@@ -61,7 +62,12 @@ export default function ViewAllCaseComp({getCases,downloadCase,role,viewUrl,
   const [changeisActiveStatus, setChangeIsActiveStatus] = useState({ show: false, details: {} })
   const [caseAmt, setCaseAmt] = useState(0)
   const [downloading, setDownloading] = useState(false)
-  const [dateRange, setDateRange] = useState({ startDate: new Date("2024/01/01"), endDate: new Date() });
+  const [dateRange, setDateRange] = useState(
+    location?.pathname==location?.state?.path && location?.state?.filter?.dateRange ? location?.state?.filter?.dateRange : {
+      startDate: new Date("2024/01/01"),
+      endDate: new Date(),
+    }
+  );
 
 
 
@@ -69,7 +75,7 @@ export default function ViewAllCaseComp({getCases,downloadCase,role,viewUrl,
 
   const handleReset = () => {
     setSearchQuery("")
-    setPageItemLimit(5)
+    setPageItemLimit(10)
     setDateRange([{ startDate: new Date("2024/01/01"), endDate: new Date() }])
     setStatusType("")
   }
@@ -139,7 +145,7 @@ export default function ViewAllCaseComp({getCases,downloadCase,role,viewUrl,
 
 
   useEffect(() => {
-    if (!deleteCase.status || !changeisActiveStatus.show) {
+    if (!deleteCase.status && !changeisActiveStatus.show && !deleteCase.status && !changeStatus.status) {
       getAllCases()
     }
   }, [pageItemLimit, pgNo, statusType, changeStatus, changeisActiveStatus, deleteCase])
@@ -203,6 +209,24 @@ export default function ViewAllCaseComp({getCases,downloadCase,role,viewUrl,
       setShareCase(newCaseList)
     }
   }
+
+  const handleBack = () => {
+    if(location?.state?.filter && location?.state?.back){
+        navigate(location?.state?.back,{state:{...location?.state,back:location?.pathname}});
+    }else{
+        navigate(-1)
+    }
+  };
+
+  const filter = {
+    pageItemLimit,
+    pgNo,
+    searchQuery,
+    dateRange,
+    statusType
+  }
+
+
   return (<>
     {loading ? <Loader /> :
       <div>
@@ -211,7 +235,7 @@ export default function ViewAllCaseComp({getCases,downloadCase,role,viewUrl,
           <div className="d-flex flex align-items-center gap-3">
             {/* <IoArrowBackCircleOutline className="fs-3"  onClick={() => navigate("/admin/dashboard")} style={{ cursor: "pointer" }} /> */}
             <div className="d-flex flex align-items-center gap-1">
-            {isBack && <IoArrowBackCircleOutline className="fs-3" onClick={() => navigate(-1)} style={{ cursor: "pointer" }} />} 
+            {(isBack || location?.state?.back) && <IoArrowBackCircleOutline className="fs-3" onClick={handleBack} style={{ cursor: "pointer" }} />} 
               <span>All Case</span>
             </div>
           </div>
@@ -321,8 +345,8 @@ export default function ViewAllCaseComp({getCases,downloadCase,role,viewUrl,
                     {isShare &&<td className="text-nowrap"><input className="form-check-input" name="shareCase" type="checkbox" checked={shareCase.includes(item?._id)} onChange={(e) => handleShareOnchange(e, item?._id)} id="flexCheckDefault" /></td>}
                     <th scope="row">{ind + 1}</th>
                     <td className="text-nowrap">
-                      <span className="d-flex gap-2"><span style={{ cursor: "pointer", height: 30, width: 30, borderRadius: 30 }} className="bg-primary text-white d-flex align-items-center justify-content-center" onClick={() => navigate(`${viewUrl}${item._id}`)}><HiMiniEye /></span>
-                      {isEdit && <span style={{ cursor: "pointer", height: 30, width: 30, borderRadius: 30 }} className="bg-warning text-dark d-flex align-items-center justify-content-center" onClick={() => navigate(`${editUrl}${item._id}`)}><CiEdit /></span>}
+                      <span className="d-flex gap-2"><span style={{ cursor: "pointer", height: 30, width: 30, borderRadius: 30 }} className="bg-primary text-white d-flex align-items-center justify-content-center" onClick={() => navigate(`${viewUrl}${item._id}`,{state:{filter,back:location?.pathname,path:location?.pathname}})}><HiMiniEye /></span>
+                      {isEdit && <span style={{ cursor: "pointer", height: 30, width: 30, borderRadius: 30 }} className="bg-warning text-dark d-flex align-items-center justify-content-center" onClick={() => navigate(`${editUrl}${item._id}`,{state:{filter,back:location?.pathname,path:location?.pathname}})}><CiEdit /></span>}
                        {isChangeStatus && <span style={{ cursor: "pointer", height: 30, width: 30, borderRadius: 30 }} className="bg-success text-white d-flex align-items-center justify-content-center" onClick={() => setChangeStatus({ status: true, details: item })}><VscGitPullRequestGoToChanges /></span>}
                       {isRemoveCase && <span style={{ cursor: "pointer", height: 30, width: 30, borderRadius: 30 }} className="bg-danger text-white d-flex align-items-center justify-content-center" onClick={() => setChangeIsActiveStatus({ show: true, details: { _id: item._id, currentStatus: item?.isActive, name: item?.name, recovery: false } })}><AiOutlineDelete /></span>}
                         {/* <span style={{ cursor: "pointer",height:30,width:30,borderRadius:30 }} className="bg-danger text-white d-flex align-items-center justify-content-center" onClick={() => setDeleteCase({status:true,id:item?._id})}><AiOutlineDelete /></span> */}
@@ -330,7 +354,7 @@ export default function ViewAllCaseComp({getCases,downloadCase,role,viewUrl,
                       {createInvUrl  && <td className="text-nowrap">
               <span>
                 {item?.caseFrom?.toLowerCase()=="client" ?
-                <Link to={`${createInvUrl}${item?.clientId}/${item?._id}`}><span className="badge bg-primary" style={{ cursor: "pointer" }}>Create</span></Link>
+                <Link to={`${createInvUrl}${item?.clientId}/${item?._id}`} state={{filter,back:location?.pathname,path:location?.pathname}}><span className="badge bg-primary" style={{ cursor: "pointer" }}>Create</span></Link>
                 : <span className="badge bg-secondary">Create</span>
                  }
                 </span> 
@@ -339,8 +363,8 @@ export default function ViewAllCaseComp({getCases,downloadCase,role,viewUrl,
                     <td className=" text-nowrap"><span className={(item?.currentStatus?.toLowerCase() == "reject" ? "badge bg-danger text-white" : (item?.currentStatus?.toLowerCase() == "pending" ?  "badge bg-warning" : (item?.currentStatus?.toLowerCase() == "resolve" ? "badge bg-success" :"badge bg-primary") )) }>{item?.currentStatus}</span></td>
                     <td className="text-nowrap">{item?.createdAt && getFormateDMYDate(item?.createdAt)}</td>
                    {(role?.toLowerCase()!="client" && role?.toLowerCase()!="partner" ) && <td className="text-nowrap text-capitalize">{item?.caseFrom}</td>}
-                   {(role?.toLowerCase()!="client" && role?.toLowerCase()!="partner" ) && <td className="text-nowrap text-capitalize" >{item?.empSaleName || "-"}</td> }
-                   {(role?.toLowerCase()!="client" && role?.toLowerCase()!="partner" ) && <td className="text-nowrap text-capitalize" >{item?.partnerName || "-"}</td> }
+                   {(role?.toLowerCase()!="client" && role?.toLowerCase()!="partner" ) && <td className="text-nowrap text-capitalize" >{item?.employeeDetails?.fullName ? `${item?.employeeDetails?.fullName} | ${item?.employeeDetails?.type} | ${item?.employeeDetails?.designation}`  : "-"}</td> }
+                   {(role?.toLowerCase()!="client" && role?.toLowerCase()!="partner" ) && <td className="text-nowrap text-capitalize" >{item?.partnerDetails?.fullName || "-"}</td> }
                    {/* {(role?.toLowerCase()!="client" && role?.toLowerCase()!="partner" ) && <td className="text-nowrap text-capitalize" >{item?.partnerCode || "-"}</td> } */}
                     <td className="text-nowrap">{item?.name}</td>
                     <td className="text-nowrap">{item?.mobileNo}</td>

@@ -6,7 +6,7 @@ import 'react-date-range/dist/theme/default.css'; // theme css file
 import ReactPaginate from 'react-paginate';
 import { CiEdit } from 'react-icons/ci'
 import ChangeStatusModal from "../../components/Common/changeStatusModal"
-import { useNavigate } from "react-router-dom"
+import { Link, useLocation, useNavigate } from "react-router-dom"
 import {BiLeftArrow} from 'react-icons/bi'
 import {BiRightArrow} from 'react-icons/bi'
 import SetStatusOfProfile from "../../components/Common/setStatusModal"
@@ -24,21 +24,23 @@ import { employeeType } from "../../utils/constant";
 import { getFormateDMYDate } from "../../utils/helperFunction";
 import { FaUserTag } from "react-icons/fa6";
 import { SiMicrosoftexcel } from "react-icons/si";
-import { IoArrowBackCircleOutline } from "react-icons/io5";
+import { IoArrowBackCircleOutline, IoNewspaperOutline } from "react-icons/io5";
 export default function AllEmployee({page,empId,getEmployee,isTrash,isActive,deleteEmployeeId,
-  updateEmployee,role,caseUrl,partnerUrl,isedit,viewSathiUrl,isDownload,getDownload,isBack}) {
+  updateEmployee,role,caseUrl,partnerUrl,isedit,viewSathiUrl,isDownload,getDownload,isBack,statement
+  ,statementUrl}) {
   const [data, setData] = useState([])
   const navigate = useNavigate()
+  const location = useLocation()
   const [loading, setLoading] = useState(true)
-  const [pageItemLimit, setPageItemLimit] = useState(10)
-  const [searchQuery, setSearchQuery] = useState("")
+  const [pageItemLimit, setPageItemLimit] = useState(location?.pathname == location?.state?.path && location?.state?.filter?.pageItemLimit ? location?.state?.filter?.pageItemLimit :10)
+  const [searchQuery, setSearchQuery] = useState(location?.pathname == location?.state?.path && location?.state?.filter?.searchQuery ? location?.state?.filter?.searchQuery :"")
   const [isSearch,setIsSearch] = useState(false)
   const [noOfEmployee, setNoOfEmployee] = useState(0)
-  const [pgNo, setPgNo] = useState(1)
+  const [pgNo, setPgNo] = useState(location?.pathname == location?.state?.path && location?.state?.filter?.pgNo ? location?.state?.filter?.pgNo :1)
   const [changeStatus, setChangeStatus] = useState({show: false, details: "" })
   const [employeeUpdateStatus, setEmployeeUpdateStatus] = useState({show: false,id:null, details: {} })
   const [deleteEmployee,setDeleteEmployee] = useState({status:false,id:"",text:""})
-  const [empType,setEmpType] = useState('')
+  const [empType,setEmpType] = useState(location?.pathname == location?.state?.path && location?.state?.filter?.empType ? location?.state?.filter?.empType :"")
   const [downloading, setDownloading] = useState(false)
 
 
@@ -152,8 +154,37 @@ export default function AllEmployee({page,empId,getEmployee,isTrash,isActive,del
     setPgNo(event.selected + 1)
   };
 
+  const handleBack = () => {
+    if(location?.state?.filter && location?.state?.back){
+        navigate(location?.state?.back,{state:{...location?.state,back:location?.pathname}});
+    }else{
+        navigate(-1)
+    }
+  };
 
-  // console.log("data", data);
+  // console.log("loca",location);
+
+  const filter = {
+    pageItemLimit,
+    pgNo,
+    searchQuery,
+    empType
+  }
+
+  const editEmployeeDetails=(item)=>{
+    return {
+      fullName:item?.fullName,
+      type:item?.type,
+      designation:item?.designation,
+      mobileNo:item?.mobileNo,
+      branchId:item?.branchId,
+      bankName:item?.bankName || "",
+      bankBranchName:item?.bankBranchName || "",
+      bankAccountNo:item?.bankAccountNo || "",
+      panNo:item?.panNo || "",
+      address:item?.address || "",
+    }
+  }
 
   return (<>
    {loading?<Loader/> :
@@ -162,7 +193,7 @@ export default function AllEmployee({page,empId,getEmployee,isTrash,isActive,del
         <div className="d-flex flex align-items-center gap-3">
           {/* <IoArrowBackCircleOutline className="fs-3"  onClick={() => navigate("/admin/dashboard")} style={{ cursor: "pointer" }} /> */}
           <div className="d-flex flex align-items-center gap-1">
-          {isBack && <IoArrowBackCircleOutline className="fs-3" onClick={() => navigate(-1)} style={{ cursor: "pointer" }} />} 
+          {(isBack || location?.state?.back) && <IoArrowBackCircleOutline className="fs-3" onClick={handleBack} style={{ cursor: "pointer" }} />} 
             <span>{page ? page : "All Employee"}</span>
             {/* <span><LuPcCase /></span> */}
           </div>
@@ -220,10 +251,11 @@ export default function AllEmployee({page,empId,getEmployee,isTrash,isActive,del
             {data.map((item, ind) => <tr key={item._id} className="border-2 border-bottom border-light text-center">
               <th scope="row" className="text-nowrap">{ind + 1}</th>
               <td className="text-nowrap"><span className="d-flex justify-content-center align-items-center gap-2">
-                {!isTrash && <span style={{ cursor: "pointer",height:30,width:30,borderRadius:30 }} className={`bg-primary text-white d-flex align-items-center justify-content-center`} onClick={() =>navigate(`${caseUrl}${item._id}`)}><TbReportAnalytics className="fs-5"/></span>}
-                {!isTrash && <span style={{ cursor: "pointer",height:30,width:30,borderRadius:30 }} className={`${(item?.type?.toLowerCase()=="sales" ||item?.type?.toLowerCase()=="branch" ||item?.type?.toLowerCase()=="sathi team") ? "bg-info" :"bg-secondary" } text-white d-flex align-items-center justify-content-center`} onClick={() => (item?.type?.toLowerCase()=="sales" ||item?.type?.toLowerCase()=="branch" ||item?.type?.toLowerCase()=="sathi team") && navigate(`${partnerUrl}${item._id}`)}><FaUserFriends className="fs-5"/></span>}
-                {!isTrash && isedit && <span className="bg-warning text-white" style={{ cursor: "pointer",height:30,width:30,borderRadius:30 }} onClick={() => setEmployeeUpdateStatus({ show: true,id:item?._id, details: {fullName:item?.fullName,type:item?.type,designation:item?.designation,mobileNo:item?.mobileNo,branchId:item?.branchId} })}><CiEdit /></span>}
-                {!isTrash && viewSathiUrl && (item?.type?.toLowerCase()=="sales" ||item?.type?.toLowerCase()=="branch") && <span className="bg-warning text-white" style={{ cursor: "pointer",height:30,width:30,borderRadius:30 }} onClick={()=>navigate(`${viewSathiUrl}${item._id}`)}><FaUserTag /></span>}
+                {!isTrash && <span style={{ cursor: "pointer",height:30,width:30,borderRadius:30 }} className={`bg-primary text-white d-flex align-items-center justify-content-center`} onClick={() =>navigate(`${caseUrl}${item._id}`,{state:{filter,back:location?.pathname,path:location?.pathname}})}><TbReportAnalytics className="fs-5"/></span>}
+                {!isTrash && <span style={{ cursor: "pointer",height:30,width:30,borderRadius:30 }} className={`${(item?.type?.toLowerCase()=="sales" ||item?.type?.toLowerCase()=="branch" ||item?.type?.toLowerCase()=="sathi team") ? "bg-info" :"bg-secondary" } text-white d-flex align-items-center justify-content-center`} onClick={() => (item?.type?.toLowerCase()=="sales" ||item?.type?.toLowerCase()=="branch" ||item?.type?.toLowerCase()=="sathi team") && navigate(`${partnerUrl}${item._id}`,{state:{filter,back:location?.pathname,path:location?.pathname}})}><FaUserFriends className="fs-5"/></span>}
+                {!isTrash && isedit && <span className="bg-warning text-white" style={{ cursor: "pointer",height:30,width:30,borderRadius:30 }} onClick={() => setEmployeeUpdateStatus({ show: true,id:item?._id, details: editEmployeeDetails(item) })}><CiEdit /></span>}
+                {!isTrash && statement && item?.type?.toLowerCase()=="sathi team" && <Link to={`${statementUrl}/${item?._id}`} state={{filter,back:location?.pathname,path:location?.pathname}}  style={{ cursor: "pointer", height: 30, width: 30, borderRadius: 30 }} className="bg-primary text-white d-flex align-items-center justify-content-center"><IoNewspaperOutline /></Link>}
+                {!isTrash && viewSathiUrl && (item?.type?.toLowerCase()=="sales" ||item?.type?.toLowerCase()=="branch") && <span className="bg-warning text-white" style={{ cursor: "pointer",height:30,width:30,borderRadius:30 }} onClick={()=>navigate(`${viewSathiUrl}${item._id}`,{state:{filter,back:location?.pathname,path:location?.pathname}})}><FaUserTag /></span>}
                 {role?.toLowerCase()=="admin" && <span className={`${!isTrash ? "bg-danger" :"bg-success"}  text-white`} style={{ cursor: "pointer",height:30,width:30,borderRadius:30 }} onClick={() => setChangeStatus({ show: true, details: {_id:item._id,currentStatus:item?.isActive,name:item?.fullName} })}>{isTrash ? <FaTrashRestoreAlt/> :<AiOutlineDelete />} </span>}
                 {isTrash && role?.toLowerCase()=="admin" && <span className="bg-danger text-white" style={{ cursor: "pointer",height:30,width:30,borderRadius:30 }} onClick={() => setDeleteEmployee({status:true,id:item?._id,text:`Your want to parmanent delete ${item?.fullName} employee`})}><AiOutlineDelete /></span>}
                 </span></td>

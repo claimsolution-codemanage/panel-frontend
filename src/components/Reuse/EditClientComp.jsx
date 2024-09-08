@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 import { useNavigate } from 'react-router-dom'
 import { useState } from 'react'
 import { useContext } from 'react'
@@ -22,16 +22,18 @@ import { checkPhoneNo, checkNumber,getCheckStorage } from '../../utils/helperFun
 
 export default function EditClient({ id, getClient, updateClient,uploadImg ,role }) {
     const state = useContext(AppContext)
-    console.log("state",state?.myAppData?.details?.role);
+    // console.log("state",state?.myAppData?.details?.role);
     const [saving, setSaving] = useState(false)
     const [loading, setLoading] = useState(true)
     const navigate = useNavigate()
+    const location = useLocation()
     const [uploadPhoto, setUploadPhoto] = useState({ status: 0,type:"", loading: false, message: "" })
     const imgRef = useRef()
     const kycPhotoRef = useRef()
     const kycAadhaarRef = useRef()
     const kycAadhaarBackRef = useRef()
     const kycPanRef = useRef()
+
     const UserProfileFormik = useFormik({
         initialValues: {
             profilePhoto: "",
@@ -170,13 +172,22 @@ export default function EditClient({ id, getClient, updateClient,uploadImg ,role
             handleUploadFile(result?.file,type)
         }
     }
+
+    const handleBack = () => {
+        if(location?.state?.filter && location?.state?.back){
+            navigate(location?.state?.back,{state:{...location?.state,back:location?.pathname}});
+        }else{
+            navigate(-1)
+        }
+      };
+
     return (
         <>
             {loading ? <Loader /> :
                 <div>
                     <div className="d-flex justify-content-between bg-color-1 text-primary fs-5 px-4 py-3 shadow">
                         <div className="d-flex flex align-items-center gap-3">
-                            <IoArrowBackCircleOutline className="fs-3" onClick={() => navigate(-1)} style={{ cursor: "pointer" }} />
+                            <IoArrowBackCircleOutline className="fs-3" onClick={handleBack} style={{ cursor: "pointer" }} />
                             <div className="d-flex flex align-items-center gap-1">
                                 <span>Edit Profile</span>
                             </div>

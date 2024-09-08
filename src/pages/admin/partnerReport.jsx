@@ -15,7 +15,7 @@ import { FaCircleArrowDown } from 'react-icons/fa6'
 import { LuPcCase } from 'react-icons/lu'
 import { IoArrowBackCircleOutline } from 'react-icons/io5'
 import ChangeStatusModal from "../../components/Common/changeStatusModal"
-import { useNavigate } from "react-router-dom"
+import { useLocation, useNavigate } from "react-router-dom"
 import { BiLeftArrow } from 'react-icons/bi'
 import { BiRightArrow } from 'react-icons/bi'
 import { adminChangeCaseStatus, adminShareCaseToEmployee, adminViewPartnerReport, adminPartnerReportDownload } from "../../apis"
@@ -43,14 +43,15 @@ export default function AdminViewPartnerReport() {
   const [data, setData] = useState([])
   const param = useParams()
   const navigate = useNavigate()
+  const location = useLocation()
   const [loading, setLoading] = useState(true)
-  const [statusType, setStatusType] = useState("")
-  const [pageItemLimit, setPageItemLimit] = useState(10)
+  const [statusType, setStatusType] = useState(location?.pathname==location?.state?.path && location?.state?.filter?.statusType ? location?.state?.filter?.statusType :"")
+  const [pageItemLimit, setPageItemLimit] = useState(location?.pathname==location?.state?.path && location?.state?.filter?.pageItemLimit ? location?.state?.filter?.pageItemLimit :10)
   const [showCalender, setShowCalender] = useState(false)
   const [isSearch, setIsSearch] = useState(false)
-  const [searchQuery, setSearchQuery] = useState("")
+  const [searchQuery, setSearchQuery] = useState(location?.pathname==location?.state?.path && location?.state?.filter?.searchQuery ? location?.state?.filter?.searchQuery :"")
   const [noOfCase, setNoOfCase] = useState(0)
-  const [pgNo, setPgNo] = useState(1)
+  const [pgNo, setPgNo] = useState(location?.pathname==location?.state?.path && location?.state?.filter?.pgNo ? location?.state?.filter?.pgNo :1)
   const [changeStatus, setChangeStatus] = useState({ status: false, details: "" })
   const [shareCase, setShareCase] = useState([])
   const [caseShareModal, setCaseShareModal] = useState({ status: false, value: [] })
@@ -62,7 +63,7 @@ export default function AdminViewPartnerReport() {
   const [userReport, setUserReport] = useState({})
   const [downloading, setDownloading] = useState(false)
   const [dateRange, setDateRange] = useState(
-    {
+    location?.pathname==location?.state?.path && location?.state?.filter?.dateRange ? location?.state?.filter?.dateRange : {
       startDate: new Date("2024/01/01"),
       endDate: new Date(),
     });
@@ -211,19 +212,35 @@ export default function AdminViewPartnerReport() {
     }
   }
 
+  const filter = {
+    pageItemLimit,
+    pgNo,
+    searchQuery,
+    dateRange,
+    statusType
+  }
+
+  const handleBack = () => {
+    if(location?.state?.filter && location?.state?.back){
+        navigate(location?.state?.back,{state:{...location?.state,back:location?.pathname}});
+    }else{
+        navigate(-1)
+    }
+  };
+
   return (<>
     {loading ? <Loader /> :
       <div>
         <DateSelect show={showCalender} hide={() => setShowCalender(false)} onFilter={getAllCases} dateRange={dateRange} setDateRange={setDateRange} />
         <div className="d-flex justify-content-between bg-color-1 text-primary fs-5 px-4 py-3 shadow">
           <div className="d-flex flex align-items-center gap-3">
-            <IoArrowBackCircleOutline className="fs-3" onClick={() => navigate(-1)} style={{ cursor: "pointer" }} />
+            <IoArrowBackCircleOutline className="fs-3" onClick={handleBack} style={{ cursor: "pointer" }} />
             <div className="d-flex flex align-items-center gap-1">
               <span>Partner Report</span>
               {/* <span><LuPcCase /></span> */}
             </div>
           </div>
-          <button onClick={() => navigate(`/admin/partner details/${param._id}`)} className="btn btn-primary">View</button>
+          <button onClick={() => navigate(`/admin/partner details/${param._id}`,{state:{filter,back:location?.pathname,path:location?.pathname}})} className="btn btn-primary">View</button>
         </div>
 
         <div className="mx-5 p-3">
@@ -330,8 +347,8 @@ export default function AdminViewPartnerReport() {
                     {/* <td className="text-nowrap"><input class="form-check-input" name="shareCase" type="checkbox" checked={shareCase.includes(item?._id)} onChange={(e) => handleShareOnchange(e, item?._id)} id="flexCheckDefault" /></td> */}
                     <th scope="row">{ind + 1}</th>
                     <td className="text-nowrap">
-                      <span className="d-flex gap-2"><span style={{ cursor: "pointer", height: 30, width: 30, borderRadius: 30 }} className="bg-primary text-white d-flex align-items-center justify-content-center" onClick={() => navigate(`/admin/view case/${item._id}`)}><HiMiniEye /></span>
-                        <span style={{ cursor: "pointer", height: 30, width: 30, borderRadius: 30 }} className="bg-warning text-dark d-flex align-items-center justify-content-center" onClick={() => navigate(`/admin/edit%20case/${item._id}`)}><CiEdit /></span>
+                      <span className="d-flex gap-2"><span style={{ cursor: "pointer", height: 30, width: 30, borderRadius: 30 }} className="bg-primary text-white d-flex align-items-center justify-content-center" onClick={() => navigate(`/admin/view case/${item._id}`,{state:{filter,back:location?.pathname,path:location?.pathname}})}><HiMiniEye /></span>
+                        <span style={{ cursor: "pointer", height: 30, width: 30, borderRadius: 30 }} className="bg-warning text-dark d-flex align-items-center justify-content-center" onClick={() => navigate(`/admin/edit%20case/${item._id}`,{state:{filter,back:location?.pathname,path:location?.pathname}})}><CiEdit /></span>
                         <span style={{ cursor: "pointer", height: 30, width: 30, borderRadius: 30 }} className="bg-success text-white d-flex align-items-center justify-content-center" onClick={() => setChangeStatus({ status: true, details: item })}><VscGitPullRequestGoToChanges /></span>
                         <span style={{ cursor: "pointer", height: 30, width: 30, borderRadius: 30 }} className="bg-danger text-white d-flex align-items-center justify-content-center" onClick={() => setChangeIsActiveStatus({ show: true, details: { _id: item._id, currentStatus: item?.isActive, name: item?.name, recovery: false } })}><AiOutlineDelete /></span>
                         {/* <span style={{ cursor: "pointer",height:30,width:30,borderRadius:30 }} className="bg-danger text-white d-flex align-items-center justify-content-center" onClick={() => setDeleteCase({status:true,id:item?._id})}><AiOutlineDelete /></span> */}
@@ -346,8 +363,8 @@ export default function AdminViewPartnerReport() {
                     <td className=" text-nowrap"><span className={(item?.currentStatus?.toLowerCase() == "reject" ? "badge bg-danger text-white" : (item?.currentStatus?.toLowerCase() == "pending" ?  "badge bg-warning" : (item?.currentStatus?.toLowerCase() == "resolve" ? "badge bg-success" :"badge bg-primary") ))}>{item?.currentStatus}</span></td>
                     <td className="text-nowrap">{item?.createdAt && getFormateDMYDate(item?.createdAt)}</td>
                    {<td className="text-nowrap text-capitalize">{item?.caseFrom}</td>}
-                   {<td className="text-nowrap text-capitalize" >{item?.empSaleName || "-"}</td> }
-                   {<td className="text-nowrap text-capitalize" >{item?.partnerName || "-"}</td> }
+                   {<td className="text-nowrap text-capitalize" >{item?.employeeDetails?.fullName ? `${item?.employeeDetails?.fullName} | ${item?.employeeDetails?.type} | ${item?.employeeDetails?.designation}`  : "-"}</td> }
+                   {<td className="text-nowrap text-capitalize" >{item?.partnerDetails?.fullName || "-"}</td> }
                    {/* {(role?.toLowerCase()!="client" && role?.toLowerCase()!="partner" ) && <td className="text-nowrap text-capitalize" >{item?.partnerCode || "-"}</td> } */}
                     <td className="text-nowrap">{item?.name}</td>
                     <td className="text-nowrap">{item?.mobileNo}</td>

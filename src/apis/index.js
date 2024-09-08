@@ -180,6 +180,11 @@ export const partnerTls = () => {
   return axios.get(`${API_BASE}/api/partner/getTls`)
 }
 
+export const partnerStatement = () => {
+  setheader()
+  return axios.get(`${API_BASE}/api/partner/getStatement`)
+}
+
 
 
 
@@ -235,7 +240,7 @@ export const adminCreateNewEmployee = (data) => {
   return axios.post(`${API_BASE}/api/admin/createEmployeeAccount`, data)
 }
 
-export const allAdminCase = (pageItemLimit = "", pageNo = "", searchQuery = "", statusType = "", startDate = "", endDate = "", type,empId,id,isReject) => {
+export const allAdminCase = (pageItemLimit = "", pageNo = "", searchQuery = "", statusType = "", startDate = "", endDate = "", type,empId,id,isReject="") => {
   setheader()
   return axios.get(`${API_BASE}/api/admin/viewAllCase?limit=${pageItemLimit}&pageNo=${pageNo}&search=${searchQuery}&status=${statusType}&startDate=${startDate}&endDate=${endDate}&type=${type}&isReject=${isReject}`)
 }
@@ -494,6 +499,11 @@ export const adminSharePartnerToSaleEmp = (data) => {
   return axios.put(`${API_BASE}/api/admin/addSharePartner`, data)
 }
 
+export const adminAddPartnerRefToEmp = (data) => {
+  setheader()
+  return axios.put(`${API_BASE}/api/admin/addPartnerRefToEmp`, data)
+}
+
 
 export const adminAddCaseCommit = (data) => {
   setheader()
@@ -590,7 +600,7 @@ export const adminPaidInvoice = (data) => {
 
 export const adminUnactiveInvoice = (_id,type) => {
   setheader()
-  return axios.put(`${API_BASE}/api/admin/unActiveInvoiceById?_id=${_id}&type=${!type}`)
+  return axios.put(`${API_BASE}/api/admin/unActiveInvoiceById?_id=${_id}&type=${type}`)
 }
 
 export const adminDeleteInvoice = (_id,type) => {
@@ -617,6 +627,17 @@ export const adminViewAllTrashInvoice = (pageItemLimit = "", pageNo = "", search
   return axios.get(`${API_BASE}/api/admin/viewAllInvoice?limit=${pageItemLimit}&pageNo=${pageNo}&search=${searchQuery}&startDate=${startDate}&endDate=${endDate}&type=${false}`)
 }
 
+
+//  for statment
+export const adminCreateOrUpdateStatment = (data) => {
+  setheader()
+  return axios.post(`${API_BASE}/api/admin/createOrUpdateStatement`, data)
+}
+
+export const adminAllStatment= (pageItemLimit = "", pageNo = "", partnerId = "",empId="", startDate = "", endDate = "") => {
+  setheader()
+  return axios.get(`${API_BASE}/api/admin/getAllStatement?limit=${pageItemLimit}&pageNo=${pageNo}&partnerId=${partnerId}&empId=${empId}&startDate=${startDate}&endDate=${endDate}`)
+}
 
 
 
@@ -802,6 +823,11 @@ export const employeeChangeCaseStatus = (data) => {
   return axios.put(`${API_BASE}/api/employee/changeCaseStatus`, data)
 }
 
+export const empOprUpdateEmployee = (id,data) => {
+  setheader()
+  return axios.put(`${API_BASE}/api/employee/updateEmployeeAccount?_id=${id}`, data)
+}
+
 export const employeeGetCaseById = (_id) => {
   setheader()
   return axios.get(`${API_BASE}/api/employee/viewCaseById?_id=${_id}`)
@@ -912,7 +938,7 @@ export const financeEmployeeEditInvoice = (_id, data) => {
 
 export const financeEmployeeUnactiveInvoice = (_id, type) => {
   setheader()
-  return axios.put(`${API_BASE}/api/employee/finance/unActiveInvoiceById?_id=${_id}&type=${!type}`)
+  return axios.put(`${API_BASE}/api/employee/finance/unActiveInvoiceById?_id=${_id}&type=${type}`)
 }
 
 export const financeEmployeeRemoveInvoice = (_id) => {
@@ -1057,8 +1083,25 @@ export const empOpSharePartnerToSaleEmp = (data) => {
   return axios.put(`${API_BASE}/api/employee/operation/addSharePartner`, data)
 }
 
+export const empAddPartnerRefToEmp = (data) => {
+  setheader()
+  return axios.put(`${API_BASE}/api/employee/operation/addPartnerRefToEmp`, data)
+}
+
+
 
 export const empOpGetSaleEmp = (pageItemLimit = "", pageNo = "", searchQuery = "") => {
   setheader()
   return axios.get(`${API_BASE}/api/employee/opeation/sale-employee?limit=${pageItemLimit}&pageNo=${pageNo}&search=${searchQuery}`)
+}
+
+//  for statment
+export const empOpCreateOrUpdateStatment = (data) => {
+  setheader()
+  return axios.post(`${API_BASE}/api/employee/operation/createOrUpdateStatement`, data)
+}
+
+export const empOpAllStatment= (pageItemLimit = "", pageNo = "", partnerId = "",empId="", startDate = "", endDate = "") => {
+  setheader()
+  return axios.get(`${API_BASE}/api/employee/operation/getAllStatement?limit=${pageItemLimit}&pageNo=${pageNo}&partnerId=${partnerId}&empId=${empId}&startDate=${startDate}&endDate=${endDate}`)
 }

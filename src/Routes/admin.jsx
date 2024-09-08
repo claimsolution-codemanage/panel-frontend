@@ -1,6 +1,7 @@
 import AdminTemplate from "../template/adminTemplate"
 import PanelTemplate from "../template/PanelTemplate"
 import {Route} from 'react-router-dom'
+import { adminAllStatment } from "../apis";
 
 
 // for admin routes
@@ -40,6 +41,7 @@ import AdminEmployeeTrash from "../pages/admin/EmployeeTrash";
 import AdminViewEmployee from "../pages/admin/ViewEmployee";
 import AdminViewMySathi from "../pages/admin/viewMySathi";
 import AdminRejectCase from '../pages/admin/allRejectCase'
+import ViewAllStatement from "../components/Reuse/ViewAllStatement";
 
 {/* for admin */}
 export const adminRoutes = [
@@ -60,9 +62,6 @@ export const adminRoutes = [
   <Route path='/admin/all employee' element={<AdminTemplate><AllAdminEmployee/></AdminTemplate>}/>,
   <Route path='/admin/all job' element={<AdminTemplate><AdminAllJobs/></AdminTemplate>}/>,
   <Route path='/admin/all complaint' element={<AdminTemplate><AdminAllComplaint/></AdminTemplate>}/>,
-  <Route path='/admin/all trash partner' element={<AdminTemplate><AdminTrashPartner/></AdminTemplate>}/>,
-  <Route path='/admin/all trash client' element={<AdminTemplate><AdminTrashClient/></AdminTemplate>}/>,
-  <Route path='/admin/all trash case' element={<AdminTemplate><AdminTrashCase/></AdminTemplate>}/>,
   <Route path='/admin/my-admins' element={<AdminTemplate><MyAdmins/></AdminTemplate>}/>,
   <Route path='/admin/view-partner-report/:_id' element={<AdminTemplate><AdminViewPartnerReport/></AdminTemplate>}/>,
   <Route path='/admin/edit-client/:_id'  element={<AdminTemplate><AdminEditClient/></AdminTemplate>}/>,
@@ -74,11 +73,16 @@ export const adminRoutes = [
   <Route path='/admin/all-invoices'  element={<AdminTemplate><AdminAllInvoice/></AdminTemplate>}/>,
   <Route path='/admin/view-invoice/:_id'  element={<AdminTemplate><AdminViewInvoice/></AdminTemplate>}/>,
   <Route path='/admin/edit-invoice/:_id'  element={<AdminTemplate><AdminEditInvoice/></AdminTemplate>}/>,
+  <Route path='/admin/all trash partner' element={<AdminTemplate><AdminTrashPartner/></AdminTemplate>}/>,
+  <Route path='/admin/all trash client' element={<AdminTemplate><AdminTrashClient/></AdminTemplate>}/>,
+  <Route path='/admin/all trash case' element={<AdminTemplate><AdminTrashCase/></AdminTemplate>}/>,
   <Route path='/admin/all-trash-invoice'  element={<AdminTemplate><AdminInvoiceTrash/></AdminTemplate>}/>,
   <Route path='/admin/all-trash-doc'  element={<AdminTemplate><AdminCaseDocTrash/></AdminTemplate>}/>,
   <Route path='/admin/all-trash-employee'  element={<AdminTemplate><AdminEmployeeTrash/></AdminTemplate>}/>,
   <Route path='/admin/view-sathi/:_id'  element={<AdminTemplate><AdminViewMySathi/></AdminTemplate>}/>,
   <Route path='/admin/reject-cases'  element={<AdminTemplate><AdminRejectCase/></AdminTemplate>}/>,
+  <Route path='/admin/statement/partner/:partnerId'  element={<AdminTemplate><ViewAllStatement getStatementApi={adminAllStatment} type={"admin"}/></AdminTemplate>}/>,
+  <Route path='/admin/statement/employee/:empId'  element={<AdminTemplate><ViewAllStatement getStatementApi={adminAllStatment} type={"admin"}/></AdminTemplate>}/>,
 
 
 ]

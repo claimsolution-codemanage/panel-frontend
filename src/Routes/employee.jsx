@@ -1,6 +1,7 @@
 import EmployeeTemplate from "../template/employeeTemplate"
 import PanelTemplate from "../template/PanelTemplate"
 import { Route } from "react-router-dom"
+import { empOpAllStatment } from "../apis"
 
 
 // for employee routes
@@ -32,6 +33,7 @@ import EmpViewMySathi from "../pages/employee/viewMySathi"
 
 // for sale employee
 import EmployeeAddPartner from '../pages/employee/sales/addPartner'
+import ViewAllStatement from "../components/Reuse/ViewAllStatement"
 
 export const employeeRoutes = [
     <Route path='/employee/signin' element={<PanelTemplate><EmployeeSignIn/></PanelTemplate>}/>,
@@ -62,6 +64,9 @@ export const employeeRoutes = [
   <Route path='/employee/branch-team'  element={<EmployeeTemplate><EmpBranchTeam/></EmployeeTemplate>}/>,
   <Route path='/employee/add-sathi-team'  element={<EmployeeTemplate><EmployeeAddSathiAcc/></EmployeeTemplate>}/>,
   <Route path='/employee/view-sathi/:_id'  element={<EmployeeTemplate><EmpViewMySathi/></EmployeeTemplate>}/>,
+  <Route path='/employee/statement/partner/:partnerId'  element={<EmployeeTemplate><ViewAllStatement getStatementApi={empOpAllStatment} type={"operation"}/></EmployeeTemplate>}/>,
+  <Route path='/employee/statement/employee/:empId'  element={<EmployeeTemplate><ViewAllStatement getStatementApi={empOpAllStatment} type={"operation"}/></EmployeeTemplate>}/>,
+  <Route path='/employee/statement/sathi-team/:empId'  element={<EmployeeTemplate><ViewAllStatement getStatementApi={empOpAllStatment} type={"sathi team"}/></EmployeeTemplate>}/>,
 
 
 ]

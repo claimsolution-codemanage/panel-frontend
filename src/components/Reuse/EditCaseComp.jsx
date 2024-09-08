@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react"
 import { policyType,allState, generalInsuranceList, healthInsuranceList, LifeInsuranceList,otherInsuranceList } from "../../utils/constant"
 import { toast } from 'react-toastify'
-import { useNavigate } from "react-router-dom"
+import { useLocation, useNavigate } from "react-router-dom"
 import { isNaN, useFormik } from 'formik'
 import * as yup from 'yup'
 import { FaFilePdf, FaFileImage,FaFileWord } from 'react-icons/fa6'
@@ -28,6 +28,7 @@ export default function EditCaseComp({viewCase,updateCase,attachementUpload,addC
     const [uploadingDocs, setUploadingDocs] = useState(false)
     const attachmentRef = useRef()
     const navigate = useNavigate()
+    const location = useLocation()
     // console.log("params",params?._id);
     const [data, setData] = useState({
         name: "",
@@ -127,6 +128,8 @@ export default function EditCaseComp({viewCase,updateCase,attachementUpload,addC
 
     })
 
+    
+
     useEffect(() => {
         if(caseDetailsFormik?.values?.policyType?.toLowerCase() == "other" || caseDetailsFormik?.values?.complaintType?.toLowerCase() == "other"){
             if(caseDetailsFormik?.values?.policyType?.toLowerCase() == "other"){
@@ -164,7 +167,7 @@ export default function EditCaseComp({viewCase,updateCase,attachementUpload,addC
         // }
     }, [others, caseDetailsFormik?.values])
 
-    console.log("error---",error);
+    // console.log("error---",error);
 
     // useEffect(()=>{
     //     const policyType = caseDetailsFormik?.values?.policyType
@@ -305,9 +308,17 @@ export default function EditCaseComp({viewCase,updateCase,attachementUpload,addC
             }
         }, [id])
 
-    const handleCaseDocsUploading =(payload)=>{
-            setUploadedFiles([...uploadedFiles,{...payload,new:true}])
+    const handleCaseDocsUploading = (payload) => {
+        setUploadedFiles([...uploadedFiles, { ...payload, new: true }])
+    }
+
+    const handleBack = () => {
+        if (location?.state?.filter && location?.state?.back) {
+            navigate(location?.state?.back, { state: { ...location?.state,back:location?.pathname } });
+        } else {
+            navigate(-1)
         }
+    };
 
 
 
@@ -316,7 +327,7 @@ export default function EditCaseComp({viewCase,updateCase,attachementUpload,addC
         <div>
             <div className="d-flex justify-content-between bg-color-1 text-primary fs-5 px-4 py-3 shadow">
                 <div className="d-flex flex align-items-center gap-3">
-                    <IoArrowBackCircleOutline className="fs-3" style={{ cursor: 'pointer' }} onClick={() => navigate(-1)} />
+                    <IoArrowBackCircleOutline className="fs-3" style={{ cursor: 'pointer' }} onClick={handleBack} />
                     <div className="d-flex flex align-items-center gap-1">
                         <span>Edit Case</span>
                     </div>

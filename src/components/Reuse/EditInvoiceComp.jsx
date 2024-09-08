@@ -12,7 +12,7 @@ import EditItem from '../Common/InvoiceComp/editItem'
 import { BiMessageSquareEdit } from "react-icons/bi";
 import { useReactToPrint } from 'react-to-print';
 import { toast } from 'react-toastify'
-import { useNavigate, useParams } from 'react-router-dom'
+import { useLocation, useNavigate, useParams } from 'react-router-dom'
 import { IoArrowBackCircleOutline } from 'react-icons/io5'
 import Loader from '../Common/loader'
 import { invoiceFormatDate } from '../../utils/helperFunction'
@@ -23,6 +23,7 @@ export default function EditInvoiceComp({getInvoice,id,editInvoice,allInvoiceUrl
   const toWords = new ToWords()
   const param = useParams()
   const navigate = useNavigate()
+  const location = useLocation()
   const [loading, setLoading] = useState(false)
   const [loadInvoice,setLoadInvoice] = useState({status:true,data:{}})
   const [showSender, setShowSender] = useState(false)
@@ -254,12 +255,20 @@ useEffect(() => {
     }
   }
 
+  const handleBack = () => {
+    if(location?.state?.filter && location?.state?.back){
+        navigate(location?.state?.back,{state:{...location?.state,back:location?.pathname}});
+    }else{
+        navigate(-1)
+    }
+  };
+
   return (
     <div>{loadInvoice.status ? <Loader/> :
     <div>
       <div className="d-flex justify-content-between bg-color-1 text-primary fs-5 px-4 py-3 shadow">
         <div className="d-flex flex align-items-center gap-3">
-        <IoArrowBackCircleOutline className="fs-3" onClick={() => navigate(-1)} style={{ cursor: "pointer" }} />
+        <IoArrowBackCircleOutline className="fs-3" onClick={handleBack} style={{ cursor: "pointer" }} />
           <div className="d-flex flex align-items-center gap-1">
             <span>Edit Invoice</span>
           </div>

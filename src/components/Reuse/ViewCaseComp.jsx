@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react"
 import { adminGetCaseById } from "../../apis"
 import { toast } from 'react-toastify'
-import { useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { useParams } from "react-router-dom"
 import { IoArrowBackCircleOutline } from 'react-icons/io5'
 import Button from 'react-bootstrap/Button';
@@ -30,13 +30,16 @@ import ConfirmationModal from "../../components/Common/confirmationModal"
 import { getCheckStorage } from "../../utils/helperFunction"
 import SetStatusOfProfile from "../Common/setStatusModal"
 
-export default function ViewCaseComp({id,getCase,role,attachementUpload,addCaseDoc,editUrl,addCaseCommit,
-viewPartner,viewClient,editCaseProcess,addCaseProcess,addReference,deleteReference,deleteDoc,isAddRefence,isAddCaseProcess,isAddCommit,
+export default function ViewCaseComp({id,getCase,role,attachementUpload,addCaseDoc,
+editUrl,addCaseCommit,viewPartner,viewClient,editCaseProcess,addCaseProcess,addReference,
+deleteReference,deleteDoc,isAddRefence,isAddCaseProcess,isAddCommit,
 isViewProfile,setCaseDocStatus,viewEmp
 }) {
+
     const [data, setData] = useState([])
     const [uploadingDocs, setUploadingDocs] = useState(false)
     const state = useContext(AppContext)
+    const location = useLocation()
     const [addCaseReference, setAddCaseReference] = useState({ show: false, _id: "" })
     const [loading, setLoading] = useState(false)
     const [changeStatus, setChangeStatus] = useState({ status: false, details: "" })
@@ -151,6 +154,16 @@ isViewProfile,setCaseDocStatus,viewEmp
         }
       }
 
+console.log(location);
+
+      const handleBack = () => {
+        if(location?.state?.filter && location?.state?.back){
+            navigate(location?.state?.back,{state:{...location?.state,back:location?.pathname}});
+        }else{
+            navigate(-1)
+        }
+      };
+
     return (<>
         {loading ? <Loader /> :
             <div>
@@ -158,7 +171,7 @@ isViewProfile,setCaseDocStatus,viewEmp
                     <div>
                         <div className="d-flex justify-content-between bg-color-1 text-primary fs-5 px-4 py-3 shadow">
                             <div className="d-flex flex align-items-center gap-3">
-                                <IoArrowBackCircleOutline className="fs-3" onClick={() => navigate(-1)} style={{ cursor: "pointer" }} />
+                                <IoArrowBackCircleOutline className="fs-3" onClick={handleBack} style={{ cursor: "pointer" }} />
                                 <div className="d-flex flex align-items-center gap-1">
                                     <span>View Case</span>
 
@@ -177,7 +190,7 @@ isViewProfile,setCaseDocStatus,viewEmp
                                                         <div className="d-flex align-items-center justify-content-between">
                                                             <h6 className="text-primary text-capitalize text-center fs-3">{data[0]?.caseFrom}</h6>
                                                           
-                                                            {isViewProfile && <Link to={data[0]?.caseFrom == "partner" ? `${viewPartner}${data[0]?.partnerId}` :( data[0]?.caseFrom == "client" ? `${viewClient}${data[0]?.clientId}` : `${viewEmp}${data[0]?.empSaleId}`)} className="btn btn-primary">View</Link>}
+                                                            {isViewProfile && <Link state={{filter: location?.state?.filter,back:location?.pathname}}  to={data[0]?.caseFrom == "partner" ? `${viewPartner}${data[0]?.partnerId}` :( data[0]?.caseFrom == "client" ? `${viewClient}${data[0]?.clientId}` : `${viewEmp}${data[0]?.empSaleId}`)}  className="btn btn-primary">View</Link>}
                                                         </div>
                                                     </div>
                                                     <div className="row">
@@ -198,11 +211,11 @@ isViewProfile,setCaseDocStatus,viewEmp
 
                                                         {data[0]?.partnerId && <div className="mb-2 d-flex align-items-center gap-3 col-12 col-md-4">
                                                             <h6 className="fw-bold">Reference of partner </h6>
-                                                            <Link to={`${viewPartner}${data[0]?.partnerId}`} className="h6 text-decoration-underline text-capitalize">View</Link>
+                                                            <Link to={`${viewPartner}${data[0]?.partnerId}`} state={{filter: location?.state?.filter,back:location?.pathname}} className="h6 text-decoration-underline text-capitalize">View</Link>
                                                         </div>}
                                                         {data[0]?.empSaleId && <div className="mb-2 d-flex align-items-center gap-3 col-12 col-md-4">
                                                             <h6 className="fw-bold">Reference of employee</h6>
-                                                            <Link to={`${viewEmp}${data[0]?.empSaleId}`} className="h6 text-decoration-underline text-capitalize">View</Link>
+                                                            <Link to={`${viewEmp}${data[0]?.empSaleId}`} state={{filter: location?.state?.filter,back:location?.pathname}} className="h6 text-decoration-underline text-capitalize">View</Link>
                                                         </div>}
 
                                                         {data[0]?.caseFrom != "client" &&
@@ -220,7 +233,7 @@ isViewProfile,setCaseDocStatus,viewEmp
                                                         <div className="d-flex gap-2 align-items-center justify-content-between">
                                                             <h6 className="text-primary text-center fs-3">Case Details</h6>
                                                             {editUrl && <div className="d-flex gap-2">
-                                                                  <Link to={`${editUrl}${data[0]?._id}`} className="btn btn-primary">Edit/ Update</Link>
+                                                                  <Link to={`${editUrl}${data[0]?._id}`} state={{filter: location?.state?.filter,back:location?.pathname}} className="btn btn-primary">Edit/ Update</Link>
                                                               
                                                               {isAddRefence && <>
                                                             
@@ -234,7 +247,7 @@ isViewProfile,setCaseDocStatus,viewEmp
                                                     <div className="row">
                                                         <div className="mb-2 d-flex align-items-center gap-3 col-12 col-md-4">
                                                             <h6 className="fw-bold">Case Date</h6>
-                                                            <p className=" h6 text-capitalize">{data[0]?.createdAt && new Date(data[0]?.createdAt).toLocaleDateString()}</p>
+                                                            <p className=" h6 text-capitalize">{data[0]?.createdAt &&  getFormateDMYDate(data[0]?.createdAt)}</p>
                                                         </div>
                                                         <div className="mb-2 d-flex align-items-center gap-3 col-12 col-md-4">
 
@@ -395,7 +408,7 @@ isViewProfile,setCaseDocStatus,viewEmp
                                                                         {role?.toLowerCase()=="admin" &&   <td>
                                                                             <span style={{ cursor: "pointer", height: 30, width: 30, borderRadius: 30 }} className="bg-warning text-dark d-flex align-items-center justify-content-center" onClick={() => setShowEditCaseModal({ status: true, details: { caseId: data[0]?._id, processId: item?._id, caseStatus: item?.status, caseRemark: item?.remark, isCurrentStatus: data[0]?.processSteps.length == ind + 1 } })}><CiEdit /></span>
                                                                         </td>}
-                                                                        <td className="text-nowrap "> {item?.date && <p className="mb-1">{getFormateDMYDate(item?.date)}</p>}</td>
+                                                                        <td className="text-nowrap "> {item?.createdAt && <p className="mb-1">{getFormateDMYDate(item?.createdAt)}</p>}</td>
                                                                         <td className="text-nowrap ">{item?.status && <p className={`mb-1 badge ${(item?.status?.toLowerCase() == "reject" ? "bg-danger" : (item?.status?.toLowerCase() == "pending" ?  "bg-warning" : (item?.status?.toLowerCase() == "resolve" ? "bg-success" :"bg-primary") ))}`}>{item?.status}</p>}</td>
                                                                         {role?.toLowerCase()=="admin" &&  <td className="text-nowrap "> <p className="mb-1 text-capitalize">{item?.consultant ? item?.consultant : "System"} </p></td> }
                                                                         <td className="text-break col-4">{item?.remark && <p className="mb-1 text-center">{item?.remark}</p>}</td>
@@ -423,7 +436,7 @@ isViewProfile,setCaseDocStatus,viewEmp
                                                             <div className={`${commentBy(commit) && "float-end"} w-25`}>
                                                                 <div className={`${commentBy(commit)? "bg-info  w-auto text-dark" : "bg-primary text-white"} p-2 rounded-3`}>
                                                                     {commit?.message}</div>
-                                                                <p className="badge bg-warning text-dark m-0">{commentBy(commit) ? "you" : commit?.name} | {new Date(commit?.date).toLocaleDateString()}</p>
+                                                                <p className="badge bg-warning text-dark m-0">{commentBy(commit) ? "you" : commit?.name} | {commit?.createdAt && getFormateDMYDate(commit?.createdAt)}</p>
                                                             </div>
                                                         </div>)}
 

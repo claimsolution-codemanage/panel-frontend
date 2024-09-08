@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 import { toast } from 'react-toastify'
-import { useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { useParams } from "react-router-dom"
 import { IoArrowBackCircleOutline } from 'react-icons/io5'
 import Loader from "../../components/Common/loader"
@@ -19,6 +19,7 @@ export default function ViewPartnerComp({viewPartner,id,role,editUrl,isEdit}) {
     const [changeStatus, setChangeStatus] = useState({ status: false, details: {} })
     const [adminTag, setAdminTag] = useState({ status: false, details: {} })
     const navigate = useNavigate()
+    const location = useLocation()
 
     useEffect(() => {
         if (id || !adminTag?.status) {
@@ -47,12 +48,20 @@ export default function ViewPartnerComp({viewPartner,id,role,editUrl,isEdit}) {
         }
     }, [id, changeStatus, adminTag])
 
+  const handleBack = () => {
+    if(location?.state?.filter && location?.state?.back){
+        navigate(location?.state?.back,{state:{...location?.state,back:location?.pathname}});
+    }else{
+        navigate(-1)
+    }
+  };
+
     return (<>
         {loading ? <Loader /> :
             <div>
                 <div className="d-flex justify-content-between bg-color-1 text-primary fs-5 px-4 py-3 shadow">
                     <div className="d-flex flex align-items-center gap-3">
-                        {role?.toLowerCase()!=="partner" && <IoArrowBackCircleOutline className="fs-3" onClick={() => navigate(-1)} style={{ cursor: "pointer" }} />} 
+                        {role?.toLowerCase()!=="partner" && <IoArrowBackCircleOutline className="fs-3" onClick={handleBack} style={{ cursor: "pointer" }} />} 
                         <div className="d-flex flex align-items-center gap-1">
                             <span>{role?.toLowerCase()==="partner" ? "View Profile" :"View Partner Details"}</span>
                         </div>
@@ -152,6 +161,10 @@ export default function ViewPartnerComp({viewPartner,id,role,editUrl,isEdit}) {
                                                 <div className="mb-2 d-flex align-items-center gap-3">
                                                     <h6 className="fw-bold">City</h6>
                                                     <p className=" h6 text-capitalize">{data[0]?.profile?.city}</p>
+                                                </div>
+                                                <div className="mb-2 d-flex align-items-center gap-3">
+                                                    <h6 className="fw-bold">Address</h6>
+                                                    <p className=" h6 text-capitalize">{data[0]?.profile?.address}</p>
                                                 </div>
                                                 <div className="mb-2 d-flex align-items-center gap-3">
                                                     <h6 className="fw-bold">State</h6>

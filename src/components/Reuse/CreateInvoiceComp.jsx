@@ -12,14 +12,16 @@ import { BiMessageSquareEdit } from "react-icons/bi";
 import { useReactToPrint } from 'react-to-print';
 import { toast } from 'react-toastify'
 import { financeEmployeeCreateInvoice } from '../../apis'
-import { useNavigate, useParams } from 'react-router-dom'
+import { useLocation, useNavigate, useParams } from 'react-router-dom'
 import {ToWords} from 'to-words'
 import { invoiceFormatDate } from '../../utils/helperFunction'
+import { IoArrowBackCircleOutline } from 'react-icons/io5'
 
 export default function CreateInvoiceComp({createInvoice,clientId,caseId,viewInvoiceUrl}) {
   const navigate = useNavigate()
   const toWords = new ToWords()
   const printRef = useRef()
+  const location = useLocation()
   const caseParam = useParams()
   const [loading, setLoading] = useState(false)
   const [showSender, setShowSender] = useState(false)
@@ -29,7 +31,7 @@ export default function CreateInvoiceComp({createInvoice,clientId,caseId,viewInv
   const [finalDetails, setFinalDetails] = useState({ subAmt: 0, gstAmt: 0, totalAmt: 0, billDate: new Date().getTime() })
 
 
-  console.log("caseParam",caseParam);
+  // console.log("caseParam",caseParam);
 
   const senderFormik = useFormik({
     initialValues: {
@@ -221,16 +223,24 @@ export default function CreateInvoiceComp({createInvoice,clientId,caseId,viewInv
     }
   }
 
-
+  const handleBack = () => {
+    if(location?.state?.filter && location?.state?.back){
+        navigate(location?.state?.back,{state:{...location?.state,back:location?.pathname}});
+    }else{
+        navigate(-1)
+    }
+  };
 
   return (
     <div>
       <div className="d-flex justify-content-between bg-color-1 text-primary fs-5 px-4 py-3 shadow">
-        <div className="d-flex flex align-items-center gap-3">
-          <div className="d-flex flex align-items-center gap-1">
-            <span>Create Invoice</span>
+        <div className="d-flex justify-content-between ">
+          <div className="d-flex flex align-items-center gap-3">
+            {location?.state?.back && <IoArrowBackCircleOutline className="fs-3" onClick={handleBack} style={{ cursor: "pointer" }} />}
+            <div className="d-flex flex align-items-center gap-1">
+              <span>Create Invoice</span>
+            </div>
           </div>
-
         </div>
         <div className="">
           <button aria-disabled={loading} type="submit" className={`btn btn-primary color-1 w-100 ${loading && "disabled"}`} onClick={handleSave}>  {loading ? <span className="spinner-border spinner-border-sm" role="status" aria-hidden={true}></span> : <span>Save </span>} </button>

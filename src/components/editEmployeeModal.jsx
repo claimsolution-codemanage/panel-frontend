@@ -6,6 +6,7 @@ import { useFormik } from 'formik';
 import PhoneInput from 'react-phone-input-2';
 import { employeeType,employeeDesignation } from '../utils/constant';
 import * as yup from 'yup'
+import { checkNumber } from '../utils/helperFunction';
 
 export default function EditEmployeeModal({ id, hide, show, handleComfirmation,details }) {
     const [loading, setLoading] = useState(false)
@@ -17,7 +18,12 @@ export default function EditEmployeeModal({ id, hide, show, handleComfirmation,d
             type: details?.type, 
             designation: details?.designation, 
             mobileNo: details?.mobileNo,
-            branchId:details?.branchId
+            branchId:details?.branchId,
+            bankName:details?.bankName || "",
+            bankBranchName:details?.bankBranchName || "",
+            bankAccountNo:details?.bankAccountNo || "",
+            panNo:details?.panNo || "",
+            address:details?.address || "",
          },
         validationSchema: yup.object().shape({
             fullName: yup.string().required("FullName is required"),
@@ -25,6 +31,11 @@ export default function EditEmployeeModal({ id, hide, show, handleComfirmation,d
             designation: yup.string().required("Employee designation is required"),
             mobileNo: yup.string().required("Employee mobile No is required"),
             branchId: yup.string().required("Employee branch ID is required"),
+            bankName:yup.string(),
+            bankBranchName:yup.string(),
+            bankAccountNo:yup.string(),
+            panNo:yup.string(),
+            address:yup.string(),
         }),
         onSubmit: async (values) => {
             setLoading(true)
@@ -97,6 +108,26 @@ export default function EditEmployeeModal({ id, hide, show, handleComfirmation,d
                                 <span className="text-danger">{employeeUpdateFormik?.errors?.designation}</span>
                             ) : null}
                                 </div>
+                        <div className="mb-3">
+                            <input type="text" name="bankName" value={employeeUpdateFormik?.values?.bankName} onChange={employeeUpdateFormik.handleChange} className={`form-control ${employeeUpdateFormik?.touched?.bankName && employeeUpdateFormik?.errors?.bankName && "error"}`} placeholder="Bank name" />
+                            <p className="text-danger">{employeeUpdateFormik?.touched?.bankName && employeeUpdateFormik?.errors?.bankName}</p>
+                        </div>
+                        <div className="mb-3">
+                            <input type="text" name="bankBranchName" value={employeeUpdateFormik?.values?.bankBranchName} onChange={employeeUpdateFormik.handleChange} className={`form-control ${employeeUpdateFormik?.touched?.bankBranchName && employeeUpdateFormik?.errors?.bankBranchName && "error"}`} placeholder="Bank branch name" />
+                            <p className="text-danger">{employeeUpdateFormik?.touched?.bankBranchName && employeeUpdateFormik?.errors?.bankBranchName}</p>
+                        </div>
+                        <div className="mb-3">
+                            <input type="text" name="bankAccountNo" value={employeeUpdateFormik?.values?.bankAccountNo} onChange={(e)=>checkNumber(e) && employeeUpdateFormik.handleChange(e)} className={`form-control ${employeeUpdateFormik?.touched?.bankAccountNo && employeeUpdateFormik?.errors?.bankAccountNo && "error"}`} placeholder="Bank account no" />
+                            <p className="text-danger">{employeeUpdateFormik?.touched?.bankAccountNo && employeeUpdateFormik?.errors?.bankAccountNo}</p>
+                        </div>
+                        <div className="mb-3">
+                            <input type="text" name="panNo" value={employeeUpdateFormik?.values?.panNo} onChange={employeeUpdateFormik.handleChange} className={`form-control ${employeeUpdateFormik?.touched?.panNo && employeeUpdateFormik?.errors?.panNo && "error"}`} placeholder="PAN no" />
+                            <p className="text-danger">{employeeUpdateFormik?.touched?.panNo && employeeUpdateFormik?.errors?.panNo}</p>
+                        </div>
+                        <div className="mb-3">
+                            <input type="text" name="address" value={employeeUpdateFormik?.values?.address} onChange={employeeUpdateFormik.handleChange} className={`form-control ${employeeUpdateFormik?.touched?.address && employeeUpdateFormik?.errors?.address && "error"}`} placeholder="Address" />
+                            <p className="text-danger">{employeeUpdateFormik?.touched?.address && employeeUpdateFormik?.errors?.address}</p>
+                        </div>
 
 
                         <div className="d-flex gap-2 float-end">

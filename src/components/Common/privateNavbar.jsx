@@ -3,7 +3,7 @@ import { BsFillPersonLinesFill, BsPostcard } from 'react-icons/bs'
 import { RiAdminFill, RiBankLine, RiTeamLine } from 'react-icons/ri'
 import { SiMicrosoftteams, SiReaddotcv } from 'react-icons/si'
 import { MdOutlineCancelPresentation, MdOutlineLibraryAdd, MdOutlinePostAdd } from 'react-icons/md'
-import { IoLogOutOutline,IoSettingsOutline } from 'react-icons/io5'
+import { IoLogOutOutline,IoNewspaperOutline,IoSettingsOutline } from 'react-icons/io5'
 import { Link } from 'react-router-dom'
 import { AppContext } from '../../App'
 import { useContext, useEffect, useState } from 'react'
@@ -73,6 +73,10 @@ export default function PrivateNavbar() {
                     <MdOutlineLibraryAdd />
                     <div className=''>Add Case</div>
                 </Link>
+                <Link to={`/partner/statement/${userDetails?._id}`} className={`d-flex align-items-center mx-2 px-2 py-2 gap-3 text-white   ${(location?.pathname?.includes("/partner/statement/")) && "active_item"}`}  >
+             <IoNewspaperOutline />
+             <div className=''>Commission</div>
+            </Link>
                 <Link to="/partner/view service agreement" className={`d-flex align-items-center mx-2 px-2 py-2 gap-3  text-white  ${location.pathname == "/partner/view%20service%20agreement" && "active_item"}`} >
                 <LuPcCase />
                     <div className=''>Service Agreement</div>
@@ -258,11 +262,13 @@ export default function PrivateNavbar() {
              <RiTeamLine />
              <div className=''>Add Sathi Team</div>
          </Link>
-            <Link to="/employee/branch-team" className={`d-flex align-items-center mx-2 px-2 py-2 gap-3 text-white   ${(location.pathname.includes("branch-team") || location?.pathname?.includes("view-sathi")) && "active_item"}`}  >
+            </>  }
+            {(empType?.toLowerCase() =="sales" || empType?.toLowerCase() =="branch" || empType?.toLowerCase() =="operation") && <>
+            <Link to="/employee/branch-team" className={`d-flex align-items-center mx-2 px-2 py-2 gap-3 text-white   ${(location.pathname.includes("branch-team") || location?.pathname?.includes("view-sathi") || location?.pathname?.includes("/statement/employee/")) && "active_item"}`}  >
              <SiMicrosoftteams />
              <div className=''>Branch Team</div>
-         </Link>
-            </>  }
+            </Link>
+            </>}
             {/* for finance employee */}
             {(empType?.toLowerCase() =="operation" || empType?.toLowerCase() =="finance") && <>
                 <Link to="/employee/all-invoices" className={`d-flex align-items-center mx-2 px-2 py-2 gap-3 text-white   ${(location.pathname.includes("/employee/all-invoices") || location.pathname.includes("/employee/view-invoice") ) && "active_item"}`}  >
@@ -284,6 +290,12 @@ export default function PrivateNavbar() {
                     </Link>
                     </div>
                 </div> */}
+            </>}
+            {(empType?.toLowerCase() =="sathi team") && <>
+            <Link to={`/employee/statement/sathi-team/${userDetails?._id}`} className={`d-flex align-items-center mx-2 px-2 py-2 gap-3 text-white   ${(location?.pathname?.includes("/statement/sathi-team/")) && "active_item"}`}  >
+             <IoNewspaperOutline />
+             <div className=''>Commission</div>
+            </Link>
             </>}
                 <Link to="/employee/reset password" className={`d-flex align-items-center mx-2 px-2 py-2 gap-3 text-white   ${location.pathname == "/employee/reset%20password" && "active_item"}`}  >
                     <IoSettingsOutline />

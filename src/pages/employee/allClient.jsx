@@ -15,7 +15,7 @@ import { FaCircleArrowDown } from 'react-icons/fa6'
 import { LuPcCase } from 'react-icons/lu'
 import { IoArrowBackCircleOutline } from 'react-icons/io5'
 import ChangeStatusModal from "../../components/Common/changeStatusModal"
-import { Link, useNavigate } from "react-router-dom"
+import { Link, useLocation, useNavigate } from "react-router-dom"
 import {BiLeftArrow} from 'react-icons/bi'
 import {BiRightArrow} from 'react-icons/bi'
 import SetStatusOfProfile from "../../components/Common/setStatusModal"
@@ -30,21 +30,22 @@ import { SiMicrosoftexcel } from "react-icons/si"
 
  
 export default function EmployeeAllClient() {
-  const state = useContext(AppContext)
-  const empType  = state?.myAppData?.details?.empType
+  const stateContext = useContext(AppContext)
+  const empType  = stateContext?.myAppData?.details?.empType
   const [data, setData] = useState([])
+  const location = useLocation()
   const navigate = useNavigate()
   const [isSearch,setIsSearch] = useState(false)
   const [loading, setLoading] = useState(true)
-  const [pageItemLimit, setPageItemLimit] = useState(10)
-  const [searchQuery, setSearchQuery] = useState("")
+  const [pageItemLimit, setPageItemLimit] = useState(location?.pathname==location?.state?.path && location?.state?.filter?.pageItemLimit ? location?.state?.filter?.pageItemLimit :10)
+  const [searchQuery, setSearchQuery] = useState(location?.pathname==location?.state?.path && location?.state?.filter?.searchQuery ? location?.state?.filter?.searchQuery :"")
   const [noOfClient, setNoOfClient] = useState(0)
-  const [pgNo, setPgNo] = useState(1)
+  const [pgNo, setPgNo] = useState(location?.pathname==location?.state?.path && location?.state?.filter?.pgNo ? location?.state?.filter?.pgNo :1)
   const [changeStatus, setChangeStatus] = useState({show: false, details: "" })
   const [showCalender, setShowCalender] = useState(false)
   const [downloading, setDownloading] = useState(false)
   const [dateRange, setDateRange] = useState(
-    {
+    location?.pathname==location?.state?.path && location?.state?.filter?.dateRange ? location?.state?.filter?.dateRange : {
       startDate: new Date("2024/01/01"),
       endDate: new Date(),
     });
@@ -145,6 +146,13 @@ export default function EmployeeAllClient() {
     }
   }
 
+const filter = {
+  pageItemLimit,
+  pgNo,
+  searchQuery,
+  dateRange
+}
+
   return (<>
   {loading ? <Loader/> : 
     <div>
@@ -192,7 +200,7 @@ export default function EmployeeAllClient() {
               <th scope="col" className="text-nowrap" ><span>Action</span></th>
               <th scope="col" className="text-nowrap">Branch ID</th>
                       <th scope="col" className="text-nowrap">Associate With Us</th>
-                      <th scope="col" className="text-nowrap">Cient Name</th>
+                      <th scope="col" className="text-nowrap">Client Name</th>
                       <th scope="col" className="text-nowrap" >Client Code</th>
                       <th scope="col" className="text-nowrap" >Mobile No</th>
                       <th scope="col" className="text-nowrap" >Email Id</th>
@@ -204,9 +212,9 @@ export default function EmployeeAllClient() {
             {data.map((item, ind) => <tr key={item._id} className="border-2 border-bottom border-light text-center">
               <th scope="row" className="text-nowrap">{ind + 1}</th>
               <td className="text-nowrap"><span className="d-flex align-items-center gap-2">
-              <span  style={{ height: 30, width: 30, borderRadius: 30 }} className="cursor-pointer bg-success text-white d-flex align-items-center justify-content-center" onClick={() => navigate(`/employee/client details/${item._id}`)}><HiMiniEye /></span>
+              <span  style={{ height: 30, width: 30, borderRadius: 30 }} className="cursor-pointer bg-success text-white d-flex align-items-center justify-content-center" onClick={() => navigate(`/employee/client details/${item._id}`,{state:{filter,back:location?.pathname,path:location?.pathname}})}><HiMiniEye /></span>
               {empType?.toLowerCase()=="operation" && <>
-              <Link to={`/employee/edit-client/${item?._id}`} style={{ height: 30, width: 30, borderRadius: 30 }} className="cursor-pointer bg-info text-white d-flex align-items-center justify-content-center"><CiEdit className="fs-5 text-dark"/></Link>
+              <Link to={`/employee/edit-client/${item?._id}`} state={{filter,back:location?.pathname,path:location?.pathname}} style={{ height: 30, width: 30, borderRadius: 30 }} className="cursor-pointer bg-info text-white d-flex align-items-center justify-content-center"><CiEdit className="fs-5 text-dark"/></Link>
               </>}
               </span></td>
               <td className="text-nowrap">{item?.branchId}</td>

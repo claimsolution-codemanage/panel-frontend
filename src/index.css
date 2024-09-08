@@ -286,7 +286,7 @@ img.btn-icon {
 }
 
 .popup-right-side-form{
-  margin-top: 180px;
+  margin-top: 100px;
 }
 
 .cursor-pointer{
@@ -297,3 +297,8 @@ img.btn-icon {
   color: #ff2525;
   text-decoration: underline !important;
 }
+
+.react-datepicker-wrapper{
+  width: 100%;
+}
+

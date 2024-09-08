@@ -15,7 +15,7 @@ import { FaCircleArrowDown } from 'react-icons/fa6'
 import { LuPcCase } from 'react-icons/lu'
 import { IoArrowBackCircleOutline } from 'react-icons/io5'
 import ChangeStatusModal from "../../components/Common/changeStatusModal"
-import { useNavigate } from "react-router-dom"
+import { useLocation, useNavigate } from "react-router-dom"
 import {BiLeftArrow} from 'react-icons/bi'
 import {BiRightArrow} from 'react-icons/bi'
 import { adminChangeCaseStatus,adminShareCaseToEmployee } from "../../apis"
@@ -40,14 +40,15 @@ import { SiMicrosoftexcel } from "react-icons/si";
 export default function AdminTrashCase() {
   const [data, setData] = useState([])
   const navigate = useNavigate()
+  const location = useLocation()
   const [loading, setLoading] = useState(true)
-  const [statusType, setStatusType] = useState("")
-  const [pageItemLimit, setPageItemLimit] = useState(10)
+  const [statusType, setStatusType] = useState(location?.pathname==location?.state?.path && location?.state?.filter?.statusType ? location?.state?.filter?.statusType :"")
+  const [pageItemLimit, setPageItemLimit] = useState(location?.pathname==location?.state?.path && location?.state?.filter?.pageItemLimit ? location?.state?.filter?.pageItemLimit :10)
   const [showCalender, setShowCalender] = useState(false)
   const [isSearch,setIsSearch] = useState(false)
-  const [searchQuery, setSearchQuery] = useState("")
+  const [searchQuery, setSearchQuery] = useState(location?.pathname==location?.state?.path && location?.state?.filter?.searchQuery ? location?.state?.filter?.searchQuery :"")
   const [noOfCase, setNoOfCase] = useState(0)
-  const [pgNo, setPgNo] = useState(1)
+  const [pgNo, setPgNo] = useState(location?.pathname==location?.state?.path && location?.state?.filter?.pgNo ? location?.state?.filter?.pgNo :1)
   const [changeStatus, setChangeStatus] = useState({ status: false, details: "" })
   const [shareCase,setShareCase] = useState([])
   const [caseShareModal,setCaseShareModal] = useState({status:false,value:[]})
@@ -55,14 +56,14 @@ export default function AdminTrashCase() {
   const [deleteCase,setDeleteCase] = useState({status:false,id:""})
   const [changeisActiveStatus, setChangeIsActiveStatus] = useState({show: false, details: {} })
   const [dateRange, setDateRange] = useState(
-    {
+    location?.pathname==location?.state?.path && location?.state?.filter?.dateRange ? location?.state?.filter?.dateRange : {
       startDate: new Date("2024/01/01"),
       endDate: new Date(),
     });
 
   const handleReset = () => {
     setSearchQuery("")
-    setPageItemLimit(5)
+    setPageItemLimit(10)
     setDateRange({ startDate: new Date("2024/01/01"), endDate: new Date(),})
     setStatusType("")
   }
@@ -163,12 +164,15 @@ const getAllCases =async()=>{
       setShareCase(newCaseList)
     }
   }
-  // console.log("handleShareOnchange",shareCase);
 
-  // console.log("data", data);
-  // console.log("chagne status", changeStatus.details.currentStatus);
+  const filter = {
+    pageItemLimit,
+    pgNo,
+    searchQuery,
+    statusType,
+    dateRange
+  }
 
-  // console.log("range",dateRange);
   return (<>
    {loading?<Loader/> :
     <div>
@@ -248,7 +252,7 @@ const getAllCases =async()=>{
             <td className="text-nowrap"><input class="form-check-input" name="shareCase"  type="checkbox" checked={shareCase.includes(item?._id)} onChange={(e)=>handleShareOnchange(e,item?._id)} id="flexCheckDefault"/></td>
               <th scope="row">{ind + 1}</th>
               <td className="text-nowrap">
-                <span className="d-flex gap-2"><span style={{ cursor: "pointer",height:30,width:30,borderRadius:30 }} className="bg-primary text-white d-flex align-items-center justify-content-center" onClick={() => navigate(`/admin/view case/${item._id}`)}><HiMiniEye /></span>
+                <span className="d-flex gap-2"><span style={{ cursor: "pointer",height:30,width:30,borderRadius:30 }} className="bg-primary text-white d-flex align-items-center justify-content-center" onClick={() => navigate(`/admin/view case/${item._id}`,{state:{filter,back:location?.pathname,path:location?.pathname}})}><HiMiniEye /></span>
                 {/* <span style={{ cursor: "pointer",height:30,width:30,borderRadius:30 }} className="bg-warning text-dark d-flex align-items-center justify-content-center" onClick={() => navigate(`/admin/edit%20case/${item._id}`)}><CiEdit /></span> */}
                 {/* <span style={{ cursor: "pointer",height:30,width:30,borderRadius:30 }} className="bg-success text-white d-flex align-items-center justify-content-center" onClick={() => setChangeStatus({ status: true, details: item })}><VscGitPullRequestGoToChanges /></span> */}
                 <span style={{ cursor: "pointer",height:30,width:30,borderRadius:30 }} className="bg-success text-white d-flex align-items-center justify-content-center" onClick={() => setChangeIsActiveStatus({ show: true, details: {_id:item._id,currentStatus:item?.isActive,name:item?.name,recovery:false} })}><FaTrashRestoreAlt/></span>

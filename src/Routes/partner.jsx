@@ -23,6 +23,8 @@ import PartnerAcceptTls from '../pages/partner/acceptTls'
 import PartnerViewTLS from '../pages/partner/viewTls'
 import PartnerServiceAgreement from '../pages/partner/ServiceAgreement'
 import AcceptPartnerRequest from '../pages/partner/acceptPartnerRequest'
+import ViewAllStatement from '../components/Reuse/ViewAllStatement'
+import { partnerStatement } from '../apis'
 
 export const partnerRoutes = [
     <Route path='/partner/signin' element={<PanelTemplate><SignIn /></PanelTemplate>} />,
@@ -44,6 +46,7 @@ export const partnerRoutes = [
     <Route path='/partner/view case/:_id' element={<PartnerTemplate><PartnerViewCase /></PartnerTemplate>} />,
     <Route path='/partner/view tls' element={<PartnerTemplate><PartnerViewTLS /></PartnerTemplate>} />,
     <Route path='/partner/view service agreement' element={<PartnerTemplate><PartnerServiceAgreement /></PartnerTemplate>} />,
+    <Route path='/partner/statement/:partnerId' element={<PartnerTemplate><ViewAllStatement getStatementApi={partnerStatement}/></PartnerTemplate>} />,
 
 ]
 {/* <Route path='/partner/edit case/:_id' element={<PartnerTemplate><PartnerEditCase/></PartnerTemplate>}/> */ }

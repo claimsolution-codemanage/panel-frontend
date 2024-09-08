@@ -13,13 +13,13 @@ import ReactPaginate from 'react-paginate';
 import { CiEdit } from 'react-icons/ci'
 import { FaCircleArrowDown } from 'react-icons/fa6'
 import { LuPcCase } from 'react-icons/lu'
-import { IoArrowBackCircleOutline } from 'react-icons/io5'
+import { IoArrowBackCircleOutline, IoNewspaperOutline } from 'react-icons/io5'
 import ChangeStatusModal from "../../components/Common/changeStatusModal"
-import { useNavigate } from "react-router-dom"
+import { useLocation, useNavigate } from "react-router-dom"
 import { BiLeftArrow } from 'react-icons/bi'
 import { BiRightArrow } from 'react-icons/bi'
 import SetStatusOfProfile from "../../components/Common/setStatusModal"
-import { adminSetPartnerStatus,adminSharePartnerToSaleEmp } from "../../apis"
+import { adminSetPartnerStatus,adminSharePartnerToSaleEmp,adminAddPartnerRefToEmp } from "../../apis"
 import Loader from "../../components/Common/loader"
 import { useContext } from "react"
 import { AppContext } from "../../App"
@@ -37,25 +37,33 @@ import { CiAlignBottom } from 'react-icons/ci'
 import { IoShareSocialOutline } from "react-icons/io5";
 import SharePartnerModal from "../../components/Common/sharePartnerModal"
 import ChangeBranch from "../../components/changeBranch"
+import AddEmpRefModal from "../../components/addEmpRefModal"
 import { VscGitPullRequestGoToChanges } from "react-icons/vsc"
+import {IoPersonAddOutline} from 'react-icons/io5'
 
 export default function AllAdminPartner() {
   const state = useContext(AppContext)
   const [data, setData] = useState([])
   const navigate = useNavigate()
+  const location = useLocation()
   const [loading, setLoading] = useState(true)
-  const [pageItemLimit, setPageItemLimit] = useState(10)
-  const [searchQuery, setSearchQuery] = useState("")
+  const [pageItemLimit, setPageItemLimit] = useState(location?.pathname==location?.state?.path && location?.state?.filter?.pageItemLimit ? location?.state?.filter?.pageItemLimit :10)
+  const [searchQuery, setSearchQuery] = useState(location?.pathname==location?.state?.path && location?.state?.filter?.searchQuery ? location?.state?.filter?.searchQuery :"")
   const [isSearch, setIsSearch] = useState(false)
   const [noOfPartner, setNoOfPartner] = useState(0)
-  const [pgNo, setPgNo] = useState(1)
+  const [pgNo, setPgNo] = useState(location?.pathname==location?.state?.path && location?.state?.filter?.pgNo ? location?.state?.filter?.pgNo :1)
   const [changeStatus, setChangeStatus] = useState({ show: false, details: {} })
   const [deletePartner, setDeletePartner] = useState({ status: false, id: "", text: "" })
   const [partnerShareModal, setPatnerShareModal] = useState({ status: false, value: [] })
   const [downloading, setDownloading] = useState(false)
-  const [dateRange, setDateRange] = useState({ startDate: new Date("2024/01/01"), endDate: new Date() });
+  const [dateRange, setDateRange] = useState( location?.pathname==location?.state?.path && location?.state?.filter?.dateRange ? 
+    location?.state?.filter?.dateRange : {
+    startDate: new Date("2024/01/01"),
+    endDate: new Date(),
+  });
   const [showCalender, setShowCalender] = useState(false)
   const [changeBranch,setChangeBranch] = useState({loading:false,branchId:null,status:false,_id:null})
+  const [empRef,setEmpRef] = useState({partnerId:null,status:false})
   const [sharePartner, setSharePartner] = useState([])
 
 
@@ -139,10 +147,10 @@ export default function AllAdminPartner() {
 
 
   useEffect(() => {
-    if (!deletePartner?.status && !changeBranch?.status) {
+    if (!deletePartner?.status && !changeBranch?.status && !empRef.status) {
       getAllPartner()
     }
-  }, [pageItemLimit, pgNo, changeStatus, deletePartner,changeBranch?.status])
+  }, [pageItemLimit, pgNo, changeStatus, deletePartner,changeBranch?.status,empRef.status])
 
   useEffect(() => {
     if (isSearch) {
@@ -160,7 +168,7 @@ export default function AllAdminPartner() {
 
   const handleReset = () => {
     setSearchQuery("")
-    setPageItemLimit(5)
+    setPageItemLimit(10)
     setDateRange([{ startDate: new Date("2024/01/01"), endDate: new Date() }])
   }
 
@@ -202,6 +210,12 @@ export default function AllAdminPartner() {
     setPgNo(event.selected + 1)
   };
 
+  const filter = {
+    pageItemLimit,
+    pgNo,
+    searchQuery,
+    dateRange
+  }
 
   // console.log("data", data);
 
@@ -288,12 +302,14 @@ export default function AllAdminPartner() {
                       {/* <td className="text-nowrap"><span className="d-flex align-items-center gap-2"><span style={{ cursor: "pointer" }} onClick={() => navigate(`/admin/partner details/${item._id}`)}><HiMiniEye /></span><span style={{ cursor: "pointer" }} onClick={() => setChangeStatus({ show: true, details: {_id:item._id,currentStatus:item?.isActive} })}><CiEdit /></span></span></td> */}
                       <td className="text-nowrap">
                         <span className="d-flex gap-2">
-                          <span style={{ cursor: "pointer", height: 30, width: 30, borderRadius: 30 }} className="bg-warning text-white d-flex align-items-center justify-content-center" onClick={() => navigate(`/admin/view-partner-report/${item._id}`)}><TbReportAnalytics className="fs-5" /></span>
-                          <Link to={`/admin/edit-partner/${item?._id}`} style={{ height: 30, width: 30, borderRadius: 30 }} className="cursor-pointer bg-info text-white d-flex align-items-center justify-content-center"><CiEdit className="fs-5 text-dark" /></Link>
-                          <span style={{ cursor: "pointer", height: 30, width: 30, borderRadius: 30 }} className="bg-primary text-white d-flex align-items-center justify-content-center" onClick={() => navigate(`/admin/partner details/${item._id}`)}><HiMiniEye /></span>
+                          <span style={{ cursor: "pointer", height: 30, width: 30, borderRadius: 30 }} className="bg-warning text-white d-flex align-items-center justify-content-center" onClick={() => navigate(`/admin/view-partner-report/${item._id}`,{state:{filter,back:location?.pathname,path:location?.pathname}})}><TbReportAnalytics className="fs-5" /></span>
+                          <Link to={`/admin/edit-partner/${item?._id}`} state={{filter,back:location?.pathname,path:location?.pathname}} style={{ height: 30, width: 30, borderRadius: 30 }} className="cursor-pointer bg-info text-white d-flex align-items-center justify-content-center"><CiEdit className="fs-5 text-dark" /></Link>
+                          <span style={{ cursor: "pointer", height: 30, width: 30, borderRadius: 30 }} className="bg-primary text-white d-flex align-items-center justify-content-center" onClick={() => navigate(`/admin/partner details/${item._id}`,{state:{filter,back:location?.pathname,path:location?.pathname}})}><HiMiniEye /></span>
                           <span style={{ cursor: "pointer", height: 30, width: 30, borderRadius: 30 }} className="bg-success text-white d-flex align-items-center justify-content-center" onClick={() => setChangeBranch({ ...changeBranch,status:true,_id:item?._id,branchId:item?.branchId})}><VscGitPullRequestGoToChanges /></span>
+                          <Link to={`/admin/statement/partner/${item?._id}`} state={{filter,back:location?.pathname,path:location?.pathname}}  style={{ cursor: "pointer", height: 30, width: 30, borderRadius: 30 }} className="bg-primary text-white d-flex align-items-center justify-content-center"><IoNewspaperOutline /></Link>
+                         {<span style={{ cursor: "pointer", height: 30, width: 30, borderRadius: 30 }} className="bg-secondary text-white d-flex align-items-center justify-content-center" onClick={() => setEmpRef({partnerId:item._id,status:true})}><IoPersonAddOutline /></span>}
                           <span style={{ cursor: "pointer", height: 30, width: 30, borderRadius: 30 }} className="bg-danger text-white d-flex align-items-center justify-content-center" onClick={() => setChangeStatus({ show: true, details: { _id: item._id, currentStatus: item?.isActive, name: item?.profile?.consultantName, recovery: false } })}><AiOutlineDelete /></span>
-
+                          
                           {/* <span style={{ cursor: "pointer",height:30,width:30,borderRadius:30 }} className="bg-danger text-white d-flex align-items-center justify-content-center" onClick={() => setDeletePartner({status:true,id:item?._id,text:`Your want to delete ${item?.profile?.consultantName} partner`})}><AiOutlineDelete /></span> */}
 
                         </span></td>
@@ -340,6 +356,7 @@ export default function AllAdminPartner() {
           {changeStatus?.show && <SetStatusOfProfile changeStatus={changeStatus} hide={() => setChangeStatus({ show: false, details: {} })} type="Partner" handleChanges={handleChanges} />}
           {deletePartner?.status && <ConfirmationModal show={deletePartner?.status} id={deletePartner?.id} hide={() => setDeletePartner({ status: false, id: "" })} heading="Are you sure?" text={deletePartner?.text ? deletePartner?.text : "Your want to delete this partner"} handleComfirmation={adminDeletePartnerById} />}
           {partnerShareModal.status && <SharePartnerModal handleShareCase={adminSharePartnerToSaleEmp} partnerShareModal={partnerShareModal} close={() => { setPatnerShareModal({ value: [], status: false }); setSharePartner([]) }} getSaleEmp={adminGetSaleEmployee}/>}
+          {empRef?.status && <AddEmpRefModal empRef={empRef} onChangeEmpRef={setEmpRef}  handleApi={adminAddPartnerRefToEmp}/>}
           {changeBranch?.status && <ChangeBranch branch={changeBranch}  onBranchChange={setChangeBranch} type="partner" handleBranch={adminChangeBranch}/>}
         </div>
 

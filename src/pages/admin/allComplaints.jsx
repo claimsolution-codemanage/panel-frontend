@@ -98,6 +98,8 @@ export default function AdminAllComplaint() {
   };
 
 
+  
+
   return (<>
     {loading ? <Loader /> :
       <div>

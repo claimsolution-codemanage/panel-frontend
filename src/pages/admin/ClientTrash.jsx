@@ -15,7 +15,7 @@ import { FaCircleArrowDown } from 'react-icons/fa6'
 import { LuPcCase } from 'react-icons/lu'
 import { IoArrowBackCircleOutline } from 'react-icons/io5'
 import ChangeStatusModal from "../../components/Common/changeStatusModal"
-import { useNavigate } from "react-router-dom"
+import { useLocation, useNavigate } from "react-router-dom"
 import {BiLeftArrow} from 'react-icons/bi'
 import {BiRightArrow} from 'react-icons/bi'
 import SetStatusOfProfile from "../../components/Common/setStatusModal"
@@ -30,12 +30,13 @@ import {FaTrashRestoreAlt} from 'react-icons/fa'
 export default function AdminTrashClient() {
   const [data, setData] = useState([])
   const navigate = useNavigate()
+  const location = useLocation()
   const [loading, setLoading] = useState(false)
-  const [pageItemLimit, setPageItemLimit] = useState(10)
-  const [searchQuery, setSearchQuery] = useState("")
+  const [pageItemLimit, setPageItemLimit] = useState(location?.pathname==location?.state?.path && location?.state?.filter?.pageItemLimit ? location?.state?.filter?.pageItemLimit :10)
+  const [searchQuery, setSearchQuery] = useState(location?.pathname==location?.state?.path && location?.state?.filter?.searchQuery ? location?.state?.filter?.searchQuery :"")
   const [isSearch,setIsSearch] = useState(false)
   const [noOfClient, setNoOfClient] = useState(0)
-  const [pgNo, setPgNo] = useState(1)
+  const [pgNo, setPgNo] = useState(location?.pathname==location?.state?.path && location?.state?.filter?.pgNo ? location?.state?.filter?.pgNo :1)
   const [changeStatus, setChangeStatus] = useState({show: false, details: {} })
   const [deleteClient,setDeleteClient] = useState({status:false,id:"",text:""})
 
@@ -117,7 +118,12 @@ export default function AdminTrashClient() {
   };
 
 
-  // console.log("data", data);
+  const filter = {
+    pageItemLimit,
+    pgNo,
+    searchQuery,
+  }
+
 
   return (<>
   {loading ? <Loader/>  : 
@@ -176,7 +182,7 @@ export default function AdminTrashClient() {
               {/* <td className="text-nowrap"> <span className={`badge ${item?.isActive ? "bg-primary" : "bg-danger"}`}>{item?.isActive ? "Active" : "Unactive"}</span> </td> */}
               {/* <td className="text-nowrap"><span className="d-flex align-items-center gap-2"><span style={{ cursor: "pointer" }} onClick={() => navigate(`/admin/client details/${item._id}`)}><HiMiniEye /></span><span style={{ cursor: "pointer" }} onClick={() => setChangeStatus({ show: true, details: {_id:item._id,currentStatus:item?.isActive} })}><CiEdit /></span></span></td> */}
               <td className="text-nowrap">
-                <span className="d-flex gap-2"><span style={{ cursor: "pointer",height:30,width:30,borderRadius:30 }} className="bg-primary text-white d-flex align-items-center justify-content-center" onClick={() => navigate(`/admin/client details/${item._id}`)}><HiMiniEye /></span>
+                <span className="d-flex gap-2"><span style={{ cursor: "pointer",height:30,width:30,borderRadius:30 }} className="bg-primary text-white d-flex align-items-center justify-content-center" onClick={() => navigate(`/admin/client details/${item._id}`,{state:{filter,back:location?.pathname,path:location?.pathname}})}><HiMiniEye /></span>
                 <span style={{ cursor: "pointer",height:30,width:30,borderRadius:30 }} className="bg-success text-white d-flex align-items-center justify-content-center" onClick={() => setChangeStatus({ show: true, details: {_id:item._id,currentStatus:item?.isActive,name:item?.profile?.consultantName,recovery:false} })}><FaTrashRestoreAlt /></span>
                 <span style={{ cursor: "pointer",height:30,width:30,borderRadius:30 }} className="bg-danger text-white d-flex align-items-center justify-content-center" onClick={() => setDeleteClient({status:true,id:item?._id,text:`Your want to permanent delete ${item?.profile?.consultantName} client`})}><AiOutlineDelete /></span>
                 </span></td>

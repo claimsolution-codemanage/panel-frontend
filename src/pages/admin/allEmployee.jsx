@@ -18,6 +18,8 @@ export default function AllAdminEmployee() {
   isActive={adminSetEmployeeStatus}
   deleteEmployeeId={adminDeleteEmployeeById}
   updateEmployee={adminUpdateEmployeeById}
+  statement={true}
+  statementUrl={"/admin/statement/employee"}
  />
   </>)
 }

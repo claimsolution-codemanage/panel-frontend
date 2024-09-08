@@ -31,6 +31,8 @@ export default function EmployeeAllPartner() {
       handleBrachChange={empOperationChangeBranch}
       unactive={()=>{}}
       isType={empType?.toLowerCase()!="operation" }
+      isEmpRefAccess={empType?.toLowerCase()=="operation" }
+      statement={empType?.toLowerCase()=='operation'}
       />
 </>)
 }

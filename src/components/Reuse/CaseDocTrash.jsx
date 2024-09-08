@@ -6,7 +6,7 @@ import 'react-date-range/dist/styles.css'; // main style file
 import 'react-date-range/dist/theme/default.css'; // theme css file
 import { getFormateDMYDate, getFormateDate } from "../../utils/helperFunction"
 import ReactPaginate from 'react-paginate';
-import { Link, useNavigate } from "react-router-dom"
+import { Link, useLocation, useNavigate } from "react-router-dom"
 import { BiLeftArrow } from 'react-icons/bi'
 import { BiRightArrow } from 'react-icons/bi'
 import Loader from "../../components/Common/loader";
@@ -26,17 +26,18 @@ export default function CaseDocTrash({getAllDoc,isActive,deleteDoc,isTrash,isDel
   const state = useContext(AppContext)
   const [data, setData] = useState([])
   const navigate = useNavigate()
+  const location = useLocation()
   const [loading, setLoading] = useState(true)
   const [isReset, setReset] = useState(true)
-  const [pageItemLimit, setPageItemLimit] = useState(10)
+  const [pageItemLimit, setPageItemLimit] = useState(location?.pathname==location?.state?.path && location?.state?.filter?.pageItemLimit ? location?.state?.filter?.pageItemLimit :10)
   const [showCalender, setShowCalender] = useState(false)
-  const [searchQuery, setSearchQuery] = useState("")
+  const [searchQuery, setSearchQuery] = useState(location?.pathname==location?.state?.path && location?.state?.filter?.searchQuery ? location?.state?.filter?.searchQuery :"")
   const [noOfDoc, setNoOfDoc] = useState(0)
-  const [pgNo, setPgNo] = useState(1)
+  const [pgNo, setPgNo] = useState(location?.pathname==location?.state?.path && location?.state?.filter?.pgNo ? location?.state?.filter?.pgNo :1)
   const [changeStatus, setChangeStatus] = useState({ status: false, details: "" })
   const [deleteCaseDoc, setDeleteDoc] = useState({ status: false, details: {} })
   const [dateRange, setDateRange] = useState(
-    {
+    location?.pathname==location?.state?.path && location?.state?.filter?.dateRange ? location?.state?.filter?.dateRange : {
       startDate: new Date("2024/01/01"),
       endDate: new Date(),
     }
@@ -44,7 +45,7 @@ export default function CaseDocTrash({getAllDoc,isActive,deleteDoc,isTrash,isDel
 
   const handleReset = () => {
     setSearchQuery("")
-    setPageItemLimit(5)
+    setPageItemLimit(10)
     setDateRange({ startDate: new Date("2024/01/01"), endDate: new Date() })
     setReset(true)
   }
@@ -133,6 +134,13 @@ export default function CaseDocTrash({getAllDoc,isActive,deleteDoc,isTrash,isDel
       }
     }}
 
+    const filter = {
+      pageItemLimit,
+      pgNo,
+      searchQuery,
+      dateRange
+    }
+
   return (<>
     {loading ? <Loader /> :
       <div>
@@ -197,7 +205,7 @@ export default function CaseDocTrash({getAllDoc,isActive,deleteDoc,isTrash,isDel
                   {data.map((item, ind) => <tr key={ind} className="border-2 text-nowrap border-bottom border-light text-center">
                     <th scope="row">{ind + 1}</th>
                     <td><span className="d-flex gap-2">
-                      <Link to={getCheckStorage(item?.url)} target="_black" style={{ cursor: "pointer", height: 30, width: 30, borderRadius: 30 }} className="bg-warning text-white d-flex align-items-center justify-content-center"><HiMiniEye /></Link>
+                      <Link to={getCheckStorage(item?.url)} target="_black" state={{filter,back:location?.pathname,path:location?.pathname}} style={{ cursor: "pointer", height: 30, width: 30, borderRadius: 30 }} className="bg-warning text-white d-flex align-items-center justify-content-center"><HiMiniEye /></Link>
                     {isTrash && <span style={{ cursor: "pointer", height: 30, width: 30, borderRadius: 30 }} className={`${isTrash ? "bg-success" :"bg-danger"}  text-white d-flex align-items-center justify-content-center`} onClick={() =>setChangeStatus({ show: true, details: { _id: item._id, currentStatus: item?.isActive, name: item?.name, recovery:true } })}>{isTrash ? <FaTrashRestoreAlt/> : <AiOutlineDelete />} </span>}
                     {isDelete && <span style={{ cursor: "pointer", height: 30, width: 30, borderRadius: 30 }} className={`bg-danger  text-white d-flex align-items-center justify-content-center`} onClick={() =>setDeleteDoc({ status: true, details: { _id: item._id,name:item?.name} })}><AiOutlineDelete /> </span>}
 

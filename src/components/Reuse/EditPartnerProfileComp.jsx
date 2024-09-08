@@ -1,7 +1,7 @@
 import { allState } from "../../utils/constant"
 import "react-image-upload/dist/index.css";
 import { useState, useEffect, useRef } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { getPartnerProfile, employeeGetPartnerById, employeeUpdatePartnerProfile, employeeUpdatePartnerBankingDetails } from "../../apis";
 import { formatDateToISO } from "../../utils/helperFunction";
 import { BsCameraFill } from 'react-icons/bs'
@@ -65,6 +65,7 @@ export default function EditPartnerProfileComp({ getPartner, updateProfile, upda
         kycAadhaar: "",
         kycAadhaarBack: "",
         kycPan: "",
+        address:"",
 
     })
     const imgRef = useRef()
@@ -75,8 +76,17 @@ export default function EditPartnerProfileComp({ getPartner, updateProfile, upda
     const gstRef = useRef()
     const chequeRef = useRef()
     const navigate = useNavigate()
+    const location = useLocation()
 
-    console.log("bankDetails", bankDetails);
+    // console.log("bankDetails", bankDetails);
+
+    const handleBack = () => {
+        if(location?.state?.filter && location?.state?.back){
+            navigate(location?.state?.back,{state:{...location?.state,back:location?.pathname}});
+        }else{
+            navigate(-1)
+        }
+      };
 
     useEffect(() => {
         if (id) {
@@ -179,7 +189,7 @@ export default function EditPartnerProfileComp({ getPartner, updateProfile, upda
         setBankDetails({ ...bankDetails, [name]: value })
     }
 
-    console.log("uploading", uploadBankDetailsPhoto);
+    // console.log("uploading", uploadBankDetailsPhoto);
 
     const handleBankDetailsUploadFile = async (file, type) => {
         try {
@@ -244,7 +254,7 @@ export default function EditPartnerProfileComp({ getPartner, updateProfile, upda
             <div>
                 <div className="d-flex justify-content-between bg-color-1 text-primary fs-5 px-4 py-3 shadow">
                     <div className="d-flex flex align-items-center gap-3">
-                        <IoArrowBackCircleOutline className="fs-3" onClick={() => navigate(-1)} style={{ cursor: "pointer" }} />
+                        <IoArrowBackCircleOutline className="fs-3" onClick={handleBack} style={{ cursor: "pointer" }} />
                         <div className="d-flex flex align-items-center gap-1">
                             <span>Edit Profile</span>
                             {/* <span><LuPcCase /></span> */}
@@ -359,6 +369,10 @@ export default function EditPartnerProfileComp({ getPartner, updateProfile, upda
                                     <div className="mb-3 col-12 col-md-4">
                                         <label for="city" className="form-label">City</label>
                                         <input type="text" name="city" value={data.city} onChange={handleOnchange} className="form-control" id="city" aria-describedby="city" />
+                                    </div>
+                                    <div className="mb-3 col-12 col-md-4">
+                                        <label for="address" className="form-label">Address</label>
+                                        <input type="text" name="address" value={data?.address} onChange={handleOnchange} className="form-control" id="address" aria-describedby="address" />
                                     </div>
                                     <div className="mb-3 col-12 col-md-4">
                                         <label for="state" className="form-label">State</label>
