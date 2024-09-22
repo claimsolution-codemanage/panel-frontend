@@ -32,7 +32,7 @@ export default function EmployeeAllPartner() {
       unactive={()=>{}}
       isType={empType?.toLowerCase()!="operation" }
       isEmpRefAccess={empType?.toLowerCase()=="operation" }
-      statement={empType?.toLowerCase()=='operation'}
+      statement={empType?.toLowerCase()=='operation' || empType?.toLowerCase()=='finance'}
       />
 </>)
 }

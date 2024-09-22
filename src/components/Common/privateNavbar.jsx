@@ -141,7 +141,7 @@ export default function PrivateNavbar() {
                 <CgNotes/>
                     <div className=''>All Complaint</div>
                 </Link>
-                <Link to="/admin/all partner" className={`d-flex align-items-center mx-2 px-2 py-2 gap-3 text-white   ${location.pathname.includes("partner") && !location.pathname.includes("trash") && "active_item"}`}  >
+                <Link to="/admin/all partner" className={`d-flex align-items-center mx-2 px-2 py-2 gap-3 text-white   ${location.pathname.includes("partner") && !location.pathname.includes("statement") && !location.pathname.includes("trash") && "active_item"}`}  >
                     <FaUserFriends />
                     <div className=''>All Partner</div>
                 </Link>
@@ -149,9 +149,17 @@ export default function PrivateNavbar() {
                     <FaUserTag />
                     <div className=''>All Client</div>
                 </Link>
-                <Link to="/admin/all-invoices" className={`d-flex align-items-center mx-2 px-2 py-2 gap-3 text-white   ${location.pathname.includes("invoice") &&  "active_item"}`}  >
+                <Link to="/admin/all-invoices" className={`d-flex align-items-center mx-2 px-2 py-2 gap-3 text-white   ${location.pathname.includes("invoice") && !location.pathname.includes("add-invoice") &&  "active_item"}`}  >
                     <FaFileInvoice />
                     <div className=''>All Invoice</div>
+                </Link>
+                <Link to="/admin/add-invoice" className={`d-flex align-items-center mx-2 px-2 py-2 gap-3 text-white   ${location.pathname.includes("/admin/add-invoice") &&  "active_item"}`}  >
+                    <MdOutlineLibraryAdd />
+                    <div className=''>Add Invoice</div>
+                </Link>
+                <Link to="/admin/statement" className={`d-flex align-items-center mx-2 px-2 py-2 gap-3 text-white   ${location.pathname.includes("/admin/statement") &&  "active_item"}`}  >
+                    <IoNewspaperOutline />
+                    <div className=''>Statement</div>
                 </Link>
                 <Link to="/admin/all employee" className={`d-flex align-items-center mx-2 px-2 py-2 gap-3 text-white   ${(location.pathname=="/admin/all%20employee" || location.pathname.includes("/admin/employee/profile")) && "active_item"}`}  >
                     <FaUsers />
@@ -231,9 +239,9 @@ export default function PrivateNavbar() {
             </Link>
             </>}
 
-            {(empType?.toLowerCase() =="operation" || empType?.toLowerCase() =="sales" || 
+            {(empType?.toLowerCase() =="finance" || empType?.toLowerCase() =="operation" || empType?.toLowerCase() =="sales" || 
             empType?.toLowerCase() =="Sathi Team".toLowerCase() || empType?.toLowerCase() =="branch") && <>
-            <Link to="/employee/all partner" className={`d-flex align-items-center mx-2 px-2 py-2 gap-3 text-white   ${location.pathname.includes("partner") && !location.pathname.includes("add-partner") && "active_item"}`}  >
+            <Link to="/employee/all partner" className={`d-flex align-items-center mx-2 px-2 py-2 gap-3 text-white   ${location.pathname.includes("partner") && !location.pathname.includes("statement") && !location.pathname.includes("add-partner") && "active_item"}`}  >
             <FaUserFriends />
             <div className=''>All Partner</div>
             </Link>
@@ -263,33 +271,30 @@ export default function PrivateNavbar() {
              <div className=''>Add Sathi Team</div>
          </Link>
             </>  }
-            {(empType?.toLowerCase() =="sales" || empType?.toLowerCase() =="branch" || empType?.toLowerCase() =="operation") && <>
-            <Link to="/employee/branch-team" className={`d-flex align-items-center mx-2 px-2 py-2 gap-3 text-white   ${(location.pathname.includes("branch-team") || location?.pathname?.includes("view-sathi") || location?.pathname?.includes("/statement/employee/")) && "active_item"}`}  >
+            {(empType?.toLowerCase() =="sales" || empType?.toLowerCase() =="branch" || empType?.toLowerCase() =="finance" || empType?.toLowerCase() =="operation") && <>
+            <Link to="/employee/branch-team" className={`d-flex align-items-center mx-2 px-2 py-2 gap-3 text-white   ${(location.pathname.includes("branch-team") || location?.pathname?.includes("view-sathi")) && "active_item"}`}  >
              <SiMicrosoftteams />
              <div className=''>Branch Team</div>
             </Link>
             </>}
             {/* for finance employee */}
             {(empType?.toLowerCase() =="operation" || empType?.toLowerCase() =="finance") && <>
+                <Link to="/employee/statement" className={`d-flex align-items-center mx-2 px-2 py-2 gap-3 text-white   ${(location.pathname.includes("/employee/statement")) && "active_item"}`}  >
+                    <IoNewspaperOutline />
+                    <div className=''>Statement</div>
+                </Link>
                 <Link to="/employee/all-invoices" className={`d-flex align-items-center mx-2 px-2 py-2 gap-3 text-white   ${(location.pathname.includes("/employee/all-invoices") || location.pathname.includes("/employee/view-invoice") ) && "active_item"}`}  >
                     <FaFileInvoice />
                     <div className=''>All Invoices</div>
                 </Link>
-                {/* <div  className={`cursor-pointer`}  >
-                    <div onClick={()=>setShowTrashOption(!showTrashOption)} className='d-flex align-items-center mx-2 px-2 py-2 gap-3 cursor-pointer text-white'>
-                    <FaRegTrashCan />
-                    <div className='d-flex align-items-center gap-5'>
-                        <div className=''>Trash</div>
-                        {showTrashOption ? <IoIosArrowDown/> : <IoIosArrowForward/>}
-                    </div>
-                    </div>
-                    <div className={`px-3 ${!showTrashOption && "d-none"}`}>
-                    <Link to="/employee/all-trash-invoice" className={`d-flex align-items-center mx-2 px-2 py-2 gap-3 text-white   ${location.pathname == "/admin/all-trash-invoice" && "active_item"}`}  >
-                    <FaTrashAlt />
-                    <div className=''>Invoice</div>
-                    </Link>
-                    </div>
-                </div> */}
+              
+            </>}
+            {(empType?.toLowerCase() =="finance") && <>
+                <Link to="/employee/add-invoice" className={`d-flex align-items-center mx-2 px-2 py-2 gap-3 text-white   ${(location.pathname.includes("/employee/add-invoice") ) && "active_item"}`}  >
+                    <MdOutlineLibraryAdd />
+                    <div className=''>Add Invoice</div>
+                </Link>
+              
             </>}
             {(empType?.toLowerCase() =="sathi team") && <>
             <Link to={`/employee/statement/sathi-team/${userDetails?._id}`} className={`d-flex align-items-center mx-2 px-2 py-2 gap-3 text-white   ${(location?.pathname?.includes("/statement/sathi-team/")) && "active_item"}`}  >
@@ -319,17 +324,12 @@ export default function PrivateNavbar() {
                 <div className='d-flex flex-column align-items-center justify-content-center'>
                     <div className='d-flex align-items-center justify-content-center text-white bg-danger' style={{height:50,width:50,borderRadius:50}}><ImSwitch className='fs-3'/></div>
                     <h2 className='py-3'>Are you sure?</h2>
-                    {/* <p className='text'>Your want to Logout.</p> */}
                 </div>
                 <div className='d-flex  align-items-center justify-content-center mt-3 gap-3'>
                 <Button className='btn btn-success px-4' onClick={() => handleLogout()}>Yes</Button>
                 <Button className='btn btn-danger px-4' onClick={() => setLogout(false)}>No</Button>
                 </div>
             </Modal.Body>
-            {/* <Modal.Footer className=''>
-                <Button className='btn btn-success' onClick={() => handleLogout()}>Yes</Button>
-                <Button className='btn btn-danger' onClick={() => setLogout(false)}>No</Button>
-            </Modal.Footer> */}
         </Modal>
 
     </>)

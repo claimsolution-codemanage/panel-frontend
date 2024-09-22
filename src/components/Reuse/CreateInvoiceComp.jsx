@@ -17,7 +17,7 @@ import {ToWords} from 'to-words'
 import { invoiceFormatDate } from '../../utils/helperFunction'
 import { IoArrowBackCircleOutline } from 'react-icons/io5'
 
-export default function CreateInvoiceComp({createInvoice,clientId,caseId,viewInvoiceUrl}) {
+export default function CreateInvoiceComp({createInvoice,clientId,caseId,viewInvoiceUrl,isOffice}) {
   const navigate = useNavigate()
   const toWords = new ToWords()
   const printRef = useRef()
@@ -169,7 +169,7 @@ export default function CreateInvoiceComp({createInvoice,clientId,caseId,viewInv
 
   const handleSave = async () => {
     // console.log("error:", senderFormik.initialErrors, receiverFormik.isValidating, invoiceItemsFormik.errors);
-    if(clientId && caseId){
+    if(isOffice || (clientId && caseId)){
         try {
           if (Object.keys(senderFormik.errors).length > 0 || !senderFormik.isValid) {
             // console.log("senderFormik.errors", senderFormik.errors);

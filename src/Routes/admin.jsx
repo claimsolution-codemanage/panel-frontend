@@ -1,7 +1,7 @@
 import AdminTemplate from "../template/adminTemplate"
 import PanelTemplate from "../template/PanelTemplate"
 import {Route} from 'react-router-dom'
-import { adminAllStatment } from "../apis";
+import { adminAllStatment,adminStatements } from "../apis";
 
 
 // for admin routes
@@ -42,6 +42,8 @@ import AdminViewEmployee from "../pages/admin/ViewEmployee";
 import AdminViewMySathi from "../pages/admin/viewMySathi";
 import AdminRejectCase from '../pages/admin/allRejectCase'
 import ViewAllStatement from "../components/Reuse/ViewAllStatement";
+import AdminAddInvoice from "../pages/admin/addInvoice";
+import Statement from "../components/Reuse/Statement";
 
 {/* for admin */}
 export const adminRoutes = [
@@ -70,6 +72,7 @@ export const adminRoutes = [
   <Route path='/admin/view-employee-case-report/:_id'  element={<AdminTemplate><AdminViewSaleEmpCaseReport/></AdminTemplate>}/>,
   <Route path='/admin/view-employee-partner-report/:_id'  element={<AdminTemplate><AdminSaleEmpPartnerReport/></AdminTemplate>}/>,
   <Route path='/admin/create-invoice/:clientId/:caseId'  element={<AdminTemplate><AdminCreateInvoice/></AdminTemplate>}/>,
+  <Route path='/admin/add-invoice'  element={<AdminTemplate><AdminAddInvoice/></AdminTemplate>}/>,
   <Route path='/admin/all-invoices'  element={<AdminTemplate><AdminAllInvoice/></AdminTemplate>}/>,
   <Route path='/admin/view-invoice/:_id'  element={<AdminTemplate><AdminViewInvoice/></AdminTemplate>}/>,
   <Route path='/admin/edit-invoice/:_id'  element={<AdminTemplate><AdminEditInvoice/></AdminTemplate>}/>,
@@ -83,6 +86,7 @@ export const adminRoutes = [
   <Route path='/admin/reject-cases'  element={<AdminTemplate><AdminRejectCase/></AdminTemplate>}/>,
   <Route path='/admin/statement/partner/:partnerId'  element={<AdminTemplate><ViewAllStatement getStatementApi={adminAllStatment} type={"admin"}/></AdminTemplate>}/>,
   <Route path='/admin/statement/employee/:empId'  element={<AdminTemplate><ViewAllStatement getStatementApi={adminAllStatment} type={"admin"}/></AdminTemplate>}/>,
+  <Route path='/admin/statement'  element={<AdminTemplate><Statement getStatementApi={adminStatements} type={"admin"}/></AdminTemplate>}/>,
 
 
 ]

@@ -125,7 +125,7 @@ export default function AllInvoiceComp({viewAllInvoice,payInvoice,viewInvoiceUrl
   }, [pageItemLimit, pgNo,])
 
   useEffect(() => {
-    if (!isActiveInvoice.status ||!changeStatus?.show || !changeInvoiceStatus?.status) {
+    if (!isActiveInvoice.status && !changeStatus?.show && !changeInvoiceStatus?.status) {
       getViewAllInvoice()
     }
   }, [isActiveInvoice,changeStatus,changeInvoiceStatus])
@@ -273,12 +273,14 @@ export default function AllInvoiceComp({viewAllInvoice,payInvoice,viewInvoiceUrl
                     {isEdit &&!isTrash && !item?.isPaid && <span style={{ cursor: "pointer",height:30,width:30,borderRadius:30 }} className="bg-success text-white d-flex align-items-center justify-content-center" onClick={() => navigate(`${editInvoiceUrl}${item._id}`,{state:{filter,back:location?.pathname,path:location?.pathname}})}><CiEdit /></span>}
                     {isDelete && !item?.isPaid && <span style={{ cursor: "pointer", height: 30, width: 30, borderRadius: 30 }} className={`${isTrash ? "bg-success" :"bg-danger"}  text-white d-flex align-items-center justify-content-center`} onClick={() =>setChangeStatus({ show: true, details: { _id: item._id, currentStatus: item?.isActive, name: item?.invoiceNo, recovery: false } })}>{isTrash ? <FaTrashRestoreAlt/> : <AiOutlineDelete />} </span>}
                     {isTrash && !item?.isPaid && <span style={{ cursor: "pointer", height: 30, width: 30, borderRadius: 30 }} className={`bg-danger  text-white d-flex align-items-center justify-content-center`} onClick={() =>setIsActiveInvoice({ status: true, details: { _id: item._id,invoiceNo:item?.invoiceNo} })}><AiOutlineDelete /> </span>}
-                    {!isTrash && paidAccess && !item?.isPaid && <span style={{ cursor: "pointer",height:30,width:30,borderRadius:30 }} className="bg-success text-white d-flex align-items-center justify-content-center" onClick={() => setChangeInvoiceStatus({status:true,_id:item._id})}><MdCurrencyRupee /></span>}
+                    {!item?.isOffice && !isTrash && paidAccess && !item?.isPaid && <span style={{ cursor: "pointer",height:30,width:30,borderRadius:30 }} className="bg-success text-white d-flex align-items-center justify-content-center" onClick={() => setChangeInvoiceStatus({status:true,_id:item._id})}><MdCurrencyRupee /></span>}
 
                     </span>
                     </td>
                     <td className="text-nowrap">
-                      {item?.isPaid ?
+                      {item?.isOffice ? <span  className={`badge bg-danger`}>Office</span> 
+                      :  
+                      <>{item?.isPaid ?
                         <span onClick={() => setPaymentDetails({ status: true, details: item })} className={`badge cursor-pointer bg-success`}>Paid</span>
                         : <>
                           {tranactionLoading?.id == item._id ?
@@ -286,7 +288,9 @@ export default function AllInvoiceComp({viewAllInvoice,payInvoice,viewInvoiceUrl
                             : <span onClick={() => role?.toLowerCase()!=="client" || tranactionLoading?.status ? () => {} : generateTransaction(item?._id, item?.caseId)} className={`badge bg-primary ${role?.toLowerCase()==="client" && "cursor-pointer"}`}>To pay</span>
                           }
                         </>
-                      }
+                      }</>
+                    }
+                    
 
                     </td>
                     <td className="text-nowrap">{item?.createdAt && getFormateDMYDate(item?.createdAt)}</td>

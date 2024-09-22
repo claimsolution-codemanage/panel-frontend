@@ -1,7 +1,7 @@
 import EmployeeTemplate from "../template/employeeTemplate"
 import PanelTemplate from "../template/PanelTemplate"
 import { Route } from "react-router-dom"
-import { empOpAllStatment } from "../apis"
+import { empOpAllStatment, empOpStatments } from "../apis"
 
 
 // for employee routes
@@ -30,10 +30,12 @@ import EmpBranchTeam from "../pages/employee/branchTeam"
 import EmpViewProfile from "../pages/employee/viewProfile"
 import EmployeeAddSathiAcc from "../pages/employee/createSathiAcc"
 import EmpViewMySathi from "../pages/employee/viewMySathi"
+import EmployeeAddInvoice from "../pages/employee/finance/pages/addInvoice"
 
 // for sale employee
 import EmployeeAddPartner from '../pages/employee/sales/addPartner'
 import ViewAllStatement from "../components/Reuse/ViewAllStatement"
+import Statement from "../components/Reuse/Statement"
 
 export const employeeRoutes = [
     <Route path='/employee/signin' element={<PanelTemplate><EmployeeSignIn/></PanelTemplate>}/>,
@@ -51,6 +53,7 @@ export const employeeRoutes = [
   <Route path='/employee/all client' element={<EmployeeTemplate><EmployeeAllClient/></EmployeeTemplate>}/>,
   <Route path='/employee/client details/:_id' element={<EmployeeTemplate><EmployeeClientDetails/></EmployeeTemplate>}/>,
   <Route path='/employee/create-invoice/:clientId/:caseId' element={<EmployeeTemplate><EmployeeCreateInvoice/></EmployeeTemplate>}/>,
+  <Route path='/employee/add-invoice' element={<EmployeeTemplate><EmployeeAddInvoice/></EmployeeTemplate>}/>,
   <Route path='/employee/view-invoice/:_id' element={<EmployeeTemplate><EmployeeViewInvoice/></EmployeeTemplate>}/>,
   <Route path='/employee/all-invoices' element={<EmployeeTemplate><EmployeeAllInvoices/></EmployeeTemplate>}/>,
   <Route path='/employee/resetPassword/:verifyToken' sensitive={true} strict={false} element={<PanelTemplate><EmployeeResetForgetPassword/></PanelTemplate>}/>,
@@ -67,7 +70,7 @@ export const employeeRoutes = [
   <Route path='/employee/statement/partner/:partnerId'  element={<EmployeeTemplate><ViewAllStatement getStatementApi={empOpAllStatment} type={"operation"}/></EmployeeTemplate>}/>,
   <Route path='/employee/statement/employee/:empId'  element={<EmployeeTemplate><ViewAllStatement getStatementApi={empOpAllStatment} type={"operation"}/></EmployeeTemplate>}/>,
   <Route path='/employee/statement/sathi-team/:empId'  element={<EmployeeTemplate><ViewAllStatement getStatementApi={empOpAllStatment} type={"sathi team"}/></EmployeeTemplate>}/>,
-
+  <Route path='/employee/statement'  element={<EmployeeTemplate><Statement getStatementApi={empOpStatments} type={"operation"}/></EmployeeTemplate>}/>,
 
 ]
 {/* <Route path='/employee/all-trash-invoice'  element={<EmployeeTemplate><EmployeeInvoiceTrash/></EmployeeTemplate>}/> */}

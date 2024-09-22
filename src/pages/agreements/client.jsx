@@ -46,7 +46,7 @@ export default function ClientAgreement() {
 <div className='fs-4 fw-bold'>COMPENSATION:</div>
 <ol type='a'>
 <li>
-<p>The Client agrees to pay 25% including GST (referred to as "Fees") of the total amount within 7 (seven) days from the date the money is credited to the Client's bank account from insurance companies. This also applies if the policy is terminated and results in the recovery of money.</p>
+<p>The Client agrees to pay 20% including GST (referred to as "Fees") of the total amount within 7 (seven) days from the date the money is credited to the Client's bank account from insurance companies. This also applies if the policy is terminated and results in the recovery of money.</p>
 <p className='text-center'>Or</p>
 </li>
 <li>

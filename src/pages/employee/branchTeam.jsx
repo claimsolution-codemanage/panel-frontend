@@ -9,7 +9,7 @@ export default function EmpBranchTeam() {
     const state = useContext(AppContext)
     const navigate = useNavigate()
     const userDetails = state?.myAppData?.details
-    const isAccess = ((userDetails?.empType?.toLowerCase() == "sales" || userDetails?.empType?.toLowerCase() == "branch" || userDetails?.empType?.toLowerCase() =="operation") )
+    const isAccess = ((userDetails?.empType?.toLowerCase() == "sales" || userDetails?.empType?.toLowerCase() == "branch" || userDetails?.empType?.toLowerCase() =="finance" || userDetails?.empType?.toLowerCase() =="operation") )
 
     useEffect(() => {
         if (!isAccess) {
@@ -34,7 +34,7 @@ export default function EmpBranchTeam() {
                 isActive={() => { }}
                 deleteEmployeeId={() => { }}
                 updateEmployee={empOprUpdateEmployee}
-                statement={userDetails?.empType?.toLowerCase() =="operation"}
+                statement={userDetails?.empType?.toLowerCase() =="operation" || userDetails?.empType?.toLowerCase() =="finance"}
                 statementUrl={"/employee/statement/employee"}
             />}
         </>

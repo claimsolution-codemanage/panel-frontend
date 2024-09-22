@@ -1,4 +1,4 @@
-import { useState, useEffect, useContext } from "react"
+import { useState, useEffect, useRef, useContext } from "react"
 import { toast } from 'react-toastify'
 import { getFormateDMYDate, getFormateDate } from "../../utils/helperFunction"
 import ReactPaginate from 'react-paginate';
@@ -13,13 +13,14 @@ import { CiFilter } from "react-icons/ci";
 import DateSelect from "../Common/DateSelect"
 import { SiMicrosoftexcel } from "react-icons/si";
 import { Link } from "react-router-dom"
+import loash from 'lodash'
 import CreateOrUpdateStatmentModal from "./createOrUpdateStatementModal";
+import { BsSearch } from "react-icons/bs";
 import { AppContext } from "../../App";
 
-export default function ViewAllStatement({getStatementApi,type}) {
-  const state = useContext(AppContext)
-  const param = useParams()
-  const {partnerId,empId} = param
+export default function Statement({getStatementApi,type}) {
+const state = useContext(AppContext)
+  const searchRef = useRef()
   const [data, setData] = useState([])
   const navigate = useNavigate()
   const location = useLocation()
@@ -27,7 +28,9 @@ export default function ViewAllStatement({getStatementApi,type}) {
   const [pageItemLimit, setPageItemLimit] = useState(10)
   const [showCalender, setShowCalender] = useState(false)
   const [noOfData, setNoOfData] = useState(0)
-  const [showStatement,setShowStatement] = useState({status:false,data:null})
+  const [searchQuery, setSearchQuery] = useState(location?.pathname==location?.state?.path && location?.state?.filter?.searchQuery ? location?.state?.filter?.searchQuery :"")
+  const [isSearch, setIsSearch] = useState(false)
+  const [showStatement,setShowStatement] = useState({status:false,data:null,create:false})
   const [pgNo, setPgNo] = useState(1)
   const [statementOf,setStatementOf] = useState({})
   const [dateRange, setDateRange] = useState(
@@ -53,7 +56,7 @@ export default function ViewAllStatement({getStatementApi,type}) {
     try {
       const startDate = dateRange.startDate ? getFormateDate(dateRange.startDate) : ""
       const endDate = dateRange.endDate ? getFormateDate(dateRange.endDate) : ""
-      const res = await getStatementApi(pageItemLimit,pgNo,partnerId,empId,startDate,endDate)
+      const res = await getStatementApi(pageItemLimit,pgNo,startDate,endDate,searchQuery)
       if (res?.data?.success && res?.data?.data?.data) {
         setData(res?.data?.data?.data)
         setNoOfData(res?.data?.data?.totalData)
@@ -73,17 +76,15 @@ export default function ViewAllStatement({getStatementApi,type}) {
   
 
   useEffect(() => {
-    if ((partnerId || empId) && getStatementApi &&!showStatement.status) {
+    if (getStatementApi && !showStatement.status) {
       getAllStatement()
     }
-  }, [partnerId,empId,showStatement])
+  }, [showStatement])
 
 
   const handlePageClick = (event) => {
     setPgNo(event.selected + 1)
   };
-
-
 
   const handleBack = () => {
     if(location?.state?.filter && location?.state?.back){
@@ -93,6 +94,11 @@ export default function ViewAllStatement({getStatementApi,type}) {
     }
   };
 
+  const handleSearchQuery = (value) => {
+    setIsSearch(true)
+    setSearchQuery(value)
+  }
+
   useEffect(()=>{
     const type = ["admin","finance","operation"]
     if(!((type?.includes(state?.myAppData?.details?.role?.toLowerCase())) || (type?.includes(state?.myAppData?.details?.empType?.toLowerCase())))){
@@ -100,104 +106,57 @@ export default function ViewAllStatement({getStatementApi,type}) {
     }
   },[state?.myAppData])
 
+
+  useEffect(() => {
+    if (isSearch) {
+      let debouncedCall = loash.debounce(function () {
+        getAllStatement()
+        setIsSearch(false)
+        setPageItemLimit(10)
+        setPgNo(1)
+      }, 1000);
+      debouncedCall();
+      return () => {
+        debouncedCall.cancel();
+      };
+    }
+
+  }, [searchQuery, isSearch])
+
   return (<>
     {loading ? <Loader /> :
       <div>
+
         <DateSelect show={showCalender} hide={() => setShowCalender(false)} onFilter={getAllStatement} dateRange={dateRange} setDateRange={setDateRange} />
         <div className="d-flex justify-content-between bg-color-1 text-primary fs-5 px-4 py-3 shadow">
           <div className="d-flex flex align-items-center gap-3">
             {/* <IoArrowBackCircleOutline className="fs-3"  onClick={() => navigate("/admin/dashboard")} style={{ cursor: "pointer" }} /> */}
             <div className="d-flex flex align-items-center gap-1">
-            <IoArrowBackCircleOutline className="fs-3" onClick={handleBack} style={{ cursor: "pointer" }} />
               <span>Statement</span>
             </div>
           </div>
           {
-            (type=="admin" || type=="operation") && <div className="btn btn-primary" onClick={()=>setShowStatement({status:!showStatement?.status,data:null})}>
+            (type=="admin" || type=="operation") && <div className="btn btn-primary" onClick={()=>setShowStatement({status:!showStatement?.status,data:null,create:true})}>
             Create
           </div>
           }
    
         </div>
-        <div className="mx-md-5 m-sm-0 p-3">
-        <div className="bg-color-1 p-3 p-md-5 rounded-2 shadow">
-          <div className="row row-cols-1 row-cols-lg-3">
-            <div className="align-items-center  d-flex gap-2">
-              <p className="">{statementOf?.partner ? "Partner" : "Sathi"} Name:</p>
-              <p className="text-capitalize">
-              {statementOf?.partner ? (statementOf?.partner?.profile?.consultantName) 
-              :statementOf?.employee?.fullName}
-              </p>
-            </div>
-            <div className="d-flex gap-2">
-              <p>Reporting Branch:</p>
-              <p className="text-capitalize">
-              {statementOf?.partner ? (statementOf?.partner?.branchId) 
-              :statementOf?.employee?.branchId}
-              </p>
-            </div>
-            <div className="d-flex gap-2">
-              <p>Bank Name:</p>
-              <p className="text-capitalize">
-              {statementOf?.partner ? (statementOf?.partner?.bankingDetails?.bankName) 
-              :statementOf?.employee?.bankName}
-              </p>
-            </div>
-            <div className="d-flex gap-2">
-              <p>{statementOf?.partner ? "Consultant Code" : "Sathi Id"}:</p>
-              <p className="text-capitalize">
-              {statementOf?.partner ? (statementOf?.partner?.profile?.consultantCode) 
-              :statementOf?.employee?.empId}
-              </p>
-            </div>
-            <div className="d-flex gap-2">
-              <p>Manager Name:</p>
-              <p className="text-capitalize">
-              {statementOf?.partner ? (statementOf?.partner?.salesId?.fullName) 
-              :statementOf?.employee?.referEmpId?.fullName}
-              </p>
-            </div>
-            <div className="d-flex gap-2">
-              <p>Bank Branch:</p>
-              <p className="text-capitalize">
-              {statementOf?.partner ? (statementOf?.partner?.bankingDetails?.bankBranchName) 
-              :statementOf?.employee?.bankBranchName}
-              </p>
-            </div>
-            <div className="d-flex gap-2">
-              <p>Address:</p>
-              <p className="text-capitalize">
-              {statementOf?.partner ? (statementOf?.partner?.profile?.address) 
-              :statementOf?.employee?.address}
-              </p>
-            </div>
-            <div className="d-flex gap-2">
-              <p>PAN No:</p>
-              <p className="text-capitalize">
-              {statementOf?.partner ? (statementOf?.partner?.bankingDetails?.panNo) 
-              :statementOf?.employee?.panNo}
-              </p>
-            </div>
-            <div className="d-flex gap-2">
-              <p>Bank A/C No:</p>
-              <p className="text-capitalize">
-              {statementOf?.partner ? (statementOf?.partner?.bankingDetails?.bankAccountNo) 
-              :statementOf?.employee?.bankAccountNo}
-              </p>
-            </div>
-          </div>
-        </div>
-        </div>
+       
 
         <div className="mx-md-5 m-sm-0 p-3">
           <div className="bg-color-1 p-3 p-md-5 rounded-2 shadow">
             <div className="row p-0 mb-2">
-              <div className="col-12 col-md-9">
-                <div className="row">
-                  <div className="col-md-4 col-12 d-flex gap-3">
+              <div className="col-12">
+                <div className="">
+                  <div className="d-flex flex gap-2">
+                  <div className="form-control px-2 d-flex gap-2 w-100">
+                <span className=""><BsSearch className="text-black" /></span>
+                <input className="w-100" value={searchQuery} onChange={(e) => handleSearchQuery(e.target.value)}  placeholder="Search.." style={{ outline: "none", border: 0 }} />
+              </div>
                     <div className="btn btn-primary fs-5" onClick={() => setShowCalender(!showCalender)}><CiFilter /></div>
                     <div className="btn btn-primary fs-5" onClick={() => handleReset()}>Reset</div>
-                    <select className="form-select" name="pageItemLimit" value={pageItemLimit} onChange={(e) => { setPageItemLimit(e.target.value); setPgNo(1) }} aria-label="Default select example">
+                    <select className="form-select w-auto" name="pageItemLimit" value={pageItemLimit} onChange={(e) => { setPageItemLimit(e.target.value); setPgNo(1) }} aria-label="Default select example">
                       <option value="">Items</option>
                       <option value={5}>5</option>
                       <option value={10}>10</option>
@@ -216,6 +175,8 @@ export default function ViewAllStatement({getStatementApi,type}) {
                     <th scope="col" className="text-nowrap" >SL No</th>
                     {(type== "admin"||type=="operation" ) && 
                     <th scope="col" className="text-nowrap" >Action</th>}
+                    <th scope="col" className="text-nowrap">Partner Name</th>
+                    <th scope="col" className="text-nowrap">Employee Name</th>
                     <th scope="col" className="text-nowrap">Case Login Date</th>
                     <th scope="col" className="text-nowrap"  >Policyholder Name</th>
                     <th scope="col" className="text-nowrap"  >File No</th>
@@ -235,6 +196,8 @@ export default function ViewAllStatement({getStatementApi,type}) {
                     <th scope="row">{ind + 1}</th> 
                     {(type== "admin"||type=="operation" ) &&  <th><span  style={{ height: 30, width: 30, borderRadius: 30 }} onClick={()=>setShowStatement({...showStatement,status:!showStatement?.status,data:item})} className="cursor-pointer bg-primary text-white d-flex align-items-center justify-content-center"><CiEdit className="fs-5 text-white" /></span>
                     </th> }    
+                   <td className="text-nowrap">{item?.partnerDetails?.profile?.consultantName || "-"}</td>
+                   <td className="text-nowrap">{item?.empDetails?.fullName || "-"}</td>
                    <td className="text-nowrap">{item?.caseLogin && getFormateDMYDate(item?.caseLogin)}</td>
                     <td className="text-nowrap">{item?.policyHolder}</td>
                     <td className="text-nowrap">{item?.fileNo}</td>
@@ -278,7 +241,7 @@ export default function ViewAllStatement({getStatementApi,type}) {
 
           </div>
         </div>
-          <CreateOrUpdateStatmentModal show={showStatement?.status} data={showStatement?.data} hide={()=>setShowStatement({...showStatement,status:!showStatement?.status})} partnerId={partnerId} empId={empId} type={type}/>
+          <CreateOrUpdateStatmentModal show={showStatement?.status} data={showStatement?.data} hide={()=>setShowStatement({...showStatement,status:!showStatement?.status})}  type={type} all={showStatement?.create}/>
       </div>}
   </>)
 }

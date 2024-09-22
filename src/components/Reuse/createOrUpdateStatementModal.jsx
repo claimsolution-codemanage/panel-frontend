@@ -12,7 +12,7 @@ import { adminCreateOrUpdateStatment,empOpCreateOrUpdateStatment } from '../../a
 
 
 
-export default function CreateOrUpdateStatmentModal({show,hide,type,partnerId,empId,data}) {
+export default function CreateOrUpdateStatmentModal({show,hide,type,partnerId,empId,data,all}) {
     const [loading,setLoading] = useState(false)
    console.log("type",type);
    
@@ -21,6 +21,8 @@ export default function CreateOrUpdateStatmentModal({show,hide,type,partnerId,em
 let initialValues={
     empId:"",
     partnerId:"",
+    partnerEmail:"",
+    empEmail:"",
     caseLogin:new Date(),
     policyHolder:"",
     fileNo:"",
@@ -41,6 +43,8 @@ const formik = useFormik({
     validationSchema:Yup.object().shape({
         empId:Yup.string(),
         partnerId:Yup.string(),
+        partnerEmail:Yup.string(),
+        empEmail:Yup.string(),
         caseLogin:Yup.string().required("Case login is required"),
         policyHolder:Yup.string().required("Policy holder name is required"),
         fileNo:Yup.string().required("File no is required"),
@@ -151,6 +155,19 @@ console.log("formik",formik,data);
                   </div>
                   <p className='text-danger'>{formik.touched?.caseLogin && formik.errors?.caseLogin}</p>
                 </div>
+                {all && <>
+                  <div className="form-group ">
+                  <label for="partnerEmail" className="col-form-label">Partner Email:</label>
+                  <input type="text" name='partnerEmail' value={formik.values?.partnerEmail} onChange={formik.handleChange} className={`form-control ${formik.errors?.partnerEmail && formik.touched?.partnerEmail && "border-danger"}`}  />
+                    <p className='text-danger'>{formik.touched?.partnerEmail && formik.errors?.partnerEmail}</p>
+                </div>
+                <div className="form-group ">
+                  <label for="empEmail" className="col-form-label">Sathi Team Email:</label>
+                  <input type="text" name='empEmail' value={formik.values?.empEmail} onChange={formik.handleChange} className={`form-control ${formik.errors?.empEmail && formik.touched?.empEmail && "border-danger"}`}  />
+                    <p className='text-danger'>{formik.touched?.empEmail && formik.errors?.empEmail}</p>
+                </div>
+                </>}
+         
               <div className="form-group ">
                   <label for="policyHolder" className="col-form-label">Policyholder Name:</label>
                   <input type="text" name='policyHolder' value={formik.values?.policyHolder} onChange={formik.handleChange} className={`form-control ${formik.errors?.policyHolder && formik.touched?.policyHolder && "border-danger"}`}  />
