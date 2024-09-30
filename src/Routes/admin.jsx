@@ -44,6 +44,7 @@ import AdminRejectCase from '../pages/admin/allRejectCase'
 import ViewAllStatement from "../components/Reuse/ViewAllStatement";
 import AdminAddInvoice from "../pages/admin/addInvoice";
 import Statement from "../components/Reuse/Statement";
+import AdminNotification from "../pages/admin/allNotification";
 
 {/* for admin */}
 export const adminRoutes = [
@@ -87,6 +88,6 @@ export const adminRoutes = [
   <Route path='/admin/statement/partner/:partnerId'  element={<AdminTemplate><ViewAllStatement getStatementApi={adminAllStatment} type={"admin"}/></AdminTemplate>}/>,
   <Route path='/admin/statement/employee/:empId'  element={<AdminTemplate><ViewAllStatement getStatementApi={adminAllStatment} type={"admin"}/></AdminTemplate>}/>,
   <Route path='/admin/statement'  element={<AdminTemplate><Statement getStatementApi={adminStatements} type={"admin"}/></AdminTemplate>}/>,
-
+  <Route path='/admin/notification'  element={<AdminTemplate><AdminNotification/></AdminTemplate>}/>,
 
 ]

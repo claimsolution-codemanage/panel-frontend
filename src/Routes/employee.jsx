@@ -31,6 +31,7 @@ import EmpViewProfile from "../pages/employee/viewProfile"
 import EmployeeAddSathiAcc from "../pages/employee/createSathiAcc"
 import EmpViewMySathi from "../pages/employee/viewMySathi"
 import EmployeeAddInvoice from "../pages/employee/finance/pages/addInvoice"
+import EmpNotification from "../pages/employee/allNotification"
 
 // for sale employee
 import EmployeeAddPartner from '../pages/employee/sales/addPartner'
@@ -71,6 +72,7 @@ export const employeeRoutes = [
   <Route path='/employee/statement/employee/:empId'  element={<EmployeeTemplate><ViewAllStatement getStatementApi={empOpAllStatment} type={"operation"}/></EmployeeTemplate>}/>,
   <Route path='/employee/statement/sathi-team/:empId'  element={<EmployeeTemplate><ViewAllStatement getStatementApi={empOpAllStatment} type={"sathi team"}/></EmployeeTemplate>}/>,
   <Route path='/employee/statement'  element={<EmployeeTemplate><Statement getStatementApi={empOpStatments} type={"operation"}/></EmployeeTemplate>}/>,
+  <Route path='/employee/notification'  element={<EmployeeTemplate><EmpNotification/></EmployeeTemplate>}/>,
 
 ]
 {/* <Route path='/employee/all-trash-invoice'  element={<EmployeeTemplate><EmployeeInvoiceTrash/></EmployeeTemplate>}/> */}

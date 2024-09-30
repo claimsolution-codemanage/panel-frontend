@@ -2,6 +2,7 @@ import { addNewCasePartner} from "../../../apis"
 import { useParams } from "react-router-dom"
 import { partnerGetCaseById,partnerUpdateCaseById } from "../../../apis"
 import { partnerAttachementUpload } from "../../../apis/upload"
+import EditCaseComp from "../../../components/Reuse/EditCaseComp"
 
 
 export default function PartnerEditCase() {

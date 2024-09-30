@@ -2,7 +2,7 @@ import { RxDashboard } from 'react-icons/rx'
 import { BsFillPersonLinesFill, BsPostcard } from 'react-icons/bs'
 import { RiAdminFill, RiBankLine, RiTeamLine } from 'react-icons/ri'
 import { SiMicrosoftteams, SiReaddotcv } from 'react-icons/si'
-import { MdOutlineCancelPresentation, MdOutlineLibraryAdd, MdOutlinePostAdd } from 'react-icons/md'
+import { MdNotificationsActive, MdOutlineCancelPresentation, MdOutlineLibraryAdd, MdOutlinePostAdd } from 'react-icons/md'
 import { IoLogOutOutline,IoNewspaperOutline,IoSettingsOutline } from 'react-icons/io5'
 import { Link } from 'react-router-dom'
 import { AppContext } from '../../App'
@@ -157,6 +157,10 @@ export default function PrivateNavbar() {
                     <MdOutlineLibraryAdd />
                     <div className=''>Add Invoice</div>
                 </Link>
+                <Link to="/admin/notification" className={`d-flex align-items-center mx-2 px-2 py-2 gap-3 text-white   ${location.pathname.includes("/admin/notification") &&  "active_item"}`}  >
+                    <MdNotificationsActive />
+                    <div className=''>Notification</div>
+                </Link>
                 <Link to="/admin/statement" className={`d-flex align-items-center mx-2 px-2 py-2 gap-3 text-white   ${location.pathname.includes("/admin/statement") &&  "active_item"}`}  >
                     <IoNewspaperOutline />
                     <div className=''>Statement</div>
@@ -233,6 +237,10 @@ export default function PrivateNavbar() {
             <div className=''>Profile</div>
             </Link>
             {(empType?.toLowerCase() =="operation") && <>
+                <Link to="/employee/notification" className={`d-flex align-items-center mx-2 px-2 py-2 gap-3 text-white   ${location.pathname.includes("/employee/notification") &&  "active_item"}`}  >
+                    <MdNotificationsActive />
+                    <div className=''>Notification</div>
+                </Link>
             <Link to="/employee/all client" className={`d-flex align-items-center mx-2 px-2 py-2 gap-3 text-white   ${location.pathname.includes("client") && "active_item"}`}  >
             <FaUserTag />
             <div className=''>All Client</div>

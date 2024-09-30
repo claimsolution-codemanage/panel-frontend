@@ -302,3 +302,39 @@ img.btn-icon {
   width: 100%;
 }
 
+.w-55{
+  width: 55%;
+}
+
+.w-adj{
+  width: fit-content;
+}
+
+#statement-pdf table {
+  width: 100%;
+  table-layout: fixed;  /* Ensure consistent column width */
+  word-wrap: break-word;  /* Prevent long text from overflowing */
+}
+
+#statement-pdf {
+  overflow: auto;
+}
+
+@media print {
+  table {
+    page-break-inside: auto;
+  }
+
+  tr {
+    page-break-inside: avoid;
+    page-break-after: auto;
+  }
+
+  thead {
+    display: table-header-group;
+  }
+
+  tfoot {
+    display: table-footer-group;
+  }
+}

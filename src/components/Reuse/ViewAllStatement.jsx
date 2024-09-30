@@ -15,6 +15,8 @@ import { SiMicrosoftexcel } from "react-icons/si";
 import { Link } from "react-router-dom"
 import CreateOrUpdateStatmentModal from "./createOrUpdateStatementModal";
 import { AppContext } from "../../App";
+import StatementPdf from "../Common/PdfConvert/StatementPdf";
+import html2pdf from 'html2pdf.js'
 
 export default function ViewAllStatement({getStatementApi,type}) {
   const state = useContext(AppContext)
@@ -30,6 +32,7 @@ export default function ViewAllStatement({getStatementApi,type}) {
   const [showStatement,setShowStatement] = useState({status:false,data:null})
   const [pgNo, setPgNo] = useState(1)
   const [statementOf,setStatementOf] = useState({})
+  const [downloadPdf,setDownloadPdf] = useState({loading:false,data:[],statementOf:{}})
   const [dateRange, setDateRange] = useState(
    {
       startDate: new Date("2024/01/01"),
@@ -83,6 +86,42 @@ export default function ViewAllStatement({getStatementApi,type}) {
     setPgNo(event.selected + 1)
   };
 
+  const handleDownloadPdf = async() => {
+    try {
+      setDownloadPdf({...downloadPdf,loading:true})
+      const startDate = dateRange.startDate ? getFormateDate(dateRange.startDate) : ""
+      const endDate = dateRange.endDate ? getFormateDate(dateRange.endDate) : ""
+      const res = await getStatementApi("","",partnerId,empId,startDate,endDate,true)
+      if (res?.data?.success && res?.data?.data?.data) {
+        setDownloadPdf({
+          ...downloadPdf,
+          data:res?.data?.data?.data,
+          statementOf:res?.data?.data?.statementOf
+        })
+        const element = document.getElementById("statement-pdf");
+        const options = {
+          margin:       0.2,
+          filename:     'statement.pdf',
+          image:        { type: 'jpeg', quality: 0.98 },
+          html2canvas: { scale: 2, windowWidth: 1200 },
+          jsPDF:        { unit: 'in', format: 'a4', orientation: 'landscape' }
+        };
+    
+        if(element){
+          setTimeout(() => {
+            html2pdf().from(element).set(options).save();
+            setDownloadPdf({...downloadPdf,loading:false})
+            toast.success("Successfully statement downloaded")
+          }, 2000);
+        }
+      }
+    } catch (error) {
+      console.log(error);
+      setDownloadPdf({...downloadPdf,loading:false})
+    }
+  };
+
+
 
 
   const handleBack = () => {
@@ -112,11 +151,19 @@ export default function ViewAllStatement({getStatementApi,type}) {
               <span>Statement</span>
             </div>
           </div>
+          <div className="d-md-flex gap-1">
           {
             (type=="admin" || type=="operation") && <div className="btn btn-primary" onClick={()=>setShowStatement({status:!showStatement?.status,data:null})}>
             Create
           </div>
           }
+        <button onClick={handleDownloadPdf} className={`btn btn-primary`} disabled={downloadPdf?.loading}>
+        {downloadPdf?.loading ? 
+      <span className="spinner-border spinner-border-sm" role="status" aria-hidden={true}></span> 
+      :"Download"  
+      } 
+        </button>
+          </div>
    
         </div>
         <div className="mx-md-5 m-sm-0 p-3">
@@ -279,6 +326,8 @@ export default function ViewAllStatement({getStatementApi,type}) {
           </div>
         </div>
           <CreateOrUpdateStatmentModal show={showStatement?.status} data={showStatement?.data} hide={()=>setShowStatement({...showStatement,status:!showStatement?.status})} partnerId={partnerId} empId={empId} type={type}/>
+          
+          <StatementPdf data={downloadPdf?.data} statementOf={downloadPdf?.statementOf} dateRange={dateRange}/>
       </div>}
   </>)
 }

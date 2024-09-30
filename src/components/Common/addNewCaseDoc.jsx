@@ -80,7 +80,8 @@ export default function AddNewCaseDocsModal({uploadingDocs,setUploadingDocs, han
 
     const handleAttachment = async (e) => {
         const files = e.target.files;
-
+        console.log(files);
+        
         if (files && files.length > 0) {
             const file = files[0];
             const fileType = file?.type;
@@ -101,6 +102,8 @@ export default function AddNewCaseDocsModal({uploadingDocs,setUploadingDocs, han
                 uploadAttachmentFile(file, "pdf")
                 // Process PDF file
                 // console.log("Processing PDF file");
+            }else if(fileType?.includes("audio")){
+                uploadAttachmentFile(file, "audio")
             } else if (fileType == "application/vnd.openxmlformats-officedocument.wordprocessingml.document") {
                 setLoading({ status: false, code: 2, type: "uploading", message: "File must be image, pdf file" })
                 // uploadAttachmentFile(file, "word")

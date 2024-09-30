@@ -29,6 +29,7 @@ import { getFormateDMYDate } from "../../utils/helperFunction"
 import ConfirmationModal from "../../components/Common/confirmationModal"
 import { getCheckStorage } from "../../utils/helperFunction"
 import SetStatusOfProfile from "../Common/setStatusModal"
+import { LuFileAudio } from "react-icons/lu"
 
 export default function ViewCaseComp({id,getCase,role,attachementUpload,addCaseDoc,
 editUrl,addCaseCommit,viewPartner,viewClient,editCaseProcess,addCaseProcess,addReference,
@@ -78,7 +79,7 @@ isViewProfile,setCaseDocStatus,viewEmp
     }
 
     useEffect(() => {
-        if (id && !showEditCaseModal.status && !changeisActiveStatus.show && !addCaseReference.show && !removeCaseReference.status && !deleteCaseDoc?.status && !uploadingDocs) {
+        if (id && !showEditCaseModal.status && !caseCommitModal && !changeisActiveStatus.show && !addCaseReference.show && !removeCaseReference.status && !deleteCaseDoc?.status && !uploadingDocs) {
             getCaseById()
         }
     }, [id, changeStatus, caseCommitModal, showEditCaseModal, addCaseReference,changeisActiveStatus ,removeCaseReference ,deleteCaseDoc,uploadingDocs])
@@ -365,7 +366,7 @@ console.log(location);
                                                                             </div> 
                                                                         <div className="d-flex flex-column p-4 justify-content-center align-items-center">
                                                                             <div className="d-flex justify-content-center bg-color-6 align-items-center fs-4 text-white bg-primary" style={{ height: '3rem', width: '3rem', borderRadius: '3rem' }}>
-                                                                                {item?.type == "image" ? <FaFileImage /> : (item?.type == "pdf" ? <FaFilePdf /> : <FaFileWord />)}
+                                                                                {item?.type == "image" ? <FaFileImage /> : (item?.type == "pdf" ? <FaFilePdf /> : (item?.type=="audio" ? <LuFileAudio /> :<FaFileWord />))}
                                                                             </div>
                                                                         </div>
                                                                         <div className="d-flex align-items-center justify-content-center bg-dark gap-5 w-100 p-2 text-primary">

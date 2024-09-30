@@ -11,6 +11,7 @@ import { IoMdAdd } from 'react-icons/io'
 import { checkNumber, checkPhoneNo } from '../../utils/helperFunction'
 import { MdOutlineCancel } from "react-icons/md";
 import AddNewCaseDocsModal from "../../components/Common/addNewCaseDoc"
+import { LuFileAudio } from "react-icons/lu"
 
 
 export default function AddCaseComp({ addCase, uploadAttachment, successUrl,role }) {
@@ -388,7 +389,7 @@ export default function AddCaseComp({ addCase, uploadAttachment, successUrl,role
                                         <div onClick={()=>handleRemoveDoc(ind)}  className="text-danger fs-5 cursor-pointer"><MdOutlineCancel/></div>
                                         <div className="d-flex flex-column p-4 justify-content-center align-items-center">
                                             <div className="d-flex justify-content-center bg-color-6 align-items-center fs-4 text-white bg-primary" style={{ height: '3rem', width: '3rem', borderRadius: '3rem' }}>
-                                                {item?.docType == "image" ? <FaFileImage /> : <FaFilePdf />}
+                                                {item?.docType == "image" ? <FaFileImage /> : (item?.docType == "pdf" ? <FaFilePdf /> : (item?.docType=="audio" ? <LuFileAudio /> :<FaFileWord />))}
                                             </div>
                                         </div>
                                         <div className="d-flex align-items-center justify-content-center bg-dark gap-5 w-100 p-2 text-primary">

@@ -634,15 +634,27 @@ export const adminCreateOrUpdateStatment = (data) => {
   return axios.post(`${API_BASE}/api/admin/createOrUpdateStatement`, data)
 }
 
-export const adminAllStatment= (pageItemLimit = "", pageNo = "", partnerId = "",empId="", startDate = "", endDate = "") => {
+export const adminAllStatment= (pageItemLimit = "", pageNo = "", partnerId = "",empId="", startDate = "", endDate = "",isPdf=false) => {
   setheader()
-  return axios.get(`${API_BASE}/api/admin/getAllStatement?limit=${pageItemLimit}&pageNo=${pageNo}&partnerId=${partnerId}&empId=${empId}&startDate=${startDate}&endDate=${endDate}`)
+  return axios.get(`${API_BASE}/api/admin/getAllStatement?limit=${pageItemLimit}&pageNo=${pageNo}&partnerId=${partnerId}&empId=${empId}&startDate=${startDate}&endDate=${endDate}&isPdf=${isPdf}`)
 }
 
 export const adminStatements= (pageItemLimit = "", pageNo = "",startDate = "", endDate = "",search="") => {
   setheader()
   return axios.get(`${API_BASE}/api/admin/getStatements?limit=${pageItemLimit}&pageNo=${pageNo}&search=${search}&startDate=${startDate}&endDate=${endDate}`)
 }
+
+// notification
+export const adminAllNotificationApi= (search="") => {
+  setheader()
+  return axios.get(`${API_BASE}/api/admin/getAllNotification`)
+}
+
+export const adminUpdateNotificationApi = (data) => {
+  setheader()
+  return axios.put(`${API_BASE}/api/admin/updateNotification`, data)
+}
+
 
 
 
@@ -1114,4 +1126,15 @@ export const empOpAllStatment= (pageItemLimit = "", pageNo = "", partnerId = "",
 export const empOpStatments= (pageItemLimit = "", pageNo = "",startDate = "", endDate = "",search='') => {
   setheader()
   return axios.get(`${API_BASE}/api/employee/emp/getStatements?limit=${pageItemLimit}&pageNo=${pageNo}&search=${search}&startDate=${startDate}&endDate=${endDate}`)
+}
+
+// notification
+export const empAllNotificationApi= (search="") => {
+  setheader()
+  return axios.get(`${API_BASE}/api/employee/emp/getAllNotification`)
+}
+
+export const empUpdateNotificationApi = (data) => {
+  setheader()
+  return axios.put(`${API_BASE}/api/employee/emp/updateNotification`, data)
 }

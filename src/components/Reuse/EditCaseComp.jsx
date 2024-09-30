@@ -13,6 +13,7 @@ import Loader from "../../components/Common/loader"
 import AddNewCaseDocsModal from "../Common/addNewCaseDoc"
 import { complaintType } from "../../utils/constant"
 import {checkNumber,checkPhoneNo} from '../../utils/helperFunction'
+import { LuFileAudio } from "react-icons/lu"
 
 export default function EditCaseComp({viewCase,updateCase,attachementUpload,addCase,role,successUrl,id}) {
     const [uploadAttachement,setUploadAttachement] = useState({status:0,message:""})
@@ -505,7 +506,7 @@ export default function EditCaseComp({viewCase,updateCase,attachementUpload,addC
                                     <div key={item?._id} className="align-items-center bg-color-7 d-flex flex-column justify-content-center w-100 rounded-3">
                                         <div className="d-flex flex-column p-4 justify-content-center align-items-center">
                                             <div className="d-flex justify-content-center bg-color-6 align-items-center fs-4 text-white bg-primary" style={{ height: '3rem', width: '3rem', borderRadius: '3rem' }}>
-                                                {item?.docType == "image" || item?.type == "image" ? <FaFileImage /> : <FaFilePdf />}
+                                                {(item?.docType == "image" || item?.type == "image" )? <FaFileImage /> : (item?.type == "pdf" ? <FaFilePdf /> : (item?.type=="audio" ? <LuFileAudio /> :<FaFileWord />))}
                                                
                                             </div>
                                         </div>

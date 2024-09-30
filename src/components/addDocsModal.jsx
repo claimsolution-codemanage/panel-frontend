@@ -6,6 +6,8 @@ import { useNavigate } from 'react-router-dom';
 import { IoMdAdd } from 'react-icons/io'
 import { FaFilePdf, FaFileImage } from 'react-icons/fa6'
 import { docType } from '../utils/constant';
+import { FaFileWord } from 'react-icons/fa';
+import { LuFileAudio } from 'react-icons/lu';
 
 export default function AddDocsModal({ _id, uploadingDocs, setUploadingDocs, handleCaseDocsUploading, attachementUpload }) {
     const [data, setData] = useState({
@@ -189,7 +191,9 @@ export default function AddDocsModal({ _id, uploadingDocs, setUploadingDocs, han
                 uploadAttachmentFile(file, "pdf")
                 // Process PDF file
                 // console.log("Processing PDF file");
-            } else if (fileType == "application/vnd.openxmlformats-officedocument.wordprocessingml.document") {
+            } else if(fileType?.includes("audio")){
+                uploadAttachmentFile(file, "audio")
+            }  else if (fileType == "application/vnd.openxmlformats-officedocument.wordprocessingml.document") {
                 setLoading({ status: false, code: 2, type: "uploading", message: "File must be image, pdf file" })
                 // uploadAttachmentFile(file, "word")
                 
@@ -238,7 +242,7 @@ export default function AddDocsModal({ _id, uploadingDocs, setUploadingDocs, han
                         {data?.docURL && <div  className="align-items-center bg-color-7 d-flex flex-column justify-content-center w-25 rounded-3">
                             <div className="d-flex flex-column p-4 justify-content-center align-items-center">
                                 <div className="d-flex justify-content-center bg-color-6 align-items-center fs-4 text-white bg-primary" style={{ height: '3rem', width: '3rem', borderRadius: '3rem' }}>
-                                    {data?.docType == "image" ? <FaFileImage /> : <FaFilePdf />}
+                                    {data?.docType == "image" ? <FaFileImage /> : (data?.docType=="pdf" ? <FaFilePdf /> : (data?.docType=="audio" ? <LuFileAudio /> : <FaFileWord/>)) }
                                 </div>
                             </div>
                             <div className="d-flex align-items-center justify-content-center bg-dark gap-5 w-100 p-2 text-primary">
