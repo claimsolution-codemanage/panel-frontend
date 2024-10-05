@@ -348,5 +348,58 @@ img.btn-icon {
 }
 
 .bg-gray-light{
-  background-color: rgb(212, 212, 212);
+  background-color: #d4d1d1;
+}
+
+/* Define the page height to fit a specific PDF page size */
+.page {
+  width: 100%; /* Adjust based on your content width */
+  height: 750px;  /* A4 landscape height in pixels */
+  position: relative;
+  page-break-after: always; /* Ensure page breaks after each content block */
+}
+
+/* .position-relative-pg{
+  position: relative ;
+} */
+
+
+
+
+
+
+/* Define header and footer as fixed elements for each page */
+.header {
+  position: absolute;
+  top: 0;
+  width: 100%;
+  height: 70px; /* Adjust height for your header */
+  background-color: #fff; /* Optional background color */
+  text-align: center;
+  z-index: 1000; /* Make sure it stays above other content */
+}
+
+.footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: auto; /* Adjust height for your footer */
+  background-color: #fff; /* Footer background */
+  text-align: center;
+  z-index: 1000; /* Ensure it stays on top */
+  /* padding-top: 10px;  */
+}
+
+.content {
+  position: absolute;
+  margin-top: 100px; 
+  margin-bottom: 80px; 
+  padding: 0 20px; 
+}
+
+/* Ensure page breaks after each page */
+.page {
+  position: relative !important;
+  page-break-after: always;
+  min-height: 755px; /* Ensure the content fits within one landscape A4 page */
 }

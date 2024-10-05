@@ -62,6 +62,8 @@ export default function ViewAllStatement({getStatementApi,type}) {
       if (res?.data?.success && res?.data?.data?.data) {
         setData(res?.data?.data?.data)
         setNoOfData(res?.data?.data?.totalData)
+        console.log(res?.data?.data?.data?.length);
+        
         setStatementOf(res?.data?.data?.statementOf)        
         setLoading(false)
       }
@@ -81,7 +83,7 @@ export default function ViewAllStatement({getStatementApi,type}) {
     if ((partnerId || empId) && getStatementApi &&!showStatement.status) {
       getAllStatement()
     }
-  }, [partnerId,empId,showStatement])
+  }, [partnerId,empId,showStatement,pgNo,pageItemLimit])
 
 
   const handlePageClick = (event) => {
@@ -90,67 +92,33 @@ export default function ViewAllStatement({getStatementApi,type}) {
 
   const handleDownloadPdf = async() => {
     try {
-      const element = document.getElementById("statement-pdf");
-      const footerElement = document.getElementById("pdf-footer"); 
-      const options = {
-        margin:       0.2,
-        filename:     'statement.pdf',
-        image:        { type: 'jpeg', quality: 0.98 },
-        html2canvas: { scale: 2, windowWidth: 1200 },
-        jsPDF:        { unit: 'in', format: 'a4', orientation: 'landscape' }
-      };
-  
-      if (element && footerElement) {
-        setTimeout(() => {
-          html2pdf().from(element).set(options).toPdf().get('pdf').then(async (pdf) => {
-            const totalPages = pdf.internal.getNumberOfPages();
-            const pageWidth = pdf.internal.pageSize.getWidth();
-            const pageHeight = pdf.internal.pageSize.getHeight();
-      
-            // Convert footer HTML to image using html2canvas
-            const footerCanvas = await html2canvas(footerElement, { scale: 2 });
-            const footerImgData = footerCanvas.toDataURL('image/jpeg');
-      
-            // Loop through all pages to add the footer
-            for (let i = 1; i <= totalPages; i++) {
-              pdf.setPage(i);
-              pdf.addImage(footerImgData, 'JPEG', 0, pageHeight - 30, pageWidth, 30); // Adjust footer position
-            }
-            
-            // Save the PDF
-            pdf.save('statement.pdf');
-            setDownloadPdf({ ...downloadPdf, loading: false });
-            toast.success("Successfully statement downloaded");
-          });
-        }, 2000);
-      }
-      // setDownloadPdf({...downloadPdf,loading:true})
-      // const startDate = dateRange.startDate ? getFormateDate(dateRange.startDate) : ""
-      // const endDate = dateRange.endDate ? getFormateDate(dateRange.endDate) : ""
-      // const res = await getStatementApi("","",partnerId,empId,startDate,endDate,true)
-      // if (res?.data?.success && res?.data?.data?.data) {
-      //   setDownloadPdf({
-      //     ...downloadPdf,
-      //     data:res?.data?.data?.data,
-      //     statementOf:res?.data?.data?.statementOf
-      //   })
-      //   const element = document.getElementById("statement-pdf");
-      //   const options = {
-      //     margin:       0.2,
-      //     filename:     'statement.pdf',
-      //     image:        { type: 'jpeg', quality: 0.98 },
-      //     html2canvas: { scale: 2, windowWidth: 1200 },
-      //     jsPDF:        { unit: 'in', format: 'a4', orientation: 'landscape' }
-      //   };
+      setDownloadPdf({...downloadPdf,loading:true})
+      const startDate = dateRange.startDate ? getFormateDate(dateRange.startDate) : ""
+      const endDate = dateRange.endDate ? getFormateDate(dateRange.endDate) : ""
+      const res = await getStatementApi("","",partnerId,empId,startDate,endDate,true)
+      if (res?.data?.success && res?.data?.data?.data) {
+        setDownloadPdf({
+          ...downloadPdf,
+          data:res?.data?.data?.data,
+          statementOf:res?.data?.data?.statementOf
+        })
+        const element = document.getElementById("statement-pdf");
+        const options = {
+          margin:       0.2,
+          filename:     'statement.pdf',
+          image:        { type: 'jpeg', quality: 0.98 },
+          html2canvas: { scale: 2, windowWidth: 1200 },
+          jsPDF:        { unit: 'in', format: 'a4', orientation: 'landscape' }
+        };
     
-      //   if(element){
-      //     setTimeout(() => {
-      //       html2pdf().from(element).set(options).save();
-      //       setDownloadPdf({...downloadPdf,loading:false})
-      //       toast.success("Successfully statement downloaded")
-      //     }, 2000);
-      //   }
-      // }
+        if(element){
+          setTimeout(() => {
+            html2pdf().from(element).set(options).save();
+            setDownloadPdf({...downloadPdf,loading:false})
+            toast.success("Successfully statement downloaded")
+          }, 2000);
+        }
+      }
     } catch (error) {
       console.log(error);
       setDownloadPdf({...downloadPdf,loading:false})
@@ -169,7 +137,7 @@ export default function ViewAllStatement({getStatementApi,type}) {
   };
 
   useEffect(()=>{
-    const type = ["admin","finance","operation"]
+    const type = ["admin","finance","operation","partner"]
     if(!((type?.includes(state?.myAppData?.details?.role?.toLowerCase())) || (type?.includes(state?.myAppData?.details?.empType?.toLowerCase())))){
         navigate(-1)
     }
@@ -364,7 +332,7 @@ export default function ViewAllStatement({getStatementApi,type}) {
           <CreateOrUpdateStatmentModal show={showStatement?.status} data={showStatement?.data} hide={()=>setShowStatement({...showStatement,status:!showStatement?.status})} partnerId={partnerId} empId={empId} type={type}/>
           
           {/* <StatementPdf data={downloadPdf?.data} statementOf={downloadPdf?.statementOf} dateRange={dateRange}/> */}
-          <StatementPdf data={data} statementOf={statementOf} dateRange={dateRange}/>
+          <StatementPdf data={downloadPdf.data} statementOf={downloadPdf.statementOf} dateRange={dateRange}/>
 
       </div>}
   </>)

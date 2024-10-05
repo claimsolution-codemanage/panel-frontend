@@ -180,9 +180,9 @@ export const partnerTls = () => {
   return axios.get(`${API_BASE}/api/partner/getTls`)
 }
 
-export const partnerStatement = () => {
+export const partnerStatement = (pageItemLimit = "", pageNo = "", partnerId = "",empId="", startDate = "", endDate = "",isPdf=false) => {
   setheader()
-  return axios.get(`${API_BASE}/api/partner/getStatement`)
+  return axios.get(`${API_BASE}/api/partner/getStatement?startDate=${startDate}&endDate=${endDate}&limit=${pageItemLimit}&pageNo=${pageNo}&isPdf=${isPdf}`)
 }
 
 
@@ -1118,9 +1118,9 @@ export const empOpCreateOrUpdateStatment = (data) => {
   return axios.post(`${API_BASE}/api/employee/emp/createOrUpdateStatement`, data)
 }
 
-export const empOpAllStatment= (pageItemLimit = "", pageNo = "", partnerId = "",empId="", startDate = "", endDate = "") => {
+export const empOpAllStatment= (pageItemLimit = "", pageNo = "", partnerId = "",empId="", startDate = "", endDate = "",isPdf=false) => {
   setheader()
-  return axios.get(`${API_BASE}/api/employee/emp/getAllStatement?limit=${pageItemLimit}&pageNo=${pageNo}&partnerId=${partnerId}&empId=${empId}&startDate=${startDate}&endDate=${endDate}`)
+  return axios.get(`${API_BASE}/api/employee/emp/getAllStatement?limit=${pageItemLimit}&pageNo=${pageNo}&partnerId=${partnerId}&empId=${empId}&startDate=${startDate}&endDate=${endDate}&isPdf=${isPdf}`)
 }
 
 export const empOpStatments= (pageItemLimit = "", pageNo = "",startDate = "", endDate = "",search='') => {
