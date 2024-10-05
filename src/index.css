@@ -338,3 +338,15 @@ img.btn-icon {
     display: table-footer-group;
   }
 }
+
+.pdf-font-table{
+  font-size: 0.07in;
+}
+
+.pdf-font{
+  font-size: 0.12in;
+}
+
+.bg-gray-light{
+  background-color: rgb(212, 212, 212);
+}

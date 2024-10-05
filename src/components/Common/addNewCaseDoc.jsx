@@ -5,8 +5,10 @@ import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 import { IoMdAdd } from 'react-icons/io'
 import { v4 as uuidv4 } from 'uuid';
-import { FaFilePdf, FaFileImage } from 'react-icons/fa6'
+import { FaFilePdf, FaFileImage,FaFileWord } from 'react-icons/fa6'
 import { docType } from '../../utils/constant';
+import { LuFileAudio } from "react-icons/lu"
+
 
 export default function AddNewCaseDocsModal({uploadingDocs,setUploadingDocs, handleCaseDocsUploading, attachementUpload }) {
     const [data, setData] = useState({
@@ -84,39 +86,34 @@ export default function AddNewCaseDocsModal({uploadingDocs,setUploadingDocs, han
         
         if (files && files.length > 0) {
             const file = files[0];
-            const fileType = file?.type;
+            let fileType = file?.type;
+            const fileName = file.name;
             const maxSize = 150 * 1024 * 1024;
             if (file.size > maxSize) {
             setLoading({ status: false, code: 2, type: "uploading", message: "File must be less than 150Mb" })
             return
             }
 
-
+            if (!fileType) {
+                const extension = fileName.split('.').pop().toLowerCase();
+                if (['mp3', 'wav', 'amr',"acc"].includes(extension)) {
+                    fileType = 'audio';
+                }
+            }
+    
             if (fileType.includes("image")) {
-                // setLoading({status:true,code:0,type:"uploading",message:"uploading..."})
                 uploadAttachmentFile(file, "image")
-
-                // console.log("Processing image file");
             } else if (fileType.includes("pdf")) {
-                // setLoading({status:true,code:0,type:"uploading",message:"uploading..."})
                 uploadAttachmentFile(file, "pdf")
-                // Process PDF file
-                // console.log("Processing PDF file");
             }else if(fileType?.includes("audio")){
                 uploadAttachmentFile(file, "audio")
             } else if (fileType == "application/vnd.openxmlformats-officedocument.wordprocessingml.document") {
-                setLoading({ status: false, code: 2, type: "uploading", message: "File must be image, pdf file" })
-                // uploadAttachmentFile(file, "word")
-                
-                // console.log("Processing Word file");
+                setLoading({ status: false, code: 2, type: "uploading", message: "File must be image,audio, pdf file" })
             } else {
-                setLoading({ status: false, code: 2, type: "uploading", message: "File must be image, pdf file" })
-                // Unsupported file type
-                // setUploadAttachement({ status: 2, message: "File must be image, pdf or word file" });
+                setLoading({ status: false, code: 2, type: "uploading", message: "File must be image,audio, pdf file" })
             }
         } else {
             setLoading({ status: false, code: 2, type: "uploading", message: "Please select a file" })
-            // setUploadAttachement({ status: 2, message: "Please select a file" });
         }
     };
 
@@ -136,7 +133,7 @@ export default function AddNewCaseDocsModal({uploadingDocs,setUploadingDocs, han
                     </div>
                     <div className='d-flex flex-column text-primary text-center h6 justify-content-center'>
                         <span>Add one file at a time</span>
-                        <span>Allowed only image and pdf file</span>
+                        <span>Allowed only image, pdf and audio file</span>
                     </div>
                     <div className="mb-3 ">
                 <label htmlFor="docType" className={`form-label`}>Document Type*</label>
@@ -153,7 +150,7 @@ export default function AddNewCaseDocsModal({uploadingDocs,setUploadingDocs, han
                         {data?.docURL && <div  className="align-items-center bg-color-7 d-flex flex-column justify-content-center w-25 rounded-3">
                             <div className="d-flex flex-column p-4 justify-content-center align-items-center">
                                 <div className="d-flex justify-content-center bg-color-6 align-items-center fs-4 text-white bg-primary" style={{ height: '3rem', width: '3rem', borderRadius: '3rem' }}>
-                                    {data?.docType == "image" ? <FaFileImage /> : <FaFilePdf />}
+                                    {data?.docType == "image" ? <FaFileImage /> : (data?.docType == "pdf" ? <FaFilePdf /> : (data?.docType=="audio" ? <LuFileAudio /> :<FaFileWord />))}
                                 </div>
                             </div>
                             <div className="d-flex align-items-center justify-content-center bg-dark gap-5 w-100 p-2 text-primary">

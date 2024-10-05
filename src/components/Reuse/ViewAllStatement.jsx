@@ -17,6 +17,8 @@ import CreateOrUpdateStatmentModal from "./createOrUpdateStatementModal";
 import { AppContext } from "../../App";
 import StatementPdf from "../Common/PdfConvert/StatementPdf";
 import html2pdf from 'html2pdf.js'
+import html2canvas from 'html2canvas';
+
 
 export default function ViewAllStatement({getStatementApi,type}) {
   const state = useContext(AppContext)
@@ -88,33 +90,67 @@ export default function ViewAllStatement({getStatementApi,type}) {
 
   const handleDownloadPdf = async() => {
     try {
-      setDownloadPdf({...downloadPdf,loading:true})
-      const startDate = dateRange.startDate ? getFormateDate(dateRange.startDate) : ""
-      const endDate = dateRange.endDate ? getFormateDate(dateRange.endDate) : ""
-      const res = await getStatementApi("","",partnerId,empId,startDate,endDate,true)
-      if (res?.data?.success && res?.data?.data?.data) {
-        setDownloadPdf({
-          ...downloadPdf,
-          data:res?.data?.data?.data,
-          statementOf:res?.data?.data?.statementOf
-        })
-        const element = document.getElementById("statement-pdf");
-        const options = {
-          margin:       0.2,
-          filename:     'statement.pdf',
-          image:        { type: 'jpeg', quality: 0.98 },
-          html2canvas: { scale: 2, windowWidth: 1200 },
-          jsPDF:        { unit: 'in', format: 'a4', orientation: 'landscape' }
-        };
-    
-        if(element){
-          setTimeout(() => {
-            html2pdf().from(element).set(options).save();
-            setDownloadPdf({...downloadPdf,loading:false})
-            toast.success("Successfully statement downloaded")
-          }, 2000);
-        }
+      const element = document.getElementById("statement-pdf");
+      const footerElement = document.getElementById("pdf-footer"); 
+      const options = {
+        margin:       0.2,
+        filename:     'statement.pdf',
+        image:        { type: 'jpeg', quality: 0.98 },
+        html2canvas: { scale: 2, windowWidth: 1200 },
+        jsPDF:        { unit: 'in', format: 'a4', orientation: 'landscape' }
+      };
+  
+      if (element && footerElement) {
+        setTimeout(() => {
+          html2pdf().from(element).set(options).toPdf().get('pdf').then(async (pdf) => {
+            const totalPages = pdf.internal.getNumberOfPages();
+            const pageWidth = pdf.internal.pageSize.getWidth();
+            const pageHeight = pdf.internal.pageSize.getHeight();
+      
+            // Convert footer HTML to image using html2canvas
+            const footerCanvas = await html2canvas(footerElement, { scale: 2 });
+            const footerImgData = footerCanvas.toDataURL('image/jpeg');
+      
+            // Loop through all pages to add the footer
+            for (let i = 1; i <= totalPages; i++) {
+              pdf.setPage(i);
+              pdf.addImage(footerImgData, 'JPEG', 0, pageHeight - 30, pageWidth, 30); // Adjust footer position
+            }
+            
+            // Save the PDF
+            pdf.save('statement.pdf');
+            setDownloadPdf({ ...downloadPdf, loading: false });
+            toast.success("Successfully statement downloaded");
+          });
+        }, 2000);
       }
+      // setDownloadPdf({...downloadPdf,loading:true})
+      // const startDate = dateRange.startDate ? getFormateDate(dateRange.startDate) : ""
+      // const endDate = dateRange.endDate ? getFormateDate(dateRange.endDate) : ""
+      // const res = await getStatementApi("","",partnerId,empId,startDate,endDate,true)
+      // if (res?.data?.success && res?.data?.data?.data) {
+      //   setDownloadPdf({
+      //     ...downloadPdf,
+      //     data:res?.data?.data?.data,
+      //     statementOf:res?.data?.data?.statementOf
+      //   })
+      //   const element = document.getElementById("statement-pdf");
+      //   const options = {
+      //     margin:       0.2,
+      //     filename:     'statement.pdf',
+      //     image:        { type: 'jpeg', quality: 0.98 },
+      //     html2canvas: { scale: 2, windowWidth: 1200 },
+      //     jsPDF:        { unit: 'in', format: 'a4', orientation: 'landscape' }
+      //   };
+    
+      //   if(element){
+      //     setTimeout(() => {
+      //       html2pdf().from(element).set(options).save();
+      //       setDownloadPdf({...downloadPdf,loading:false})
+      //       toast.success("Successfully statement downloaded")
+      //     }, 2000);
+      //   }
+      // }
     } catch (error) {
       console.log(error);
       setDownloadPdf({...downloadPdf,loading:false})
@@ -327,7 +363,9 @@ export default function ViewAllStatement({getStatementApi,type}) {
         </div>
           <CreateOrUpdateStatmentModal show={showStatement?.status} data={showStatement?.data} hide={()=>setShowStatement({...showStatement,status:!showStatement?.status})} partnerId={partnerId} empId={empId} type={type}/>
           
-          <StatementPdf data={downloadPdf?.data} statementOf={downloadPdf?.statementOf} dateRange={dateRange}/>
+          {/* <StatementPdf data={downloadPdf?.data} statementOf={downloadPdf?.statementOf} dateRange={dateRange}/> */}
+          <StatementPdf data={data} statementOf={statementOf} dateRange={dateRange}/>
+
       </div>}
   </>)
 }
