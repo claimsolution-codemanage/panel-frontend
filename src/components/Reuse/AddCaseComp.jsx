@@ -12,6 +12,7 @@ import { checkNumber, checkPhoneNo } from '../../utils/helperFunction'
 import { MdOutlineCancel } from "react-icons/md";
 import AddNewCaseDocsModal from "../../components/Common/addNewCaseDoc"
 import { LuFileAudio } from "react-icons/lu"
+import DocumentPreview from "../DocumentPreview"
 
 
 export default function AddCaseComp({ addCase, uploadAttachment, successUrl,role }) {
@@ -387,10 +388,12 @@ export default function AddCaseComp({ addCase, uploadAttachment, successUrl,role
                                     {uploadedFiles.map((item,ind) => <div className="p-2">
                                     <div className="align-items-center bg-color-7 d-flex flex-column justify-content-center w-100 rounded-3">
                                         <div onClick={()=>handleRemoveDoc(ind)}  className="text-danger fs-5 cursor-pointer"><MdOutlineCancel/></div>
-                                        <div className="d-flex flex-column p-4 justify-content-center align-items-center">
-                                            <div className="d-flex justify-content-center bg-color-6 align-items-center fs-4 text-white bg-primary" style={{ height: '3rem', width: '3rem', borderRadius: '3rem' }}>
+                                        <div className="d-flex flex-column justify-content-center align-items-center">
+                                            {console.log("item",item) }
+                                        <DocumentPreview url={ item?.docURL} />
+                                            {/* <div className="d-flex justify-content-center bg-color-6 align-items-center fs-4 text-white bg-primary" style={{ height: '3rem', width: '3rem', borderRadius: '3rem' }}>
                                                 {item?.docType == "image" ? <FaFileImage /> : (item?.docType == "pdf" ? <FaFilePdf /> : (item?.docType=="audio" ? <LuFileAudio /> :<FaFileWord />))}
-                                            </div>
+                                            </div> */}
                                         </div>
                                         <div className="d-flex align-items-center justify-content-center bg-dark gap-5 w-100 p-2 text-primary">
                                             <p className="fs-5 text-break text-capitalize text-center text-wrap">{item?.docName}</p>
@@ -402,7 +405,7 @@ export default function AddCaseComp({ addCase, uploadAttachment, successUrl,role
                             </div>
                             <div className="d-flex  justify-content-center">
                                 <button type="submit" aria-disabled={loading} disabled={error} className={loading ? "d-flex align-items-center justify-content-center gap-3 btn btn-primary w-50 disabled" : "d-flex align-items-center justify-content-center gap-3 btn btn-primary w-50 "}>
-                                    {loading ? <span className="spinner-border spinner-border-sm" role="status" aria-hidden={true}></span> : <span>Add New Case </span>}
+                                    {loading ? <span className="spinner-border spinner-border-sm" role="status" aria-hidden={true}></span> : <span>Submit </span>}
                                 </button>
                             </div>
                         </div>

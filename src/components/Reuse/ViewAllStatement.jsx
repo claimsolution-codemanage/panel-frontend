@@ -106,8 +106,8 @@ export default function ViewAllStatement({getStatementApi,type}) {
         const options = {
           margin:       0.2,
           filename:     'statement.pdf',
-          image:        { type: 'jpeg', quality: 0.98 },
-          html2canvas: { scale: 2, windowWidth: 1200 },
+          image:        { type: 'jpeg', quality: 1 },
+          html2canvas: { scale: 3, windowWidth: 1200 },
           jsPDF:        { unit: 'in', format: 'a4', orientation: 'landscape' }
         };
     
@@ -155,7 +155,7 @@ export default function ViewAllStatement({getStatementApi,type}) {
               <span>Statement</span>
             </div>
           </div>
-          <div className="d-md-flex gap-1">
+          <div className="d-md-flex gap-2">
           {
             (type=="admin" || type=="operation") && <div className="btn btn-primary" onClick={()=>setShowStatement({status:!showStatement?.status,data:null})}>
             Create
@@ -332,7 +332,7 @@ export default function ViewAllStatement({getStatementApi,type}) {
           <CreateOrUpdateStatmentModal show={showStatement?.status} data={showStatement?.data} hide={()=>setShowStatement({...showStatement,status:!showStatement?.status})} partnerId={partnerId} empId={empId} type={type}/>
           
           {/* <StatementPdf data={downloadPdf?.data} statementOf={downloadPdf?.statementOf} dateRange={dateRange}/> */}
-          <StatementPdf data={downloadPdf.data} statementOf={downloadPdf.statementOf} dateRange={dateRange}/>
+          <StatementPdf data={data} statementOf={statementOf} dateRange={dateRange}/>
 
       </div>}
   </>)

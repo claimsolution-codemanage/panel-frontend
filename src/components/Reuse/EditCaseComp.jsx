@@ -12,8 +12,9 @@ import { useParams } from "react-router-dom"
 import Loader from "../../components/Common/loader"
 import AddNewCaseDocsModal from "../Common/addNewCaseDoc"
 import { complaintType } from "../../utils/constant"
-import {checkNumber,checkPhoneNo} from '../../utils/helperFunction'
+import {checkNumber,checkPhoneNo, getCheckStorage} from '../../utils/helperFunction'
 import { LuFileAudio } from "react-icons/lu"
+import DocumentPreview from "../DocumentPreview"
 
 export default function EditCaseComp({viewCase,updateCase,attachementUpload,addCase,role,successUrl,id}) {
     const [uploadAttachement,setUploadAttachement] = useState({status:0,message:""})
@@ -314,11 +315,12 @@ export default function EditCaseComp({viewCase,updateCase,attachementUpload,addC
     }
 
     const handleBack = () => {
-        if (location?.state?.filter && location?.state?.back) {
-            navigate(location?.state?.back, { state: { ...location?.state,back:location?.pathname } });
-        } else {
-            navigate(-1)
-        }
+        navigate(-1)
+        // if (location?.state?.filter && location?.state?.back) {
+        //     navigate(location?.state?.back, { state: { ...location?.state,back:location?.pathname } });
+        // } else {
+        //     navigate(-1)
+        // }
     };
 
 
@@ -504,10 +506,15 @@ export default function EditCaseComp({viewCase,updateCase,attachementUpload,addC
                                 <div className="row row-cols-1 row-cols-md-4  align-items-center">
                                     {uploadedFiles.map(item => <div className="p-2">
                                     <div key={item?._id} className="align-items-center bg-color-7 d-flex flex-column justify-content-center w-100 rounded-3">
-                                        <div className="d-flex flex-column p-4 justify-content-center align-items-center">
-                                            <div className="d-flex justify-content-center bg-color-6 align-items-center fs-4 text-white bg-primary" style={{ height: '3rem', width: '3rem', borderRadius: '3rem' }}>
+                                        <div className="d-flex flex-column justify-content-center align-items-center">
+                                                {getCheckStorage(item?.url || item?.docURL) ?
+                                                    <DocumentPreview url={getCheckStorage(item?.url || item?.docURL)} />
+                                                    : <div className="d-flex justify-content-center bg-color-6 align-items-center fs-4 text-white bg-primary" style={{ height: '3rem', width: '3rem', borderRadius: '3rem' }}>
+                                                        <FaFileWord />
+                                                    </div>}
+                                            {/* <div className="d-flex justify-content-center bg-color-6 align-items-center fs-4 text-white bg-primary" style={{ height: '3rem', width: '3rem', borderRadius: '3rem' }}>
                                                 {(item?.docType == "image" || item?.type == "image" )? <FaFileImage /> : ((item?.type || item?.docType) == "pdf" ? <FaFilePdf /> : ((item?.type || item?.docType)=="audio" ? <LuFileAudio /> :<FaFileWord />))}                                               
-                                            </div>
+                                            </div> */}
                                         </div>
                                         <div className="d-flex align-items-center justify-content-center bg-dark gap-5 w-100 p-2 text-primary">
                                             <p className="fs-5 text-break text-capitalize text-center text-wrap">{item?.name ?item?.name :item?.docName}</p>

@@ -17,6 +17,7 @@ import { validateUploadFile } from '../../utils/helperFunction'
 import { useFormik } from 'formik'
 import * as yup from 'yup'
 import { checkPhoneNo, checkNumber,getCheckStorage } from '../../utils/helperFunction'
+import DocumentPreview from '../DocumentPreview'
 
 
 
@@ -151,27 +152,73 @@ export default function EditClient({ id, getClient, updateClient,uploadImg ,role
     const handleUploadFile = async (file,type) => {
         try {
             setUploadPhoto({ status: 1, loading: true,type, message: "uploading..." })
-            const res = await uploadImg(file)
+            // Create a FormData object to send the file
+            const formData = new FormData();
+            formData.append("file", file);
+
+            const res = await uploadImg("attachment",formData)
             UserProfileFormik.setFieldValue(type, res?.data?.url)
             setUploadPhoto({ status: 1, loading: false,type, message: "uploaded" })
             setTimeout(() => {
                 setUploadPhoto({ status: 0, loading: false,type:"", message: "" })
             }, 3000);
         } catch (error) {
+            console.log(error);
+            
             setUploadPhoto({ status: 0, loading: false,type, message: "Failed to upload file" })
         }
     }
 
-    const handleImgOnchange = async (e,type) => {
-        setUploadPhoto({ status: 0, loading: true, message: "" })
-        const result = validateUploadFile(e.target.files, 5, "image")
-        if (!result?.success) {
-            setUploadPhoto({ status: 0, loading: false,type, message: result?.message })
-        } else {
-            // console.log("result?.file", result?.file);
-            handleUploadFile(result?.file,type)
+    const handleImgOnchange = async (e, type) => {
+        setUploadPhoto({ status: 0, loading: true, message: "" });
+    
+        // Get the selected files from the event
+        const files = e?.target?.files;
+    
+        // Allowed MIME types for images and PDFs
+        const allowedMimeTypes = [
+            "image/jpeg", "image/jpg", "image/png", "image/gif", "image/bmp", // Images
+            "application/pdf" // PDF
+        ];
+    
+        // Check if files are selected
+        if (!files || files.length === 0) {
+            setUploadPhoto({
+                status: 0,
+                loading: false,
+                message: "Please select a file."
+            });
+            return;
         }
-    }
+    
+        const file = files[0]; // Get the first file
+        const fileType = file.type; // Get the MIME type
+        const maxSize = 5 * 1024 * 1024; // 5MB in bytes
+    
+        // Validate file type
+        if (!allowedMimeTypes.includes(fileType)) {
+            setUploadPhoto({
+                status: 0,
+                loading: false,
+                message: "Invalid file type. Please upload a valid image or PDF."
+            });
+            return;
+        }
+    
+        // Validate file size
+        if (file.size > maxSize) {
+            setUploadPhoto({
+                status: 0,
+                loading: false,
+                message: "File size exceeds the 5MB limit."
+            });
+            return;
+        }
+    
+        // Call the upload handler function
+        handleUploadFile(file, type);
+    };
+    
 
     const handleBack = () => {
         if(location?.state?.filter && location?.state?.back){
@@ -328,7 +375,8 @@ export default function EditClient({ id, getClient, updateClient,uploadImg ,role
                                                         <label htmlFor="kycPhoto" className="form-label text-break">Photo {(uploadPhoto.message && uploadPhoto.type == "kycPhoto") && <span className={uploadPhoto.status == 1 ? "text-success" : "text-danger"}>{uploadPhoto.message}</span>}</label>
                                                         <div className='btn btn-primary' onClick={() => kycPhotoRef.current.click()}>Upload</div>
                                                         </div>
-                                                        {<img style={{height:'200px'}} className="border rounded-2 w-100 img-fluid" src={getCheckStorage(UserProfileFormik?.values?.kycPhoto) ? getCheckStorage(UserProfileFormik?.values?.kycPhoto) : "/Images/upload.jpeg"} alt="kycPhoto" />}
+                                                        <DocumentPreview url={getCheckStorage(UserProfileFormik?.values?.kycPhoto) || "/Images/upload.jpeg"}/>
+                                                        {/* {<img style={{height:'200px'}} className="border rounded-2 w-100 img-fluid" src={getCheckStorage(UserProfileFormik?.values?.kycPhoto) ? getCheckStorage(UserProfileFormik?.values?.kycPhoto) : "/Images/upload.jpeg"} alt="kycPhoto" />} */}
                                                         <input type="file" name="kycPhoto" ref={kycPhotoRef} id="kycPhoto" hidden={true} onChange={(e) => handleImgOnchange(e, e?.target?.name)} />
                                                     </div>
                                                     <div className="mb-3 d-flex gap-2 flex-column">
@@ -336,7 +384,8 @@ export default function EditClient({ id, getClient, updateClient,uploadImg ,role
                                                         <label htmlFor="kycAadhar" className="form-label text-break">Aadhaar Front {(uploadPhoto.message && uploadPhoto.type == "kycAadhaar") && <span className={uploadPhoto.status == 1 ? "text-success" : "text-danger"}>{uploadPhoto.message}</span>}</label>
                                                         <div className='btn btn-primary' onClick={() => kycAadhaarRef.current.click()}>Upload</div>
                                                         </div>
-                                                        {<img style={{height:'200px'}} className="border rounded-2 w-100 img-fluid" src={getCheckStorage(UserProfileFormik?.values?.kycAadhaar) ? getCheckStorage(UserProfileFormik?.values?.kycAadhaar) : "/Images/upload.jpeg"} alt="kycAadhar" />}
+                                                        <DocumentPreview url={getCheckStorage(UserProfileFormik?.values?.kycAadhaar) || "/Images/upload.jpeg"}/>
+                                                        {/* {<img style={{height:'200px'}} className="border rounded-2 w-100 img-fluid" src={getCheckStorage(UserProfileFormik?.values?.kycAadhaar) ? getCheckStorage(UserProfileFormik?.values?.kycAadhaar) : "/Images/upload.jpeg"} alt="kycAadhar" />} */}
                                                         <input type="file" name="kycAadhaar" ref={kycAadhaarRef} id="kycAadhaar" hidden={true} onChange={(e) => handleImgOnchange(e, e?.target?.name)} />
                                                     </div>
                                                     <div className="mb-3 d-flex gap-2 flex-column">
@@ -344,7 +393,8 @@ export default function EditClient({ id, getClient, updateClient,uploadImg ,role
                                                         <label htmlFor="kycAadhaarBack" className="form-label text-break">Aadhaar Back {(uploadPhoto.message && uploadPhoto.type == "kycAadhaarBack") && <span className={uploadPhoto.status == 1 ? "text-success" : "text-danger"}>{uploadPhoto.message}</span>}</label>
                                                         <div className='btn btn-primary' onClick={() => kycAadhaarBackRef.current.click()}>Upload</div>
                                                         </div>
-                                                        {<img style={{height:'200px'}} className="border rounded-2 w-100 img-fluid" src={getCheckStorage(UserProfileFormik?.values?.kycAadhaarBack) ? getCheckStorage(UserProfileFormik?.values?.kycAadhaarBack) : "/Images/upload.jpeg"} alt="kycAadhar" />}
+                                                        <DocumentPreview url={getCheckStorage(UserProfileFormik?.values?.kycAadhaarBack) || "/Images/upload.jpeg"}/>
+                                                        {/* {<img style={{height:'200px'}} className="border rounded-2 w-100 img-fluid" src={getCheckStorage(UserProfileFormik?.values?.kycAadhaarBack) ? getCheckStorage(UserProfileFormik?.values?.kycAadhaarBack) : "/Images/upload.jpeg"} alt="kycAadhar" />} */}
                                                         <input type="file" name="kycAadhaarBack" ref={kycAadhaarBackRef} id="kycAadhaarBack" hidden={true} onChange={(e) => handleImgOnchange(e, e?.target?.name)} />
                                                     </div>
                                                     <div className="mb-3 d-flex gap-2 flex-column">
@@ -352,7 +402,8 @@ export default function EditClient({ id, getClient, updateClient,uploadImg ,role
                                                         <label htmlFor="kycPan" className="form-label text-break">PAN Card{(uploadPhoto.message && uploadPhoto.type == "kycPan") && <span className={uploadPhoto.status == 1 ? "text-success" : "text-danger"}>{uploadPhoto.message}</span>}</label>
                                                         <div className='btn btn-primary' onClick={() => kycPanRef.current.click()}>Upload</div>
                                                         </div>
-                                                        {<img style={{height:'200px'}} className="border rounded-2 w-100 img-fluid" src={getCheckStorage(UserProfileFormik?.values?.kycPan) ? getCheckStorage(UserProfileFormik?.values?.kycPan) : "/Images/upload.jpeg"} alt="kycPan" />}
+                                                        <DocumentPreview url={getCheckStorage(UserProfileFormik?.values?.kycPan) || "/Images/upload.jpeg"}/>
+                                                        {/* {<img style={{height:'200px'}} className="border rounded-2 w-100 img-fluid" src={getCheckStorage(UserProfileFormik?.values?.kycPan) ? getCheckStorage(UserProfileFormik?.values?.kycPan) : "/Images/upload.jpeg"} alt="kycPan" />} */}
                                                         <input type="file" name="kycPan" ref={kycPanRef} id="kycPan" hidden={true} onChange={(e) => handleImgOnchange(e, e?.target?.name)} />
                                                     </div>
                                                 </div>

@@ -89,7 +89,7 @@ export default function ViewInvoiceComp({getInvoice,id}) {
               <div className="card-body">
                 <div className="invoice-title">
                   <div className="float-end font-size-15">
-                    {!data?.isOffice && <div className={`rounded-1 w-auto text-white text-center px-2 py-1 ${data?.isPaid ? "bg-primary" :"bg-danger"}`}>{data?.isPaid ? "Paid":"Due"}</div>}
+                    {<div className={`rounded-1 w-auto text-white text-center px-2 py-1 ${data?.isPaid ? "bg-primary" :"bg-danger"}`}>{data?.isPaid ? "Paid":"Due"}</div>}
                     <h4 className='fs-4'>Invoice {data?.invoiceNo}</h4>
 
                     <div className="mt-4">

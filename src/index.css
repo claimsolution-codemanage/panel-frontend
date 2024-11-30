@@ -365,8 +365,29 @@ img.btn-icon {
 
 
 
+.bg-logo1{
+background-color: #182f59;
+}
 
+.bg-logo2{
+  background-color: #b2badf;
+}
 
+.bg-logo3{
+  background-color: #f99b23;
+}
+
+.pdf-logo1{
+  border-color: #182f59 !important;
+}
+
+.pdf-logo3{
+  border-color: #f99b23 !important;
+}
+
+.text-logo1{
+  color: #182f59 !important;
+}
 
 /* Define header and footer as fixed elements for each page */
 .header {
@@ -375,7 +396,7 @@ img.btn-icon {
   width: 100%;
   height: 70px; /* Adjust height for your header */
   background-color: #fff; /* Optional background color */
-  text-align: center;
+  /* text-align: center; */
   z-index: 1000; /* Make sure it stays above other content */
 }
 
@@ -392,9 +413,9 @@ img.btn-icon {
 
 .content {
   position: absolute;
-  margin-top: 100px; 
+  margin-top: 80px; 
   margin-bottom: 80px; 
-  padding: 0 20px; 
+  padding: 0 0px; 
 }
 
 /* Ensure page breaks after each page */

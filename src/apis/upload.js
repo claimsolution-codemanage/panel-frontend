@@ -48,6 +48,7 @@ export function setheader(){
 
   export const adminAttachementUpload = (type,formData)=>{
     setheader()
+    
     return axios.post(`${API_BASE}/api/admin/upload/attachment`,formData)
   }
 

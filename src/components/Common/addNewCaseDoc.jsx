@@ -1,6 +1,6 @@
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
-import { useEffect, useRef, useState } from 'react';
+import { useContext, useEffect, useRef, useState } from 'react';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 import { IoMdAdd } from 'react-icons/io'
@@ -8,16 +8,27 @@ import { v4 as uuidv4 } from 'uuid';
 import { FaFilePdf, FaFileImage,FaFileWord } from 'react-icons/fa6'
 import { docType } from '../../utils/constant';
 import { LuFileAudio } from "react-icons/lu"
+import { AppContext } from '../../App';
+import { TiDeleteOutline } from "react-icons/ti";
+import DocumentPreview from '../DocumentPreview';
 
 
 export default function AddNewCaseDocsModal({uploadingDocs,setUploadingDocs, handleCaseDocsUploading, attachementUpload }) {
+    const appState = useContext(AppContext)
     const [data, setData] = useState({
         docDate: new Date().toLocaleDateString(),
         docName: "",
         docType: "",
         docFormat: "",
-        docURL: ""
+        docURL: "",
+        isPrivate:false
     })
+
+    const userDetails = appState?.myAppData?.details
+    const hasAccess = userDetails?.role?.toLowerCase()=="admin" || userDetails?.empType?.toLowerCase()=="operation"
+
+    // console.log(hasAccess);
+    
     const [otherDocName,setOtherDocName] = useState("")
     const docRef = useRef()
     const [loading, setLoading] = useState({ status: false, code: 0, type: "", message: "" })
@@ -82,41 +93,118 @@ export default function AddNewCaseDocsModal({uploadingDocs,setUploadingDocs, han
 
     const handleAttachment = async (e) => {
         const files = e.target.files;
-        console.log(files);
-        
+    
         if (files && files.length > 0) {
             const file = files[0];
-            let fileType = file?.type;
             const fileName = file.name;
-            const maxSize = 150 * 1024 * 1024;
+            const maxSize = 150 * 1024 * 1024; // 150MB
+            const allowedExtensions = [
+                "jpg", "jpeg", "png", "gif", "bmp", 
+                "pdf", 
+                "mp3", "wav", "ogg", "amr", "aac", 
+                "mp4", "avi", 
+                "doc", "docx", 
+                "xls", "xlsx"
+            ];
+            const mimeTypes = {
+                image: ["image/jpeg", "image/png", "image/gif", "image/bmp"],
+                pdf: ["application/pdf"],
+                audio: ["audio/mpeg", "audio/wav", "audio/ogg", "audio/amr", "audio/aac"],
+                video: ["video/mp4", "video/x-msvideo"],
+                word: [
+                    "application/msword",
+                    "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+                ],
+                excel: [
+                    "application/vnd.ms-excel",
+                    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                ],
+            };
+    
+            // Validate file size
             if (file.size > maxSize) {
-            setLoading({ status: false, code: 2, type: "uploading", message: "File must be less than 150Mb" })
-            return
+                setLoading({
+                    status: false,
+                    code: 2,
+                    type: "uploading",
+                    message: "File must be less than 150MB",
+                });
+                return;
             }
-
+    
+            // Get file extension and type
+            let fileType = file.type || "";
+            const fileExtension = fileName.split(".").pop().toLowerCase();
+    
+            // Determine file type if MIME is missing
             if (!fileType) {
-                const extension = fileName.split('.').pop().toLowerCase();
-                if (['mp3', 'wav', 'amr',"acc"].includes(extension)) {
-                    fileType = 'audio';
+                if (["mp3", "wav", "ogg", "amr", "aac"].includes(fileExtension)) {
+                    fileType = "audio";
+                } else if (["mp4", "avi"].includes(fileExtension)) {
+                    fileType = "video";
+                } else if (["doc", "docx"].includes(fileExtension)) {
+                    fileType = "word";
+                } else if (["xls", "xlsx"].includes(fileExtension)) {
+                    fileType = "excel";
+                } else if (["jpg", "jpeg", "png", "gif", "bmp"].includes(fileExtension)) {
+                    fileType = "image";
+                } else if (fileExtension === "pdf") {
+                    fileType = "application/pdf";
                 }
             }
     
-            if (fileType.includes("image")) {
-                uploadAttachmentFile(file, "image")
-            } else if (fileType.includes("pdf")) {
-                uploadAttachmentFile(file, "pdf")
-            }else if(fileType?.includes("audio")){
-                uploadAttachmentFile(file, "audio")
-            } else if (fileType == "application/vnd.openxmlformats-officedocument.wordprocessingml.document") {
-                setLoading({ status: false, code: 2, type: "uploading", message: "File must be image,audio, pdf file" })
+            // Match file type with allowed MIME types
+            const isFileSupported =
+                mimeTypes.image.includes(fileType) ||
+                mimeTypes.pdf.includes(fileType) ||
+                mimeTypes.audio.includes(fileType) ||
+                mimeTypes.video.includes(fileType) ||
+                mimeTypes.word.includes(fileType) ||
+                mimeTypes.excel.includes(fileType);
+    
+            if (isFileSupported) {
+                if (mimeTypes.image.includes(fileType)) {
+                    uploadAttachmentFile(file, "image");
+                } else if (mimeTypes.pdf.includes(fileType)) {
+                    uploadAttachmentFile(file, "pdf");
+                } else if (mimeTypes.audio.includes(fileType)) {
+                    uploadAttachmentFile(file, "audio");
+                } else if (mimeTypes.video.includes(fileType)) {
+                    uploadAttachmentFile(file, "video");
+                } else if (mimeTypes.word.includes(fileType)) {
+                    uploadAttachmentFile(file, "word");
+                } else if (mimeTypes.excel.includes(fileType)) {
+                    uploadAttachmentFile(file, "excel");
+                }
+            } else if (allowedExtensions.includes(fileExtension)) {
+                setLoading({
+                    status: false,
+                    code: 2,
+                    type: "uploading",
+                    message: `Unsupported file type for ${fileExtension}. Please upload a valid file.`,
+                });
             } else {
-                setLoading({ status: false, code: 2, type: "uploading", message: "File must be image,audio, pdf file" })
+                setLoading({
+                    status: false,
+                    code: 2,
+                    type: "uploading",
+                    message: "File format not supported. Supported formats: image, audio, pdf, video, Word, Excel.",
+                });
             }
         } else {
-            setLoading({ status: false, code: 2, type: "uploading", message: "Please select a file" })
+            setLoading({
+                status: false,
+                code: 2,
+                type: "uploading",
+                message: "Please select a file",
+            });
         }
     };
+        
 
+    const handleRemoveDoc =()=>{
+        setData({...data,docURL:null})
+    }
     // console.log("data", data);
 
     return (
@@ -133,9 +221,14 @@ export default function AddNewCaseDocsModal({uploadingDocs,setUploadingDocs, han
                     </div>
                     <div className='d-flex flex-column text-primary text-center h6 justify-content-center'>
                         <span>Add one file at a time</span>
-                        <span>Allowed only image, pdf and audio file</span>
+                        {/* <span>Allowed only image, pdf and audio file</span> */}
                     </div>
-                    <div className="mb-3 ">
+                    {hasAccess && <div class="form-check form-switch">
+                <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckChecked" checked={data?.isPrivate} onChange={(e)=>setData({...data,isPrivate:e?.target?.checked})}/>
+                <label class="form-check-label" for="private">Private</label>
+                </div>}
+               
+                <div className="mb-3 ">
                 <label htmlFor="docType" className={`form-label`}>Document Type*</label>
                 <select className={`form-select `} id="complaintType" name="complaintType" value={data?.docName} onChange={(e)=>setData({...data,docName:e?.target?.value})} aria-label="Default select example">
                 <option value="">--Select Document Type</option>
@@ -146,12 +239,14 @@ export default function AddNewCaseDocsModal({uploadingDocs,setUploadingDocs, han
                 <p>Document name have maximum 60 characters</p>
                 </> }
                 </div>
-                    <div className="d-flex  gap-5 px-5  align-items-center">
-                        {data?.docURL && <div  className="align-items-center bg-color-7 d-flex flex-column justify-content-center w-25 rounded-3">
-                            <div className="d-flex flex-column p-4 justify-content-center align-items-center">
-                                <div className="d-flex justify-content-center bg-color-6 align-items-center fs-4 text-white bg-primary" style={{ height: '3rem', width: '3rem', borderRadius: '3rem' }}>
+                    <div className="row row-cols-3 p-0 m-0">
+                        {data?.docURL && <div  className="align-items-center p-0 bg-color-7 d-flex flex-column justify-content-center rounded-3">
+                            <div onClick={handleRemoveDoc} className='text-danger fs-3 cursor-pointer'><TiDeleteOutline/></div>
+                            <div className="d-flex flex-column justify-content-center align-items-center">
+                                <DocumentPreview url={data?.docURL}/>
+                                {/* <div className="d-flex justify-content-center bg-color-6 align-items-center fs-4 text-white bg-primary" style={{ height: '3rem', width: '3rem', borderRadius: '3rem' }}>
                                     {data?.docType == "image" ? <FaFileImage /> : (data?.docType == "pdf" ? <FaFilePdf /> : (data?.docType=="audio" ? <LuFileAudio /> :<FaFileWord />))}
-                                </div>
+                                </div> */}
                             </div>
                             <div className="d-flex align-items-center justify-content-center bg-dark gap-5 w-100 p-2 text-primary">
                                 <p className="fs-5 text-break text-capitalize text-center text-wrap">{data?.docName}</p>

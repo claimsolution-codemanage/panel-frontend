@@ -1,6 +1,6 @@
 import { employeeUpdateClient,employeeGetClientById } from "../../apis"
 import { useParams } from "react-router-dom"
-import { employeeImageUpload } from '../../apis/upload'
+import { employeeImageUpload,employeeAttachementUpload } from '../../apis/upload'
 import EditClient from '../../components/Reuse/EditClientComp'
 
 
@@ -13,7 +13,7 @@ export default function EmployeeEditClient() {
           id={param?._id} 
           getClient={employeeGetClientById} 
           updateClient={employeeUpdateClient} 
-          uploadImg={employeeImageUpload} 
+          uploadImg={employeeAttachementUpload} 
           role="employee" />
         </>
     )

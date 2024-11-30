@@ -110,7 +110,7 @@ export const partnerType =[
 export const caseStatus = ["Pending","Accept","Under Expert Review","Processing",
 "Gro","Ombudsman","Query","Resolve","Reject","Others","Ombudsman Hearing date on",
 "Ombudsman hearing done","Ombudsman Award","Ombudsman dismissed/ Refer to legal team",
-"Case file in court"
+"Case file in court","Settlement","Payment"
 ];
 
 

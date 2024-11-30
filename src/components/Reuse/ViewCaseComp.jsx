@@ -30,6 +30,8 @@ import ConfirmationModal from "../../components/Common/confirmationModal"
 import { getCheckStorage } from "../../utils/helperFunction"
 import SetStatusOfProfile from "../Common/setStatusModal"
 import { LuFileAudio } from "react-icons/lu"
+import { CiLock } from "react-icons/ci";
+import DocumentPreview from "../DocumentPreview"
 
 export default function ViewCaseComp({id,getCase,role,attachementUpload,addCaseDoc,
 editUrl,addCaseCommit,viewPartner,viewClient,editCaseProcess,addCaseProcess,addReference,
@@ -238,7 +240,7 @@ console.log(location);
                                                               
                                                               {isAddRefence && <>
                                                             
-                                                               {data[0]?.caseFrom == "client" && (data[0]?.partnerReferenceCaseDetails || data[0]?.empSaleReferenceCaseDetails) && <button className="btn btn-warning text-white" onClick={() => setRemoveCaseReference({ ...removeCaseReference, status: true })}>Remove Reference</button>}
+                                                               {data[0]?.caseFrom == "client" && ((data[0]?.partnerId || data[0]?.partnerReferenceCaseDetails) ||( data[0]?.empSaleId || data[0]?.empSaleReferenceCaseDetails)) && <button className="btn btn-warning text-white" onClick={() => setRemoveCaseReference({ ...removeCaseReference, status: true })}>Remove Reference</button>}
                                                                 {data[0]?.caseFrom == "client" && <button className="btn btn-success text-white" onClick={() => setAddCaseReference({ show: true, _id: data[0]?._id })}>Add Reference</button>}
                                                                 </>}
                                                             </div> }
@@ -355,6 +357,7 @@ console.log(location);
                                                                     <div key={item?._id} className="p-2">
                                                                     <div  className="align-items-center bg-color-7 d-flex flex-column justify-content-center rounded-3">
                                                                     <div className="w-100 p-2">
+                                                                        {item?.isPrivate &&  <CiLock className="fs-3 text-primary fs-bold"/>}
                                                                             <div className="dropdown float-end cursor-pointer">
                                                                             <i className="bi bi-three-dots-vertical" data-bs-toggle="dropdown" aria-expanded="false"></i>
                                                                             <ul className="dropdown-menu">
@@ -364,10 +367,15 @@ console.log(location);
                                                                             </ul>
                                                                         </div>
                                                                             </div> 
-                                                                        <div className="d-flex flex-column p-4 justify-content-center align-items-center">
-                                                                            <div className="d-flex justify-content-center bg-color-6 align-items-center fs-4 text-white bg-primary" style={{ height: '3rem', width: '3rem', borderRadius: '3rem' }}>
-                                                                                {item?.type == "image" ? <FaFileImage /> : (item?.type == "pdf" ? <FaFilePdf /> : (item?.type=="audio" ? <LuFileAudio /> :<FaFileWord />))}
-                                                                            </div>
+                                                                        <div className="d-flex flex-column justify-content-center align-items-center">
+                    
+                                                                        {getCheckStorage(item?.url) ? 
+                                                                        <DocumentPreview url={getCheckStorage(item?.url)}/>
+                                                                        : <div className="d-flex justify-content-center bg-color-6 align-items-center fs-4 text-white bg-primary" style={{ height: '3rem', width: '3rem', borderRadius: '3rem' }}>
+                                                                        <FaFileWord />
+                                                                    </div>}
+                                                                            
+                                                                            
                                                                         </div>
                                                                         <div className="d-flex align-items-center justify-content-center bg-dark gap-5 w-100 p-2 text-primary">
                                                                             <p className="text-center text-wrap fs-5 text-capitalize">{item?.name}</p>
@@ -515,8 +523,8 @@ console.log(location);
                         <div className="mb-3 col-12">
                             <select className="form-select w-100" name="Type" value={removeCaseReference.type} onChange={(e) => setRemoveCaseReference({ ...removeCaseReference, type: e?.target?.value })} >
                                 <option value="">--select remove reference type</option>
-                                {data[0]?.partnerReferenceCaseDetails && <option value="partner">Partner</option>}
-                                {data[0]?.empSaleReferenceCaseDetails && <option value="sale-emp">Sale</option>}
+                                {(data[0]?.partnerId || data[0]?.partnerReferenceCaseDetails) && <option value="partner">Partner</option>}
+                                {( data[0]?.empSaleId || data[0]?.empSaleReferenceCaseDetails) && <option value="sale-emp">Sale</option>}
                             </select>
                         </div>
 
