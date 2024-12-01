@@ -1,8 +1,10 @@
 import React from "react";
+import { CiFileOn } from "react-icons/ci";
+import { FaFileWord } from "react-icons/fa6";
 
 const DocumentPreview = ({ url, height = "150px" }) => {
   const getFileType = (url) => {
-    const extension = url.split('.').pop().split('?')[0];
+    const extension = url?.split('.')?.pop()?.split('?')?.[0]?.toLowerCase();
     if (["jpg", "jpeg", "png", "gif", "bmp","jfif"].includes(extension)) return "image";
     if (["pdf"].includes(extension)) return "pdf";
     if (["mp3", "wav", "ogg",'amr',"acc"].includes(extension)) return "audio";
@@ -38,7 +40,13 @@ const DocumentPreview = ({ url, height = "150px" }) => {
         />
       );
     default:
-      return <p style={{ height }}>Unsupported file type</p>;
+      return <div  style={{ height,width: "100%" }} className="bg-light d-flex flex-column justify-content-center align-items-center">
+        <p>Unsupported file type</p>
+        <div className="d-flex justify-content-center bg-color-6 align-items-center fs-4 text-white bg-primary" style={{ height: '3rem', width: '3rem', borderRadius: '3rem' }}>
+        <CiFileOn />
+  </div> 
+      </div> 
+;
   }
 };
 

@@ -172,14 +172,14 @@ export default function ViewClientComp({ id, getClient,role,link,isEdit }) {
                             </div>
                             <div className="mt-2 row row-cols-12 row-cols-md-4">
                                 <div className="mb-3 d-flex gap-2 flex-column">
-                                    {<Link target="_blank" to={getCheckStorage(data[0]?.profile?.kycPhoto) ? getCheckStorage(data[0]?.profile?.kycPhoto) : "#!"}>
+                                    {<Link className="d-flex flex-column" target="_blank" to={getCheckStorage(data[0]?.profile?.kycPhoto) ? getCheckStorage(data[0]?.profile?.kycPhoto) : "#!"}>
                                     <label htmlFor="kycPhoto" className="form-label text-break fw-bold">Photo</label>
                                     <DocumentPreview url={getCheckStorage(data[0]?.profile?.kycPhoto) || "/Images/upload.jpeg"}/>
                                     {/* <img style={{ height: '200px' }} className="border rounded-2 w-100 img-fluid" src={getCheckStorage(data[0]?.profile?.kycPhoto) ? getCheckStorage(data[0]?.profile?.kycPhoto) : "/Images/upload.jpeg"} alt="kycPhoto" /> */}
                                     </Link>}
                                 </div>
                                 <div className="mb-3 d-flex gap-2 flex-column">
-                                    {<Link target="_blank" to={getCheckStorage(data[0]?.profile?.kycAadhaar) ? getCheckStorage(data[0]?.profile?.kycAadhaar) : "#!"}>
+                                    {<Link className="d-flex flex-column" target="_blank" to={getCheckStorage(data[0]?.profile?.kycAadhaar) ? getCheckStorage(data[0]?.profile?.kycAadhaar) : "#!"}>
                                     <label htmlFor="kycAadhar" className="form-label text-break fw-bold">Aadhaar Front</label>
                                     <DocumentPreview url={getCheckStorage(data[0]?.profile?.kycAadhaar) || "/Images/upload.jpeg"}/>
 
@@ -188,7 +188,7 @@ export default function ViewClientComp({ id, getClient,role,link,isEdit }) {
                                     </Link>}
                                 </div>
                                 <div className="mb-3 d-flex gap-2 flex-column">
-                                    {<Link target="_blank" className="" to={getCheckStorage(data[0]?.profile?.kycAadhaarBack) ? getCheckStorage(data[0]?.profile?.kycAadhaarBack) : "#!"}>
+                                    {<Link className="d-flex flex-column" target="_blank" to={getCheckStorage(data[0]?.profile?.kycAadhaarBack) ? getCheckStorage(data[0]?.profile?.kycAadhaarBack) : "#!"}>
                                     <label htmlFor="kycAadhar" className="form-label text-break fw-bold">Aadhaar Back</label>
                                     <DocumentPreview url={getCheckStorage(data[0]?.profile?.kycAadhaarBack) || "/Images/upload.jpeg"}/>
 
@@ -197,7 +197,7 @@ export default function ViewClientComp({ id, getClient,role,link,isEdit }) {
                                     </Link>}
                                 </div>
                                 <div className="mb-3 d-flex gap-2 flex-column">
-                                    {<Link target="_blank" to={getCheckStorage(data[0]?.profile?.kycPan) ? getCheckStorage(data[0]?.profile?.kycPan) : "#!"}>
+                                    {<Link className="d-flex flex-column" target="_blank" to={getCheckStorage(data[0]?.profile?.kycPan) ? getCheckStorage(data[0]?.profile?.kycPan) : "#!"}>
                                     <label htmlFor="kycPan" className="form-label text-break fw-bold">Pan Card</label>
                                     <DocumentPreview url={getCheckStorage(data[0]?.profile?.kycPan) || "/Images/upload.jpeg"}/>
 
