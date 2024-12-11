@@ -313,6 +313,11 @@ export const adminChangeBranch = (data) => {
   return axios.put(`${API_BASE}/api/admin/change-branch`, data)
 }
 
+export const adminAddOrUpdatePayment = (data) => {
+  setheader()
+  return axios.post(`${API_BASE}/api/admin/addOrUpdatePayment`, data)
+}
+
 
 export const adminEditCaseProcessById = (data) => {
   setheader()
@@ -900,6 +905,12 @@ export const employeeUpdateCaseById = (_id, data) => {
   setheader()
   return axios.put(`${API_BASE}/api/employee/updateCaseById?_id=${_id}`, data)
 }
+
+export const empAddOrUpdatePayment = (data) => {
+  setheader()
+  return axios.post(`${API_BASE}/api/employee/emp/empAddOrUpdatePayment`, data)
+}
+
 
 export const employeeUpdateClient = (_id, data) => {
   setheader()

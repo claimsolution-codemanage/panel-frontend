@@ -188,7 +188,7 @@ const state = useContext(AppContext)
                     <th scope="col" className="text-nowrap"  >TDS</th>
                     <th scope="col" className="text-nowrap"  >Mode Of Login</th>
                     <th scope="col" className="text-nowrap"  >Net Amount Payable</th>
-                    <th scope="col" className="text-nowrap"  >UTR Details</th>
+                    {/* <th scope="col" className="text-nowrap"  >UTR Details</th> */}
                   </tr>
                 </thead>
                 <tbody>
@@ -209,7 +209,7 @@ const state = useContext(AppContext)
                     <td className="text-nowrap">{item?.TDS}</td>
                     <td className="text-nowrap">{item?.modeOfLogin}</td>
                     <td className="text-nowrap">{item?.payableAmt}</td>
-                    <td className="text-nowrap">{item?.utrDetails}</td>
+                    {/* <td className="text-nowrap">{item?.utrDetails}</td> */}
 
 
                   </tr>)}

@@ -40,7 +40,7 @@ export default function StatementPdf({ statementOf, data, dateRange }) {
           {/* Header - Make sure it appears on every page */}
           <div className='pdf-header header'>
             <div className='d-flex align-items-center justify-content-between px-5'>
-              <p className='p-0 m-0 fs-4 fst-italic text-logo1'>Health hai toh life hai</p>
+              <p className='p-0 m-0 fs-4 fst-italic text-logo1'>Claim Hai toh,Solution Hai</p>
             <img src="/Images/icons/company-logo.png" height={70} width={200} alt="Company-logo" loading="lazy" />
             </div>
           </div>

@@ -135,7 +135,7 @@ export default function AddNewCaseDocsModal({uploadingDocs,setUploadingDocs, han
             // Get file extension and type
             let fileType = file.type || "";
             const fileExtension = fileName.split(".").pop().toLowerCase();
-    
+
             // Determine file type if MIME is missing
             if (!fileType) {
                 if (["mp3", "wav", "ogg", "amr", "aac"].includes(fileExtension)) {
@@ -149,40 +149,13 @@ export default function AddNewCaseDocsModal({uploadingDocs,setUploadingDocs, han
                 } else if (["jpg", "jpeg", "png", "gif", "bmp"].includes(fileExtension)) {
                     fileType = "image";
                 } else if (fileExtension === "pdf") {
-                    fileType = "application/pdf";
+                    fileType = "pdf";
                 }
             }
-    
             // Match file type with allowed MIME types
-            const isFileSupported =
-                mimeTypes.image.includes(fileType) ||
-                mimeTypes.pdf.includes(fileType) ||
-                mimeTypes.audio.includes(fileType) ||
-                mimeTypes.video.includes(fileType) ||
-                mimeTypes.word.includes(fileType) ||
-                mimeTypes.excel.includes(fileType);
-    
+            const isFileSupported = fileType
             if (isFileSupported) {
-                if (mimeTypes.image.includes(fileType)) {
-                    uploadAttachmentFile(file, "image");
-                } else if (mimeTypes.pdf.includes(fileType)) {
-                    uploadAttachmentFile(file, "pdf");
-                } else if (mimeTypes.audio.includes(fileType)) {
-                    uploadAttachmentFile(file, "audio");
-                } else if (mimeTypes.video.includes(fileType)) {
-                    uploadAttachmentFile(file, "video");
-                } else if (mimeTypes.word.includes(fileType)) {
-                    uploadAttachmentFile(file, "word");
-                } else if (mimeTypes.excel.includes(fileType)) {
-                    uploadAttachmentFile(file, "excel");
-                }
-            } else if (allowedExtensions.includes(fileExtension)) {
-                setLoading({
-                    status: false,
-                    code: 2,
-                    type: "uploading",
-                    message: `Unsupported file type for ${fileExtension}. Please upload a valid file.`,
-                });
+                uploadAttachmentFile(file, fileType);
             } else {
                 setLoading({
                     status: false,

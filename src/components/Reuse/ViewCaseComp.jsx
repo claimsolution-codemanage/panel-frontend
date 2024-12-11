@@ -32,11 +32,14 @@ import SetStatusOfProfile from "../Common/setStatusModal"
 import { LuFileAudio } from "react-icons/lu"
 import { CiLock } from "react-icons/ci";
 import DocumentPreview from "../DocumentPreview"
+import PaymentModal from "../Common/Modal/PaymentModal"
+import { useFormik } from "formik"
+import * as Yup from "yup";
 
-export default function ViewCaseComp({id,getCase,role,attachementUpload,addCaseDoc,
-editUrl,addCaseCommit,viewPartner,viewClient,editCaseProcess,addCaseProcess,addReference,
-deleteReference,deleteDoc,isAddRefence,isAddCaseProcess,isAddCommit,
-isViewProfile,setCaseDocStatus,viewEmp
+export default function ViewCaseComp({ id, getCase, role, attachementUpload, addCaseDoc,
+    editUrl, addCaseCommit, viewPartner, viewClient, editCaseProcess, addCaseProcess, addReference,
+    deleteReference, deleteDoc, isAddRefence, isAddCaseProcess, isAddCommit,
+    isViewProfile, setCaseDocStatus, viewEmp,paymentDetailsApi,accessPayment
 }) {
 
     const [data, setData] = useState([])
@@ -52,8 +55,9 @@ isViewProfile,setCaseDocStatus,viewEmp
     const [viewDocs, setViewDocs] = useState({ status: false, details: {} })
     const [showEditCaseModal, setShowEditCaseModal] = useState({ status: false, details: {} })
     const [removeCaseReference, setRemoveCaseReference] = useState({ status: false, type: null, loading: false })
-    const [deleteCaseDoc,setDeleteCaseDoc]=useState({status:false,id:null})
+    const [deleteCaseDoc, setDeleteCaseDoc] = useState({ status: false, id: null })
     const [changeisActiveStatus, setChangeIsActiveStatus] = useState({ show: false, details: {} })
+    const [paymentModal, setpaymentModal] = useState({save:false,show:false})
 
 
     const navigate = useNavigate()
@@ -80,11 +84,125 @@ isViewProfile,setCaseDocStatus,viewEmp
         }
     }
 
+           // Dynamic validation schema based on form value of paymentMode
+           const validationSchema = Yup.object({
+            paymentMode: Yup.string()
+              .required("Payment mode is required")
+              .oneOf(["Cash", "UPI", "Web", "Cheque", "Net Banking"], "Invalid payment mode"),
+            
+            dateOfPayment: Yup.date()
+              .required("Date of payment is required"),
+            
+            utrNumber: Yup.string()
+              .test(
+                "is-required-htmlFor-upi",
+                "UTR Number is required htmlFor UPI",
+                function (value) {
+                  const { paymentMode } = this.parent;
+                  return paymentMode !== "UPI" || (value && value.trim() !== "");
+                }
+              ),
+            
+            bankName: Yup.string()
+              .test(
+                "is-required-htmlFor-bank-modes",
+                "Bank Name is required",
+                function (value) {
+                  const { paymentMode } = this.parent;
+                  return !["Cheque", "Net Banking"].includes(paymentMode) || (value && value.trim() !== "");
+                }
+              ),
+            
+            chequeNumber: Yup.string()
+              .test(
+                "is-required-htmlFor-cheque",
+                "Cheque Number is required",
+                function (value) {
+                  const { paymentMode } = this.parent;
+                  return paymentMode !== "Cheque" || (value && value.trim() !== "");
+                }
+              ),
+            
+            chequeDate: Yup.date()
+              .test(
+                "is-required-htmlFor-cheque",
+                "Cheque Date is required",
+                function (value) {
+                  const { paymentMode } = this.parent;
+                  return paymentMode !== "Cheque" || !!value;
+                }
+              ),
+            
+            chequeAmount: Yup.number()
+              .test(
+                "is-required-htmlFor-cheque",
+                "Cheque Amount is required",
+                function (value) {
+                  const { paymentMode } = this.parent;
+                  return paymentMode !== "Cheque" || (value && !isNaN(value));
+                }
+              )
+              .typeError("Cheque Amount must be a number"),
+            
+            transactionDate: Yup.date()
+              .test(
+                "is-required-htmlFor-net-banking",
+                "Transaction Date is required",
+                function (value) {
+                  const { paymentMode } = this.parent;
+                  return paymentMode !== "Net Banking" || !!value;
+                }
+              ),
+          })
+    
+    
+        const initialValues = {
+            dateOfPayment: "",
+            utrNumber: "",
+            bankName: "",
+            chequeNumber: "",
+            chequeDate: "",
+            chequeAmount: "",
+            transactionDate: "",
+            paymentMode:""
+        };
+    
+        const handleSubmit = async (values) => {
+          setpaymentModal({...paymentModal,save:true})
+          try {
+              const res = await paymentDetailsApi({...values,caseId:id})
+              if (res?.data?.success) {
+                  toast.success(res?.data?.message)
+                  getCaseById()
+              }
+              setpaymentModal({show:false,save:false})
+          } catch (error) {
+              if (error && error?.response?.data?.message) {
+                  toast.error(error?.response?.data?.message)
+              } else {
+                  toast.error("Something went wrong")
+              }
+              setpaymentModal({...paymentModal,save:false})
+          }
+      }
+    
+        const paymentFormik = useFormik({
+            initialValues,
+            validationSchema,
+            onSubmit: handleSubmit
+        })
+
+    const handleUpdatePayment =(ele)=>{
+        let payload ={...ele}
+        paymentFormik.setValues(payload)
+        setpaymentModal({...paymentModal,show:true})
+    }
+
     useEffect(() => {
         if (id && !showEditCaseModal.status && !caseCommitModal && !changeisActiveStatus.show && !addCaseReference.show && !removeCaseReference.status && !deleteCaseDoc?.status && !uploadingDocs) {
             getCaseById()
         }
-    }, [id, changeStatus, caseCommitModal, showEditCaseModal, addCaseReference,changeisActiveStatus ,removeCaseReference ,deleteCaseDoc,uploadingDocs])
+    }, [id, changeStatus, caseCommitModal, showEditCaseModal, addCaseReference, changeisActiveStatus, removeCaseReference, deleteCaseDoc, uploadingDocs])
 
 
 
@@ -111,6 +229,9 @@ isViewProfile,setCaseDocStatus,viewEmp
     }
 
     const handleRemoveCaseReference = async () => {
+        console.log("handleRemoveCaseReference",data[0]?._id, removeCaseReference?.type);
+        
+        return
         if (removeCaseReference?.type) {
             try {
                 setRemoveCaseReference({ ...removeCaseReference, loading: true })
@@ -131,41 +252,39 @@ isViewProfile,setCaseDocStatus,viewEmp
         }
     }
 
-    const commentBy = (comment)=>{
-        if(role?.toLowerCase()=="employee"){
+    const commentBy = (comment) => {
+        if (role?.toLowerCase() == "employee") {
             return state?.myAppData?.details?._id == comment?.employeeId
-        }else{
+        } else {
             return state?.myAppData?.details?._id == comment?.adminId
         }
     }
 
     const handleChanges = async (_id, status) => {
         try {
-          const res = await setCaseDocStatus(_id, status)
-          if (res?.data?.success) {
-            setChangeIsActiveStatus({ show: false, details: {} })
-            toast.success(res?.data?.message)
-    
-          }
+            const res = await setCaseDocStatus(_id, status)
+            if (res?.data?.success) {
+                setChangeIsActiveStatus({ show: false, details: {} })
+                toast.success(res?.data?.message)
+
+            }
         } catch (error) {
-          if (error && error?.response?.data?.message) {
-            toast.error(error?.response?.data?.message)
-          } else {
-            toast.error("Something went wrong")
-          }
-          // console.log("allAdminCase isActive error", error);
+            if (error && error?.response?.data?.message) {
+                toast.error(error?.response?.data?.message)
+            } else {
+                toast.error("Something went wrong")
+            }
+            // console.log("allAdminCase isActive error", error);
         }
-      }
+    }
 
-console.log(location);
-
-      const handleBack = () => {
-        if(location?.state?.filter && location?.state?.back){
-            navigate(location?.state?.back,{state:{...location?.state,back:location?.pathname}});
-        }else{
+    const handleBack = () => {
+        if (location?.state?.filter && location?.state?.back) {
+            navigate(location?.state?.back, { state: { ...location?.state, back: location?.pathname } });
+        } else {
             navigate(-1)
         }
-      };
+    };
 
     return (<>
         {loading ? <Loader /> :
@@ -187,70 +306,70 @@ console.log(location);
                                     <div>
                                         <div className="">
                                             <div className="">
-                                                {(role?.toLowerCase()!=="client" && role?.toLowerCase()!=="partner") &&
-                                                <div className="bg-color-1 my-3 p-2 p-5 rounded-2 shadow">
-                                                    <div className="border-3 border-primary border-bottom mb-5">
-                                                        <div className="d-flex align-items-center justify-content-between">
-                                                            <h6 className="text-primary text-capitalize text-center fs-3">{data[0]?.caseFrom}</h6>
-                                                          
-                                                            {isViewProfile && <Link state={{filter: location?.state?.filter,back:location?.pathname}}  to={data[0]?.caseFrom == "partner" ? `${viewPartner}${data[0]?.partnerId}` :( data[0]?.caseFrom == "client" ? `${viewClient}${data[0]?.clientId}` : `${viewEmp}${data[0]?.empSaleId}`)}  className="btn btn-primary">View</Link>}
+                                                {(role?.toLowerCase() !== "client" && role?.toLowerCase() !== "partner") &&
+                                                    <div className="bg-color-1 my-3 p-2 p-5 rounded-2 shadow">
+                                                        <div className="border-3 border-primary border-bottom mb-5">
+                                                            <div className="d-flex align-items-center justify-content-between">
+                                                                <h6 className="text-primary text-capitalize text-center fs-3">{data[0]?.caseFrom}</h6>
+
+                                                                {isViewProfile && <Link state={{ filter: location?.state?.filter, back: location?.pathname }} to={data[0]?.caseFrom == "partner" ? `${viewPartner}${data[0]?.partnerId}` : (data[0]?.caseFrom == "client" ? `${viewClient}${data[0]?.clientId}` : `${viewEmp}${data[0]?.empSaleId}`)} className="btn btn-primary">View</Link>}
+                                                            </div>
                                                         </div>
-                                                    </div>
-                                                    <div className="row">
-                                                        <div className="mb-2 d-flex align-items-center gap-3 col-12 col-md-4">
-                                                            <h6 className="fw-bold">Case From</h6>
-                                                            <p className=" h6 text-capitalize">{data[0]?.caseFrom}</p>
-                                                        </div>
-                                                        {data[0]?.caseFrom == "partner" &&
+                                                        <div className="row">
                                                             <div className="mb-2 d-flex align-items-center gap-3 col-12 col-md-4">
-                                                                <h6 className="fw-bold">Partner Name</h6>
-                                                                <p className=" h6 text-capitalize">{data[0]?.partnerName}</p>
+                                                                <h6 className="fw-bold">Case From</h6>
+                                                                <p className=" h6 text-capitalize">{data[0]?.caseFrom}</p>
                                                             </div>
-                                                        }
-                                                        {data[0]?.consultantCode && <div className="mb-2 d-flex align-items-center gap-3 col-12 col-md-4">
-                                                            <h6 className="fw-bold">{data[0]?.caseFrom?.toLowerCase() == "client" ? "Customer Code" : "Consultant Code"} </h6>
-                                                            <p className=" h6 text-capitalize">{data[0]?.consultantCode}</p>
-                                                        </div>}
+                                                            {data[0]?.caseFrom == "partner" &&
+                                                                <div className="mb-2 d-flex align-items-center gap-3 col-12 col-md-4">
+                                                                    <h6 className="fw-bold">Partner Name</h6>
+                                                                    <p className=" h6 text-capitalize">{data[0]?.partnerName}</p>
+                                                                </div>
+                                                            }
+                                                            {data[0]?.consultantCode && <div className="mb-2 d-flex align-items-center gap-3 col-12 col-md-4">
+                                                                <h6 className="fw-bold">{data[0]?.caseFrom?.toLowerCase() == "client" ? "Customer Code" : "Consultant Code"} </h6>
+                                                                <p className=" h6 text-capitalize">{data[0]?.consultantCode}</p>
+                                                            </div>}
 
-                                                        {data[0]?.partnerId && <div className="mb-2 d-flex align-items-center gap-3 col-12 col-md-4">
-                                                            <h6 className="fw-bold">Reference of partner </h6>
-                                                            <Link to={`${viewPartner}${data[0]?.partnerId}`} state={{filter: location?.state?.filter,back:location?.pathname}} className="h6 text-decoration-underline text-capitalize">View</Link>
-                                                        </div>}
-                                                        {data[0]?.empSaleId && <div className="mb-2 d-flex align-items-center gap-3 col-12 col-md-4">
-                                                            <h6 className="fw-bold">Reference of employee</h6>
-                                                            <Link to={`${viewEmp}${data[0]?.empSaleId}`} state={{filter: location?.state?.filter,back:location?.pathname}} className="h6 text-decoration-underline text-capitalize">View</Link>
-                                                        </div>}
+                                                            {data[0]?.partnerId && <div className="mb-2 d-flex align-items-center gap-3 col-12 col-md-4">
+                                                                <h6 className="fw-bold">Reference of partner </h6>
+                                                                <Link to={`${viewPartner}${data[0]?.partnerId}`} state={{ filter: location?.state?.filter, back: location?.pathname }} className="h6 text-decoration-underline text-capitalize">View</Link>
+                                                            </div>}
+                                                            {data[0]?.empSaleId && <div className="mb-2 d-flex align-items-center gap-3 col-12 col-md-4">
+                                                                <h6 className="fw-bold">Reference of employee</h6>
+                                                                <Link to={`${viewEmp}${data[0]?.empSaleId}`} state={{ filter: location?.state?.filter, back: location?.pathname }} className="h6 text-decoration-underline text-capitalize">View</Link>
+                                                            </div>}
 
-                                                        {data[0]?.caseFrom != "client" &&
-                                                            <div className="mb-2 d-flex align-items-center gap-3 col-12 col-md-12">
-                                                                <h6 className="fw-bold">Mapping Id</h6>
-                                                                <p className=" h6 text-break">{data[0]?.caseFrom=="partner" ? `partnerId=${data[0]?.partnerId}` : `empSaleId=${data[0]?.empSaleId}`}&{data[0]?.caseFrom=="partner" ? "partnerCaseId" : "empSaleCaseId"}={data[0]?._id}</p>
-                                                            </div>
-                                                        }
+                                                            {data[0]?.caseFrom != "client" &&
+                                                                <div className="mb-2 d-flex align-items-center gap-3 col-12 col-md-12">
+                                                                    <h6 className="fw-bold">Mapping Id</h6>
+                                                                    <p className=" h6 text-break">{data[0]?.caseFrom == "partner" ? `partnerId=${data[0]?.partnerId}` : `empSaleId=${data[0]?.empSaleId}`}&{data[0]?.caseFrom == "partner" ? "partnerCaseId" : "empSaleCaseId"}={data[0]?._id}</p>
+                                                                </div>
+                                                            }
 
 
-                                                    </div>
-                                                </div>}
+                                                        </div>
+                                                    </div>}
                                                 <div className="bg-color-1 my-5 p-3 p-md-5 rounded-2 shadow">
                                                     <div className="border-3 border-primary border-bottom mb-5">
                                                         <div className="d-flex gap-2 align-items-center justify-content-between">
                                                             <h6 className="text-primary text-center fs-3">Case Details</h6>
                                                             {editUrl && <div className="d-flex gap-2">
-                                                                  <Link to={`${editUrl}${data[0]?._id}`} state={{filter: location?.state?.filter,back:location?.pathname}} className="btn btn-primary">Edit/ Update</Link>
-                                                              
-                                                              {isAddRefence && <>
-                                                            
-                                                               {data[0]?.caseFrom == "client" && ((data[0]?.partnerId || data[0]?.partnerReferenceCaseDetails) ||( data[0]?.empSaleId || data[0]?.empSaleReferenceCaseDetails)) && <button className="btn btn-warning text-white" onClick={() => setRemoveCaseReference({ ...removeCaseReference, status: true })}>Remove Reference</button>}
-                                                                {data[0]?.caseFrom == "client" && <button className="btn btn-success text-white" onClick={() => setAddCaseReference({ show: true, _id: data[0]?._id })}>Add Reference</button>}
+                                                                <Link to={`${editUrl}${data[0]?._id}`} state={{ filter: location?.state?.filter, back: location?.pathname }} className="btn btn-primary">Edit/ Update</Link>
+
+                                                                {isAddRefence && <>
+
+                                                                    {data[0]?.caseFrom == "client" && ((data[0]?.partnerId || data[0]?.partnerReferenceCaseDetails) || (data[0]?.empSaleId || data[0]?.empSaleReferenceCaseDetails)) && <button className="btn btn-warning text-white" onClick={() => setRemoveCaseReference({ ...removeCaseReference, status: true })}>Remove Reference</button>}
+                                                                    {data[0]?.caseFrom == "client" && <button className="btn btn-success text-white" onClick={() => setAddCaseReference({ show: true, _id: data[0]?._id })}>Add Reference</button>}
                                                                 </>}
-                                                            </div> }
+                                                            </div>}
                                                         </div>
 
                                                     </div>
                                                     <div className="row">
                                                         <div className="mb-2 d-flex align-items-center gap-3 col-12 col-md-4">
                                                             <h6 className="fw-bold">Case Date</h6>
-                                                            <p className=" h6 text-capitalize">{data[0]?.createdAt &&  getFormateDMYDate(data[0]?.createdAt)}</p>
+                                                            <p className=" h6 text-capitalize">{data[0]?.createdAt && getFormateDMYDate(data[0]?.createdAt)}</p>
                                                         </div>
                                                         <div className="mb-2 d-flex align-items-center gap-3 col-12 col-md-4">
 
@@ -344,55 +463,55 @@ console.log(location);
                                                         </div>
                                                     </div>
                                                 </div>
-                                                    <div className="bg-color-1 my-5 p-3 p-md-5 rounded-2 shadow">
-                                                        <div className="border-3 border-primary border-bottom py-2 mb-5">
+                                                <div className="bg-color-1 my-5 p-3 p-md-5 rounded-2 shadow">
+                                                    <div className="border-3 border-primary border-bottom py-2 mb-5">
                                                         <div className="d-flex gap-3 justify-content-center text-primary text-center fs-4">
                                                             <span>Document List</span>
-                                                            {(role?.toLowerCase()=="client" || role?.toLowerCase()=="partner") && <div>
+                                                            {(role?.toLowerCase() == "client" || role?.toLowerCase() == "partner") && <div>
                                                                 <span onClick={() => setUploadingDocs(true)} className="bg-primary d-flex justify-content-center align-items-center text-white" style={{ cursor: 'pointer', height: '2rem', width: '2rem', borderRadius: '2rem' }}><IoMdAdd /></span>
                                                             </div>}
                                                         </div></div>
-                                                        <div className="row row-cols-1 row-cols-md-4 align-items-center">
-                                                            {data[0]?.caseDocs?.map(item =>
-                                                                    <div key={item?._id} className="p-2">
-                                                                    <div  className="align-items-center bg-color-7 d-flex flex-column justify-content-center rounded-3">
+                                                    <div className="row row-cols-1 row-cols-md-4 align-items-center">
+                                                        {data[0]?.caseDocs?.map(item =>
+                                                            <div key={item?._id} className="p-2">
+                                                                <div className="align-items-center bg-color-7 d-flex flex-column justify-content-center rounded-3">
                                                                     <div className="w-100 p-2">
-                                                                        {item?.isPrivate &&  <CiLock className="fs-3 text-primary fs-bold"/>}
-                                                                            <div className="dropdown float-end cursor-pointer">
+                                                                        {item?.isPrivate && <CiLock className="fs-3 text-primary fs-bold" />}
+                                                                        <div className="dropdown float-end cursor-pointer">
                                                                             <i className="bi bi-three-dots-vertical" data-bs-toggle="dropdown" aria-expanded="false"></i>
                                                                             <ul className="dropdown-menu">
-                                                                                <li><div className="dropdown-item"><Link to={`${getCheckStorage(item?.url) ? getCheckStorage(item?.url) :"#!"}`} target="_blank">View</Link></div></li>
-                                                                                {role?.toLowerCase()=="admin" &&  <li><div onClick={()=>setChangeIsActiveStatus({show:true,details:{_id:item?._id,currentStatus:item?.isActive,name:item?.name}})} className="dropdown-item">Delete</div></li>}
+                                                                                <li><div className="dropdown-item"><Link to={`${getCheckStorage(item?.url) ? getCheckStorage(item?.url) : "#!"}`} target="_blank">View</Link></div></li>
+                                                                                {role?.toLowerCase() == "admin" && <li><div onClick={() => setChangeIsActiveStatus({ show: true, details: { _id: item?._id, currentStatus: item?.isActive, name: item?.name } })} className="dropdown-item">Delete</div></li>}
                                                                                 {/* {role?.toLowerCase()=="admin" &&  <li><div onClick={()=>setDeleteCaseDoc({status:true,id:`caseId=${data[0]?._id}&docId=${item?._id}`})} className="dropdown-item">Delete</div></li>} */}
                                                                             </ul>
                                                                         </div>
-                                                                            </div> 
-                                                                        <div className="d-flex flex-column justify-content-center align-items-center">
-                    
-                                                                        {getCheckStorage(item?.url) ? 
-                                                                        <DocumentPreview url={getCheckStorage(item?.url)}/>
-                                                                        : <div className="d-flex justify-content-center bg-color-6 align-items-center fs-4 text-white bg-primary" style={{ height: '3rem', width: '3rem', borderRadius: '3rem' }}>
-                                                                        <FaFileWord />
-                                                                    </div>}
-                                                                            
-                                                                            
-                                                                        </div>
-                                                                        <div className="d-flex align-items-center justify-content-center bg-dark gap-5 w-100 p-2 text-primary">
-                                                                            <p className="text-center text-wrap fs-5 text-capitalize">{item?.name}</p>
-                                                                        </div>
                                                                     </div>
-                                                                    </div>
-                                                            )}
-                                                        </div>
+                                                                    <div className="d-flex flex-column justify-content-center align-items-center">
+
+                                                                        {getCheckStorage(item?.url) ?
+                                                                            <DocumentPreview url={getCheckStorage(item?.url)} />
+                                                                            : <div className="d-flex justify-content-center bg-color-6 align-items-center fs-4 text-white bg-primary" style={{ height: '3rem', width: '3rem', borderRadius: '3rem' }}>
+                                                                                <FaFileWord />
+                                                                            </div>}
 
 
-                                                        <div className="d-flex row  gap-0  align-items-center"></div>
+                                                                    </div>
+                                                                    <div className="d-flex align-items-center justify-content-center bg-dark gap-5 w-100 p-2 text-primary">
+                                                                        <p className="text-center text-wrap fs-5 text-capitalize">{item?.name}</p>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        )}
                                                     </div>
+
+
+                                                    <div className="d-flex row  gap-0  align-items-center"></div>
+                                                </div>
                                                 <div className="bg-color-1 my-5 p-3 p-md-5 rounded-2 shadow">
                                                     <div className="border-3 border-primary border-bottom py-2 mb-5">
                                                         <div className="d-flex justify-content-between">
                                                             <div className="text-primary text-center fs-4">Case Process</div>
-                                                            {isAddCaseProcess &&  <div className="d-flex gap-1 btn btn-primary" onClick={() => setChangeStatus({ status: true, details: { ...data[0] } })}>
+                                                            {isAddCaseProcess && <div className="d-flex gap-1 btn btn-primary" onClick={() => setChangeStatus({ status: true, details: { ...data[0] } })}>
                                                                 <span><CiEdit /></span>
                                                                 <div>Add Status</div>
                                                             </div>}
@@ -404,22 +523,22 @@ console.log(location);
                                                                 <thead className="">
                                                                     <tr className="bg-primary text-white text-center">
                                                                         <th scope="col" className="text-nowrap">S.no</th>
-                                                                        {role?.toLowerCase()=="admin" &&  <th scope="col" className="text-nowrap" >Edit</th>}
+                                                                        {role?.toLowerCase() == "admin" && <th scope="col" className="text-nowrap" >Edit</th>}
                                                                         <th scope="col" className="text-nowrap">Date</th>
                                                                         <th scope="col" className="text-nowrap">Status</th>
-                                                                        {role?.toLowerCase()=="admin" &&  <th scope="col" className="text-nowrap" >Marked By</th> }
+                                                                        {role?.toLowerCase() == "admin" && <th scope="col" className="text-nowrap" >Marked By</th>}
                                                                         <th scope="col" className="text-nowrap" >Remark</th>
                                                                     </tr>
                                                                 </thead>
                                                                 <tbody>
                                                                     {data[0]?.processSteps?.map((item, ind) => <tr key={item._id} className="border-2 border-bottom border-light text-center">
                                                                         <th scope="row">{ind + 1}</th>
-                                                                        {role?.toLowerCase()=="admin" &&   <td>
+                                                                        {role?.toLowerCase() == "admin" && <td>
                                                                             <span style={{ cursor: "pointer", height: 30, width: 30, borderRadius: 30 }} className="bg-warning text-dark d-flex align-items-center justify-content-center" onClick={() => setShowEditCaseModal({ status: true, details: { caseId: data[0]?._id, processId: item?._id, caseStatus: item?.status, caseRemark: item?.remark, isCurrentStatus: data[0]?.processSteps.length == ind + 1 } })}><CiEdit /></span>
                                                                         </td>}
                                                                         <td className="text-nowrap "> {item?.createdAt && <p className="mb-1">{getFormateDMYDate(item?.createdAt)}</p>}</td>
-                                                                        <td className="text-nowrap ">{item?.status && <p className={`mb-1 badge ${(item?.status?.toLowerCase() == "reject" ? "bg-danger" : (item?.status?.toLowerCase() == "pending" ?  "bg-warning" : (item?.status?.toLowerCase() == "resolve" ? "bg-success" :"bg-primary") ))}`}>{item?.status}</p>}</td>
-                                                                        {role?.toLowerCase()=="admin" &&  <td className="text-nowrap "> <p className="mb-1 text-capitalize">{item?.consultant ? item?.consultant : "System"} </p></td> }
+                                                                        <td className="text-nowrap ">{item?.status && <p className={`mb-1 badge ${(item?.status?.toLowerCase() == "reject" ? "bg-danger" : (item?.status?.toLowerCase() == "pending" ? "bg-warning" : (item?.status?.toLowerCase() == "resolve" ? "bg-success" : "bg-primary")))}`}>{item?.status}</p>}</td>
+                                                                        {role?.toLowerCase() == "admin" && <td className="text-nowrap "> <p className="mb-1 text-capitalize">{item?.consultant ? item?.consultant : "System"} </p></td>}
                                                                         <td className="text-break col-4">{item?.remark && <p className="mb-1 text-center">{item?.remark}</p>}</td>
                                                                         {/* <td className="text-nowrap">{(item?.status!="reject" || item?.status!="resolve")  && <FaCircleArrowDown className="fs-3 text-primary" />}</td> */}
                                                                     </tr>)}
@@ -429,8 +548,57 @@ console.log(location);
                                                         </div>
                                                     </div>
                                                 </div>
+                                                {data[0]?.caseFrom?.toLowerCase() == "client" &&
+                                                <div className="bg-color-1 my-5 p-3 p-md-5 rounded-2 shadow">
+                                                    <div className="border-3 border-primary border-bottom py-2 mb-5">
+                                                        <div className="d-flex justify-content-between">
+                                                            <div className="text-primary text-center fs-4">Payment Details</div>
+                                                            {accessPayment && <div className="d-flex gap-1 btn btn-primary" onClick={() =>{ setpaymentModal({save:false,show:true});paymentFormik.resetForm()}}>
+                                                                <div>Add Payment</div>
+                                                            </div>}
+                                                        </div>
+                                                    </div>
+                                                    <div className="mt-4 rounded-2 shadow">
+                                                        <div className="table-responsive">
+                                                            <table className="table table-responsive table-borderless">
+                                                                <thead className="">
+                                                                    <tr className="bg-primary text-white text-center">
+                                                                        <th scope="col" className="text-nowrap">S.no</th>
+                                                                        {accessPayment && <th scope="col" className="text-nowrap" >Edit</th>}
+                                                                        <th scope="col" className="text-nowrap">Payment mode</th>
+                                                                        <th scope="col" className="text-nowrap">Date of payment</th>
+                                                                        <th scope="col" className="text-nowrap">Bank name</th>
+                                                                        <th scope="col" className="text-nowrap">Cheque number</th>
+                                                                        <th scope="col" className="text-nowrap" >Cheque amount</th>
+                                                                        <th scope="col" className="text-nowrap" >Cheque date</th>
+                                                                        <th scope="col" className="text-nowrap" >UTR number</th>
+                                                                        <th scope="col" className="text-nowrap" >Transaction date</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    {data[0]?.casePayment?.map((item, ind) => <tr key={item._id} className="border-2 border-bottom border-light text-center">
+                                                                        <th scope="row">{ind + 1}</th>
+                                                                        {accessPayment && <td>
+                                                                            <span style={{ cursor: "pointer", height: 30, width: 30, borderRadius: 30 }} className="bg-warning text-dark d-flex align-items-center justify-content-center" onClick={() => handleUpdatePayment(item)}><CiEdit /></span>
+                                                                        </td>}
+                                                                        <td className="text-break col-1"><p className="mb-1 text-center">{item?.paymentMode || "-"}</p></td>
+                                                                        <td className="text-nowrap "> {item?.dateOfPayment ? <p className="mb-1">{getFormateDMYDate(item?.dateOfPayment)}</p> :"-"}</td>
+                                                                        <td className="text-break col-1"><p className="mb-1 text-center">{item?.bankName || "-"}</p></td>
+                                                                        <td className="text-break col-1"><p className="mb-1 text-center">{item?.chequeNumber || "-"}</p></td>
+                                                                        <td className="text-break col-1"><p className="mb-1 text-center">{item?.chequeAmount || "-"}</p></td>
+                                                                        <td className="text-nowrap "> {item?.chequeDate ? <p className="mb-1">{getFormateDMYDate(item?.chequeDate)}</p>:"-"}</td>
+                                                                        <td className="text-break col-1"><p className="mb-1 text-center">{item?.utrNumber || "-"}</p></td>
+                                                                        <td className="text-nowrap "> {item?.transactionDate ? <p className="mb-1">{getFormateDMYDate(item?.transactionDate)}</p>: "-"}</td>
+                                                                        
+                                                                    </tr>)}
+                                                                </tbody>
+                                                            </table>
 
-                                                {isAddCommit &&    <div className="bg-color-1 my-5 p-3 p-md-5 rounded-2 shadow">
+                                                        </div>
+                                                    </div>
+                                                </div> }
+
+                                                {isAddCommit && <div className="bg-color-1 my-5 p-3 p-md-5 rounded-2 shadow">
                                                     <div className="border-3 border-primary border-bottom py-2 mb-5">
                                                         <div className="d-flex justify-content-center align-items-center gap-3">
                                                             <div className="text-primary text-center fs-4">Case Comment</div>
@@ -443,7 +611,7 @@ console.log(location);
                                                         {data[0]?.caseCommit?.map(commit => <div key={commit?._id} className="w-100">
                                                             {/* {console.log(data[0]?._id == commit?._id, data[0]?._id, commit?._id)} */}
                                                             <div className={`${commentBy(commit) && "float-end"} w-25`}>
-                                                                <div className={`${commentBy(commit)? "bg-info  w-auto text-dark" : "bg-primary text-white"} p-2 rounded-3`}>
+                                                                <div className={`${commentBy(commit) ? "bg-info  w-auto text-dark" : "bg-primary text-white"} p-2 rounded-3`}>
                                                                     {commit?.message}</div>
                                                                 <p className="badge bg-warning text-dark m-0">{commentBy(commit) ? "you" : commit?.name} | {commit?.createdAt && getFormateDMYDate(commit?.createdAt)}</p>
                                                             </div>
@@ -464,7 +632,7 @@ console.log(location);
                 {/* {console.log("showEditCaseModal",showEditCaseModal)} */}
                 {showEditCaseModal?.status && <EditCaseStatusModal changeStatus={showEditCaseModal} setChangeStatus={setShowEditCaseModal} handleCaseStatus={editCaseProcess} role="admin" />}
                 {changeStatus?.status && <ChangeStatusModal changeStatus={changeStatus} setChangeStatus={setChangeStatus} handleCaseStatus={addCaseProcess} role="admin" />}
-
+                {paymentModal?.show && <PaymentModal show={paymentModal?.show} saving={paymentModal?.save} formik={paymentFormik} close={() => setpaymentModal({save:false,show:false})} />}
 
                 {/* for clear case payment */}
                 <Modal
@@ -524,7 +692,7 @@ console.log(location);
                             <select className="form-select w-100" name="Type" value={removeCaseReference.type} onChange={(e) => setRemoveCaseReference({ ...removeCaseReference, type: e?.target?.value })} >
                                 <option value="">--select remove reference type</option>
                                 {(data[0]?.partnerId || data[0]?.partnerReferenceCaseDetails) && <option value="partner">Partner</option>}
-                                {( data[0]?.empSaleId || data[0]?.empSaleReferenceCaseDetails) && <option value="sale-emp">Sale</option>}
+                                {(data[0]?.empSaleId || data[0]?.empSaleReferenceCaseDetails) && <option value="sale-emp">Sale</option>}
                             </select>
                         </div>
 
@@ -544,12 +712,12 @@ console.log(location);
                 {/* {console.log("addCaseReference", addCaseReference)} */}
                 {caseCommitModal && <AddCaseCommit show={caseCommitModal} id={id} close={() => { setCaseCommitModal(false) }} handleCaseCommit={addCaseCommit} />}
                 {addCaseReference?.show && <AddReferenceModal showAddCaseReference={addCaseReference} hide={() => setAddCaseReference({ show: false, _id: "" })} addReferenceCase={addReference} />}
-                {deleteCaseDoc?.status && <ConfirmationModal show={deleteCaseDoc?.status} hide={()=>setDeleteCaseDoc({status:false,id:null})} id={deleteCaseDoc?.id} handleComfirmation={deleteDoc} heading={"Are you sure?"} text={"Want to permanent delete this doc"}/>}
+                {deleteCaseDoc?.status && <ConfirmationModal show={deleteCaseDoc?.status} hide={() => setDeleteCaseDoc({ status: false, id: null })} id={deleteCaseDoc?.id} handleComfirmation={deleteDoc} heading={"Are you sure?"} text={"Want to permanent delete this doc"} />}
                 {uploadingDocs && <AddDocsModal _id={data[0]?._id} uploadingDocs={uploadingDocs} setUploadingDocs={setUploadingDocs}
-                 handleCaseDocsUploading={addCaseDoc} attachementUpload={attachementUpload} />}
-              {changeisActiveStatus?.show && <SetStatusOfProfile changeStatus={changeisActiveStatus} hide={() => setChangeIsActiveStatus({ show: false, details: {} })} type="Doc" handleChanges={handleChanges} />}
+                    handleCaseDocsUploading={addCaseDoc} attachementUpload={attachementUpload} />}
+                {changeisActiveStatus?.show && <SetStatusOfProfile changeStatus={changeisActiveStatus} hide={() => setChangeIsActiveStatus({ show: false, details: {} })} type="Doc" handleChanges={handleChanges} />}
 
-                                   
+
             </div>}
     </>)
 }

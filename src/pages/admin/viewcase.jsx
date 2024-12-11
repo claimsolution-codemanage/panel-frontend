@@ -1,4 +1,4 @@
-import { adminGetCaseById } from "../../apis"
+import { adminAddOrUpdatePayment, adminGetCaseById } from "../../apis"
 import { useParams } from "react-router-dom"
 import { adminDeleteCaseDocById,adminUpdateClientCaseFee,adminSetCaseDocIsActive,adminEditCaseProcessById,adminChangeCaseStatus, adminAddCaseCommit, adminRemoveCaseReference } from "../../apis"
 import { adminAddCaseReference } from "../../apis"
@@ -28,6 +28,8 @@ export default function AdminViewCase() {
       deleteDoc={adminDeleteCaseDocById}
       addCaseCommit={adminAddCaseCommit}
       setCaseDocStatus={adminSetCaseDocIsActive}
+      accessPayment={true}
+      paymentDetailsApi={adminAddOrUpdatePayment}
       />
     </>)
 }

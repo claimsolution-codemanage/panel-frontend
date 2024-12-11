@@ -11,6 +11,9 @@ export default function PartnerViewCase() {
      getCase={partnerGetCaseById} 
      role={"partner"} 
      addCaseDoc={partnerAddCaseFileById} 
-     attachementUpload={partnerAttachementUpload}/>
+     attachementUpload={partnerAttachementUpload}
+     accessPayment={false}
+     paymentDetailsApi={()=>{}}
+     />
     </>)
 }

@@ -15,6 +15,8 @@ export default function ClientViewCase() {
         role={"client"} 
         attachementUpload={clientAttachementUpload}
         addCaseDoc={clientAddCaseFileById}
+        accessPayment={false}
+        paymentDetailsApi={()=>{}}
         />
     </>)
 }

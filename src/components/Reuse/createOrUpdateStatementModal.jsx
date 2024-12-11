@@ -56,7 +56,7 @@ const formik = useFormik({
         TDS:Yup.string().required("TDS is required"),
         modeOfLogin:Yup.string().required("Mode of login is required"),
         payableAmt:Yup.number().required("Payable amount is required"),
-        utrDetails:Yup.string().required("UTR details is required"),
+        // utrDetails:Yup.string().required("UTR details is required"),
         fileUrl:Yup.string(),
     }),
     onSubmit:async(values)=>{
@@ -218,11 +218,11 @@ console.log("formik",formik,data);
                   <input type="text" name='payableAmt' value={formik.values?.payableAmt} onChange={checkNumber} className={`form-control ${formik.errors?.payableAmt && formik.touched?.payableAmt && "border-danger"}`}  />
                     <p className='text-danger'>{formik.touched?.payableAmt && formik.errors?.payableAmt}</p>
                 </div>
-                <div className="form-group ">
+                {/* <div className="form-group ">
                   <label for="utrDetails" className="col-form-label">UTR details:</label>
                   <input type="text" name='utrDetails' value={formik.values?.utrDetails} onChange={formik.handleChange} className={`form-control ${formik.errors?.utrDetails && formik.touched?.utrDetails && "border-danger"}`}  />
                     <p className='text-danger'>{formik.touched?.utrDetails && formik.errors?.utrDetails}</p>
-                </div>
+                </div> */}
               </form>
 
                 </div>
