@@ -81,13 +81,6 @@ export default function PaymentModal({ show, close,formik,saving}) {
                                     <span className="text-danger">{formik?.errors?.chequeDate}</span>
                                 ) : null}
                         </div>
-                        <div className="mb-3 ">
-                                <label htmlFor="chequeAmount" className={`form-label ${formik?.touched?.chequeAmount && formik?.touched?.chequeAmount && formik?.errors?.chequeAmount && "text-danger"}`}>Cheque Amount</label>
-                                <input type="text" className={`form-control ${formik?.touched?.chequeAmount && formik?.touched?.chequeAmount && formik?.errors?.chequeAmount && "border-danger"}`} id="chequeAmount" name="chequeAmount" value={formik?.values?.chequeAmount} onChange={(e)=>checkNumber(e) && formik.handleChange(e)} />
-                                {formik?.touched?.chequeAmount && formik?.errors?.chequeAmount ? (
-                                    <span className="text-danger">{formik?.errors?.chequeAmount}</span>
-                                ) : null}
-                        </div>
                         </div>}
                         {formik?.values?.paymentMode=="Net Banking" &&
                         <div>
@@ -113,6 +106,13 @@ export default function PaymentModal({ show, close,formik,saving}) {
                                 ) : null}
                         </div>
                         </div>}
+                        <div className="mb-3 ">
+                                <label htmlFor="amount" className={`form-label ${formik?.touched?.amount && formik?.touched?.amount && formik?.errors?.amount && "text-danger"}`}>Amount</label>
+                                <input type="text" className={`form-control ${formik?.touched?.amount && formik?.touched?.amount && formik?.errors?.amount && "border-danger"}`} id="amount" name="amount" value={formik?.values?.amount} onChange={(e)=>checkNumber(e) && formik.handleChange(e)} />
+                                {formik?.touched?.amount && formik?.errors?.amount ? (
+                                    <span className="text-danger">{formik?.errors?.amount}</span>
+                                ) : null}
+                        </div>
                     </div>
                 </form>
 

@@ -15,6 +15,8 @@ export default function AdminInvoiceTrash() {
     editInvoiceUrl={"/admin/edit-invoice/"}
     unactiveInvoice={adminUnactiveInvoice}
     deleteInvoice={adminDeleteInvoice}
+    downloadAccess={false}
+    downloadApi={()=>{}}
     />
   )
 }

@@ -135,7 +135,7 @@ export default function StatementPdf({ statementOf, data, dateRange }) {
                      <th scope="col" colSpan={1} className=""  >TDS</th>
                      <th scope="col" colSpan={2} className=""  >Mode Of Login</th>
                      <th scope="col" colSpan={2} className=""  >Net Amount Payable</th>
-                     <th scope="col" colSpan={2} className=""  >UTR Details</th>
+                     {/* <th scope="col" colSpan={2} className=""  >UTR Details</th> */}
                 </tr>
               </thead>
               <tbody>
@@ -153,7 +153,7 @@ export default function StatementPdf({ statementOf, data, dateRange }) {
                     <td colSpan={1} className="">{item?.TDS}</td>
                     <td colSpan={2} className="">{item?.modeOfLogin}</td>
                     <td colSpan={2} className="">{item?.payableAmt}</td>
-                    <td colSpan={2} className="">{item?.utrDetails}</td>
+                    {/* <td colSpan={2} className="">{item?.utrDetails}</td> */}
                   </tr>)}
               </tbody>
             </table>

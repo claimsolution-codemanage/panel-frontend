@@ -25,9 +25,12 @@ import {FaTrashRestoreAlt} from 'react-icons/fa'
 import { getFormateDMYDate } from "../../utils/helperFunction";
 import EditInvoiceStatusModal from "../Common/EditInvoiceStatus";
 import { MdCurrencyRupee } from "react-icons/md";
+import { SiMicrosoftexcel } from "react-icons/si";
 
 export default function AllInvoiceComp({viewAllInvoice,payInvoice,viewInvoiceUrl,role,
-  isEdit,isDelete,editInvoiceUrl,unactiveInvoice,isTrash,deleteInvoice,paidAccess,handlePaid}) {
+  isEdit,isDelete,editInvoiceUrl,unactiveInvoice,isTrash,deleteInvoice,paidAccess,handlePaid,
+  downloadAccess,downloadApi
+}) {
   const state = useContext(AppContext)
   const location = useLocation()
   const [data, setData] = useState([])
@@ -48,6 +51,7 @@ export default function AllInvoiceComp({viewAllInvoice,payInvoice,viewInvoiceUrl
   const [paymentDetails, setPaymentDetails] = useState({ status: false, details: {} })
   const [checkOutDetails, setCheckOutDetails] = useState({ status: false, encData: null, clientCode: null })
   const [changeInvoiceStatus, setChangeInvoiceStatus] = useState({status:false,_id:null})
+  const [downloading, setDownloading] = useState(false)
 
   const [dateRange, setDateRange] = useState(
     location?.pathname==location?.state?.path && location?.state?.filter?.dateRange ?
@@ -119,6 +123,76 @@ export default function AllInvoiceComp({viewAllInvoice,payInvoice,viewInvoiceUrl
     }
   }
 
+  // const handleDownload = async () => {
+  //   try {
+  //     const startDate = dateRange.startDate ? getFormateDate(dateRange.startDate) : ""
+  //     const endDate = dateRange.endDate ? getFormateDate(dateRange.endDate) : ""
+  //     setDownloading(true)
+  //     const res = await downloadApi(searchQuery, startDate, endDate,true)
+  //     console.log("res", res?.data);
+  //     if (res?.status == 200) {
+  //       const url = window.URL.createObjectURL(new Blob([res.data]));
+  //       const a = document.createElement('a');
+  //       a.href = url;
+  //       a.download = 'invoice.xlsx'; 
+  //       document.body.appendChild(a);
+  //       a.click();
+  //       window.URL.revokeObjectURL(url);
+  //       toast.success("Download the excel")
+  //       setDownloading(false)
+  //     } else {
+  //       setDownloading(false)
+  //     }
+      
+  //   } catch (error) {
+  //     console.log("error", error);
+  //     if (error && error?.response?.data?.message) {
+  //       toast.error(error?.response?.data?.message)
+  //     } else {
+  //       toast.error("Failed to download")
+  //     }
+  //     setDownloading(false)
+  //   }
+  // }
+
+  const handleDownload = async () => {
+    try {
+      const startDate = dateRange.startDate ? getFormateDate(dateRange.startDate) : "";
+      const endDate = dateRange.endDate ? getFormateDate(dateRange.endDate) : "";
+      setDownloading(true);
+  
+      // Step 1: Fetch File Data
+      const res = await downloadApi(searchQuery, startDate, endDate, true);
+  
+      if (res?.status === 200) {
+        // Step 2: Create Blob URL
+        const blob = new Blob([res.data], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" });
+        const url = window.URL.createObjectURL(blob);
+  
+        // Step 3: Create and Trigger Download
+        const a = document.createElement("a");
+        a.href = url;
+        const contentDisposition = res.headers["content-disposition"];
+        const match = contentDisposition?.match(/filename="(.+)"/);
+        a.download = match ? match[1] : "invoice.xlsx"; // Use backend filename if available
+        document.body.appendChild(a);
+        a.click();
+        window.URL.revokeObjectURL(url);
+  
+        // Notify Success
+        toast.success("Download successful!");
+      } else {
+        toast.error("Failed to download the file.");
+      }
+    } catch (error) {
+      console.error("Download Error:", error);
+      const errorMessage = error?.response?.data?.message || "Failed to download the file.";
+      toast.error(errorMessage);
+    } finally {
+      setDownloading(false);
+    }
+  };
+  
 
   useEffect(() => {
     getViewAllInvoice()
@@ -231,6 +305,7 @@ export default function AllInvoiceComp({viewAllInvoice,payInvoice,viewInvoiceUrl
                   <div className="col-12 col-md-7 d-flex gap-3">
                     <div className="btn btn-primary" onClick={() => setShowCalender(!showCalender)}><CiFilter /></div>
                     <div className="btn btn-primary" onClick={() => handleReset()}>Reset</div>
+                    {downloadAccess &&  <button className={`btn btn-primary fs-5 ${downloading && "disabled"}`} disabled={downloading} onClick={() => !downloading && handleDownload()}>{downloading ? <span className="spinner-border-md"></span> : <SiMicrosoftexcel />}</button>}
                   </div>
                   <div className="col-12 col-md-3">
                   </div>

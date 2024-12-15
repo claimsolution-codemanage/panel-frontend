@@ -15,6 +15,8 @@ export default function EmployeeInvoiceTrash() {
     editInvoiceUrl={"/employee/edit-invoice/"}
     unactiveInvoice={financeEmployeeUnactiveInvoice}
     deleteInvoice={financeEmployeeRemoveInvoice}
+    downloadAccess={false}
+    downloadApi={()=>{}}
     />
   )
 }

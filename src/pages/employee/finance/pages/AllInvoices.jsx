@@ -1,6 +1,6 @@
 import { useContext } from "react";
 import { AppContext } from "../../../../App";
-import {financeEmployeeViewAllInvoice,financeEmployeeUnactiveInvoice,empOperationPaidInvoice } from "../../../../apis"
+import {financeEmployeeViewAllInvoice,financeEmployeeUnactiveInvoice,empOperationPaidInvoice, empDownloadAllInvoiceApi } from "../../../../apis"
 import AllInvoiceComp from "../../../../components/Reuse/AllInvoiceComp";
 
 
@@ -20,6 +20,8 @@ export default function EmployeeAllInvoices() {
     isTrash={false}
     editInvoiceUrl={"/employee/edit-invoice/"}
     unactiveInvoice={financeEmployeeUnactiveInvoice}
+    downloadAccess={empType?.toLowerCase()==="operation" || empType?.toLowerCase()==="finance"}
+    downloadApi={empDownloadAllInvoiceApi}
     />
   </>)
 }

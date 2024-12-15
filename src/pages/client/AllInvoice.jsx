@@ -10,6 +10,9 @@ export default function ClientAllInvoice() {
   paidAccess={false}
   handlePaid={()=>{}}
   viewAllInvoice={clientViewAllInvoice} 
-  payInvoice={clientPayInvoiceById}/>
+  payInvoice={clientPayInvoiceById}
+  downloadAccess={false}
+  downloadApi={()=>{}}
+  />
   </>)
 }

@@ -133,16 +133,16 @@ export default function ViewCaseComp({ id, getCase, role, attachementUpload, add
                 }
               ),
             
-            chequeAmount: Yup.number()
+              amount: Yup.number()
               .test(
                 "is-required-htmlFor-cheque",
-                "Cheque Amount is required",
+                "Amount is required",
                 function (value) {
                   const { paymentMode } = this.parent;
-                  return paymentMode !== "Cheque" || (value && !isNaN(value));
+                  return (value && !isNaN(value));
                 }
               )
-              .typeError("Cheque Amount must be a number"),
+              .typeError("Amount must be a number"),
             
             transactionDate: Yup.date()
               .test(
@@ -162,7 +162,7 @@ export default function ViewCaseComp({ id, getCase, role, attachementUpload, add
             bankName: "",
             chequeNumber: "",
             chequeDate: "",
-            chequeAmount: "",
+            amount: "",
             transactionDate: "",
             paymentMode:""
         };
@@ -231,7 +231,7 @@ export default function ViewCaseComp({ id, getCase, role, attachementUpload, add
     const handleRemoveCaseReference = async () => {
         console.log("handleRemoveCaseReference",data[0]?._id, removeCaseReference?.type);
         
-        return
+        // return
         if (removeCaseReference?.type) {
             try {
                 setRemoveCaseReference({ ...removeCaseReference, loading: true })
@@ -569,7 +569,7 @@ export default function ViewCaseComp({ id, getCase, role, attachementUpload, add
                                                                         <th scope="col" className="text-nowrap">Date of payment</th>
                                                                         <th scope="col" className="text-nowrap">Bank name</th>
                                                                         <th scope="col" className="text-nowrap">Cheque number</th>
-                                                                        <th scope="col" className="text-nowrap" >Cheque amount</th>
+                                                                        <th scope="col" className="text-nowrap" >Amount</th>
                                                                         <th scope="col" className="text-nowrap" >Cheque date</th>
                                                                         <th scope="col" className="text-nowrap" >UTR number</th>
                                                                         <th scope="col" className="text-nowrap" >Transaction date</th>
@@ -585,7 +585,7 @@ export default function ViewCaseComp({ id, getCase, role, attachementUpload, add
                                                                         <td className="text-nowrap "> {item?.dateOfPayment ? <p className="mb-1">{getFormateDMYDate(item?.dateOfPayment)}</p> :"-"}</td>
                                                                         <td className="text-break col-1"><p className="mb-1 text-center">{item?.bankName || "-"}</p></td>
                                                                         <td className="text-break col-1"><p className="mb-1 text-center">{item?.chequeNumber || "-"}</p></td>
-                                                                        <td className="text-break col-1"><p className="mb-1 text-center">{item?.chequeAmount || "-"}</p></td>
+                                                                        <td className="text-break col-1"><p className="mb-1 text-center">{item?.amount || "-"}</p></td>
                                                                         <td className="text-nowrap "> {item?.chequeDate ? <p className="mb-1">{getFormateDMYDate(item?.chequeDate)}</p>:"-"}</td>
                                                                         <td className="text-break col-1"><p className="mb-1 text-center">{item?.utrNumber || "-"}</p></td>
                                                                         <td className="text-nowrap "> {item?.transactionDate ? <p className="mb-1">{getFormateDMYDate(item?.transactionDate)}</p>: "-"}</td>

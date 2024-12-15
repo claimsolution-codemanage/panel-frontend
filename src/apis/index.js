@@ -627,6 +627,15 @@ export const adminViewAllInvoice = (pageItemLimit = "", pageNo = "", searchQuery
   return axios.get(`${API_BASE}/api/admin/viewAllInvoice?limit=${pageItemLimit}&pageNo=${pageNo}&search=${searchQuery}&startDate=${startDate}&endDate=${endDate}&type=${true}`)
 }
 
+export const adminDownloadAllInvoiceApi = (searchQuery = "", startDate = "", endDate = "",type=true) => {
+  setheader()
+  return axios({
+    method: 'GET',
+    url: `${API_BASE}/api/admin/adminDownloadAllInvoice?search=${searchQuery}&startDate=${startDate}&endDate=${endDate}&type=${type}`,
+    responseType: 'blob',
+  })
+}
+
 export const adminViewAllTrashInvoice = (pageItemLimit = "", pageNo = "", searchQuery = "", startDate = "", endDate = "") => {
   setheader()
   return axios.get(`${API_BASE}/api/admin/viewAllInvoice?limit=${pageItemLimit}&pageNo=${pageNo}&search=${searchQuery}&startDate=${startDate}&endDate=${endDate}&type=${false}`)
@@ -994,6 +1003,16 @@ export const financeEmployeeViewAllInvoice = (pageItemLimit = "", pageNo = "", s
   setheader()
   return axios.get(`${API_BASE}/api/employee/finance/viewAllInvoice?limit=${pageItemLimit}&pageNo=${pageNo}&search=${searchQuery}&startDate=${startDate}&endDate=${endDate}&type=${true}`)
 }
+
+export const empDownloadAllInvoiceApi = (searchQuery = "", startDate = "", endDate = "",type=true) => {
+  setheader()
+  return axios({
+    method: 'GET',
+    url: `${API_BASE}/api/employee/emp/empDownloadAllInvoice?search=${searchQuery}&startDate=${startDate}&endDate=${endDate}&type=${type}`,
+    responseType: 'blob',
+  })
+}
+
 
 export const financeEmployeeViewAllTrashInvoice = (pageItemLimit = "", pageNo = "", searchQuery = "", startDate = "", endDate = "") => {
   setheader()
