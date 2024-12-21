@@ -15,6 +15,7 @@ import {CiAlignBottom,CiBookmark,CiStar,CiShoppingTag,CiGrid41} from 'react-icon
 import Loader from '../../components/Common/loader';
 import { useState } from 'react';
 import { allMonths } from '../../utils/constant';
+import { Link } from 'react-router-dom';
 
 
 
@@ -154,9 +155,16 @@ export default function AdminDasboard() {
         <div className="container-fluid">
           <div className="row">
             <div className="col-12">
-              <div className="card mx-4 p-3 border-0 shadow rounded-4 mt-3">
-                <p className='fw-bold h5 m-0'>Dashboard</p>
-              </div>
+                <div className="card mx-4 p-3 border-0 shadow rounded-4 mt-3">
+                  <div className='d-flex flex-column flex-lg-row align-items-center justify-content-between'>
+                    <div className='d-flex align-items-center'>
+                      <div  className="nav__logo">
+                        <img src="/Images/icons/company-logo.png" height={70} alt="Company logo" loading="lazy" />
+                      </div>
+                    </div>
+                    <p className='fw-bold h5 p-0 m-0 '>Dashboard</p>
+                  </div>
+                </div>
             </div>
           </div>
         </div>

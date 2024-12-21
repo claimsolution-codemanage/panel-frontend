@@ -52,6 +52,11 @@ export default function PrivateNavbar() {
 
     return (<>
         <div className="h-100 d-flex flex-column  bg-primary gap-2 py-4 color-4">
+               <div className='d-flex align-items-center mx-2 py-2  justify-content-center bg-white active_item'>
+                      <div className="nav__logo">
+                        <img src="/Images/icons/company-logo.png" height={70} alt="Company logo" loading="lazy" />
+                      </div>
+                    </div>
             {myRole == "partner" && <>
                 <Link to="/partner/dashboard" className={`d-flex align-items-center mx-2 px-2 py-2 gap-3 text-white   ${location.pathname.includes("dashboard") && "active_item"}`}  >
                     <RxDashboard />

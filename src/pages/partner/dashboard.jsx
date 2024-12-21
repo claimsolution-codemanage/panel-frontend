@@ -151,9 +151,16 @@ export default function ClientDasboard() {
           <div className="row">
             <div className="col-12">
               <div className="card mx-md-4  p-3 border-0 shadow rounded-4 mt-3">
-                <div className='row'>
-                <div className='col-12 col-md-6  fw-bold fs-4 m-0'>Dashboard</div>
-                <div className='col-12 col-md-6 d-flex align-items-center gap-2 justify-content-center'>
+              <div className='row row-cols-1 row-cols-lg-3 align-items-center'>
+                <div className='d-flex align-items-center justify-content-lg-between justify-content-center'>
+                    <div className='d-flex align-items-center'>
+                      <div  className="nav__logo">
+                        <img src="/Images/icons/company-logo.png" height={70} alt="Company logo" loading="lazy" />
+                      </div>
+                    </div>
+                  </div>
+                    <p className='fw-bold h5 p-0 m-0 d-flex align-items-center gap-2 justify-content-center'>Dashboard</p>
+                <div className='d-flex align-items-center gap-2 justify-content-center'>
                   <MdMoreTime className='fs-4 text-primary'/>
               <p className='m-0 text-success'>{parnterDetails?.lastLogin && new Date(parnterDetails?.lastLogin)?.toLocaleString('en-US', dateOptions)?.split("GMT")?.[0]}</p>
                 </div>
@@ -170,7 +177,7 @@ export default function ClientDasboard() {
                             <h6 className="h1 fw-bold">Welcome to your Dashboard</h6>
                             </div>
                         
-                        <p className='mt-4'>You can view the overall data of your case details.</p>
+                        <p className='mt-4'><span className='text-capitalize fw-bold'>{parnterDetails?.fullName},</span> you can view the overall data of your case details.</p>
                     </div>
                 </div>
             </div>
