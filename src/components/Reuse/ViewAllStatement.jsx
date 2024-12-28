@@ -20,7 +20,7 @@ import html2pdf from 'html2pdf.js'
 import html2canvas from 'html2canvas';
 
 
-export default function ViewAllStatement({getStatementApi,type}) {
+export default function ViewAllStatement({getStatementApi,type,excelDownloadApi}) {
   const state = useContext(AppContext)
   const param = useParams()
   const {partnerId,empId} = param
@@ -34,6 +34,7 @@ export default function ViewAllStatement({getStatementApi,type}) {
   const [showStatement,setShowStatement] = useState({status:false,data:null})
   const [pgNo, setPgNo] = useState(1)
   const [statementOf,setStatementOf] = useState({})
+  const [downloading, setDownloading] = useState(false)
   const [downloadPdf,setDownloadPdf] = useState({loading:false,data:[],statementOf:{}})
   const [dateRange, setDateRange] = useState(
    {
@@ -41,6 +42,8 @@ export default function ViewAllStatement({getStatementApi,type}) {
       endDate: new Date(),
     }
   );
+  const roleAccess = ["admin","finance","operation"]
+  const excelDownloadAccess = ((roleAccess?.includes(state?.myAppData?.details?.role?.toLowerCase())) || (roleAccess?.includes(state?.myAppData?.details?.empType?.toLowerCase())))
 
 
 
@@ -76,7 +79,38 @@ export default function ViewAllStatement({getStatementApi,type}) {
     }
   }
 
-  console.log("statementOf",statementOf);
+  const handleDownload = async () => {
+    try {
+      const type = true
+      const startDate = dateRange.startDate ? getFormateDate(dateRange.startDate) : ""
+      const endDate = dateRange.endDate ? getFormateDate(dateRange.endDate) : ""
+      setDownloading(true)
+      const res = await excelDownloadApi(startDate, endDate,partnerId,empId)
+      console.log("res", res);
+      if (res?.status == 200) {
+        const url = window.URL.createObjectURL(new Blob([res.data]));
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'Statement.xlsx'; // Specify the filename here
+        document.body.appendChild(a);
+        a.click();
+        window.URL.revokeObjectURL(url);
+        toast.success("Download the excel")
+        setDownloading(false)
+      } else {
+        setDownloading(false)
+
+      }
+    } catch (error) {
+      console.log("error", error);
+      if (error && error?.response?.data?.message) {
+        toast.error(error?.response?.data?.message)
+      } else {
+        toast.error("Failed to download")
+      }
+      setDownloading(false)
+    }
+  }
   
 
   useEffect(() => {
@@ -256,6 +290,9 @@ export default function ViewAllStatement({getStatementApi,type}) {
                       <option value={20}>20</option>
                       <option value={25}>25</option>
                     </select>
+                    {excelDownloadAccess && 
+                    <button className={`btn btn-primary fs-5 ${downloading && "disabled"}`} disabled={downloading} onClick={() => !downloading && handleDownload()}>{downloading ? <span className="spinner-border-sm"></span> : <SiMicrosoftexcel />}</button>
+                    }
                   </div>
                 </div>
               </div>

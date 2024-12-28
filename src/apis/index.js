@@ -254,6 +254,15 @@ export const adminAllCaseDownload = (searchQuery = "", statusType = "", startDat
   })
 }
 
+export const adminAllStatementDownload = (startDate = "", endDate = "",partnerId="",empId="") => {
+  setheader()
+  return axios({
+    method: 'GET',
+    url: `${API_BASE}/api/admin/download/downloadAllStatement?startDate=${startDate}&endDate=${endDate}&partnerId=${partnerId}&empId=${empId}`,
+    responseType: 'blob',
+  })
+}
+
 export const adminViewPartnerReport = (partnerId = "", pageItemLimit = "", pageNo = "", searchQuery = "", statusType = "", startDate = "", endDate = "", type) => {
   setheader()
   return axios.get(`${API_BASE}/api/admin/adminViewPartnerReport?partnerId=${partnerId}&limit=${pageItemLimit}&pageNo=${pageNo}&search=${searchQuery}&status=${statusType}&startDate=${startDate}&endDate=${endDate}&type=${type}`)
@@ -1167,4 +1176,13 @@ export const empAllNotificationApi= (search="") => {
 export const empUpdateNotificationApi = (data) => {
   setheader()
   return axios.put(`${API_BASE}/api/employee/emp/updateNotification`, data)
+}
+
+export const empAllStatementDownload = (startDate = "", endDate = "",partnerId="",empId="") => {
+  setheader()
+  return axios({
+    method: 'GET',
+    url: `${API_BASE}/api/employee/emp/download/empDownloadAllStatement?startDate=${startDate}&endDate=${endDate}&partnerId=${partnerId}&empId=${empId}`,
+    responseType: 'blob',
+  })
 }

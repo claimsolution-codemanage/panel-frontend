@@ -18,7 +18,7 @@ import CreateOrUpdateStatmentModal from "./createOrUpdateStatementModal";
 import { BsSearch } from "react-icons/bs";
 import { AppContext } from "../../App";
 
-export default function Statement({getStatementApi,type}) {
+export default function Statement({getStatementApi,type,excelDownloadApi}) {
 const state = useContext(AppContext)
   const searchRef = useRef()
   const [data, setData] = useState([])
@@ -33,6 +33,7 @@ const state = useContext(AppContext)
   const [showStatement,setShowStatement] = useState({status:false,data:null,create:false})
   const [pgNo, setPgNo] = useState(1)
   const [statementOf,setStatementOf] = useState({})
+  const [downloading, setDownloading] = useState(false)
   const [dateRange, setDateRange] = useState(
    {
       startDate: new Date("2024/01/01"),
@@ -79,7 +80,7 @@ const state = useContext(AppContext)
     if (getStatementApi && !showStatement.status) {
       getAllStatement()
     }
-  }, [showStatement])
+  }, [showStatement,pgNo])
 
 
   const handlePageClick = (event) => {
@@ -98,6 +99,39 @@ const state = useContext(AppContext)
     setIsSearch(true)
     setSearchQuery(value)
   }
+
+    const handleDownload = async () => {
+      try {
+        const type = true
+        const startDate = dateRange.startDate ? getFormateDate(dateRange.startDate) : ""
+        const endDate = dateRange.endDate ? getFormateDate(dateRange.endDate) : ""
+        setDownloading(true)
+        const res = await excelDownloadApi(startDate, endDate)
+        console.log("res", res);
+        if (res?.status == 200) {
+          const url = window.URL.createObjectURL(new Blob([res.data]));
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = 'Statement.xlsx'; // Specify the filename here
+          document.body.appendChild(a);
+          a.click();
+          window.URL.revokeObjectURL(url);
+          toast.success("Download the excel")
+          setDownloading(false)
+        } else {
+          setDownloading(false)
+  
+        }
+      } catch (error) {
+        console.log("error", error);
+        if (error && error?.response?.data?.message) {
+          toast.error(error?.response?.data?.message)
+        } else {
+          toast.error("Failed to download")
+        }
+        setDownloading(false)
+      }
+    }
 
   useEffect(()=>{
     const type = ["admin","finance","operation"]
@@ -164,6 +198,7 @@ const state = useContext(AppContext)
                       <option value={20}>20</option>
                       <option value={25}>25</option>
                     </select>
+                    <button className={`btn btn-primary fs-5 ${downloading && "disabled"}`} disabled={downloading} onClick={() => !downloading && handleDownload()}>{downloading ? <span className="spinner-border-sm"></span> : <SiMicrosoftexcel />}</button>
                   </div>
                 </div>
               </div>

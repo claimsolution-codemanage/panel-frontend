@@ -1,7 +1,7 @@
 import EmployeeTemplate from "../template/employeeTemplate"
 import PanelTemplate from "../template/PanelTemplate"
 import { Route } from "react-router-dom"
-import { empOpAllStatment, empOpStatments } from "../apis"
+import { empAllStatementDownload, empOpAllStatment, empOpStatments } from "../apis"
 
 
 // for employee routes
@@ -68,10 +68,10 @@ export const employeeRoutes = [
   <Route path='/employee/branch-team'  element={<EmployeeTemplate><EmpBranchTeam/></EmployeeTemplate>}/>,
   <Route path='/employee/add-sathi-team'  element={<EmployeeTemplate><EmployeeAddSathiAcc/></EmployeeTemplate>}/>,
   <Route path='/employee/view-sathi/:_id'  element={<EmployeeTemplate><EmpViewMySathi/></EmployeeTemplate>}/>,
-  <Route path='/employee/statement/partner/:partnerId'  element={<EmployeeTemplate><ViewAllStatement getStatementApi={empOpAllStatment} type={"operation"}/></EmployeeTemplate>}/>,
-  <Route path='/employee/statement/employee/:empId'  element={<EmployeeTemplate><ViewAllStatement getStatementApi={empOpAllStatment} type={"operation"}/></EmployeeTemplate>}/>,
-  <Route path='/employee/statement/sathi-team/:empId'  element={<EmployeeTemplate><ViewAllStatement getStatementApi={empOpAllStatment} type={"sathi team"}/></EmployeeTemplate>}/>,
-  <Route path='/employee/statement'  element={<EmployeeTemplate><Statement getStatementApi={empOpStatments} type={"operation"}/></EmployeeTemplate>}/>,
+  <Route path='/employee/statement/partner/:partnerId'  element={<EmployeeTemplate><ViewAllStatement getStatementApi={empOpAllStatment} excelDownloadApi={empAllStatementDownload} type={"operation"}/></EmployeeTemplate>}/>,
+  <Route path='/employee/statement/employee/:empId'  element={<EmployeeTemplate><ViewAllStatement getStatementApi={empOpAllStatment} excelDownloadApi={empAllStatementDownload} type={"operation"}/></EmployeeTemplate>}/>,
+  <Route path='/employee/statement/sathi-team/:empId'  element={<EmployeeTemplate><ViewAllStatement getStatementApi={empOpAllStatment} excelDownloadApi={empAllStatementDownload} type={"sathi team"}/></EmployeeTemplate>}/>,
+  <Route path='/employee/statement'  element={<EmployeeTemplate><Statement getStatementApi={empOpStatments} excelDownloadApi={empAllStatementDownload} type={"operation"}/></EmployeeTemplate>}/>,
   <Route path='/employee/notification'  element={<EmployeeTemplate><EmpNotification/></EmployeeTemplate>}/>,
 
 ]
