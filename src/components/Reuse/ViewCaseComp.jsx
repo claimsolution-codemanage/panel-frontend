@@ -3,7 +3,7 @@ import { adminGetCaseById } from "../../apis"
 import { toast } from 'react-toastify'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { useParams } from "react-router-dom"
-import { IoArrowBackCircleOutline } from 'react-icons/io5'
+import { IoArrowBackCircleOutline, IoFolder, IoFolderOpenSharp } from 'react-icons/io5'
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import { adminDeleteCaseDocById, adminUpdateClientCaseFee, adminChangeCaseStatus, adminAddCaseCommit, adminRemoveCaseReference } from "../../apis"
@@ -58,6 +58,8 @@ export default function ViewCaseComp({ id, getCase, role, attachementUpload, add
     const [deleteCaseDoc, setDeleteCaseDoc] = useState({ status: false, id: null })
     const [changeisActiveStatus, setChangeIsActiveStatus] = useState({ show: false, details: {} })
     const [paymentModal, setpaymentModal] = useState({save:false,show:false})
+    const [folderInfo,setFolderInfo] = useState({})
+    const [fileInfo,setFileInfo] = useState({type:null,list:[]})
 
 
     const navigate = useNavigate()
@@ -70,6 +72,19 @@ export default function ViewCaseComp({ id, getCase, role, attachementUpload, add
             if (res?.data?.success && res?.data?.data) {
                 setData([res?.data?.data])
                 setLoading(false)
+                let caseDocs = res?.data?.data?.caseDocs
+                if(Array.isArray(caseDocs)){
+                    let folder ={}
+                    caseDocs?.forEach(ele=>{
+                        let type = ele?.name?.toLowerCase() || "other"
+                        if(folder[type]){
+                            folder[type]=[...folder[type],ele]
+                        }else{
+                            folder[type]= [ele]
+                        }
+                    })
+                setFolderInfo(folder)
+                }
             }
         } catch (error) {
             if (error && error?.response?.data?.message) {
@@ -80,7 +95,7 @@ export default function ViewCaseComp({ id, getCase, role, attachementUpload, add
                 setLoading(false)
             }
 
-            // console.log("case error", error);
+            console.log("case error", error);
         }
     }
 
@@ -286,6 +301,22 @@ export default function ViewCaseComp({ id, getCase, role, attachementUpload, add
         }
     };
 
+ const handleShareDocument =(type,data)=>{
+    const docUrl = getCheckStorage(data?.url)
+  if(!docUrl) return
+  if(type=="whatsapp"){
+    const message = `Document share from ClaimSolution. Check out this document: ${data?.name || "document"}\n${docUrl}`;
+    const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(message)}`
+    window.open(whatsappUrl,"_blank");
+  }else if(type=="email"){
+    const subject = `Document share from ClaimSolution`;
+    const body = `Hi,\n\nCheck out this document: ${data?.name || "document"}\n\nPlease find the document link below:\n${docUrl}\n\nRegards\nClaimSolution`
+    const emailUrl = `mailto:?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`
+    window.open(emailUrl,"_blank");
+  }
+ }
+
+
     return (<>
         {loading ? <Loader /> :
             <div>
@@ -466,13 +497,27 @@ export default function ViewCaseComp({ id, getCase, role, attachementUpload, add
                                                 <div className="bg-color-1 my-5 p-3 p-md-5 rounded-2 shadow">
                                                     <div className="border-3 border-primary border-bottom py-2 mb-5">
                                                         <div className="d-flex gap-3 justify-content-center text-primary text-center fs-4">
-                                                            <span>Document List</span>
+                                                             {fileInfo?.type &&  <IoArrowBackCircleOutline className="fs-3" onClick={()=>setFileInfo({type:null,list:[]})} style={{ cursor: "pointer" }} />} 
+                                                            <span className="text-capitalize">{fileInfo?.type || "Document List"}</span>
                                                             {(role?.toLowerCase() == "client" || role?.toLowerCase() == "partner") && <div>
                                                                 <span onClick={() => setUploadingDocs(true)} className="bg-primary d-flex justify-content-center align-items-center text-white" style={{ cursor: 'pointer', height: '2rem', width: '2rem', borderRadius: '2rem' }}><IoMdAdd /></span>
                                                             </div>}
                                                         </div></div>
                                                     <div className="row row-cols-1 row-cols-md-4 align-items-center">
-                                                        {data[0]?.caseDocs?.map(item =>
+
+                                                        {fileInfo?.list?.length==0 && Object.keys(folderInfo)?.map(ele=>  <div key={ele} className="p-2">
+                                                                <div className="align-items-center bg-color-7 d-flex flex-column justify-content-center rounded-3 cursor-pointer" onClick={()=>Array.isArray(folderInfo[ele]) && setFileInfo({type:ele,list:folderInfo[ele]})}>
+                                                                    <div className="d-flex flex-column justify-content-center align-items-center py-5">
+                                                                    <div className="d-flex justify-content-center align-items-center fs-4 text-white bg-primary" style={{ height: '3rem', width: '3rem', borderRadius: '3rem' }}>
+                                                            <IoFolder className="text-light"/>
+                                                                            </div>
+                                                                    </div>
+                                                                    <div className="d-flex align-items-center justify-content-center bg-dark gap-5 w-100 p-2 text-primary">
+                                                                        <p className="text-center text-wrap fs-5 text-capitalize">{ele}</p>
+                                                                    </div>
+                                                                </div>
+                                                            </div>)}
+                                                        {fileInfo?.list?.map(item =>
                                                             <div key={item?._id} className="p-2">
                                                                 <div className="align-items-center bg-color-7 d-flex flex-column justify-content-center rounded-3">
                                                                     <div className="w-100 p-2">
@@ -481,8 +526,9 @@ export default function ViewCaseComp({ id, getCase, role, attachementUpload, add
                                                                             <i className="bi bi-three-dots-vertical" data-bs-toggle="dropdown" aria-expanded="false"></i>
                                                                             <ul className="dropdown-menu">
                                                                                 <li><div className="dropdown-item"><Link to={`${getCheckStorage(item?.url) ? getCheckStorage(item?.url) : "#!"}`} target="_blank">View</Link></div></li>
+                                                                                <li><div className="dropdown-item" onClick={()=>handleShareDocument("whatsapp",item)}>WhatsApp</div></li>
+                                                                                <li><div className="dropdown-item" onClick={()=>handleShareDocument("email",item)}>Email</div></li>
                                                                                 {role?.toLowerCase() == "admin" && <li><div onClick={() => setChangeIsActiveStatus({ show: true, details: { _id: item?._id, currentStatus: item?.isActive, name: item?.name } })} className="dropdown-item">Delete</div></li>}
-                                                                                {/* {role?.toLowerCase()=="admin" &&  <li><div onClick={()=>setDeleteCaseDoc({status:true,id:`caseId=${data[0]?._id}&docId=${item?._id}`})} className="dropdown-item">Delete</div></li>} */}
                                                                             </ul>
                                                                         </div>
                                                                     </div>
@@ -496,9 +542,9 @@ export default function ViewCaseComp({ id, getCase, role, attachementUpload, add
 
 
                                                                     </div>
-                                                                    <div className="d-flex align-items-center justify-content-center bg-dark gap-5 w-100 p-2 text-primary">
+                                                                    {/* <div className="d-flex align-items-center justify-content-center bg-dark gap-5 w-100 p-2 text-primary">
                                                                         <p className="text-center text-wrap fs-5 text-capitalize">{item?.name}</p>
-                                                                    </div>
+                                                                    </div> */}
                                                                 </div>
                                                             </div>
                                                         )}
