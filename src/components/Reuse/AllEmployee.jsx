@@ -5,17 +5,14 @@ import 'react-date-range/dist/styles.css'; // main style file
 import 'react-date-range/dist/theme/default.css'; // theme css file
 import ReactPaginate from 'react-paginate';
 import { CiEdit } from 'react-icons/ci'
-import ChangeStatusModal from "../../components/Common/changeStatusModal"
 import { Link, useLocation, useNavigate } from "react-router-dom"
 import {BiLeftArrow} from 'react-icons/bi'
 import {BiRightArrow} from 'react-icons/bi'
 import SetStatusOfProfile from "../../components/Common/setStatusModal"
-import { adminSetEmployeeStatus,adminGetAllEmployee,adminDeleteEmployeeById,adminUpdateEmployeeById } from "../../apis"
 import Loader from "../../components/Common/loader"
 import loash from 'lodash'
 import { AiOutlineDelete } from "react-icons/ai";
 import ConfirmationModal from "../../components/Common/confirmationModal";
-import { MdOutlinePublishedWithChanges } from "react-icons/md";
 import EditEmployeeModal from "../../components/editEmployeeModal";
 import { TbReportAnalytics } from "react-icons/tb";
 import { FaUserFriends } from "react-icons/fa";
@@ -25,9 +22,12 @@ import { getFormateDMYDate } from "../../utils/helperFunction";
 import { FaUserTag } from "react-icons/fa6";
 import { SiMicrosoftexcel } from "react-icons/si";
 import { IoArrowBackCircleOutline, IoNewspaperOutline } from "react-icons/io5";
-export default function AllEmployee({page,empId,getEmployee,isTrash,isActive,deleteEmployeeId,
-  updateEmployee,role,caseUrl,partnerUrl,isedit,viewSathiUrl,isDownload,getDownload,isBack,statement
-  ,statementUrl}) {
+
+export default function AllEmployee(props) {
+  const { page, empId, getEmployee, isTrash, isActive, deleteEmployeeId,
+    updateEmployee, role, caseUrl, partnerUrl, isedit, viewSathiUrl, isDownload, getDownload, 
+    isBack, statement, statementUrl, editEmpUrl } = props
+
   const [data, setData] = useState([])
   const navigate = useNavigate()
   const location = useLocation()
@@ -186,6 +186,14 @@ export default function AllEmployee({page,empId,getEmployee,isTrash,isActive,del
     }
   }
 
+  const handleEditDetails=(item)=>{
+    if(editEmpUrl){
+        navigate(`${editEmpUrl}/${item?._id}`)
+    }else{
+      setEmployeeUpdateStatus({ show: true,id:item?._id, details: editEmployeeDetails(item) })
+    }
+  }
+
   return (<>
    {loading?<Loader/> :
     <div>
@@ -253,7 +261,7 @@ export default function AllEmployee({page,empId,getEmployee,isTrash,isActive,del
               <td className="text-nowrap"><span className="d-flex justify-content-center align-items-center gap-2">
                 {!isTrash && <span style={{ cursor: "pointer",height:30,width:30,borderRadius:30 }} className={`bg-primary text-white d-flex align-items-center justify-content-center`} onClick={() =>navigate(`${caseUrl}${item._id}`,{state:{filter,back:location?.pathname,path:location?.pathname}})}><TbReportAnalytics className="fs-5"/></span>}
                 {!isTrash && <span style={{ cursor: "pointer",height:30,width:30,borderRadius:30 }} className={`${(item?.type?.toLowerCase()=="sales" ||item?.type?.toLowerCase()=="branch" ||item?.type?.toLowerCase()=="sathi team") ? "bg-info" :"bg-secondary" } text-white d-flex align-items-center justify-content-center`} onClick={() => (item?.type?.toLowerCase()=="sales" ||item?.type?.toLowerCase()=="branch" ||item?.type?.toLowerCase()=="sathi team") && navigate(`${partnerUrl}${item._id}`,{state:{filter,back:location?.pathname,path:location?.pathname}})}><FaUserFriends className="fs-5"/></span>}
-                {!isTrash && isedit && <span className="bg-warning text-white" style={{ cursor: "pointer",height:30,width:30,borderRadius:30 }} onClick={() => setEmployeeUpdateStatus({ show: true,id:item?._id, details: editEmployeeDetails(item) })}><CiEdit /></span>}
+                {!isTrash && isedit && <span className="bg-warning text-white" style={{ cursor: "pointer",height:30,width:30,borderRadius:30 }} onClick={() => handleEditDetails(item)}><CiEdit /></span>}
                 {!isTrash && statement && item?.type?.toLowerCase()=="sathi team" && <Link to={`${statementUrl}/${item?._id}`} state={{filter,back:location?.pathname,path:location?.pathname}}  style={{ cursor: "pointer", height: 30, width: 30, borderRadius: 30 }} className="bg-primary text-white d-flex align-items-center justify-content-center"><IoNewspaperOutline /></Link>}
                 {!isTrash && viewSathiUrl && (item?.type?.toLowerCase()=="sales" ||item?.type?.toLowerCase()=="branch") && <span className="bg-warning text-white" style={{ cursor: "pointer",height:30,width:30,borderRadius:30 }} onClick={()=>navigate(`${viewSathiUrl}${item._id}`,{state:{filter,back:location?.pathname,path:location?.pathname}})}><FaUserTag /></span>}
                 {role?.toLowerCase()=="admin" && <span className={`${!isTrash ? "bg-danger" :"bg-success"}  text-white`} style={{ cursor: "pointer",height:30,width:30,borderRadius:30 }} onClick={() => setChangeStatus({ show: true, details: {_id:item._id,currentStatus:item?.isActive,name:item?.fullName} })}>{isTrash ? <FaTrashRestoreAlt/> :<AiOutlineDelete />} </span>}

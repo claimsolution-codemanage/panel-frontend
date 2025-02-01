@@ -6,14 +6,14 @@ import { useNavigate } from 'react-router-dom';
 import { IoMdAdd } from 'react-icons/io'
 import { v4 as uuidv4 } from 'uuid';
 import { FaFilePdf, FaFileImage,FaFileWord } from 'react-icons/fa6'
-import { docType } from '../../utils/constant';
+import { docType, empDocType } from '../../utils/constant';
 import { LuFileAudio } from "react-icons/lu"
 import { AppContext } from '../../App';
 import { TiDeleteOutline } from "react-icons/ti";
 import DocumentPreview from '../DocumentPreview';
 
 
-export default function AddNewCaseDocsModal({uploadingDocs,setUploadingDocs, handleCaseDocsUploading, attachementUpload }) {
+export default function AddNewCaseDocsModal({uploadingDocs,setUploadingDocs, handleCaseDocsUploading, attachementUpload,type }) {
     const appState = useContext(AppContext)
     const [data, setData] = useState({
         docDate: new Date().toLocaleDateString(),
@@ -194,9 +194,8 @@ export default function AddNewCaseDocsModal({uploadingDocs,setUploadingDocs, han
                     </div>
                     <div className='d-flex flex-column text-primary text-center h6 justify-content-center'>
                         <span>Add one file at a time</span>
-                        {/* <span>Allowed only image, pdf and audio file</span> */}
                     </div>
-                    {hasAccess && <div class="form-check form-switch">
+                    {hasAccess && type!="docEmp" && <div class="form-check form-switch">
                 <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckChecked" checked={data?.isPrivate} onChange={(e)=>setData({...data,isPrivate:e?.target?.checked})}/>
                 <label class="form-check-label" for="private">Private</label>
                 </div>}
@@ -205,7 +204,10 @@ export default function AddNewCaseDocsModal({uploadingDocs,setUploadingDocs, han
                 <label htmlFor="docType" className={`form-label`}>Document Type*</label>
                 <select className={`form-select `} id="complaintType" name="complaintType" value={data?.docName} onChange={(e)=>setData({...data,docName:e?.target?.value})} aria-label="Default select example">
                 <option value="">--Select Document Type</option>
-                {docType?.map(type=><option key={type?.value} value={type.value}>{type.label}</option>)}
+                {
+                type=="docEmp" ? empDocType?.map(type=><option key={type?.value} value={type.value}>{type.label}</option>)
+                : docType?.map(type=><option key={type?.value} value={type.value}>{type.label}</option>)
+                }
                 </select>
                 {data?.docName?.toLowerCase()=="other" &&<>
                 <input type="text" className="form-control mt-2" placeholder={"Document Name"} value={otherDocName} onChange={(e)=>e?.target?.value?.length<60 && setOtherDocName(e?.target?.value)} />
@@ -217,9 +219,6 @@ export default function AddNewCaseDocsModal({uploadingDocs,setUploadingDocs, han
                             <div onClick={handleRemoveDoc} className='text-danger fs-3 cursor-pointer'><TiDeleteOutline/></div>
                             <div className="d-flex flex-column justify-content-center align-items-center">
                                 <DocumentPreview url={data?.docURL}/>
-                                {/* <div className="d-flex justify-content-center bg-color-6 align-items-center fs-4 text-white bg-primary" style={{ height: '3rem', width: '3rem', borderRadius: '3rem' }}>
-                                    {data?.docType == "image" ? <FaFileImage /> : (data?.docType == "pdf" ? <FaFilePdf /> : (data?.docType=="audio" ? <LuFileAudio /> :<FaFileWord />))}
-                                </div> */}
                             </div>
                             <div className="d-flex align-items-center justify-content-center bg-dark gap-5 w-100 p-2 text-primary">
                                 <p className="fs-5 text-break text-capitalize text-center text-wrap">{data?.docName}</p>

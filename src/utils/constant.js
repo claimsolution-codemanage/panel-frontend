@@ -148,3 +148,13 @@ export const docType =[
 export const complaintType = [
     "Claim Rejection","Claim-Short Payment","Claim-Short Payment","Policy Cancel","Misselling & Fraud Case","Other"
   ]
+
+export const empDocType =[
+    {label:"Aadhar Card",value:"Aadhar Card"},
+    {label:"Pan Card",value:"Pan Card"},
+    {label:"Photograph",value:"Photograph"},
+    {label:"Bank Account Details",value:"Bank Account Details"},
+    {label:"Cancel Cheque",value:"Cancel Cheque"},
+    {label:"Education Qualification",value:"Education Qualification"},
+    {label: "Other",value: "Other"},
+]

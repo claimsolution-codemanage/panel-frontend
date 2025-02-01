@@ -22,6 +22,7 @@ export default function AddCaseComp({ addCase, uploadAttachment, successUrl,role
     const [error, setError] = useState(false)
     const [loading, setLoading] = useState(false)
     const navigate = useNavigate()
+    
 
     const caseDetailsFormik = useFormik({
         initialValues: {
@@ -137,23 +138,6 @@ export default function AddCaseComp({ addCase, uploadAttachment, successUrl,role
         
     }, [others, caseDetailsFormik?.values])
 
-    console.log("eroor--",error);
-
-    // useEffect(()=>{
-    //     const policyType = caseDetailsFormik?.values?.policyType
-    //     caseDetailsFormik.setFieldValue("complaintType","")
-    //     if (policyType == "Life Insurance") {
-    //         setComplaintPolicyType([...LifeInsuranceList])
-    //     } else if (policyType == "General Insurance") {
-    //         setComplaintPolicyType([...generalInsuranceList])
-    //     } else if (policyType == "Health Insurance") {
-    //         setComplaintPolicyType([...healthInsuranceList])
-    //     }else{
-    //         setComplaintPolicyType([...otherInsuranceList])
-    //     }
-    // },
-    // [caseDetailsFormik?.values?.policyType])
-
     const handleChange = (e) => {
         const { name, value } = e.target;
         if (name == "mobileNo" || name=="clientMobileNo") {
@@ -166,8 +150,6 @@ export default function AddCaseComp({ addCase, uploadAttachment, successUrl,role
             caseDetailsFormik.setFieldValue(name, value)
         }
     }
-
-// console.log(caseDetailsFormik.values);
 
     const handleCaseDocsUploading = (payload) => {
         setUploadedFiles([...uploadedFiles, payload])
@@ -389,11 +371,7 @@ export default function AddCaseComp({ addCase, uploadAttachment, successUrl,role
                                     <div className="align-items-center bg-color-7 d-flex flex-column justify-content-center w-100 rounded-3">
                                         <div onClick={()=>handleRemoveDoc(ind)}  className="text-danger fs-5 cursor-pointer"><MdOutlineCancel/></div>
                                         <div className="d-flex flex-column justify-content-center align-items-center">
-                                            {console.log("item",item) }
                                         <DocumentPreview url={ item?.docURL} />
-                                            {/* <div className="d-flex justify-content-center bg-color-6 align-items-center fs-4 text-white bg-primary" style={{ height: '3rem', width: '3rem', borderRadius: '3rem' }}>
-                                                {item?.docType == "image" ? <FaFileImage /> : (item?.docType == "pdf" ? <FaFilePdf /> : (item?.docType=="audio" ? <LuFileAudio /> :<FaFileWord />))}
-                                            </div> */}
                                         </div>
                                         <div className="d-flex align-items-center justify-content-center bg-dark gap-5 w-100 p-2 text-primary">
                                             <p className="fs-5 text-break text-capitalize text-center text-wrap">{item?.docName}</p>

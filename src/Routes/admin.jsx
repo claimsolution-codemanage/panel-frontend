@@ -5,46 +5,47 @@ import { adminAllStatementDownload, adminAllStatment,adminStatements } from "../
 
 
 // for admin routes
-import AdminSignIn from '../pages/admin/signin';
-import AdminSignUp from '../pages/admin/signup'
-import AdminDashboard from '../pages/admin/dashboard'
-import AdminAccountSetting from '../pages/admin/accountSetting'
-import AdminCreateNewEmployee from '../pages/admin/createEmployee'
-import AllAdminCase from '../pages/admin/allcases'
-import AdminViewCase from '../pages/admin/viewcase'
-import AllAdminPartner from '../pages/admin/allPartner'
-import AllAdminClient from '../pages/admin/allClient'
-import AllAdminEmployee from '../pages/admin/allEmployee'
-import AdminPartnerDetails from '../pages/admin/partnerDetails'
-import AdminClientDetails from '../pages/admin/viewClient'
-import AdminAllJobs from '../pages/admin/jobs'
-import AdminEditCase from '../pages/admin/editCase'
-import AdminAllComplaint from '../pages/admin/allComplaints'
-import AdminTrashPartner from '../pages/admin/PartnerTrash'
-import AdminTrashClient from '../pages/admin/ClientTrash'
-import AdminTrashCase from '../pages/admin/CaseTrash'
-import AdminForgetPassword from '../pages/admin/forgetPassword'
-import AdminResetForgetPassword from '../pages/admin/resetForgetPassword'
+import AdminSignIn from "../pages/admin/setting/signin";
+import AdminSignUp from "../pages/admin/setting/signup";
+import AdminDashboard from '../pages/admin/other/dashboard'
+import AdminAccountSetting from '../pages/admin/setting/accountSetting'
+import AdminCreateNewEmployee from '../pages/admin/empoyee/createEmployee'
+import AllAdminCase from '../pages/admin/case/allcases'
+import AdminViewCase from '../pages/admin/case/viewcase'
+import AllAdminPartner from '../pages/admin/partner/allPartner'
+import AllAdminClient from '../pages/admin/client/allClient'
+import AllAdminEmployee from '../pages/admin/empoyee/allEmployee'
+import AdminPartnerDetails from '../pages/admin/partner/partnerDetails'
+import AdminClientDetails from '../pages/admin/client/viewClient'
+import AdminAllJobs from '../pages/admin/other/jobs'
+import AdminEditCase from '../pages/admin/case/editCase'
+import AdminAllComplaint from '../pages/admin/other/allComplaints'
+import AdminTrashPartner from '../pages/admin/partner/PartnerTrash'
+import AdminTrashClient from '../pages/admin/client/ClientTrash'
+import AdminTrashCase from '../pages/admin/case/CaseTrash'
+import AdminForgetPassword from '../pages/admin/setting/forgetPassword'
+import AdminResetForgetPassword from '../pages/admin/setting/resetForgetPassword'
 import MyAdmins from '../pages/admin/SuperAdmin/MyAdmins'
-import AdminViewPartnerReport from '../pages/admin/partnerReport'
-import AdminEditClient from '../pages/admin/editClient'
-import AdminEditPartner from '../pages/admin/editParnter'
-import AdminViewSaleEmpCaseReport from '../pages/admin/saleEmpCaseReport'
-import AdminSaleEmpPartnerReport from '../pages/admin/saleEmpPartnerReport'
-import AdminCreateInvoice from "../pages/admin/createInvoice";
-import AdminAllInvoice from "../pages/admin/allInvoice";
-import AdminViewInvoice from "../pages/admin/viewInvoice";
-import AdminEditInvoice from "../pages/admin/editInvoice";
-import AdminInvoiceTrash from "../pages/admin/InvoiceTrash";
-import AdminCaseDocTrash from "../pages/admin/caseDocTrash";
-import AdminEmployeeTrash from "../pages/admin/EmployeeTrash";
-import AdminViewEmployee from "../pages/admin/ViewEmployee";
-import AdminViewMySathi from "../pages/admin/viewMySathi";
-import AdminRejectCase from '../pages/admin/allRejectCase'
+import AdminViewPartnerReport from '../pages/admin/partner/partnerReport'
+import AdminEditClient from '../pages/admin/client/editClient'
+import AdminEditPartner from '../pages/admin/partner/editParnter'
+import AdminViewSaleEmpCaseReport from '../pages/admin/empoyee/saleEmpCaseReport'
+import AdminSaleEmpPartnerReport from '../pages/admin/empoyee/saleEmpPartnerReport'
+import AdminCreateInvoice from "../pages/admin/invoice/createInvoice";
+import AdminAllInvoice from "../pages/admin/invoice/allInvoice";
+import AdminViewInvoice from "../pages/admin/invoice/viewInvoice";
+import AdminEditInvoice from "../pages/admin/invoice/editInvoice";
+import AdminInvoiceTrash from "../pages/admin/invoice/InvoiceTrash";
+import AdminCaseDocTrash from "../pages/admin/case/caseDocTrash";
+import AdminEmployeeTrash from "../pages/admin/empoyee/EmployeeTrash";
+import AdminViewEmployee from "../pages/admin/empoyee/ViewEmployee";
+import AdminViewMySathi from "../pages/admin/empoyee/viewMySathi";
+import AdminRejectCase from '../pages/admin/case/allRejectCase'
 import ViewAllStatement from "../components/Reuse/ViewAllStatement";
-import AdminAddInvoice from "../pages/admin/addInvoice";
+import AdminAddInvoice from "../pages/admin/invoice/addInvoice";
 import Statement from "../components/Reuse/Statement";
-import AdminNotification from "../pages/admin/allNotification";
+import AdminNotification from "../pages/admin/other/allNotification";
+import AdminEditEmployee from "../pages/admin/empoyee/EditEmployee";
 
 {/* for admin */}
 export const adminRoutes = [
@@ -70,6 +71,7 @@ export const adminRoutes = [
   <Route path='/admin/edit-client/:_id'  element={<AdminTemplate><AdminEditClient/></AdminTemplate>}/>,
   <Route path='/admin/edit-partner/:_id'  element={<AdminTemplate><AdminEditPartner/></AdminTemplate>}/>,
   <Route path='/admin/employee/profile/:_id'  element={<AdminTemplate><AdminViewEmployee/></AdminTemplate>}/>,
+  <Route path='/admin/employee/edit/:_id'  element={<AdminTemplate><AdminEditEmployee/></AdminTemplate>}/>,
   <Route path='/admin/view-employee-case-report/:_id'  element={<AdminTemplate><AdminViewSaleEmpCaseReport/></AdminTemplate>}/>,
   <Route path='/admin/view-employee-partner-report/:_id'  element={<AdminTemplate><AdminSaleEmpPartnerReport/></AdminTemplate>}/>,
   <Route path='/admin/create-invoice/:clientId/:caseId'  element={<AdminTemplate><AdminCreateInvoice/></AdminTemplate>}/>,

@@ -129,8 +129,6 @@ const checkNumber=(e)=>{
   }
 }
 
-console.log("formik",formik,data);
-
 
     return (
         <Modal
