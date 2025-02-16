@@ -10,7 +10,7 @@ export default function ClientAgreement() {
     <div className="container-px-5 px-5">
       
 <p className='pt-5 h1 text-center fw-bold my-5'>SERVICE AGREEMENT</p>
-<p>This agreement is between you (referred to as <strong>"The Client/User/You"</strong>) and <strong>M/s Adakiya Consultancy Services Private Limited</strong>, located at A-3, Kh No - 150, Bhavishya Apartment, Nai Basti Road, Deoli, South Delhi-110080, India (referred to as <strong>"The Consultant" or "Claim Solution"</strong>). "The Consultant" and "The Client" together are called "Parties," and individually as "Party."</p>
+<p>This agreement is between you (referred to as <strong>"The Client/User/You"</strong>) and <strong>M/s Adakiya Consultancy Services Private Limited</strong>, located at A-4 & 5, 3rd Floor, Rajupark, Devli Road, Near Domino's Pizza, New Delhi -110080, India (referred to as <strong>"The Consultant" or "Claim Solution"</strong>). "The Consultant" and "The Client" together are called "Parties," and individually as "Party."</p>
 <div className='fw-bold fs-4 color-4'> When you click the acceptance button, you are explicitly agreeing to and giving your consent to follow all the terms mentioned in this agreement.</div>
 <p>The Consultant mainly works in the business of offering services related to Life, Health, and General Insurance. This includes helping clients with issues like resolving complaints with insurance companies, representing clients at the Ombudsman, and advocating for them at Consumer Forums or Courts.</p>
 <p>Claim Solution's main mission is focused on social causes and improving the overall image of insurance companies for the benefit of the public.</p>
@@ -192,7 +192,7 @@ export default function ClientAgreement() {
 </ul>
 <strong>The addresses for the Company are</strong>
 <p>Attn: Ms Jyoti <br />
-  Address: A-3, Kh No. 150, Bhavishya Apartment, Nai Basti Road, Deoli, South Delhi-110080 <br />
+  Address: A-4 & 5, 3rd Floor, Rajupark, Devli Road, Near Domino's Pizza, New Delhi -110080,India <br />
   <a href="mailto:help@claimsolution.in" target="_blank">Email: </a><a href="mailto:help@claimsolution.in" target="_blank">help@claimsolution.in</a></p>
 <strong>If to the Client:</strong>
 <p>Address: [&bull;] Email: [&bull;]</p>

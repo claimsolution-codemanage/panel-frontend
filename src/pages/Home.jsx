@@ -76,7 +76,7 @@ export default function Home() {
         <div className="modal-dialog modal-md float-end w-100">
           <div className="modal-content">
             <div className="container-fluid">
-              <div className="row shadow-1-strong border border-2 bg-primary border-white rounded-2 p-0">
+              <div className="row shadow-1-strong border-2 bg-primary border-white rounded-2 p-0">
                 <div className="col-md-12 ">
                   <form onSubmit={complaintFormik.handleSubmit}>
                     <div>

@@ -20,7 +20,7 @@ import html2pdf from 'html2pdf.js'
 import html2canvas from 'html2canvas';
 
 
-export default function ViewAllStatement({getStatementApi,type,excelDownloadApi}) {
+export default function ViewAllStatement({getStatementApi,type,excelDownloadApi,fileDetailApi}) {
   const state = useContext(AppContext)
   const param = useParams()
   const {partnerId,empId} = param
@@ -54,7 +54,7 @@ export default function ViewAllStatement({getStatementApi,type,excelDownloadApi}
     setDateRange([{ startDate: new Date("2024/01/01"), endDate: new Date() }])
   }
 
-  // console.log("daterange", dateRange)
+
 
   const getAllStatement = async () => {
     setLoading(true)
@@ -65,7 +65,7 @@ export default function ViewAllStatement({getStatementApi,type,excelDownloadApi}
       if (res?.data?.success && res?.data?.data?.data) {
         setData(res?.data?.data?.data)
         setNoOfData(res?.data?.data?.totalData)
-        console.log(res?.data?.data?.data?.length);
+        // console.log(res?.data?.data?.data?.length);
         
         setStatementOf(res?.data?.data?.statementOf)        
         setLoading(false)
@@ -86,7 +86,7 @@ export default function ViewAllStatement({getStatementApi,type,excelDownloadApi}
       const endDate = dateRange.endDate ? getFormateDate(dateRange.endDate) : ""
       setDownloading(true)
       const res = await excelDownloadApi(startDate, endDate,partnerId,empId)
-      console.log("res", res);
+      // console.log("res", res);
       if (res?.status == 200) {
         const url = window.URL.createObjectURL(new Blob([res.data]));
         const a = document.createElement('a');
@@ -102,7 +102,7 @@ export default function ViewAllStatement({getStatementApi,type,excelDownloadApi}
 
       }
     } catch (error) {
-      console.log("error", error);
+      // console.log("error", error);
       if (error && error?.response?.data?.message) {
         toast.error(error?.response?.data?.message)
       } else {
@@ -366,7 +366,7 @@ export default function ViewAllStatement({getStatementApi,type,excelDownloadApi}
 
           </div>
         </div>
-          <CreateOrUpdateStatmentModal show={showStatement?.status} data={showStatement?.data} hide={()=>setShowStatement({...showStatement,status:!showStatement?.status})} partnerId={partnerId} empId={empId} type={type}/>
+          <CreateOrUpdateStatmentModal show={showStatement?.status} data={showStatement?.data} hide={()=>setShowStatement({...showStatement,status:!showStatement?.status})} partnerId={partnerId} empId={empId} type={type} fileDetailApi={fileDetailApi}/>
           
           {/* <StatementPdf data={downloadPdf?.data} statementOf={downloadPdf?.statementOf} dateRange={dateRange}/> */}
           <StatementPdf data={data} statementOf={statementOf} dateRange={dateRange}/>

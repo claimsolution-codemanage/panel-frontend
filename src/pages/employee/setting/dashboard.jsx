@@ -11,10 +11,10 @@ import {
   Legend,
 } from 'chart.js';
 import { Line,Pie } from 'react-chartjs-2';
-import {CiAlignBottom,CiBookmark,CiStar,CiShoppingTag,CiGrid41} from 'react-icons/ci'
-import Loader from '../../components/Common/loader';
+import {CiAlignBottom} from 'react-icons/ci'
+import Loader from '../../../components/Common/loader';
 import { useState } from 'react';
-import { allMonths } from '../../utils/constant';
+import { allMonths } from '../../../utils/constant';
 import { Link } from 'react-router-dom';
 
 
@@ -33,11 +33,11 @@ ChartJS.register(
 
 
 
-import { adminDashboardData,allEmployeeDashboardData } from '../../apis';
+import { allEmployeeDashboardData } from '../../../apis';
 import {toast} from 'react-toastify'
 import { useEffect } from 'react';
 import { useContext } from 'react';
-import { AppContext } from '../../App';
+import { AppContext } from '../../../App';
 export default function AdminDasboard() {
   const state = useContext(AppContext)
   const [loading,setLoading] = useState(false)

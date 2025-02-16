@@ -1,27 +1,27 @@
 import EmployeeTemplate from "../template/employeeTemplate"
 import PanelTemplate from "../template/PanelTemplate"
 import { Route } from "react-router-dom"
-import { empAllStatementDownload, empOpAllStatment, empOpStatments } from "../apis"
+import { empAllStatementDownload, empFindCaseByFileNoApi, empOpAllStatment, empOpStatments } from "../apis"
 
 
 // for employee routes
-import EmployeeDasboard from '../pages/employee/dashboard'
-import EmployeeSignIn from '../pages/employee/signin'
-import EmployeeForgetPassword from '../pages/employee/forgetPassword'
-import EmployeeAllCase from '../pages/employee/allCase'
-import EmployeeViewCase from '../pages/employee/viewCase'
-import EmployeeAllClient from '../pages/employee/allClient'
-import EmployeeClientDetails from '../pages/employee/viewClient'
+import EmployeeDasboard from '../pages/employee/setting/dashboard'
+import EmployeeSignIn from '../pages/employee/setting/signin'
+import EmployeeForgetPassword from '../pages/employee/setting/forgetPassword'
+import EmployeeAllCase from '../pages/employee/cases/allCase'
+import EmployeeViewCase from '../pages/employee/cases/viewCase'
+import EmployeeAllClient from '../pages/employee/client/allClient'
+import EmployeeClientDetails from '../pages/employee/client/viewClient'
 import EmployeeAllPartner from '../pages/employee/allPartner'
 import EmployeePartnerDetails from '../pages/employee/viewPartner'
-import EmployeeResetPassword from '../pages/employee/resetPassword'
+import EmployeeResetPassword from '../pages/employee/setting/resetPassword'
 import EmployeeCreateInvoice from '../pages/employee/finance/pages/CreateInvoice'
 import EmployeeAllInvoices from '../pages/employee/finance/pages/AllInvoices'
 import EmployeeViewInvoice from '../pages/employee/finance/pages/ViewInvoice'
-import EmployeeResetForgetPassword from '../pages/employee/resetForgetPassword'
+import EmployeeResetForgetPassword from '../pages/employee/setting/resetForgetPassword'
 import EmployeeEditInvoice from '../pages/employee/finance/pages/editInvoice'
-import EmployeeEditCase from '../pages/employee/editCase'
-import EmployeeEditClient from '../pages/employee/editClient'
+import EmployeeEditCase from '../pages/employee/cases/editCase'
+import EmployeeEditClient from '../pages/employee/client/editClient'
 import EmployeeEditPartner from '../pages/employee/editPartner'
 import EmpSaleNewCase from '../pages/employee/sales/addCase'
 import EmployeeInvoiceTrash from '../pages/employee/finance/pages/InvoiceTrash'
@@ -31,7 +31,7 @@ import EmpViewProfile from "../pages/employee/viewProfile"
 import EmployeeAddSathiAcc from "../pages/employee/createSathiAcc"
 import EmpViewMySathi from "../pages/employee/viewMySathi"
 import EmployeeAddInvoice from "../pages/employee/finance/pages/addInvoice"
-import EmpNotification from "../pages/employee/allNotification"
+import EmpNotification from "../pages/employee/setting/allNotification"
 
 // for sale employee
 import EmployeeAddPartner from '../pages/employee/sales/addPartner'
@@ -68,10 +68,10 @@ export const employeeRoutes = [
   <Route path='/employee/branch-team'  element={<EmployeeTemplate><EmpBranchTeam/></EmployeeTemplate>}/>,
   <Route path='/employee/add-sathi-team'  element={<EmployeeTemplate><EmployeeAddSathiAcc/></EmployeeTemplate>}/>,
   <Route path='/employee/view-sathi/:_id'  element={<EmployeeTemplate><EmpViewMySathi/></EmployeeTemplate>}/>,
-  <Route path='/employee/statement/partner/:partnerId'  element={<EmployeeTemplate><ViewAllStatement getStatementApi={empOpAllStatment} excelDownloadApi={empAllStatementDownload} type={"operation"}/></EmployeeTemplate>}/>,
-  <Route path='/employee/statement/employee/:empId'  element={<EmployeeTemplate><ViewAllStatement getStatementApi={empOpAllStatment} excelDownloadApi={empAllStatementDownload} type={"operation"}/></EmployeeTemplate>}/>,
-  <Route path='/employee/statement/sathi-team/:empId'  element={<EmployeeTemplate><ViewAllStatement getStatementApi={empOpAllStatment} excelDownloadApi={empAllStatementDownload} type={"sathi team"}/></EmployeeTemplate>}/>,
-  <Route path='/employee/statement'  element={<EmployeeTemplate><Statement getStatementApi={empOpStatments} excelDownloadApi={empAllStatementDownload} type={"operation"}/></EmployeeTemplate>}/>,
+  <Route path='/employee/statement/partner/:partnerId'  element={<EmployeeTemplate><ViewAllStatement getStatementApi={empOpAllStatment} excelDownloadApi={empAllStatementDownload} fileDetailApi={empFindCaseByFileNoApi} type={"operation"}/></EmployeeTemplate>}/>,
+  <Route path='/employee/statement/employee/:empId'  element={<EmployeeTemplate><ViewAllStatement getStatementApi={empOpAllStatment} excelDownloadApi={empAllStatementDownload} fileDetailApi={empFindCaseByFileNoApi} type={"operation"}/></EmployeeTemplate>}/>,
+  <Route path='/employee/statement/sathi-team/:empId'  element={<EmployeeTemplate><ViewAllStatement getStatementApi={empOpAllStatment} excelDownloadApi={empAllStatementDownload} fileDetailApi={empFindCaseByFileNoApi} type={"sathi team"}/></EmployeeTemplate>}/>,
+  <Route path='/employee/statement'  element={<EmployeeTemplate><Statement getStatementApi={empOpStatments} excelDownloadApi={empAllStatementDownload} fileDetailApi={empFindCaseByFileNoApi} type={"operation"}/></EmployeeTemplate>}/>,
   <Route path='/employee/notification'  element={<EmployeeTemplate><EmpNotification/></EmployeeTemplate>}/>,
 
 ]

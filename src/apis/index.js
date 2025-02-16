@@ -678,7 +678,10 @@ export const adminUpdateNotificationApi = (data) => {
   return axios.put(`${API_BASE}/api/admin/updateNotification`, data)
 }
 
-
+export const adminFindCaseByFileNoApi= (fileNo="") => {
+  setheader()
+  return axios.get(`${API_BASE}/api/admin/adminFindCaseByFileNo?fileNo=${fileNo}`)
+}
 
 
 
@@ -1185,4 +1188,9 @@ export const empAllStatementDownload = (startDate = "", endDate = "",partnerId="
     url: `${API_BASE}/api/employee/emp/download/empDownloadAllStatement?startDate=${startDate}&endDate=${endDate}&partnerId=${partnerId}&empId=${empId}`,
     responseType: 'blob',
   })
+}
+
+export const empFindCaseByFileNoApi= (fileNo="") => {
+  setheader()
+  return axios.get(`${API_BASE}/api/employee/employeeFindCaseByFileNo?fileNo=${fileNo}`)
 }

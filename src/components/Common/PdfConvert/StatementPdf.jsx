@@ -195,7 +195,7 @@ export default function StatementPdf({ statementOf, data, dateRange }) {
             </div>
             <div className='bg-logo2 text-center text-black py-1' >
                Adakiya Consultancy Services Pvt. Ltd<br/>
-               150, Bhavishya Apartment in Nai Basti Road Deoli, Nai Basti Road, Deoli, South Delhi - 110080, India
+               Regional Office Address - A-4 & 5, 3rd Floor, Rajupark, Devli Road, Near Domino's Pizza, New Delhi -110080, India
                </div>
                <div className='bg-logo1 text-white d-flex py-1 gap-3 align-items-center justify-content-center' style={{color:'white'}}>
                  <p className='p-0 m-0'>Connect with us online:</p>

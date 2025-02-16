@@ -2,10 +2,10 @@ import { Link, useParams } from 'react-router-dom'
 import { useNavigate } from 'react-router-dom'
 import { useState } from 'react'
 import { useContext } from 'react'
-import { AppContext } from '../../App'
+import { AppContext } from '../../../App'
 import { toast } from 'react-toastify'
-import { employeeResetForgetPassword } from '../../apis'
-import { setToken } from '../../utils/helperFunction'
+import { employeeResetForgetPassword } from '../../../apis'
+import { setToken } from '../../../utils/helperFunction'
 import { BsEyeSlashFill } from "react-icons/bs";
 import { BsEyeFill } from "react-icons/bs";
 

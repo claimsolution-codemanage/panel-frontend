@@ -11,7 +11,8 @@ export default function PartnerAgreement() {
     <p className='h3 py-4 mt-5 fw-bold text-center'>Agreement Terms &amp; Conditions</p>
 <p>This business support agreement is between <strong>"The Partner/User/You" </strong>(which means you and includes your successors, legal representatives, and allowed assigns) as the <strong>First Part</strong>.</p>
 <p className='text-center'>AND</p>
-<p><strong>Adakiya Consultancy Services Pvt. Ltd.</strong>, is a company registered in India with its main office at Kh No. 150, Bhavishya Apartment, Nai Basti Road, Deoli, South Delhi-110080, India (referred to as the "Company," which term includes any successors or permitted assigns), is the<strong> Second Part </strong> in this agreement.</p>
+<p><strong>Adakiya Consultancy Services Pvt. Ltd.</strong>, is a company registered in India with its main office at A-4 & 5, 3rd Floor, Rajupark, Devli Road,
+Near Domino's Pizza, New Delhi -110080, India (referred to as the "Company," which term includes any successors or permitted assigns), is the<strong> Second Part </strong> in this agreement.</p>
 <p>Both <strong>"The Company" </strong>and <strong>"the Partner" </strong>are together called <strong>"Parties" </strong>in this agreement, and each one is referred to individually as a <strong>"Party."</strong></p>
 <div className='fw-bold mt-5 fs-2'>By selecting the acceptance button, the Partner expressly acknowledges and agrees to adhere to the entirety of the conditions outlined in this agreement.</div>
 <p className='h4 fw-bold mt-5'>WHEREAS</p>

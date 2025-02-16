@@ -69,7 +69,7 @@ useEffect(() => {
   const senderFormik = useFormik({
     initialValues: {
       name: "ADAKIYA CONSULTANCY SERVICES PVT.LTD",
-      address: "A-3, KH NO-150, Bhavishya Apartment,Nai Basti Road,Deoli,South Delhi,Delhi-110062,India",
+      address: "A-4 & 5, 3rd Floor, Rajupark, Devli Road, Near Domino's Pizza, New Delhi -110080,India",
       state: "Delhi",
       country: "IN",
       pinCode: "110062",

@@ -1,17 +1,10 @@
-import { useEffect, useState } from "react"
-import { Link, useNavigate } from "react-router-dom"
-import { adminResetPassword } from "../../apis"
-
-import { setToken,getJwtDecode } from "../../utils/helperFunction"
+import { useState } from "react"
+import { useNavigate } from "react-router-dom"
 import {toast} from 'react-toastify'
-import { AppContext } from "../../App"
-import { useContext } from "react"
-import { LuPcCase } from 'react-icons/lu'
-import { IoArrowBackCircleOutline } from 'react-icons/io5'
 import { BsEyeSlashFill } from "react-icons/bs";
 import { BsEyeFill } from "react-icons/bs";
-import Loader from "../../components/Common/loader"
-import { employeResetPassword} from "../../apis"
+import Loader from "../../../components/Common/loader"
+import { employeResetPassword} from "../../../apis"
 
 export default function EmployeeResetPassword(){
     const [data,setData] =useState({password:"",confirmPassword:""})

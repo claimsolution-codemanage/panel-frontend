@@ -1,7 +1,7 @@
 import AdminTemplate from "../template/adminTemplate"
 import PanelTemplate from "../template/PanelTemplate"
 import {Route} from 'react-router-dom'
-import { adminAllStatementDownload, adminAllStatment,adminStatements } from "../apis";
+import { adminAllStatementDownload, adminAllStatment,adminFindCaseByFileNoApi,adminStatements } from "../apis";
 
 
 // for admin routes
@@ -87,9 +87,9 @@ export const adminRoutes = [
   <Route path='/admin/all-trash-employee'  element={<AdminTemplate><AdminEmployeeTrash/></AdminTemplate>}/>,
   <Route path='/admin/view-sathi/:_id'  element={<AdminTemplate><AdminViewMySathi/></AdminTemplate>}/>,
   <Route path='/admin/reject-cases'  element={<AdminTemplate><AdminRejectCase/></AdminTemplate>}/>,
-  <Route path='/admin/statement/partner/:partnerId'  element={<AdminTemplate><ViewAllStatement getStatementApi={adminAllStatment} excelDownloadApi={adminAllStatementDownload} type={"admin"}/></AdminTemplate>}/>,
-  <Route path='/admin/statement/employee/:empId'  element={<AdminTemplate><ViewAllStatement getStatementApi={adminAllStatment} excelDownloadApi={adminAllStatementDownload} type={"admin"}/></AdminTemplate>}/>,
-  <Route path='/admin/statement'  element={<AdminTemplate><Statement getStatementApi={adminStatements} excelDownloadApi={adminAllStatementDownload} type={"admin"}/></AdminTemplate>}/>,
+  <Route path='/admin/statement/partner/:partnerId'  element={<AdminTemplate><ViewAllStatement getStatementApi={adminAllStatment} excelDownloadApi={adminAllStatementDownload} fileDetailApi={adminFindCaseByFileNoApi} type={"admin"}/></AdminTemplate>}/>,
+  <Route path='/admin/statement/employee/:empId'  element={<AdminTemplate><ViewAllStatement getStatementApi={adminAllStatment} excelDownloadApi={adminAllStatementDownload} fileDetailApi={adminFindCaseByFileNoApi} type={"admin"}/></AdminTemplate>}/>,
+  <Route path='/admin/statement'  element={<AdminTemplate><Statement getStatementApi={adminStatements} excelDownloadApi={adminAllStatementDownload} fileDetailApi={adminFindCaseByFileNoApi} type={"admin"}/></AdminTemplate>}/>,
   <Route path='/admin/notification'  element={<AdminTemplate><AdminNotification/></AdminTemplate>}/>,
 
 ]

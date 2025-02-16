@@ -17,7 +17,7 @@ export default function Contact() {
             <div className="col-sm-6">
               <div className="mapouter ">
                 <div className="gmap_canvas card-shadow">
-                  <iframe class="gmap_iframe" width="100%" frameborder="0" marginheight="0" marginwidth="0" src="https://maps.google.com/maps?width=500&amp;height=300&amp;hl=en&amp;q=Bhavishya Apartment, Nai Basti Road, Deoli, South Delhi - 110080, India&amp;t=&amp;z=14&amp;ie=UTF8&amp;iwloc=B&amp;output=embed"></iframe>
+                  <iframe class="gmap_iframe" width="100%" frameborder="0" marginheight="0" marginwidth="0" src="https://maps.google.com/maps?width=500&amp;height=300&amp;hl=en&amp;q=A-4 & 5, 3rd Floor, Rajupark, Devli Road, Near Domino's Pizza, New Delhi -110080, India&amp;t=&amp;z=14&amp;ie=UTF8&amp;iwloc=B&amp;output=embed"></iframe>
                   <a target="_blank" href="https://connectionsgame.org/">Connections Unlimited</a>
                 </div>
               </div>
@@ -29,8 +29,8 @@ export default function Contact() {
                   <div className="d-flex gap-2">
                   <i class="bi bi-building fs-5"></i>
                   Adakiya Consultancy Services Pvt. Ltd, <br />
-                  150, Bhavishya Apartment in Nai Basti Road Deoli,
-                  Nai Basti Road, Deoli, South Delhi - 110080, India
+                  Regional Office Address - A-4 & 5, 3rd Floor, Rajupark, Devli Road,
+                   Near Domino's Pizza, New Delhi -110080, India
                   </div>
 
                   <div className="d-flex gap-2">

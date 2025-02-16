@@ -1,8 +1,7 @@
-import { employeeAllCase } from "../../apis"
-import { employeeChangeCaseStatus,salesAllCaseDownload,empOptGetNormalEmployee,empOptShareSaleEmployee } from "../../apis"
-import { AppContext } from "../../App"
+import { employeeChangeCaseStatus,salesAllCaseDownload,empOptGetNormalEmployee,empOptShareSaleEmployee,employeeAllCase } from "../../../apis"
+import { AppContext } from "../../../App"
 import { useContext} from "react"
-import ViewAllCaseComp from "../../components/Reuse/ViewAllCaseComp"
+import ViewAllCaseComp from "../../../components/Reuse/ViewAllCaseComp"
 import { useParams } from "react-router-dom"
  
 export default function EmployeeAllCase() {

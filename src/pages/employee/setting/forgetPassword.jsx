@@ -2,10 +2,10 @@ import { Link } from 'react-router-dom'
 import { useNavigate } from 'react-router-dom'
 import { useState } from 'react'
 import { useContext } from 'react'
-import { AppContext } from '../../App'
+import { AppContext } from '../../../App'
 import {toast} from 'react-toastify'
-import { employeeForgetPassword } from '../../apis'
-import { setToken } from '../../utils/helperFunction'
+import { employeeForgetPassword } from '../../../apis'
+import { setToken } from '../../../utils/helperFunction'
 
 
 export default function EmployeeForgetPassword(){

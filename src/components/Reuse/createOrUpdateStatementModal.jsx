@@ -8,13 +8,10 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { adminCreateOrUpdateStatment,empOpCreateOrUpdateStatment } from '../../apis';
 
-
-
-
-
-export default function CreateOrUpdateStatmentModal({show,hide,type,partnerId,empId,data,all}) {
+export default function CreateOrUpdateStatmentModal({show,hide,type,partnerId,empId,data,all,fileDetailApi}) {
     const [loading,setLoading] = useState(false)
-   console.log("type",type);
+    const [search,setSearch] = useState(false)
+  //  console.log("type",type);
    
 
 
@@ -123,11 +120,44 @@ const checkNumber=(e)=>{
   if(!isNaN(value)){
     formik.handleChange(e)
   }else{
-    if(value?.inclues(' ')){
+    if(value?.includes(' ')){
     formik.handleChange(e)
     }
   }
 }
+
+const handleSearch = async()=>{
+  if(formik.values?.fileNo){
+    try {
+      setSearch(true)
+       const res = await fileDetailApi(formik.values?.fileNo)
+       const data = res?.data?.data?.[0]
+       if(data){
+        const {claimAmount,employeeDetails,name,insuranceCompanyName,partnerDetails,policyNo} = data
+        formik.setFieldValue("policyHolder",name || "")
+        formik.setFieldValue("policyNo",policyNo || "")
+        formik.setFieldValue("claimAmount",claimAmount || "")
+        formik.setFieldValue("insuranceCompanyName",insuranceCompanyName || "")
+        if(!partnerId && !empId){
+          formik.setFieldValue("partnerEmail",partnerDetails?.email || "")
+          formik.setFieldValue("empEmail",employeeDetails?.email || "")
+        }
+        toast.success("Success")
+       }
+      setSearch(false)
+    } catch (error) {
+      console.log("error", error);
+      if (error && error?.response?.data?.message) {
+        toast.error(error?.response?.data?.message)
+      } else {
+        toast.error("Failed to download")
+      }
+      setSearch(false)      
+    }
+  }
+}
+
+
 
 
     return (
@@ -173,7 +203,12 @@ const checkNumber=(e)=>{
                 </div>
                 <div className="form-group ">
                   <label for="fileNo" className="col-form-label">File No:</label>
-                  <input type="text" name='fileNo' value={formik.values?.fileNo} onChange={checkNumber} className={`form-control ${formik.errors?.fileNo && formik.touched?.fileNo && "border-danger"}`}  />
+                  <div className='d-flex w-100 align-items-center gap-2'>
+                  <div className='w-100'>
+                  <input type="text" name='fileNo' value={formik.values?.fileNo} onChange={checkNumber} className={`form-control w-100 ${formik.errors?.fileNo && formik.touched?.fileNo && "border-danger"}`}  />
+                  </div>
+                    <button type='search' className='btn btn-sm btn-primary' disabled={search || !formik.values?.fileNo?.trim()}  onClick={handleSearch}>Search</button>
+                  </div>
                     <p className='text-danger'>{formik.touched?.fileNo && formik.errors?.fileNo}</p>
                 </div>
                 <div className="form-group ">
@@ -216,11 +251,6 @@ const checkNumber=(e)=>{
                   <input type="text" name='payableAmt' value={formik.values?.payableAmt} onChange={checkNumber} className={`form-control ${formik.errors?.payableAmt && formik.touched?.payableAmt && "border-danger"}`}  />
                     <p className='text-danger'>{formik.touched?.payableAmt && formik.errors?.payableAmt}</p>
                 </div>
-                {/* <div className="form-group ">
-                  <label for="utrDetails" className="col-form-label">UTR details:</label>
-                  <input type="text" name='utrDetails' value={formik.values?.utrDetails} onChange={formik.handleChange} className={`form-control ${formik.errors?.utrDetails && formik.touched?.utrDetails && "border-danger"}`}  />
-                    <p className='text-danger'>{formik.touched?.utrDetails && formik.errors?.utrDetails}</p>
-                </div> */}
               </form>
 
                 </div>

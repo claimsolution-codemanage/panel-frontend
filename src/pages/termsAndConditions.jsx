@@ -50,8 +50,8 @@ export default function TermsAndCondition(){
   <p>
     <span >
       Claim Solution currently owns and runs the Website. The registered address
-      of Claim Solution is 150, Bhavishya Apartment, Nai Basti Road, Deoli,
-      South Delhi, Delhi – 110080, India.
+      of Claim Solution is A-4 & 5, 3rd Floor, Rajupark, Devli Road,
+      Near Domino's Pizza, New Delhi -110080, India.
     </span>
   </p>
   <p>&nbsp;</p>
@@ -872,29 +872,6 @@ export default function TermsAndCondition(){
     <br />
   </p>
 </>
-
-                    {/* <div className="h1 text-center fw-bold py-3">Terms and Conditions</div>
-                    <div className="m-2 p-2 color-1c"><span className="fw-bold">Make sure you carefully read and understand all the terms and conditions.</span> values your privacy. This statement explains how we gather, handle, use, store, and share your personal information. It shows our dedication to protecting your privacy. Claim Solution, also known as "we" or "our," owns, creates, and manages the <span className="fw-bold">website www.claimsolution.in ("Website")</span>. This site displays services and allows transactions related to these services. Anyone visiting the Website is referred to as "you" or "Users." This policy applies to all activities within our company, including visits to our websites.
-                      
-                    </div>
-                    <div className="fs-4 fw-bold py-3 mt-3">Acceptance of Terms</div>
-                    <div className="mt-2">
-                        The rules and conditions mentioned below (known as "Terms of Use") along with the Privacy Policy make a legal agreement between Adakiya Consultants Services Private Limited (referred to as "Claim Solution/the Company") and you. These Terms of Use have details that explain the boundaries, legal rights, and responsibilities related to your use of (i) the website, which includes classified ads, forums, email functions, internet links, and all content and services available on the domain and sub-domains found at www.claimsolution.in (referred to as the "Website"), and (ii) the online transactions between users of the Website. Some users offer services to settle the unmet needs of mistreated Insurance Policy Holders (called "Service Providers"), and others seek help from Service Providers to resolve their grievances (called "Service Users") through the Website. All these services are collectively known as the "Services." The Terms of Use mentioned here include the Privacy Policy and apply to all users of the Website, including those who contribute video content, information, private and public messages, advertisements, and other materials or services on the Website
-                        <br /><br />
-                        Claim Solution currently owns and runs the Website. The registered address of Claim Solution is 150, Bhavishya Apartment, Nai Basti Road, Deoli, South Delhi, Delhi – 110080, India.
-                        <br /><br />
-                        You understand that the Website is a platform for Service Providers and Service Users to agree on services. By using, visiting, registering, or participating in this Website, including the Services offered, you confirm that: (1) you are either a Service Provider or a potential Service User, (2) you have the authority to accept these Terms of Use, (3) you allow the transfer of payment for requested Services through the Website, and (4) you agree to follow all the terms and conditions in these Terms of Use and any other documents mentioned here. If you don't agree with this, you are not allowed to access or use the Website. If you disagree with any of the terms, please stop viewing or participating on the Website immediately.
-                        <br /><br />
-                        Whenever "you" or "your" is mentioned, it refers to the person accessing, using, and/or participating in the Website. If you explore the Website or create an Account (as defined below) for a business, you confirm that you have the authority to represent that business. Your acceptance of the Terms of Use will be considered as the business's acceptance, and in this context, "you" and "your" will refer to that business.
-                        <b>1. CHANGES TO TERMS OF USE AND/OR PRIVACY POLICY</b>
-                        <br /><br />
-                        Claim Solution has the authority to, at its discretion, modify, alter, or otherwise update the Terms of Use and any other documents referred to here to comply with legal and regulatory requirements and for other valid business reasons. This can happen at any time, and Claim Solution will notify users of these changes by posting notices on the Terms & Conditions page on the Website. It's your responsibility to check the Terms of Use for any updates regularly, and we encourage you to do so. If the Terms of Use are amended and you continue to use the Website, you agree to and accept the revised Terms of Use. If you do not agree with these or any future Terms of Use, please refrain from using or accessing the Website.
-                        <br /><br />
-                        <b>2. PRIVACY POLICY</b>
-                        <br /><br />                        
-                        Claim Solution has a Privacy Policy in place to clarify how user information is gathered and utilized. This Privacy Policy is mentioned earlier and is considered a part of the Terms of Use outlined here. Your activities on this Website are subject to the regulations set in the Privacy Policy.
-                    </div>
-                     */}
                 </div>
             </div>
         </>

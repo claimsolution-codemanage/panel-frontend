@@ -1,7 +1,7 @@
-import { employeeUpdateClient,employeeGetClientById } from "../../apis"
+import { employeeUpdateClient,employeeGetClientById } from "../../../apis"
 import { useParams } from "react-router-dom"
-import { employeeImageUpload,employeeAttachementUpload } from '../../apis/upload'
-import EditClient from '../../components/Reuse/EditClientComp'
+import { employeeImageUpload,employeeAttachementUpload } from '../../../apis/upload'
+import EditClient from '../../../components/Reuse/EditClientComp'
 
 
 

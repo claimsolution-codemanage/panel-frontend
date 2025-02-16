@@ -1,30 +1,21 @@
-import { allAdminPartner } from "../../apis"
 import { useState, useEffect } from "react"
 import { toast } from 'react-toastify'
 import { HiMiniEye } from 'react-icons/hi2'
 import { BsSearch } from 'react-icons/bs'
-import { caseStatus } from "../../utils/constant"
-import { DateRangePicker } from 'react-date-range';
-import { DateRange } from 'react-date-range';
 import 'react-date-range/dist/styles.css'; // main style file
 import 'react-date-range/dist/theme/default.css'; // theme css file
-import { getFormateDMYDate, getFormateDate } from "../../utils/helperFunction"
+import { getFormateDMYDate, getFormateDate } from "../../../utils/helperFunction"
 import ReactPaginate from 'react-paginate';
 import { CiEdit } from 'react-icons/ci'
-import { FaCircleArrowDown } from 'react-icons/fa6'
-import { LuPcCase } from 'react-icons/lu'
-import { IoArrowBackCircleOutline } from 'react-icons/io5'
-import ChangeStatusModal from "../../components/Common/changeStatusModal"
 import { Link, useLocation, useNavigate } from "react-router-dom"
 import {BiLeftArrow} from 'react-icons/bi'
 import {BiRightArrow} from 'react-icons/bi'
-import SetStatusOfProfile from "../../components/Common/setStatusModal"
-import { adminSetClientStatus,employeeAllClient,empClientDownload } from "../../apis"
-import Loader from "../../components/Common/loader"
+import { adminSetClientStatus,employeeAllClient,empClientDownload } from "../../../apis"
+import Loader from "../../../components/Common/loader"
 import loash from 'lodash'
-import { AppContext } from "../../App"
+import { AppContext } from "../../../App"
 import { useContext } from "react"
-import DateSelect from "../../components/Common/DateSelect"
+import DateSelect from "../../../components/Common/DateSelect"
 import { CiFilter } from "react-icons/ci";
 import { SiMicrosoftexcel } from "react-icons/si"
 

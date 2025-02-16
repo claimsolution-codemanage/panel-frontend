@@ -18,7 +18,7 @@ import CreateOrUpdateStatmentModal from "./createOrUpdateStatementModal";
 import { BsSearch } from "react-icons/bs";
 import { AppContext } from "../../App";
 
-export default function Statement({getStatementApi,type,excelDownloadApi}) {
+export default function Statement({getStatementApi,type,excelDownloadApi,fileDetailApi}) {
 const state = useContext(AppContext)
   const searchRef = useRef()
   const [data, setData] = useState([])
@@ -276,7 +276,7 @@ const state = useContext(AppContext)
 
           </div>
         </div>
-          <CreateOrUpdateStatmentModal show={showStatement?.status} data={showStatement?.data} hide={()=>setShowStatement({...showStatement,status:!showStatement?.status})}  type={type} all={showStatement?.create}/>
+          <CreateOrUpdateStatmentModal show={showStatement?.status} data={showStatement?.data} hide={()=>setShowStatement({...showStatement,status:!showStatement?.status})}  type={type} all={showStatement?.create} fileDetailApi={fileDetailApi}/>
       </div>}
   </>)
 }
