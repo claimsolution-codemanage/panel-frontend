@@ -141,7 +141,7 @@ export default function AdminSaleEmpPartnerReport() {
       const endDate = dateRange.endDate ? getFormateDate(dateRange.endDate) : ""
       setDownloading(true)
       const res = await adminSaleEmpPartnerDownload(param?._id, searchQuery, type, startDate, endDate)
-      console.log("res", res);
+      // console.log("res", res);
       if (res?.status == 200) {
         const url = window.URL.createObjectURL(new Blob([res.data]));
         const a = document.createElement('a');

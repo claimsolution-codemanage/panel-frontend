@@ -56,7 +56,7 @@ export default function EmployeeProfile({ _id, getProfile }) {
                                     <div className="row row-cols-12">
                                             <div className="align-items-center justify-content-center my-3 d-flex flex-column">
                                                 <div className="d-flex align-items-center justify-content-center">
-                                                    <img src={"/Images/home/profile.jpg"} alt="profileImg" style={{ height: 150, width: 150, borderRadius: 150, cursor: "pointer" }} />
+                                                    <img src={data?.profileImg || "/Images/home/profile.jpg"} alt="profileImg" style={{ height: 150, width: 150, borderRadius: 150, cursor: "pointer" }} />
                                                 </div>
                                             </div>
                                  

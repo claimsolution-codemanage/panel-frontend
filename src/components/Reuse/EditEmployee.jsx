@@ -19,7 +19,7 @@ import { MdOutlineCancel } from "react-icons/md";
 import { IoMdAdd } from "react-icons/io";
 import AddNewCaseDocsModal from "../Common/addNewCaseDoc";
 
-export default function EditEmployeeComp({ getProfile, updateProfile, imageUpload, id, attachementUpload }) {
+export default function EditEmployeeComp({ getProfile, updateProfile, imageUpload, id, attachementUpload,joiningFormUrl }) {
     const param = useParams()
     const [data, setData] = useState({
         profilePhoto: "",
@@ -181,6 +181,8 @@ export default function EditEmployeeComp({ getProfile, updateProfile, imageUploa
                         </div>
                     </div>
                     <div className="">
+                        {joiningFormUrl && <div onClick={()=>navigate(`${joiningFormUrl}/${id}`)} className="btn btn-primary">Joining Form</div>}
+                        
                     </div>
 
                 </div>

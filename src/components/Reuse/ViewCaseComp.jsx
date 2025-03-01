@@ -244,7 +244,7 @@ export default function ViewCaseComp({ id, getCase, role, attachementUpload, add
     }
 
     const handleRemoveCaseReference = async () => {
-        console.log("handleRemoveCaseReference",data[0]?._id, removeCaseReference?.type);
+        // console.log("handleRemoveCaseReference",data[0]?._id, removeCaseReference?.type);
         
         // return
         if (removeCaseReference?.type) {

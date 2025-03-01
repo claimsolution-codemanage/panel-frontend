@@ -100,7 +100,7 @@ export default function AllEmployee(props) {
       const type = true
       setDownloading(true)
       const res = await getDownload(pageItemLimit, pgNo, searchQuery,!isTrash,empType,empId||"")
-      console.log("res", res);
+      // console.log("res", res);
       if (res?.status == 200) {
         const url = window.URL.createObjectURL(new Blob([res.data]));
         const a = document.createElement('a');

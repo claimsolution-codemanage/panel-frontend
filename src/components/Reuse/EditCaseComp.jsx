@@ -275,7 +275,7 @@ export default function EditCaseComp({viewCase,updateCase,attachementUpload,addC
                     caseDetailsFormik.setValues(res?.data?.data)
                     const details =res?.data?.data
                     if(details?.policyType && !policyType?.includes(details?.policyType)){
-                        console.log(details?.policyType,details?.complaintType);
+                        // console.log(details?.policyType,details?.complaintType);
                         caseDetailsFormik.setFieldValue("policyType","Other")
                         setOthers((pre)=>{return {...pre,policy:details?.policyType}})
                     }

@@ -683,6 +683,19 @@ export const adminFindCaseByFileNoApi= (fileNo="") => {
   return axios.get(`${API_BASE}/api/admin/adminFindCaseByFileNo?fileNo=${fileNo}`)
 }
 
+//joining form
+
+export const adminAddOrUpdateJoiningFormApi = (payload) => {
+  setheader()
+  return axios.post(`${API_BASE}/api/admin/employee/adminAddOrUpdateEmpJoiningForm`, payload)
+}
+
+export const adminGetEmpJoiningFormApi = (empId) => {
+  setheader()
+  return axios.get(`${API_BASE}/api/admin/employee/admingetEmpJoiningForm?empId=${empId}`)
+}
+
+
 
 
 

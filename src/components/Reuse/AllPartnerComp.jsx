@@ -108,7 +108,7 @@ export default function AllPartnerComp({empId,getPartner,editUrl,viewUrl,showTyp
       const endDate = dateRange.endDate ? getFormateDate(dateRange.endDate) : ""
       setDownloading(true)
       const res = await downloadPartner(searchQuery, type, startDate, endDate,empId)
-      console.log("res", res);
+      // console.log("res", res);
       if (res?.status == 200) {
         const url = window.URL.createObjectURL(new Blob([res.data]));
         const a = document.createElement('a');

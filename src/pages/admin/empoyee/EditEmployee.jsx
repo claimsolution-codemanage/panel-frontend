@@ -11,6 +11,7 @@ export default function AdminEditEmployee() {
             updateProfile={adminUpdateEmployeeById}
             id={param?._id}
             role={"admin"}
+            joiningFormUrl={"/admin/employee/joinin-form"}
             attachementUpload={adminAttachementUpload}
             imageUpload={adminImageUpload}
         />

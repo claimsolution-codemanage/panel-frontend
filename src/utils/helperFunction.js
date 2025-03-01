@@ -68,7 +68,7 @@ export function getFormateForDate(date){
 }
 
 export function validateUploadFile(files,fileSize,fileType){
-  console.log(files,fileSize,fileType);
+  // console.log(files,fileSize,fileType);
   
   const file = files[0]
   if(files?.length>1) return { success: false, message: `Upload one file at once`, error: `upload ${fileType} failed` };

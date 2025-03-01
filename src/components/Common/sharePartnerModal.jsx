@@ -35,7 +35,7 @@ export default function SharePartnerModal({ partnerShareModal, handleShareCase, 
                     setLoading(false)
                 }
             } catch (error) {
-                console.log("error",error);
+                // console.log("error",error);
                 if (error && error?.response?.data?.message) {
                     toast.error(error?.response?.data?.message)
                 } else {

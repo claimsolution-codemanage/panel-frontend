@@ -105,7 +105,7 @@ export default function AdminViewPartnerReport() {
       const endDate = dateRange.endDate ? getFormateDate(dateRange.endDate) : ""
       setDownloading(true)
       const res = await adminPartnerReportDownload(param?._id, searchQuery, statusType, startDate, endDate, type)
-      console.log("res", res);
+      // console.log("res", res);
       if (res?.status == 200) {
         const url = window.URL.createObjectURL(new Blob([res.data]));
         const a = document.createElement('a');

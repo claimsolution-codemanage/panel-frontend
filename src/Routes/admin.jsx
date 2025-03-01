@@ -46,6 +46,7 @@ import AdminAddInvoice from "../pages/admin/invoice/addInvoice";
 import Statement from "../components/Reuse/Statement";
 import AdminNotification from "../pages/admin/other/allNotification";
 import AdminEditEmployee from "../pages/admin/empoyee/EditEmployee";
+import JoiningFormComp from "../pages/admin/empoyee/JoiningForm";
 
 {/* for admin */}
 export const adminRoutes = [
@@ -72,6 +73,7 @@ export const adminRoutes = [
   <Route path='/admin/edit-partner/:_id'  element={<AdminTemplate><AdminEditPartner/></AdminTemplate>}/>,
   <Route path='/admin/employee/profile/:_id'  element={<AdminTemplate><AdminViewEmployee/></AdminTemplate>}/>,
   <Route path='/admin/employee/edit/:_id'  element={<AdminTemplate><AdminEditEmployee/></AdminTemplate>}/>,
+  <Route path='/admin/employee/joinin-form/:_id'  element={<AdminTemplate><JoiningFormComp/></AdminTemplate>}/>,
   <Route path='/admin/view-employee-case-report/:_id'  element={<AdminTemplate><AdminViewSaleEmpCaseReport/></AdminTemplate>}/>,
   <Route path='/admin/view-employee-partner-report/:_id'  element={<AdminTemplate><AdminSaleEmpPartnerReport/></AdminTemplate>}/>,
   <Route path='/admin/create-invoice/:clientId/:caseId'  element={<AdminTemplate><AdminCreateInvoice/></AdminTemplate>}/>,
