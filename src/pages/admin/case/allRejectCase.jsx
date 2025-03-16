@@ -1,5 +1,6 @@
 import { adminChangeCaseStatus, adminShareCaseToEmployee, adminAllCaseDownload,adminGetNormalEmployee, adminSetCaseIsActive } from "../../../apis"
 import { adminSetCaseDocIsActive,allAdminCase } from "../../../apis"
+import { adminAttachementUpload } from "../../../apis/upload"
 import ViewAllCaseComp from "../../../components/Reuse/ViewAllCaseComp"
 
 export default function AdminRejectCase() {
@@ -22,6 +23,7 @@ export default function AdminRejectCase() {
       isReject={true}
       getNormalEmp={adminGetNormalEmployee}
       caseShare={adminShareCaseToEmployee}
+      attachementUpload={adminAttachementUpload}
       // createInvUrl={"/admin/create-invoice/"}
     />
   </>)

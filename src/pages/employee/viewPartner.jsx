@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom"
 import { useContext } from "react"
 import { AppContext } from "../../App"
 import ViewPartnerComp from "../../components/Reuse/ViewPartnerComp"
+import { employeeAttachementUpload } from "../../apis/upload"
 
 export default function EmployeePartnerDetails() {
     const state = useContext(AppContext)
@@ -14,6 +15,7 @@ export default function EmployeePartnerDetails() {
         isEdit={empType?.toLowerCase()=="operation"}
         viewPartner={employeeGetPartnerById}
          role={"employee"} 
-        editUrl={"/employee/edit-partner/"}/>
+        editUrl={"/employee/edit-partner/"}
+        attachementUpload={employeeAttachementUpload}/>
     </>)
 }

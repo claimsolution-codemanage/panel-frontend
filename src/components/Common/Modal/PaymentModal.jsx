@@ -6,6 +6,7 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import {checkNumber} from '../../../utils/helperFunction'
 import { formatDateToISO } from '../../../utils/helperFunction';
+import PaymentDetails from '../SubPart/PaymentDetails';
 
 export default function PaymentModal({ show, close,formik,saving}) {
 
@@ -22,7 +23,8 @@ export default function PaymentModal({ show, close,formik,saving}) {
                     <div className='border-3 border-primary border-bottom mb-5'>
                         <h6 className="text-primary text-center fs-3">Payment Details</h6>
                     </div>
-                    <div className="">
+                    <PaymentDetails formik={formik}/>
+                    {/* <div className="">
                     <div className="mb-3 ">
                             <label htmlFor="paymentMode" className={`form-label ${formik?.touched?.paymentMode && formik?.touched?.paymentMode && formik?.errors?.paymentMode && "text-danger"}`}>Payment Mode</label>
                             <select
@@ -113,7 +115,7 @@ export default function PaymentModal({ show, close,formik,saving}) {
                                     <span className="text-danger">{formik?.errors?.amount}</span>
                                 ) : null}
                         </div>
-                    </div>
+                    </div> */}
                 </form>
 
             </Modal.Body>

@@ -332,11 +332,16 @@ export default function EditEmployeeComp({ getProfile, updateProfile, imageUploa
                                 <div className="row row-cols-1 row-cols-md-4  align-items-center">
                                     {empFormik?.values?.docs?.map((item,ind) => <div className="p-2">
                                     <div className="align-items-center bg-color-7 d-flex flex-column justify-content-center w-100 rounded-3">
-                                        <div onClick={()=>handleRemoveDoc(ind)}  className="text-danger fs-5 cursor-pointer"><MdOutlineCancel/></div>
-                                        <Link to={item?.url || item?.docURL} target="_blank" className="d-flex flex-column justify-content-center align-items-center">
+                                            <div className="w-100 d-flex justify-content-between py-2">
+                                                <div onClick={() => handleRemoveDoc(ind)} className="text-danger fs-5 cursor-pointer"><MdOutlineCancel /></div>
+                                                <div className="dropdown float-end cursor-pointer">
+                                                    <i className="bi bi-three-dots-vertical" data-bs-toggle="dropdown" aria-expanded="false"></i>
+                                                    <ul className="dropdown-menu">
+                                                        <li><div className="dropdown-item"><Link to={`${getCheckStorage(item?.url || item?.docURL) || "#!"}`} target="_blank">View</Link></div></li>
+                                                    </ul>
+                                                </div>
+                                            </div>
                                         <DocumentPreview url={ item?.url || item?.docURL} />
-                                        
-                                        </Link>
                                         <div className="d-flex align-items-center justify-content-center bg-dark gap-5 w-100 p-2 text-primary">
                                             <p className="fs-5 text-break text-capitalize text-center text-wrap">{item?.docName}</p>
                                         </div>

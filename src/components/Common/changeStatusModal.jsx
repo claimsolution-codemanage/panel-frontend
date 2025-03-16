@@ -6,28 +6,28 @@ import { adminChangeCaseStatus } from '../../apis';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 
-export default function ChangeStatusModal({ changeStatus, setChangeStatus, handleCaseStatus, role }) {
-    const [data, setData] = useState({ _id: changeStatus?.details?._id, status: "", remark: "" })
+export default function ChangeStatusModal({ changeStatus, setChangeStatus, handleCaseStatus,getCaseById, role,attachementUpload }) {
+    const [data, setData] = useState({ _id: changeStatus?.details?._id, status: "", remark: ""})
     const [loading, setLoading] = useState(false)
     const navigate = useNavigate()
-    // console.log("status", changeStatus.details.currentStatus);
 
     const hangleOnchange = (e) => {
         const { name, value } = e.target;
         setData({ ...data, [name]: value })
     }
 
+
     const handleSumbit = async (e) => {
-        e.preventDefault()
         setLoading(true)
         try {
             const res = await handleCaseStatus(data)
-            // console.log("/admin/dashboard",res);
             if (res?.data?.success) {
                 setChangeStatus({ status: false, details: "" })
-                // navigate(path)
                 toast.success(res?.data?.message)
                 setLoading(false)
+                if(getCaseById){
+                    getCaseById()
+                }
             }
             setLoading(false)
         } catch (error) {
@@ -40,6 +40,12 @@ export default function ChangeStatusModal({ changeStatus, setChangeStatus, handl
             }
             // console.log("adminChangeCaseStatus error", error);
             setLoading(false)
+        }
+    }
+
+    const handleSave = ()=>{
+        if(data?.remark?.trim()){
+            handleSumbit()
         }
     }
     return (
@@ -77,7 +83,7 @@ export default function ChangeStatusModal({ changeStatus, setChangeStatus, handl
             </Modal.Body>
             <Modal.Footer>
                 <div className="d-flex  justify-content-center">
-                    <div aria-disabled={loading} className={`d-flex align-items-center justify-content-center gap-3 btn btn-primary ${loading && "disabled"}`} onClick={handleSumbit}>
+                    <div aria-disabled={loading} className={`d-flex align-items-center justify-content-center gap-3 btn btn-primary ${loading && "disabled"}`} onClick={handleSave}>
                         {loading ? <span className="spinner-border spinner-border-sm" role="status" aria-hidden={true}></span> : <span>Save </span>}
                     </div>
                 </div>

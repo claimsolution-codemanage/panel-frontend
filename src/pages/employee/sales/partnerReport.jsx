@@ -4,6 +4,7 @@ import { AppContext } from "../../../App"
 import { useContext} from "react"
 import ViewAllCaseComp from "../../../components/Reuse/ViewAllCaseComp"
 import { useParams } from "react-router-dom"
+import { employeeAttachementUpload } from "../../../apis/upload"
  
 export default function EmpSalePartnerReport() {
     const param = useParams()
@@ -29,6 +30,7 @@ export default function EmpSalePartnerReport() {
       isRemoveCase={false}
       isDownload={true}
       createInvUrl={empType?.toLowerCase()==="finance" ?  "/employee/create-invoice/" : ""}
+      attachementUpload={employeeAttachementUpload}
     /> 
   </>)
 }

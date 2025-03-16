@@ -1,4 +1,5 @@
 import { allCasePartner,partnerAllCaseDownload } from "../../../apis"
+import { partnerAttachementUpload } from "../../../apis/upload"
 import ViewAllCaseComp from "../../../components/Reuse/ViewAllCaseComp"
 
 
@@ -15,6 +16,7 @@ export default function AllPartnerCase() {
   caseShare={()=>{}}
   isResolvedAmt={true}
   isDownload={true}
+  attachementUpload={partnerAttachementUpload}
   />
   </>)
 }

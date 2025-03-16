@@ -327,6 +327,10 @@ export const adminAddOrUpdatePayment = (data) => {
   return axios.post(`${API_BASE}/api/admin/addOrUpdatePayment`, data)
 }
 
+export const adminCreateOrUpdateCaseFormApi = (data) => {
+  setheader()
+  return axios.post(`${API_BASE}/api/admin/adminCreateOrUpdateCaseForm`, data)
+}
 
 export const adminEditCaseProcessById = (data) => {
   setheader()
@@ -867,6 +871,11 @@ export const employeResetPassword = (data) => {
 export const employeeAllCase = (pageItemLimit = "", pageNo = "", searchQuery = "", statusType = "", startDate = "", endDate = "",type=true,empId) => {
   setheader()
   return axios.get(`${API_BASE}/api/employee/viewAllCase?limit=${pageItemLimit}&pageNo=${pageNo}&search=${searchQuery}&status=${statusType}&startDate=${startDate}&endDate=${endDate}&type=${type}&empId=${empId}`)
+}
+
+export const empOpCreateOrUpdateCaseFormApi = (data) => {
+  setheader()
+  return axios.post(`${API_BASE}/api/employee/opeation/empOpCreateOrUpdateCaseForm`, data)
 }
 
 export const saleEmpPartnerReport = (pageItemLimit = "", pageNo = "", searchQuery = "", statusType = "", startDate = "", endDate = "",type=true,empId,id) => {

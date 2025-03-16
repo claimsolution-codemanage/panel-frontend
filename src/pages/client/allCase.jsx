@@ -1,4 +1,5 @@
 import { clientViewAllCase } from "../../apis"
+import { clientAttachementUpload } from "../../apis/upload"
 import ViewAllCaseComp from "../../components/Reuse/ViewAllCaseComp"
 
  
@@ -13,6 +14,7 @@ export default function ClientViewAllCase() {
   setCaseStatus={()=>{}} 
   viewUrl={"/client/view case/"}
   caseShare={()=>{}}
+  attachementUpload={clientAttachementUpload}
   />
   </>)
 }

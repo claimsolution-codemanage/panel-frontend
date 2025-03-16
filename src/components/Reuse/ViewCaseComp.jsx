@@ -6,10 +6,9 @@ import { useParams } from "react-router-dom"
 import { IoArrowBackCircleOutline, IoFolder, IoFolderOpenSharp } from 'react-icons/io5'
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
-import { adminDeleteCaseDocById, adminUpdateClientCaseFee, adminChangeCaseStatus, adminAddCaseCommit, adminRemoveCaseReference } from "../../apis"
+import {  adminUpdateClientCaseFee,} from "../../apis"
 import { formatDateToISO } from "../../utils/helperFunction"
 import Loader from "../../components/Common/loader"
-import AddCaseModal from "../../components/Common/addCaseCommit"
 import AddDocsModal from "../addDocsModal"
 import AddCaseCommit from "../../components/Common/addCaseCommit"
 import { IoMdAdd } from 'react-icons/io'
@@ -35,11 +34,17 @@ import DocumentPreview from "../DocumentPreview"
 import PaymentModal from "../Common/Modal/PaymentModal"
 import { useFormik } from "formik"
 import * as Yup from "yup";
+import GROFormModal from "../Common/CaseStatus/GroModal"
+import GroSection from "../Common/ViewCaseSection/GroSection"
+import PaymentSection from "../Common/ViewCaseSection/PaymentSection"
+import CommentSection from  "../Common/ViewCaseSection/CommentSection"
+import StatusSection from "../Common/ViewCaseSection/StatusSection"
+
 
 export default function ViewCaseComp({ id, getCase, role, attachementUpload, addCaseDoc,
     editUrl, addCaseCommit, viewPartner, viewClient, editCaseProcess, addCaseProcess, addReference,
     deleteReference, deleteDoc, isAddRefence, isAddCaseProcess, isAddCommit,
-    isViewProfile, setCaseDocStatus, viewEmp,paymentDetailsApi,accessPayment
+    isViewProfile, setCaseDocStatus, viewEmp,paymentDetailsApi,accessPayment,isCaseFormAccess,createOrUpdateCaseFormApi
 }) {
 
     const [data, setData] = useState([])
@@ -60,6 +65,7 @@ export default function ViewCaseComp({ id, getCase, role, attachementUpload, add
     const [paymentModal, setpaymentModal] = useState({save:false,show:false})
     const [folderInfo,setFolderInfo] = useState({})
     const [fileInfo,setFileInfo] = useState({type:null,list:[]})
+
 
 
     const navigate = useNavigate()
@@ -99,119 +105,6 @@ export default function ViewCaseComp({ id, getCase, role, attachementUpload, add
         }
     }
 
-           // Dynamic validation schema based on form value of paymentMode
-           const validationSchema = Yup.object({
-            paymentMode: Yup.string()
-              .required("Payment mode is required")
-              .oneOf(["Cash", "UPI", "Web", "Cheque", "Net Banking"], "Invalid payment mode"),
-            
-            dateOfPayment: Yup.date()
-              .required("Date of payment is required"),
-            
-            utrNumber: Yup.string()
-              .test(
-                "is-required-htmlFor-upi",
-                "UTR Number is required htmlFor UPI",
-                function (value) {
-                  const { paymentMode } = this.parent;
-                  return paymentMode !== "UPI" || (value && value.trim() !== "");
-                }
-              ),
-            
-            bankName: Yup.string()
-              .test(
-                "is-required-htmlFor-bank-modes",
-                "Bank Name is required",
-                function (value) {
-                  const { paymentMode } = this.parent;
-                  return !["Cheque", "Net Banking"].includes(paymentMode) || (value && value.trim() !== "");
-                }
-              ),
-            
-            chequeNumber: Yup.string()
-              .test(
-                "is-required-htmlFor-cheque",
-                "Cheque Number is required",
-                function (value) {
-                  const { paymentMode } = this.parent;
-                  return paymentMode !== "Cheque" || (value && value.trim() !== "");
-                }
-              ),
-            
-            chequeDate: Yup.date()
-              .test(
-                "is-required-htmlFor-cheque",
-                "Cheque Date is required",
-                function (value) {
-                  const { paymentMode } = this.parent;
-                  return paymentMode !== "Cheque" || !!value;
-                }
-              ),
-            
-              amount: Yup.number()
-              .test(
-                "is-required-htmlFor-cheque",
-                "Amount is required",
-                function (value) {
-                  const { paymentMode } = this.parent;
-                  return (value && !isNaN(value));
-                }
-              )
-              .typeError("Amount must be a number"),
-            
-            transactionDate: Yup.date()
-              .test(
-                "is-required-htmlFor-net-banking",
-                "Transaction Date is required",
-                function (value) {
-                  const { paymentMode } = this.parent;
-                  return paymentMode !== "Net Banking" || !!value;
-                }
-              ),
-          })
-    
-    
-        const initialValues = {
-            dateOfPayment: "",
-            utrNumber: "",
-            bankName: "",
-            chequeNumber: "",
-            chequeDate: "",
-            amount: "",
-            transactionDate: "",
-            paymentMode:""
-        };
-    
-        const handleSubmit = async (values) => {
-          setpaymentModal({...paymentModal,save:true})
-          try {
-              const res = await paymentDetailsApi({...values,caseId:id})
-              if (res?.data?.success) {
-                  toast.success(res?.data?.message)
-                  getCaseById()
-              }
-              setpaymentModal({show:false,save:false})
-          } catch (error) {
-              if (error && error?.response?.data?.message) {
-                  toast.error(error?.response?.data?.message)
-              } else {
-                  toast.error("Something went wrong")
-              }
-              setpaymentModal({...paymentModal,save:false})
-          }
-      }
-    
-        const paymentFormik = useFormik({
-            initialValues,
-            validationSchema,
-            onSubmit: handleSubmit
-        })
-
-    const handleUpdatePayment =(ele)=>{
-        let payload ={...ele}
-        paymentFormik.setValues(payload)
-        setpaymentModal({...paymentModal,show:true})
-    }
 
     useEffect(() => {
         if (id && !showEditCaseModal.status && !caseCommitModal && !changeisActiveStatus.show && !addCaseReference.show && !removeCaseReference.status && !deleteCaseDoc?.status && !uploadingDocs) {
@@ -327,7 +220,6 @@ export default function ViewCaseComp({ id, getCase, role, attachementUpload, add
                                 <IoArrowBackCircleOutline className="fs-3" onClick={handleBack} style={{ cursor: "pointer" }} />
                                 <div className="d-flex flex align-items-center gap-1">
                                     <span>View Case</span>
-
                                 </div>
                             </div>
                         </div>
@@ -542,9 +434,6 @@ export default function ViewCaseComp({ id, getCase, role, attachementUpload, add
 
 
                                                                     </div>
-                                                                    {/* <div className="d-flex align-items-center justify-content-center bg-dark gap-5 w-100 p-2 text-primary">
-                                                                        <p className="text-center text-wrap fs-5 text-capitalize">{item?.name}</p>
-                                                                    </div> */}
                                                                 </div>
                                                             </div>
                                                         )}
@@ -553,120 +442,19 @@ export default function ViewCaseComp({ id, getCase, role, attachementUpload, add
 
                                                     <div className="d-flex row  gap-0  align-items-center"></div>
                                                 </div>
-                                                <div className="bg-color-1 my-5 p-3 p-md-5 rounded-2 shadow">
-                                                    <div className="border-3 border-primary border-bottom py-2 mb-5">
-                                                        <div className="d-flex justify-content-between">
-                                                            <div className="text-primary text-center fs-4">Case Process</div>
-                                                            {isAddCaseProcess && <div className="d-flex gap-1 btn btn-primary" onClick={() => setChangeStatus({ status: true, details: { ...data[0] } })}>
-                                                                <span><CiEdit /></span>
-                                                                <div>Add Status</div>
-                                                            </div>}
-                                                        </div>
-                                                    </div>
-                                                    <div className="mt-4 rounded-2 shadow">
-                                                        <div className="table-responsive">
-                                                            <table className="table table-responsive table-borderless">
-                                                                <thead className="">
-                                                                    <tr className="bg-primary text-white text-center">
-                                                                        <th scope="col" className="text-nowrap">S.no</th>
-                                                                        {role?.toLowerCase() == "admin" && <th scope="col" className="text-nowrap" >Edit</th>}
-                                                                        <th scope="col" className="text-nowrap">Date</th>
-                                                                        <th scope="col" className="text-nowrap">Status</th>
-                                                                        {role?.toLowerCase() == "admin" && <th scope="col" className="text-nowrap" >Marked By</th>}
-                                                                        <th scope="col" className="text-nowrap" >Remark</th>
-                                                                    </tr>
-                                                                </thead>
-                                                                <tbody>
-                                                                    {data[0]?.processSteps?.map((item, ind) => <tr key={item._id} className="border-2 border-bottom border-light text-center">
-                                                                        <th scope="row">{ind + 1}</th>
-                                                                        {role?.toLowerCase() == "admin" && <td>
-                                                                            <span style={{ cursor: "pointer", height: 30, width: 30, borderRadius: 30 }} className="bg-warning text-dark d-flex align-items-center justify-content-center" onClick={() => setShowEditCaseModal({ status: true, details: { caseId: data[0]?._id, processId: item?._id, caseStatus: item?.status, caseRemark: item?.remark, isCurrentStatus: data[0]?.processSteps.length == ind + 1 } })}><CiEdit /></span>
-                                                                        </td>}
-                                                                        <td className="text-nowrap "> {item?.createdAt && <p className="mb-1">{getFormateDMYDate(item?.createdAt)}</p>}</td>
-                                                                        <td className="text-nowrap ">{item?.status && <p className={`mb-1 badge ${(item?.status?.toLowerCase() == "reject" ? "bg-danger" : (item?.status?.toLowerCase() == "pending" ? "bg-warning" : (item?.status?.toLowerCase() == "resolve" ? "bg-success" : "bg-primary")))}`}>{item?.status}</p>}</td>
-                                                                        {role?.toLowerCase() == "admin" && <td className="text-nowrap "> <p className="mb-1 text-capitalize">{item?.consultant ? item?.consultant : "System"} </p></td>}
-                                                                        <td className="text-break col-4">{item?.remark && <p className="mb-1 text-center">{item?.remark}</p>}</td>
-                                                                        {/* <td className="text-nowrap">{(item?.status!="reject" || item?.status!="resolve")  && <FaCircleArrowDown className="fs-3 text-primary" />}</td> */}
-                                                                    </tr>)}
-                                                                </tbody>
-                                                            </table>
+                                                {/* case process */}
+                                                <StatusSection isAddCaseProcess={isAddCaseProcess} id={id} processSteps={data[0]?.processSteps} getCaseById={getCaseById} details={data[0]} addCaseProcess={addCaseProcess} attachementUpload={attachementUpload}/>
 
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                {data[0]?.caseFrom?.toLowerCase() == "client" &&
-                                                <div className="bg-color-1 my-5 p-3 p-md-5 rounded-2 shadow">
-                                                    <div className="border-3 border-primary border-bottom py-2 mb-5">
-                                                        <div className="d-flex justify-content-between">
-                                                            <div className="text-primary text-center fs-4">Payment Details</div>
-                                                            {accessPayment && <div className="d-flex gap-1 btn btn-primary" onClick={() =>{ setpaymentModal({save:false,show:true});paymentFormik.resetForm()}}>
-                                                                <div>Add Payment</div>
-                                                            </div>}
-                                                        </div>
-                                                    </div>
-                                                    <div className="mt-4 rounded-2 shadow">
-                                                        <div className="table-responsive">
-                                                            <table className="table table-responsive table-borderless">
-                                                                <thead className="">
-                                                                    <tr className="bg-primary text-white text-center">
-                                                                        <th scope="col" className="text-nowrap">S.no</th>
-                                                                        {accessPayment && <th scope="col" className="text-nowrap" >Edit</th>}
-                                                                        <th scope="col" className="text-nowrap">Payment mode</th>
-                                                                        <th scope="col" className="text-nowrap">Date of payment</th>
-                                                                        <th scope="col" className="text-nowrap">Bank name</th>
-                                                                        <th scope="col" className="text-nowrap">Cheque number</th>
-                                                                        <th scope="col" className="text-nowrap" >Amount</th>
-                                                                        <th scope="col" className="text-nowrap" >Cheque date</th>
-                                                                        <th scope="col" className="text-nowrap" >UTR number</th>
-                                                                        <th scope="col" className="text-nowrap" >Transaction date</th>
-                                                                    </tr>
-                                                                </thead>
-                                                                <tbody>
-                                                                    {data[0]?.casePayment?.map((item, ind) => <tr key={item._id} className="border-2 border-bottom border-light text-center">
-                                                                        <th scope="row">{ind + 1}</th>
-                                                                        {accessPayment && <td>
-                                                                            <span style={{ cursor: "pointer", height: 30, width: 30, borderRadius: 30 }} className="bg-warning text-dark d-flex align-items-center justify-content-center" onClick={() => handleUpdatePayment(item)}><CiEdit /></span>
-                                                                        </td>}
-                                                                        <td className="text-break col-1"><p className="mb-1 text-center">{item?.paymentMode || "-"}</p></td>
-                                                                        <td className="text-nowrap "> {item?.dateOfPayment ? <p className="mb-1">{getFormateDMYDate(item?.dateOfPayment)}</p> :"-"}</td>
-                                                                        <td className="text-break col-1"><p className="mb-1 text-center">{item?.bankName || "-"}</p></td>
-                                                                        <td className="text-break col-1"><p className="mb-1 text-center">{item?.chequeNumber || "-"}</p></td>
-                                                                        <td className="text-break col-1"><p className="mb-1 text-center">{item?.amount || "-"}</p></td>
-                                                                        <td className="text-nowrap "> {item?.chequeDate ? <p className="mb-1">{getFormateDMYDate(item?.chequeDate)}</p>:"-"}</td>
-                                                                        <td className="text-break col-1"><p className="mb-1 text-center">{item?.utrNumber || "-"}</p></td>
-                                                                        <td className="text-nowrap "> {item?.transactionDate ? <p className="mb-1">{getFormateDMYDate(item?.transactionDate)}</p>: "-"}</td>
-                                                                        
-                                                                    </tr>)}
-                                                                </tbody>
-                                                            </table>
+                                                {/* case gro form*/}
+                                                {((data[0]?.caseFrom?.toLowerCase() == "client" && data[0]?.currentStatus?.toLowerCase()=="gro") || data?.[0]?.caseGroDetails) && 
+                                                <GroSection id={id} isCaseFormAccess={isCaseFormAccess} getCaseById={getCaseById} status={data?.[0]?.currentStatus} groDetails={data?.[0]?.caseGroDetails} createOrUpdateApi={createOrUpdateCaseFormApi} attachementUpload={attachementUpload}/>                                
+                                                }
 
-                                                        </div>
-                                                    </div>
-                                                </div> }
+                                                {/* payment details */}
+                                                {data[0]?.caseFrom?.toLowerCase() == "client" && <PaymentSection id={id} accessPayment={accessPayment} getCaseById={getCaseById} paymentDetailsApi={paymentDetailsApi}  casePayment={data[0]?.casePayment}/> }
 
-                                                {isAddCommit && <div className="bg-color-1 my-5 p-3 p-md-5 rounded-2 shadow">
-                                                    <div className="border-3 border-primary border-bottom py-2 mb-5">
-                                                        <div className="d-flex justify-content-center align-items-center gap-3">
-                                                            <div className="text-primary text-center fs-4">Case Comment</div>
-                                                            <div onClick={() => setCaseCommitModal(true)} className="d-flex justify-content-center align-items-center fs-5 bg-primary text-white" style={{ cursor: 'pointer', width: "2.5rem", height: "2.5rem", borderRadius: "2.5rem" }}>
-                                                                <span><IoMdAdd /></span>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div className="d-flex flex-column gap-3">
-                                                        {data[0]?.caseCommit?.map(commit => <div key={commit?._id} className="w-100">
-                                                            {/* {console.log(data[0]?._id == commit?._id, data[0]?._id, commit?._id)} */}
-                                                            <div className={`${commentBy(commit) && "float-end"} w-25`}>
-                                                                <div className={`${commentBy(commit) ? "bg-info  w-auto text-dark" : "bg-primary text-white"} p-2 rounded-3`}>
-                                                                    {commit?.message}</div>
-                                                                <p className="badge bg-warning text-dark m-0">{commentBy(commit) ? "you" : commit?.name} | {commit?.createdAt && getFormateDMYDate(commit?.createdAt)}</p>
-                                                            </div>
-                                                        </div>)}
-
-
-                                                    </div>
-
-                                                </div>}
+                                                {/* case comment */}
+                                                {isAddCommit && <CommentSection id={id} addCaseCommit={addCaseCommit} role={role} getCaseById={getCaseById} caseCommit={data[0]?.caseCommit}/>} 
                                             </div>
                                         </div>
 
@@ -677,8 +465,7 @@ export default function ViewCaseComp({ id, getCase, role, attachementUpload, add
                     </div>}
                 {/* {console.log("showEditCaseModal",showEditCaseModal)} */}
                 {showEditCaseModal?.status && <EditCaseStatusModal changeStatus={showEditCaseModal} setChangeStatus={setShowEditCaseModal} handleCaseStatus={editCaseProcess} role="admin" />}
-                {changeStatus?.status && <ChangeStatusModal changeStatus={changeStatus} setChangeStatus={setChangeStatus} handleCaseStatus={addCaseProcess} role="admin" />}
-                {paymentModal?.show && <PaymentModal show={paymentModal?.show} saving={paymentModal?.save} formik={paymentFormik} close={() => setpaymentModal({save:false,show:false})} />}
+                {changeStatus?.status && <ChangeStatusModal changeStatus={changeStatus} setChangeStatus={setChangeStatus} handleCaseStatus={addCaseProcess} role="admin" attachementUpload={attachementUpload}/>}
 
                 {/* for clear case payment */}
                 <Modal
@@ -756,7 +543,6 @@ export default function ViewCaseComp({ id, getCase, role, attachementUpload, add
                     </Modal.Body>
                 </Modal>
                 {/* {console.log("addCaseReference", addCaseReference)} */}
-                {caseCommitModal && <AddCaseCommit show={caseCommitModal} id={id} close={() => { setCaseCommitModal(false) }} handleCaseCommit={addCaseCommit} />}
                 {addCaseReference?.show && <AddReferenceModal showAddCaseReference={addCaseReference} hide={() => setAddCaseReference({ show: false, _id: "" })} addReferenceCase={addReference} />}
                 {deleteCaseDoc?.status && <ConfirmationModal show={deleteCaseDoc?.status} hide={() => setDeleteCaseDoc({ status: false, id: null })} id={deleteCaseDoc?.id} handleComfirmation={deleteDoc} heading={"Are you sure?"} text={"Want to permanent delete this doc"} />}
                 {uploadingDocs && <AddDocsModal _id={data[0]?._id} uploadingDocs={uploadingDocs} setUploadingDocs={setUploadingDocs}

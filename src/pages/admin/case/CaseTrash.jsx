@@ -26,6 +26,7 @@ import SetStatusOfProfile from "../../../components/Common/setStatusModal"
 import {FaTrashRestoreAlt} from 'react-icons/fa'
 import DateSelect from "../../../components/Common/DateSelect"
 import { SiMicrosoftexcel } from "react-icons/si";
+import { adminAttachementUpload } from "../../../apis/upload"
  
 export default function AdminTrashCase() {
   const [data, setData] = useState([])
@@ -290,7 +291,7 @@ const getAllCases =async()=>{
       </div>
 
     </div>
-    {changeStatus?.status && <ChangeStatusModal changeStatus={changeStatus} setChangeStatus={setChangeStatus} handleCaseStatus={adminChangeCaseStatus} role="admin" />}
+    {changeStatus?.status && <ChangeStatusModal changeStatus={changeStatus} setChangeStatus={setChangeStatus} handleCaseStatus={adminChangeCaseStatus} role="admin" attachementUpload={adminAttachementUpload}/>}
     {caseShareModal?.status && <ShareCaseModal handleShareCase={adminShareCaseToEmployee} caseShareModal={caseShareModal} close={()=>{setCaseShareModal({value:[],status:false});setShareCase([])}}/>}
     {deleteCase?.status && <ConfirmationModal show={deleteCase?.status} id={deleteCase?.id} hide={()=>setDeleteCase({status:false,id:""})} heading="Are you sure?" text="Your want to delete this case" handleComfirmation={adminDeleteCaseById}/>} 
     {changeisActiveStatus?.show && <SetStatusOfProfile changeStatus={changeisActiveStatus} hide={()=>setChangeIsActiveStatus({ show: false, details: {} })} type="Case" handleChanges={handleChanges} />}

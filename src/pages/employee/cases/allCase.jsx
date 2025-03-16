@@ -3,6 +3,7 @@ import { AppContext } from "../../../App"
 import { useContext} from "react"
 import ViewAllCaseComp from "../../../components/Reuse/ViewAllCaseComp"
 import { useParams } from "react-router-dom"
+import { employeeAttachementUpload } from "../../../apis/upload"
  
 export default function EmployeeAllCase() {
   const state = useContext(AppContext)
@@ -28,6 +29,7 @@ export default function EmployeeAllCase() {
       getNormalEmp={empOptGetNormalEmployee}
       caseShare={empOptShareSaleEmployee}
       createInvUrl={empType?.toLowerCase()==="finance" ?  "/employee/create-invoice/" : ""}
+      attachementUpload={employeeAttachementUpload}
     /> 
   </>)
 }

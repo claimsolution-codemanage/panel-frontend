@@ -2,7 +2,7 @@ import React from "react";
 import { CiFileOn } from "react-icons/ci";
 import { FaFileWord } from "react-icons/fa6";
 
-const DocumentPreview = ({ url, height = "150px" }) => {
+const DocumentPreview = ({ url, height = "150px",maxWidth="100%" }) => {
   const getFileType = (url) => {
     const extension = url?.split('.')?.pop()?.split('?')?.[0]?.toLowerCase();
     if (["jpg", "jpeg", "png", "gif", "bmp","jfif"].includes(extension)) return "image";
@@ -18,9 +18,9 @@ const DocumentPreview = ({ url, height = "150px" }) => {
 
   switch (fileType) {
     case "image":
-      return <img src={url} alt="Preview" style={{ maxWidth: "100%", height }} />;
+      return <img src={url} alt="Preview" style={{ maxWidth, height }} />;
     case "pdf":
-      return <iframe src={url} title="PDF Preview" style={{ width: "100%", height }} />;
+      return <iframe src={url} title="PDF Preview" style={{ width:maxWidth, height }} />;
     case "audio":
       return  <div className="d-flex flex-column justify-content-center align-items-center">
 <audio controls autoPlay={false}   style={{ width: "250px",height }}>
@@ -29,14 +29,14 @@ const DocumentPreview = ({ url, height = "150px" }) => {
     </audio>
       </div> ;
     case "video":
-      return <video controls autoPlay={false}  src={url} style={{ width: "100%", height }} />;
+      return <video controls autoPlay={false}  src={url} style={{ width: maxWidth, height }} />;
     case "word":
     case "excel":
       return (
         <iframe
           src={`https://docs.google.com/gview?url=${encodeURIComponent(url)}&embedded=true`}
           title="Document Preview"
-          style={{ width: "100%", height }}
+          style={{ width: maxWidth, height }}
         />
       );
     default:

@@ -98,3 +98,238 @@ export const empJoiningFormInitialValues = {
         })
       ),
   });
+
+
+export const groInitialValues = {
+  specialCase:false,
+  partnerConsultantFee:"",
+  consultantFee:"",
+  groFilingDate: "",
+  groStatusUpdates: [],
+  queryHandling: [],
+  approved: false,
+  approvalDate:"",
+  approvedAmount: "",
+  attachments: [],
+  queryReply: [],
+  isSettelment: false,
+  dateOfPayment: "",
+  utrNumber: "",
+  bankName: "",
+  chequeNumber: "",
+  chequeDate: "",
+  amount: "",
+  transactionDate: "",
+  paymentMode: "",
+  approvalLetter:""
+};
+
+export const groValidationSchema = yup.object().shape({
+  partnerFee:yup.number().typeError("Must be number").min(0,"Must be minimum 0").test(
+    "partnerFee",
+    "Partner fee is required",
+    function (value) {
+      const { isSettelment } = this.parent;
+      return !isSettelment || (value && !isNaN(value));
+    }),
+  consultantFee:yup.number().typeError("Must be number").min(0,"Must be minimum 0").test(
+    "consultantFee",
+    "Consultant fee is required",
+    function (value) {
+      const { approved } = this.parent;
+      return !approved || (value && !isNaN(value));
+    }),
+  groStatusUpdates: yup.array().of(
+    yup.object().shape({
+      status: yup.string().required("Status is required"),
+      remarks: yup.string(),
+      date: yup.string().required("Date is required"),
+      attachment: yup.string().required("Attachment is required"),
+    })
+  ),
+  queryHandling: yup.array().of(
+    yup.object().shape({
+      remarks: yup.string().required("Remarks is required"),
+      date: yup.string().required("Date is required"),
+      attachment: yup.string().required("Attachment is required"),
+    })
+  ),
+  queryReply: yup.array().of(
+    yup.object().shape({
+      remarks: yup.string().required("Remarks is required"),
+      date: yup.string().required("Date is required"),
+      attachment: yup.string().required("Attachment is required"),
+    })
+  ),
+  groFilingDate: yup.string().required("Filing Date is required"),
+  approvedAmount: yup.string().test(
+    "approved",
+    "Approved amount is required",
+    function (value) {
+      const { approved } = this.parent;
+      return approved && value > 0;
+    }),
+  approvalDate: yup.string().test(
+    "approved",
+    "Approved date is required",
+    function (value) {
+      const { approved } = this.parent;
+      return approved && value;
+    }),
+  paymentMode: yup.string()
+    .test(
+      "Payment mode is required","Payment mode is required",
+      function (value) {
+        const { isSettelment } = this.parent;
+        return !isSettelment || (value && value.trim() !== "");
+      }
+    ),
+  dateOfPayment: yup.date().test("required-datepayment", "Date of payment is required",
+    function (value) {
+      const { isSettelment } = this.parent;
+      return !isSettelment || value;
+    }
+  ),
+  utrNumber: yup.string()
+    .test(
+      "is-required-htmlFor-upi","UTR Number is required for UPI",
+      function (value) {
+        const { paymentMode, isSettelment } = this.parent;
+        return !isSettelment || (paymentMode !== "UPI" || (value && value.trim() !== ""));
+      }
+    ),
+
+  bankName: yup.string()
+    .test(
+      "is-required-htmlFor-bank-modes",
+      "Bank Name is required",
+      function (value) {
+        const { paymentMode, isSettelment } = this.parent;
+        return !isSettelment || !["Cheque", "Net Banking"].includes(paymentMode) || (value && value.trim() !== "");
+      }
+    ),
+
+  chequeNumber: yup.string()
+    .test(
+      "is-required-htmlFor-cheque",
+      "Cheque Number is required",
+      function (value) {
+        const { paymentMode, isSettelment } = this.parent;
+        return !isSettelment || paymentMode !== "Cheque" || (value && value.trim() !== "");
+      }
+    ),
+
+  chequeDate: yup.date()
+    .test(
+      "is-required-htmlFor-cheque",
+      "Cheque Date is required",
+      function (value) {
+        const { paymentMode, isSettelment } = this.parent;
+        return !isSettelment || paymentMode !== "Cheque" || !!value;
+      }
+    ),
+
+  amount: yup.number()
+    .test(
+      "is-required-htmlFor-cheque",
+      "Amount is required",
+      function (value) {
+        const { paymentMode, isSettelment } = this.parent;
+        return !isSettelment || (value && !isNaN(value));
+      }
+    )
+    .typeError("Amount must be a number"),
+
+  transactionDate: yup.date()
+    .test(
+      "is-required-htmlFor-net-banking",
+      "Transaction Date is required",
+      function (value) {
+        const { paymentMode, isSettelment } = this.parent;
+        return !isSettelment || paymentMode !== "Net Banking" || !!value;
+      }
+    ),
+
+});
+
+// Dynamic validation schema based on form value of paymentMode
+export const paymentValidationSchema = yup.object({
+  paymentMode: yup.string()
+    .required("Payment mode is required")
+    .oneOf(["Cash", "UPI", "Web", "Cheque", "Net Banking"], "Invalid payment mode"),
+
+  dateOfPayment: yup.date()
+    .required("Date of payment is required"),
+
+  utrNumber: yup.string()
+    .test(
+      "is-required-htmlFor-upi",
+      "UTR Number is required for UPI",
+      function (value) {
+        const { paymentMode } = this.parent;
+        return paymentMode !== "UPI" || (value && value.trim() !== "");
+      }
+    ),
+
+  bankName: yup.string()
+    .test(
+      "is-required-htmlFor-bank-modes",
+      "Bank Name is required",
+      function (value) {
+        const { paymentMode } = this.parent;
+        return !["Cheque", "Net Banking"].includes(paymentMode) || (value && value.trim() !== "");
+      }
+    ),
+
+  chequeNumber: yup.string()
+    .test(
+      "is-required-htmlFor-cheque",
+      "Cheque Number is required",
+      function (value) {
+        const { paymentMode } = this.parent;
+        return paymentMode !== "Cheque" || (value && value.trim() !== "");
+      }
+    ),
+
+  chequeDate: yup.date()
+    .test(
+      "is-required-htmlFor-cheque",
+      "Cheque Date is required",
+      function (value) {
+        const { paymentMode } = this.parent;
+        return paymentMode !== "Cheque" || !!value;
+      }
+    ),
+
+  amount: yup.number()
+    .test(
+      "is-required-htmlFor-cheque",
+      "Amount is required",
+      function (value) {
+        const { paymentMode } = this.parent;
+        return (value && !isNaN(value));
+      }
+    )
+    .typeError("Amount must be a number"),
+
+  transactionDate: yup.date()
+    .test(
+      "is-required-htmlFor-net-banking",
+      "Transaction Date is required",
+      function (value) {
+        const { paymentMode } = this.parent;
+        return paymentMode !== "Net Banking" || !!value;
+      }
+    ),
+})
+    
+export const paymentInitialValues = {
+  dateOfPayment: "",
+  utrNumber: "",
+  bankName: "",
+  chequeNumber: "",
+  chequeDate: "",
+  amount: "",
+  transactionDate: "",
+  paymentMode: ""
+};

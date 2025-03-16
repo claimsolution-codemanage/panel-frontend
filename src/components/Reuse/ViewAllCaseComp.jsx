@@ -40,7 +40,7 @@ import { Link } from "react-router-dom"
 export default function ViewAllCaseComp({getCases,downloadCase,role,viewUrl,
   caseShare,setStatus,setCaseStatus,editUrl,createInvUrl,
   isChangeStatus,isEdit,isRemoveCase,isResolvedAmt,isDownload,
-  empId,id,isShare,getNormalEmp,isBack,isReject
+  empId,id,isShare,getNormalEmp,isBack,isReject,attachementUpload
 }) {
   const [data, setData] = useState([])
   const navigate = useNavigate()
@@ -244,7 +244,7 @@ export default function ViewAllCaseComp({getCases,downloadCase,role,viewUrl,
         <div className="mx-5 p-3">
         {(role?.toLowerCase()=="admin" || role?.toLowerCase()=="client" || role?.toLowerCase()=="partner") && <div className={`row row-cols-1 ${isResolvedAmt ? "row-cols-md-3" : "row-cols-md-2"} `}>
             <div className="border-end">
-              <div className="bg-color-1 border-0 border-5 border-primary border-start card mx-1 my-4 p-2 shadow">
+              <div className="bg-color-1 border-5 border-primary border-start card mx-1 my-4 p-2 shadow">
                 <div className='d-flex align-items-center justify-content-around'>
                   <div className="text-center ">
                     <h3 className='fw-bold h2'>{noOfCase}</h3>
@@ -255,7 +255,7 @@ export default function ViewAllCaseComp({getCases,downloadCase,role,viewUrl,
             </div>
 
             <div className=" border-end">
-              <div className="bg-color-1 border-0 border-5 border-primary border-start card mx-1 my-4 p-2 shadow">
+              <div className="bg-color-1 border-5 border-primary border-start card mx-1 my-4 p-2 shadow">
                 <div className='d-flex align-items-center justify-content-around'>
                   <div className="text-center ">
                     <h3 className='fw-bold h2'>{caseAmt ? caseAmt : 0}</h3>
@@ -265,7 +265,7 @@ export default function ViewAllCaseComp({getCases,downloadCase,role,viewUrl,
                 </div></div>
             </div>
            {isResolvedAmt && <div className="border-end">
-              <div className="bg-color-1 border-0 border-5 border-primary border-start card mx-1 my-4 p-2 shadow">
+              <div className="bg-color-1 border-5 border-primary border-start card mx-1 my-4 p-2 shadow">
                 <div className='d-flex align-items-center justify-content-around'>
                   <div className="text-center ">
                     <h3 className='fw-bold h2'>{caseResolvedAmt ? caseResolvedAmt*0.06 :0}</h3>
@@ -402,7 +402,7 @@ export default function ViewAllCaseComp({getCases,downloadCase,role,viewUrl,
             </div>
 
           </div>
-          {changeStatus?.status && <ChangeStatusModal changeStatus={changeStatus} setChangeStatus={setChangeStatus} handleCaseStatus={setStatus} role="admin" />}
+          {changeStatus?.status && <ChangeStatusModal changeStatus={changeStatus} setChangeStatus={setChangeStatus} handleCaseStatus={setStatus} role="admin" attachementUpload={attachementUpload}/>}
           {caseShareModal?.status && <ShareCaseModal handleShareCase={caseShare} caseShareModal={caseShareModal} getNoramlEmp={getNormalEmp} close={() => { setCaseShareModal({ value: [], status: false }); setShareCase([]) }} />}
           {/* {deleteCase?.status && <ConfirmationModal show={deleteCase?.status} id={deleteCase?.id} hide={()=>setDeleteCase({status:false,id:""})} heading="Are you sure?" text="Your want to delete this case" handleComfirmation={adminDeleteCaseById}/>}  */}
           {changeisActiveStatus?.show && <SetStatusOfProfile changeStatus={changeisActiveStatus} hide={() => setChangeIsActiveStatus({ show: false, details: {} })} type="Case" handleChanges={handleChanges} />}

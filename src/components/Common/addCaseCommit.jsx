@@ -11,21 +11,22 @@ import { IoIosShareAlt } from "react-icons/io";
 
 
 
-export default function AddCaseCommit({ show,handleCaseCommit,close,id }) {
+export default function AddCaseCommit({ show,handleCaseCommit,getCaseById,close,id }) {
     const [data,setData] = useState({_id:id,Comment:""})
     const [commitLoading,setCommitLoading] = useState(false)
 
       const handleCommit =async()=>{
-        // console.log("calling handleCommit");
-        if(data?.Comment?.length>=3){
+        if(data?.Comment?.trim()?.length>=3){
             try {
               setCommitLoading(true)
               const res = await handleCaseCommit(data)
-            //   console.log("handleCaseCommit", res?.data?.data);
               if (res?.data?.success) {
                   setCommitLoading(false)
                   toast.success(res?.data?.message)
                   close()
+                  if(getCaseById){
+                    getCaseById()
+                  }
               }
             } catch (error) {
               if (error && error?.response?.data?.message) {
@@ -34,7 +35,6 @@ export default function AddCaseCommit({ show,handleCaseCommit,close,id }) {
                 toast.error("Something went wrong")
               }
               setCommitLoading(false)
-            //   console.log("handleCaseCommit", error);
             }
         }else{
             // console.log("Comment else",data);

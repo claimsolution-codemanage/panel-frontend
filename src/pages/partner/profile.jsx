@@ -4,7 +4,7 @@ import { getPartnerProfile } from "../../apis"
 import { toast } from 'react-toastify'
 import { useNavigate } from 'react-router-dom'
 // import { API_BASE_IMG } from "../../apis"
-import { API_BASE_IMG } from "../../apis/upload"
+import { API_BASE_IMG, partnerAttachementUpload } from "../../apis/upload"
 import { LuPcCase } from 'react-icons/lu'
 import { CiEdit } from 'react-icons/ci'
 import { IoArrowBackCircleOutline } from 'react-icons/io5'
@@ -47,6 +47,6 @@ export default function Profile() {
 
 
     return (<>
-    <ViewPartnerComp id={1} viewPartner={getPartnerProfile} isEdit={true} role={"partner"} editUrl={"/partner/edit profile"}/>
+    <ViewPartnerComp id={1} viewPartner={getPartnerProfile} isEdit={true} role={"partner"} editUrl={"/partner/edit profile"} attachementUpload={partnerAttachementUpload}/>
     </>)
 }

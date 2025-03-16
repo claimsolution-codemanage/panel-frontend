@@ -13,7 +13,7 @@ import { API_BASE_IMG } from "../../apis/upload"
 import { CiEdit } from 'react-icons/ci'
 import { getCheckStorage } from "../../utils/helperFunction"
 
-export default function ViewPartnerComp({viewPartner,id,role,editUrl,isEdit}) {
+export default function ViewPartnerComp({viewPartner,id,role,editUrl,isEdit,attachementUpload}) {
     const [data, setData] = useState([])
     const [loading, setLoading] = useState(false)
     const [changeStatus, setChangeStatus] = useState({ status: false, details: {} })
@@ -312,6 +312,6 @@ export default function ViewPartnerComp({viewPartner,id,role,editUrl,isEdit}) {
                 </div>
             </div>}
         {adminTag?.status && <AddAdminTagModal adminTag={adminTag} setAdminTag={setAdminTag} handleAdminTag={adminSetPartnerTag} path={-1} role="admin" />}
-        {changeStatus?.status && <ChangeStatusModal changeStatus={changeStatus} setChangeStatus={setChangeStatus} path={-1} role="admin" />}
+        {changeStatus?.status && <ChangeStatusModal changeStatus={changeStatus} setChangeStatus={setChangeStatus} path={-1} role="admin" attachementUpload={attachementUpload}/>}
     </>)
 }
