@@ -2,20 +2,20 @@ import React, { useEffect, useState } from "react";
 import { useFormik, FormikProvider, FieldArray } from "formik";
 import * as Yup from "yup";
 import PaymentDetails from "../SubPart/PaymentDetails";
-import { groInitialValues, groValidationSchema } from "../../../utils/validation";
+import { ombudsmanInitialValues, ombudsmanValidationSchema } from "../../../utils/validation";
 import { toast } from "react-toastify";
 import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
 import { formatDateToISO } from "../../../utils/helperFunction";
 
-const GROFormModal = ({ caseId, show, close, getCaseById, groDetails, createOrUpdateApi, attachementUpload }) => {
+const OmbudsmanFormModal = ({ caseId, show, close, getCaseById, groDetails, createOrUpdateApi, attachementUpload }) => {
     const [saving, setSaving] = useState(false)
     const [loading, setLoading] = useState({ status: false, id: null })
 
     const handleSubmit = async (values) => {
         setSaving(true)
         try {
-            const res = await createOrUpdateApi({ ...values, caseId, type: "gro" })
+            const res = await createOrUpdateApi({ ...values, caseId, type: "ombudsman" })
             toast.success(res?.data?.message)
             if (getCaseById) { getCaseById() }
             close()
@@ -30,8 +30,8 @@ const GROFormModal = ({ caseId, show, close, getCaseById, groDetails, createOrUp
     }
 
     const formik = useFormik({
-        initialValues: groInitialValues,
-        validationSchema: groValidationSchema,
+        initialValues: ombudsmanInitialValues,
+        validationSchema: ombudsmanValidationSchema,
         onSubmit: handleSubmit
     });
 
@@ -130,22 +130,33 @@ const GROFormModal = ({ caseId, show, close, getCaseById, groDetails, createOrUp
         >
             <Modal.Body className='color-4'>
                 <div className="">
-                    <h2 className="text-center text-primary">GRO Form</h2>
+                    <h2 className="text-center text-primary">Ombudsman Form</h2>
                     <FormikProvider value={formik}>
                         <form onSubmit={formik.handleSubmit}>
                             <div className="row">
                                 <div className="col-md-4">
-                                    <div>
-                                        <input type="checkbox" id="specialCase" name="specialCase" checked={formik?.values?.specialCase} onChange={formik.handleChange} onBlur={formik.handleBlur} />
-                                        <label htmlFor="specialCase" className="ms-2">Special Case</label>
+
+                                    <div className="d-flex  gap-2">
+                                        <div className="d-flex  gap-2">
+                                            <div className="d-flex  gap-1">
+                                                <input type="radio" name={`online`} id="online" checked={formik?.values?.method == "online"} onChange={(e) => formik?.setFieldValue(`method`, "online")} />
+                                                <label htmlFor="online" className="ms-2">online</label>
+                                            </div>
+                                            <div className="d-flex  gap-1">
+                                                <input type="radio" name={`offline`} id="offline" checked={formik?.values?.method == "offline"} onChange={(e) => formik?.setFieldValue(`method`, "offline")} />
+                                                <label htmlFor="offline" className="ms-2">offline</label>
+                                            </div>
+                                        </div>
+                                        <div>
+                                        </div>
                                     </div>
-                                    {formik.touched.specialCase && formik.errors.specialCase && (
-                                        <div className="text-danger">{formik.errors.specialCase}</div>
+                                    {formik.touched.method && formik.errors.method && (
+                                        <div className="text-danger">{formik.errors.method}</div>
                                     )}
                                 </div>
                                 <div className="col-md-4">
                                     <label className="form-label">Partner Fee (%)</label>
-                                    <input type="text" className="form-control" name="partnerFee" disabled={!formik?.values?.isSettelment} value={formik?.values?.partnerFee ||""} onChange={formik.handleChange} onBlur={formik.handleBlur} />
+                                    <input type="text" className="form-control" name="partnerFee" disabled={!formik?.values?.isSettelment} value={formik?.values?.partnerFee || ""} onChange={formik.handleChange} onBlur={formik.handleBlur} />
                                     {formik.touched.partnerFee && formik.errors.partnerFee && (
                                         <div className="text-danger">{formik.errors.partnerFee}</div>
                                     )}
@@ -159,55 +170,60 @@ const GROFormModal = ({ caseId, show, close, getCaseById, groDetails, createOrUp
                                 </div>
                             </div>
                             <div className="mb-3">
-                                <label className="form-label">GRO Filing Date</label>
-                                <input type="date" className="form-control" name="groFilingDate" value={formik?.values?.groFilingDate ? formatDateToISO(formik?.values?.groFilingDate) : ""} onChange={formik.handleChange} onBlur={formik.handleBlur} />
-                                {formik.touched.groFilingDate && formik.errors.groFilingDate && (
-                                    <div className="text-danger">{formik.errors.groFilingDate}</div>
+                                <label className="form-label">Ombudsman Filing Date</label>
+                                <input type="date" className="form-control" name="filingDate" value={formik?.values?.filingDate ? formatDateToISO(formik?.values?.filingDate) : ""} onChange={formik.handleChange} onBlur={formik.handleBlur} />
+                                {formik.touched?.filingDate && formik.errors?.filingDate && (
+                                    <div className="text-danger">{formik.errors?.filingDate}</div>
                                 )}
                             </div>
-                            {/* GRO Filing Date */}
-
+                            <div className="mb-3">
+                                <label className="form-label">Complaint Number</label>
+                                <input type="text" className="form-control" name="complaintNumber" value={formik?.values?.complaintNumber || ""} onChange={formik.handleChange} onBlur={formik.handleBlur} />
+                                {formik.touched?.complaintNumber && formik.errors?.complaintNumber && (
+                                    <div className="text-danger">{formik.errors?.complaintNumber}</div>
+                                )}
+                            </div>
 
                             {/* Status Updates */}
                             <div className="card shadow mt-3">
                                 <div className="card-header bg-primary text-white d-flex justify-content-between">
                                     <span>Status</span>
-                                    <button type="button" className="btn btn-light btn-sm" onClick={() => formik.setFieldValue("groStatusUpdates", [...formik.values.groStatusUpdates, { status: "", remarks: "", date: "", isPrivate: false, attachment: "" }])}>
+                                    <button type="button" className="btn btn-light btn-sm" onClick={() => formik.setFieldValue("statusUpdates", [...formik.values?.statusUpdates, { status: "", remarks: "", date: "", isPrivate: false, attachment: "" }])}>
                                         + Add Status
                                     </button>
                                 </div>
                                 <div className="card-body overflow-auto">
-                                    <FieldArray name="groStatusUpdates">
+                                    <FieldArray name="statusUpdates">
                                         {({ remove }) => (
                                             <>
-                                                {formik.values.groStatusUpdates.map((ele, index) => (
+                                                {formik.values?.statusUpdates.map((ele, index) => (
                                                     <div className="row mb-2" key={index}>
                                                         <div className="col-md-3 mb-2 mb-md-0">
-                                                            <input type="text" placeholder="Status" className="form-control" name={`groStatusUpdates.${index}.status`} value={ele?.status} onChange={formik.handleChange} onBlur={formik.handleBlur} />
-                                                            {formik.touched.groStatusUpdates?.[index]?.status && formik.errors.groStatusUpdates?.[index]?.status && (
-                                                                <div className="text-danger">{formik.errors.groStatusUpdates?.[index]?.status}</div>
+                                                            <input type="text" placeholder="Status" className="form-control" name={`statusUpdates.${index}.status`} value={ele?.status} onChange={formik.handleChange} onBlur={formik.handleBlur} />
+                                                            {formik.touched?.statusUpdates?.[index]?.status && formik.errors?.statusUpdates?.[index]?.status && (
+                                                                <div className="text-danger">{formik.errors?.statusUpdates?.[index]?.status}</div>
                                                             )}
                                                         </div>
                                                         <div className="col-md-3 mb-2 mb-md-0">
-                                                            <input type="text" placeholder="remarks" className="form-control" name={`groStatusUpdates.${index}.remarks`} value={ele?.remarks} onChange={formik.handleChange} onBlur={formik.handleBlur} />
-                                                            {formik.touched.groStatusUpdates?.[index]?.remarks && formik.errors.groStatusUpdates?.[index]?.remarks && (
-                                                                <div className="text-danger">{formik.errors.groStatusUpdates?.[index]?.remarks}</div>
+                                                            <input type="text" placeholder="remarks" className="form-control" name={`statusUpdates.${index}.remarks`} value={ele?.remarks} onChange={formik.handleChange} onBlur={formik.handleBlur} />
+                                                            {formik.touched.statusUpdates?.[index]?.remarks && formik.errors.statusUpdates?.[index]?.remarks && (
+                                                                <div className="text-danger">{formik.errors.statusUpdates?.[index]?.remarks}</div>
                                                             )}
                                                         </div>
                                                         <div className="col-md-3 mb-2 mb-md-0">
-                                                            <input type="date" placeholder="Date" className="form-control w-100" name={`groStatusUpdates.${index}.date`} value={ele?.date ? formatDateToISO(ele?.date) : ""} onChange={formik.handleChange} onBlur={formik.handleBlur} />
-                                                            {formik.touched.groStatusUpdates?.[index]?.date && formik.errors.groStatusUpdates?.[index]?.date && (
-                                                                <div className="text-danger">{formik.errors.groStatusUpdates?.[index]?.date}</div>
+                                                            <input type="date" placeholder="Date" className="form-control w-100" name={`statusUpdates.${index}.date`} value={ele?.date ? formatDateToISO(ele?.date) : ""} onChange={formik.handleChange} onBlur={formik.handleBlur} />
+                                                            {formik.touched.statusUpdates?.[index]?.date && formik.errors.statusUpdates?.[index]?.date && (
+                                                                <div className="text-danger">{formik.errors.statusUpdates?.[index]?.date}</div>
                                                             )}
                                                         </div>
                                                         <div className="col-md-3 mb-2 mb-md-0">
                                                             <div className="d-flex gap-2">
-                                                                <input type="checkbox" className="" id="isPrivate" name={`groStatusUpdates.${index}.isPrivate`} value={ele?.isPrivate} checked={ele?.isPrivate} onChange={formik.handleChange} onBlur={formik.handleBlur} />
+                                                                <input type="checkbox" className="" id="isPrivate" name={`statusUpdates.${index}.isPrivate`} value={ele?.isPrivate} checked={ele?.isPrivate} onChange={formik.handleChange} onBlur={formik.handleBlur} />
                                                                 <div>
-                                                                    <input type="file" id={`groStatusUpdates.${index}.attachment`} hidden={true} className="form-control" onChange={(e) => handleAttachment(e, `groStatusUpdates.${index}.attachment`)} />
-                                                                    <button className="btn btn-primary" disabled={loading?.id == `groStatusUpdates.${index}.attachment`} onClick={() => handleFileClick(`groStatusUpdates.${index}.attachment`)}>{loading?.id == `groStatusUpdates.${index}.attachment` ? "Uploading" : (ele?.attachment ? "attachment" : "Upload")}</button>
-                                                                    {formik.touched.groStatusUpdates?.[index]?.attachment && formik.errors.groStatusUpdates?.[index]?.attachment && (
-                                                                        <div className="text-danger">{formik.errors.groStatusUpdates?.[index]?.attachment}</div>
+                                                                    <input type="file" id={`statusUpdates.${index}.attachment`} hidden={true} className="form-control" onChange={(e) => handleAttachment(e, `statusUpdates.${index}.attachment`)} />
+                                                                    <button className="btn btn-primary" disabled={loading?.id == `statusUpdates.${index}.attachment`} onClick={() => handleFileClick(`statusUpdates.${index}.attachment`)}>{loading?.id == `statusUpdates.${index}.attachment` ? "Uploading" : (ele?.attachment ? "attachment" : "Upload")}</button>
+                                                                    {formik.touched.statusUpdates?.[index]?.attachment && formik.errors.statusUpdates?.[index]?.attachment && (
+                                                                        <div className="text-danger">{formik.errors.statusUpdates?.[index]?.attachment}</div>
                                                                     )}
                                                                 </div>
                                                                 <div className="">
@@ -336,6 +352,120 @@ const GROFormModal = ({ caseId, show, close, getCaseById, groDetails, createOrUp
                                 </div>
                             </div>
 
+                            {/* hearingSchedule Handling */}
+                            <div className="card shadow mt-3">
+                                <div className="card-header bg-primary text-white d-flex justify-content-between">
+                                    <span>Hearing schedule</span>
+                                    <button type="button" className="btn btn-light btn-sm" onClick={() => formik.setFieldValue("hearingSchedule", [...formik.values.hearingSchedule, { date: "", remarks: "", isPrivate: false, attachment: "" }])}>
+                                        + Hearing schedule
+                                    </button>
+                                </div>
+                                <div className="card-body overflow-auto">
+                                    <FieldArray name="hearingSchedule">
+                                        {({ remove }) => (
+                                            <>
+                                                {formik.values?.hearingSchedule.map((ele, index) => (
+                                                    <div className="row mb-2" key={index}>
+                                                        <div className="col-md-3 mb-2 mb-md-0">
+                                                            <input type="date" className="form-control" name={`hearingSchedule.${index}.date`} value={ele?.date ? formatDateToISO(ele?.date) : ""} onChange={formik.handleChange} onBlur={formik.handleBlur} />
+                                                            {formik.touched?.hearingSchedule?.[index]?.date && formik.errors?.hearingSchedule?.[index]?.date && (
+                                                                <div className="text-danger">{formik.errors?.hearingSchedule?.[index]?.date}</div>
+                                                            )}
+                                                        </div>
+                                                        <div className="col-md-6  mb-2 mb-md-0">
+                                                            <input type="text" placeholder="remarks" className="form-control" name={`hearingSchedule.${index}.remarks`} value={ele?.remarks} onChange={formik.handleChange} onBlur={formik.handleBlur} />
+                                                            {formik.touched?.hearingSchedule?.[index]?.remarks && formik.errors?.hearingSchedule?.[index]?.remarks && (
+                                                                <div className="text-danger">{formik.errors?.hearingSchedule?.[index]?.remarks}</div>
+                                                            )}
+                                                        </div>
+                                                        <div className="col-md-3  mb-2 mb-md-0">
+                                                            <div className="d-flex gap-2">
+                                                                <input type="checkbox" className="" id="isPrivate" name={`hearingSchedule.${index}.isPrivate`} value={ele?.isPrivate} checked={ele?.isPrivate} onChange={formik.handleChange} onBlur={formik.handleBlur} />
+                                                                <div>
+                                                                    <input type="file" id={`hearingSchedule.${index}.attachment`} hidden={true} className="form-control" onChange={(e) => handleAttachment(e, `hearingSchedule.${index}.attachment`)} />
+                                                                    <button className="btn btn-primary" disabled={loading?.id == `hearingSchedule.${index}.attachment`} onClick={() => handleFileClick(`hearingSchedule.${index}.attachment`)}>{loading?.id == `hearingSchedule.${index}.attachment` ? "Uploading" : (ele?.attachment ? "attachment" : "Upload")}</button>
+                                                                    {formik.touched?.hearingSchedule?.[index]?.attachment && formik.errors?.hearingSchedule?.[index]?.attachment && (
+                                                                        <div className="text-danger">{formik.errors?.hearingSchedule?.[index]?.attachment}</div>
+                                                                    )}
+                                                                </div>
+                                                                <div className="">
+                                                                    <button type="button" className="btn btn-danger" onClick={() => remove(index)}>
+                                                                        -
+                                                                    </button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                ))}
+                                            </>
+                                        )}
+                                    </FieldArray>
+                                </div>
+                            </div>
+
+                            {/* award part handling */}
+                            <div className="card shadow mt-3">
+                                <div className="card-header bg-primary text-white d-flex justify-content-between">
+                                    <span>Award Part</span>
+                                    <button type="button" className="btn btn-light btn-sm" onClick={() => formik.setFieldValue("awardPart", [...formik.values.awardPart, { date: "", remarks: "", type: "award", isPrivate: false, attachment: "" }])}>
+                                        + Award Part
+                                    </button>
+                                </div>
+                                <div className="card-body overflow-auto">
+                                    <FieldArray name="awardPart">
+                                        {({ remove }) => (
+                                            <>
+                                                {formik.values?.awardPart.map((ele, index) => (
+                                                    <div className="row mb-2" key={index}>
+                                                        <div className="col-md-3 mb-2 mb-md-0">
+                                                            <input type="date" className="form-control" name={`awardPart.${index}.date`} value={ele?.date ? formatDateToISO(ele?.date) : ""} onChange={formik.handleChange} onBlur={formik.handleBlur} />
+                                                            {formik.touched?.awardPart?.[index]?.date && formik.errors?.awardPart?.[index]?.date && (
+                                                                <div className="text-danger">{formik.errors?.awardPart?.[index]?.date}</div>
+                                                            )}
+                                                        </div>
+                                                        <div className="col-md-3  mb-2 mb-md-0">
+                                                            <input type="text" placeholder="remarks" className="form-control" name={`awardPart.${index}.remarks`} value={ele?.remarks} onChange={formik.handleChange} onBlur={formik.handleBlur} />
+                                                            {formik.touched?.awardPart?.[index]?.remarks && formik.errors?.awardPart?.[index]?.remarks && (
+                                                                <div className="text-danger">{formik.errors?.awardPart?.[index]?.remarks}</div>
+                                                            )}
+                                                        </div>
+                                                        <div className="col-md-3  mb-2 mb-md-0">
+                                                            <div className="d-flex  gap-2">
+                                                                <div>
+                                                                    <input type="radio" name={`type-${index}`} id="award" checked={ele?.type == "award"} onChange={(e) => formik?.setFieldValue(`awardPart.${index}.type`, "award")} />
+                                                                    <label htmlFor="award" className="ms-2">Award</label>
+                                                                    <input type="radio" name={`type-${index}`} id="reject" checked={ele?.type == "reject"} onChange={(e) => formik?.setFieldValue(`awardPart.${index}.type`, "reject")} />
+                                                                    <label htmlFor="reject" className="ms-2">Reject</label>
+                                                                </div>
+                                                                <div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div className="col-md-3  mb-2 mb-md-0">
+                                                            <div className="d-flex gap-2">
+                                                                <input type="checkbox" className="" id="isPrivate" name={`awardPart.${index}.isPrivate`} value={ele?.isPrivate} checked={ele?.isPrivate} onChange={formik.handleChange} onBlur={formik.handleBlur} />
+                                                                <div>
+                                                                    <input type="file" id={`awardPart.${index}.attachment`} hidden={true} className="form-control" onChange={(e) => handleAttachment(e, `awardPart.${index}.attachment`)} />
+                                                                    <button className="btn btn-primary" disabled={loading?.id == `awardPart.${index}.attachment`} onClick={() => handleFileClick(`awardPart.${index}.attachment`)}>{loading?.id == `awardPart.${index}.attachment` ? "Uploading" : (ele?.attachment ? "attachment" : "Upload")}</button>
+                                                                    {formik.touched?.awardPart?.[index]?.attachment && formik.errors?.awardPart?.[index]?.attachment && (
+                                                                        <div className="text-danger">{formik.errors?.awardPart?.[index]?.attachment}</div>
+                                                                    )}
+                                                                </div>
+                                                                <div className="">
+                                                                    <button type="button" className="btn btn-danger" onClick={() => remove(index)}>
+                                                                        -
+                                                                    </button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                ))}
+                                            </>
+                                        )}
+                                    </FieldArray>
+                                </div>
+                            </div>
+
                             {/* Approval Section */}
                             <div className="card shadow mt-3">
                                 <div className="card-header bg-primary text-white">Approval</div>
@@ -406,4 +536,4 @@ const GROFormModal = ({ caseId, show, close, getCaseById, groDetails, createOrUp
     );
 };
 
-export default GROFormModal;
+export default OmbudsmanFormModal;

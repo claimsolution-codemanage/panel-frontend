@@ -3,10 +3,14 @@ import { AppContext } from '../../../App'
 import { CiEdit } from 'react-icons/ci'
 import { getFormateDMYDate } from '../../../utils/helperFunction'
 import ChangeStatusModal from '../changeStatusModal'
+import EditCaseStatusModal from '../EditCaseStatus'
 
-export default function StatusSection({ isAddCaseProcess, id,role,details,getCaseById, processSteps, addCaseProcess,attachementUpload }) {
+export default function StatusSection({ isAddCaseProcess, id, role, details, getCaseById, processSteps, addCaseProcess, attachementUpload, editCaseProcess }) {
     const state = useContext(AppContext)
     const [changeStatus, setChangeStatus] = useState({ status: false, details: "" })
+    const [showEditCaseModal, setShowEditCaseModal] = useState({ status: false, details: {} })
+    
+
 
     return (
         <>
@@ -50,8 +54,10 @@ export default function StatusSection({ isAddCaseProcess, id,role,details,getCas
                     </div>
                 </div>
             </div>
-            {changeStatus?.status && <ChangeStatusModal changeStatus={changeStatus} setChangeStatus={setChangeStatus} getCaseById={getCaseById} handleCaseStatus={addCaseProcess} role="admin" attachementUpload={attachementUpload}/>}
-            
+            {changeStatus?.status && <ChangeStatusModal changeStatus={changeStatus} setChangeStatus={setChangeStatus} getCaseById={getCaseById} handleCaseStatus={addCaseProcess} role="admin" attachementUpload={attachementUpload} />}
+            {showEditCaseModal?.status && <EditCaseStatusModal changeStatus={showEditCaseModal} getCaseById={getCaseById} setChangeStatus={setShowEditCaseModal} handleCaseStatus={editCaseProcess} role="admin" />}
+
+
         </>
     )
 }

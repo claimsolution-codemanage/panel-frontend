@@ -6,7 +6,7 @@ import { adminChangeCaseStatus } from '../../apis';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 
-export default function EditCaseStatusModal({ changeStatus, setChangeStatus, handleCaseStatus, role }) {
+export default function EditCaseStatusModal({ changeStatus, setChangeStatus, handleCaseStatus, role,getCaseById }) {
     const [data, setData] = useState({ 
         caseId: changeStatus?.details?.caseId, 
         processId: changeStatus?.details?.processId, 
@@ -37,6 +37,9 @@ export default function EditCaseStatusModal({ changeStatus, setChangeStatus, han
                 // navigate(path)
                 toast.success(res?.data?.message)
                 setLoading(false)
+                if(getCaseById){
+                    getCaseById()
+                }
             }
             setLoading(false)
         } catch (error) {
