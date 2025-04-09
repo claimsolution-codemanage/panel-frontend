@@ -9,6 +9,7 @@ import AddDocsModal from '../../addDocsModal'
 import ConfirmationModal from '../confirmationModal'
 import SetStatusOfProfile from '../setStatusModal'
 import { toast } from 'react-toastify'
+import { CiLock } from 'react-icons/ci'
 
 export default function DocumentSection({ role, data, getCaseById, attachementUpload, addCaseDoc,deleteDoc,setCaseDocStatus }) {
     const [uploadingDocs, setUploadingDocs] = useState(false)
