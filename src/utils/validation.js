@@ -1,6 +1,7 @@
 import * as yup from 'yup'
 
 export const empInitialValues = {
+    docs:[],
     profileImg:"",
     fullName:"",
     type:"",
@@ -102,7 +103,7 @@ export const empJoiningFormInitialValues = {
 
 export const groInitialValues = {
   specialCase:false,
-  partnerConsultantFee:"",
+  partnerFee:"",
   consultantFee:"",
   groFilingDate: "",
   groStatusUpdates: [],
@@ -129,15 +130,15 @@ export const groValidationSchema = yup.object().shape({
     "partnerFee",
     "Partner fee is required",
     function (value) {
-      const { isSettelment } = this.parent;
-      return !isSettelment || (value && !isNaN(value));
+      const { isSettelment,specialCase } = this.parent;
+      return (isSettelment || specialCase) ? value && !isNaN(value) : true
     }),
   consultantFee:yup.number().typeError("Must be number").min(0,"Must be minimum 0").test(
     "consultantFee",
     "Consultant fee is required",
     function (value) {
-      const { approved } = this.parent;
-      return !approved || (value && !isNaN(value));
+      const { approved, specialCase } = this.parent;
+      return (approved || specialCase) ? value && !isNaN(value) : true
     }),
   groStatusUpdates: yup.array().of(
     yup.object().shape({
@@ -167,14 +168,14 @@ export const groValidationSchema = yup.object().shape({
     "Approved amount is required",
     function (value) {
       const { approved } = this.parent;
-      return approved && value > 0;
+      return approved ?  approved && value > 0 :true
     }),
   approvalDate: yup.string().test(
     "approved",
     "Approved date is required",
     function (value) {
       const { approved } = this.parent;
-      return approved && value;
+      return approved ?  approved && value:true
     }),
   paymentMode: yup.string()
     .test(
@@ -254,7 +255,7 @@ export const groValidationSchema = yup.object().shape({
 
 export const ombudsmanInitialValues = {
   specialCase:false,
-  partnerConsultantFee:"",
+  partnerFee:"",
   consultantFee:"",
   filingDate: "",
   complaintNumber:"",
@@ -285,15 +286,15 @@ export const ombudsmanValidationSchema = yup.object().shape({
     "partnerFee",
     "Partner fee is required",
     function (value) {
-      const { isSettelment } = this.parent;
-      return !isSettelment || (value && !isNaN(value));
+      const { isSettelment,specialCase } = this.parent;
+      return (isSettelment || specialCase) ? value && !isNaN(value) : true
     }),
   consultantFee:yup.number().typeError("Must be number").min(0,"Must be minimum 0").test(
     "consultantFee",
     "Consultant fee is required",
     function (value) {
-      const { approved } = this.parent;
-      return !approved || (value && !isNaN(value));
+      const { approved, specialCase } = this.parent;
+      return (approved || specialCase) ? value && !isNaN(value) : true
     }),
   statusUpdates: yup.array().of(
     yup.object().shape({
@@ -340,14 +341,14 @@ export const ombudsmanValidationSchema = yup.object().shape({
     "Approved amount is required",
     function (value) {
       const { approved } = this.parent;
-      return approved && value > 0;
+      return approved ?  approved && value:true
     }),
   approvalDate: yup.string().test(
     "approved",
     "Approved date is required",
     function (value) {
       const { approved } = this.parent;
-      return approved && value;
+      return approved ?  value:true
     }),
   paymentMode: yup.string()
     .test(

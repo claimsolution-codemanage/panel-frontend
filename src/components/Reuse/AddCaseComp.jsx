@@ -152,7 +152,7 @@ export default function AddCaseComp({ addCase, uploadAttachment, successUrl,role
     }
 
     const handleCaseDocsUploading = (payload) => {
-        setUploadedFiles([...uploadedFiles, payload])
+        setUploadedFiles([...uploadedFiles, ...payload?.map(ele=>{return {...ele,new:true}})])
     }
 
     const handleRemoveDoc =(id)=>{

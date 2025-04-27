@@ -138,3 +138,21 @@ export const invoiceFormatDate = (dateTime,viewDate)=>{
       return viewDate ? `${date}-${month}-${year}` : `${year}-${month}-${date}`
   }
 }
+
+export const getFileTypeFromExtension = (fileExtension)=>{
+  let fileType = ""
+    if (["mp3", "wav", "ogg", "amr", "aac"].includes(fileExtension)) {
+        fileType = "audio";
+    } else if (["mp4", "avi"].includes(fileExtension)) {
+        fileType = "video";
+    } else if (["doc", "docx"].includes(fileExtension)) {
+        fileType = "word";
+    } else if (["xls", "xlsx"].includes(fileExtension)) {
+        fileType = "excel";
+    } else if (["jpg", "jpeg", "png", "gif", "bmp"].includes(fileExtension)) {
+        fileType = "image";
+    } else if (fileExtension === "pdf") {
+        fileType = "pdf";
+    }
+ return fileType
+}

@@ -166,7 +166,7 @@ export default function EditEmployeeComp({ getProfile, updateProfile, imageUploa
 
     const handleDocsUploading = (payload) => {
         const docs = empFormik?.values?.docs || []
-        empFormik?.setFieldValue("docs",[...docs,{...payload,new:true}])
+        empFormik?.setFieldValue("docs",[...docs,...payload?.map(ele=>{return {...ele,new:true}})])
     }
 
 
@@ -343,7 +343,7 @@ export default function EditEmployeeComp({ getProfile, updateProfile, imageUploa
                                             </div>
                                         <DocumentPreview url={ item?.url || item?.docURL} />
                                         <div className="d-flex align-items-center justify-content-center bg-dark gap-5 w-100 p-2 text-primary">
-                                            <p className="fs-5 text-break text-capitalize text-center text-wrap">{item?.docName}</p>
+                                            <p className="fs-5 text-break text-capitalize text-center text-wrap">{item?.docName || item?.name}</p>
                                         </div>
                                     </div>
                                     </div> 

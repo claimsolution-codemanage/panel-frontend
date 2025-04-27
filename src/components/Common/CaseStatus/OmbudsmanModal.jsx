@@ -156,14 +156,14 @@ const OmbudsmanFormModal = ({ caseId, show, close, getCaseById, groDetails, crea
                                 </div>
                                 <div className="col-md-4">
                                     <label className="form-label">Partner Fee (%)</label>
-                                    <input type="text" className="form-control" name="partnerFee" disabled={!formik?.values?.isSettelment} value={formik?.values?.partnerFee || ""} onChange={formik.handleChange} onBlur={formik.handleBlur} />
+                                    <input type="text" className="form-control" name="partnerFee"  value={formik?.values?.partnerFee || ""} onChange={formik.handleChange} onBlur={formik.handleBlur} />
                                     {formik.touched.partnerFee && formik.errors.partnerFee && (
                                         <div className="text-danger">{formik.errors.partnerFee}</div>
                                     )}
                                 </div>
                                 <div className="col-md-4">
                                     <label className="form-label">Consultant Fee (%)</label>
-                                    <input type="text" className="form-control" disabled={!formik?.values?.approved} name="consultantFee" value={formik?.values?.consultantFee} onChange={formik.handleChange} onBlur={formik.handleBlur} />
+                                    <input type="text" className="form-control"  name="consultantFee" value={formik?.values?.consultantFee} onChange={formik.handleChange} onBlur={formik.handleBlur} />
                                     {formik.touched.consultantFee && formik.errors.consultantFee && (
                                         <div className="text-danger">{formik.errors.consultantFee}</div>
                                     )}

@@ -311,7 +311,7 @@ export default function EditCaseComp({viewCase,updateCase,attachementUpload,addC
         }, [id])
 
     const handleCaseDocsUploading = (payload) => {
-        setUploadedFiles([...uploadedFiles, { ...payload, new: true }])
+        setUploadedFiles([...uploadedFiles,...payload?.map(ele=>{return {...ele,new:true}})])
     }
 
     const handleBack = () => {
@@ -512,9 +512,6 @@ export default function EditCaseComp({viewCase,updateCase,attachementUpload,addC
                                                     : <div className="d-flex justify-content-center bg-color-6 align-items-center fs-4 text-white bg-primary" style={{ height: '3rem', width: '3rem', borderRadius: '3rem' }}>
                                                         <FaFileWord />
                                                     </div>}
-                                            {/* <div className="d-flex justify-content-center bg-color-6 align-items-center fs-4 text-white bg-primary" style={{ height: '3rem', width: '3rem', borderRadius: '3rem' }}>
-                                                {(item?.docType == "image" || item?.type == "image" )? <FaFileImage /> : ((item?.type || item?.docType) == "pdf" ? <FaFilePdf /> : ((item?.type || item?.docType)=="audio" ? <LuFileAudio /> :<FaFileWord />))}                                               
-                                            </div> */}
                                         </div>
                                         <div className="d-flex align-items-center justify-content-center bg-dark gap-5 w-100 p-2 text-primary">
                                             <p className="fs-5 text-break text-capitalize text-center text-wrap">{item?.name ?item?.name :item?.docName}</p>

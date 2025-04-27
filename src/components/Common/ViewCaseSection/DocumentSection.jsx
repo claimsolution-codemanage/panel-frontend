@@ -133,7 +133,7 @@ export default function DocumentSection({ role, data, getCaseById, attachementUp
 
                 <div className="d-flex row  gap-0  align-items-center"></div>
             </div>
-            {uploadingDocs && <AddDocsModal _id={data[0]?._id} uploadingDocs={uploadingDocs} setUploadingDocs={setUploadingDocs}
+            {uploadingDocs && <AddDocsModal _id={data[0]?._id} getCaseById={getCaseById} uploadingDocs={uploadingDocs} setUploadingDocs={setUploadingDocs}
                 handleCaseDocsUploading={addCaseDoc} attachementUpload={attachementUpload} />}
             {deleteCaseDoc?.status && <ConfirmationModal show={deleteCaseDoc?.status} hide={() => setDeleteCaseDoc({ status: false, id: null })} id={deleteCaseDoc?.id} handleComfirmation={deleteDoc} heading={"Are you sure?"} text={"Want to permanent delete this doc"} />}
             {changeisActiveStatus?.show && <SetStatusOfProfile changeStatus={changeisActiveStatus} hide={() => setChangeIsActiveStatus({ show: false, details: {} })} type="Doc" handleChanges={handleChanges} />}

@@ -129,7 +129,7 @@ export default function EmpJoiningForm({ getEmpJoiningFormApi, addOrUpdateJoinin
 
     const handleDocsUploading = (payload) => {
         const docs = empFormik?.values?.docs || []
-        empFormik?.setFieldValue("docs",[...docs,{...payload,new:true}])
+        empFormik?.setFieldValue("docs",[...docs,...payload?.map(ele=>{return {...ele,new:true}})])
     }
 
     const handleRemove = (index,type)=>{
