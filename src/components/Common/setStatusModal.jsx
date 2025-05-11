@@ -5,7 +5,6 @@ import {FaTrashRestoreAlt} from 'react-icons/fa'
 
 export default function SetStatusOfProfile({ changeStatus, hide, type,isActive=false, handleChanges }) {
 
-  // console.log("changesstatus",changeStatus);
   return (
     <Modal
       show={changeStatus?.show}

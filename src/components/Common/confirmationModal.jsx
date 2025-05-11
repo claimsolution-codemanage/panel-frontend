@@ -5,7 +5,7 @@ import { toast } from 'react-toastify';
 import {ImSwitch} from 'react-icons/im'
 import { RiDeleteBin2Line } from "react-icons/ri";
 
-export default function ConfirmationModal({show,hide,id,handleComfirmation,heading,text}) {
+export default function ConfirmationModal({show,hide,id,handleComfirmation,heading,text,getRefreshData}) {
     const [loading,setLoading] = useState(false)
 
 
@@ -18,6 +18,7 @@ export default function ConfirmationModal({show,hide,id,handleComfirmation,headi
                 toast.success(res?.data?.message)
                 setLoading(false)
                 hide()
+                if(getRefreshData) getRefreshData()
 
             }
             setLoading(false)

@@ -10,7 +10,7 @@ export default function EmpViewMySathi() {
     const param = useParams()
     const navigate = useNavigate()
     const userDetails = state?.myAppData?.details
-    const isAccess = ((userDetails?.empType?.toLowerCase() == "sales" || userDetails?.empType?.toLowerCase() == "branch"))
+    const isAccess = (["sales","branch","operation"]?.includes(userDetails?.empType?.toLowerCase()))
 
     useEffect(() => {
         if (!isAccess) {

@@ -106,6 +106,12 @@ a {
   text-decoration: none;
 }
 
+.text-editor p {
+  line-height: 20px;
+  padding: 0px!important;
+  margin: 0px !important;
+}
+
 /* For Container class */
 @media screen and (width > 576px){
   .container-px-5{
@@ -423,4 +429,36 @@ background-color: #182f59;
   position: relative !important;
   page-break-after: always;
   min-height: 755px; /* Ensure the content fits within one landscape A4 page */
+}
+
+.custom-tooltip-wrapper {
+  position: relative;
+  display: inline-block;
+  cursor: pointer;
+}
+
+.custom-tooltip-text {
+  visibility: hidden;
+  opacity: 0;
+  width: auto;
+  max-width: 250px;
+  background-color: #333;
+  color: #fff;
+  text-align: center;
+  padding: 6px 10px;
+  border-radius: 4px;
+  position: absolute;
+  z-index: 999;
+  bottom: 120%; /* position above */
+  left: 50%;
+  transform: translateX(-50%);
+  white-space: normal;
+  font-size: 13px;
+  transition: opacity 0.3s ease;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+}
+
+.custom-tooltip-wrapper:hover .custom-tooltip-text {
+  visibility: visible;
+  opacity: 1;
 }

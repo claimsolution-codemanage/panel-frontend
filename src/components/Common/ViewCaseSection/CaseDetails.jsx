@@ -188,7 +188,8 @@ export default function CaseDetails({ data, role, isViewProfile, editUrl, viewCl
                 <div className="row">
                     <div className="col-12">
                         <h6 className="fw-bold">Problem Statement</h6>
-                        <p className=" h6">{data[0]?.problemStatement}</p>
+                        <div className='text-editor' dangerouslySetInnerHTML={{__html:data[0]?.problemStatement}}></div>
+                        {/* <p className=" h6">{ data[0]?.problemStatement}</p> */}
                     </div>
                 </div>
             </div>

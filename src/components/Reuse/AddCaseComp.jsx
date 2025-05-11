@@ -13,6 +13,7 @@ import { MdOutlineCancel } from "react-icons/md";
 import AddNewCaseDocsModal from "../../components/Common/addNewCaseDoc"
 import { LuFileAudio } from "react-icons/lu"
 import DocumentPreview from "../DocumentPreview"
+import TextEditor from "../TextEditor"
 
 
 export default function AddCaseComp({ addCase, uploadAttachment, successUrl,role }) {
@@ -353,7 +354,8 @@ export default function AddCaseComp({ addCase, uploadAttachment, successUrl,role
                             </div>
                             <div className="row">
                                 <div className="mb-3 col-12">
-                                    <textarea className={`form-control ${caseDetailsFormik?.touched?.problemStatement && caseDetailsFormik?.errors?.problemStatement && "border-danger"}`} placeholder="Describe problem" name="problemStatement" value={caseDetailsFormik?.values?.problemStatement} onChange={handleChange} rows={5} cols={5} ></textarea>
+                                    <TextEditor value={caseDetailsFormik?.values?.problemStatement} handleOnChange={(val)=>caseDetailsFormik?.setFieldValue("problemStatement",val)}/>
+                                    {/* <textarea className={`form-control ${caseDetailsFormik?.touched?.problemStatement && caseDetailsFormik?.errors?.problemStatement && "border-danger"}`} placeholder="Describe problem" name="problemStatement" value={caseDetailsFormik?.values?.problemStatement} onChange={handleChange} rows={5} cols={5} ></textarea> */}
                                     {caseDetailsFormik?.touched?.problemStatement && caseDetailsFormik?.errors?.problemStatement ? (
                                         <span className="text-danger">{caseDetailsFormik?.errors?.problemStatement}</span>
                                     ) : null}

@@ -36,7 +36,7 @@ export default function AdminTrashClient() {
     setLoading(true)
     try {
       const type = false;
-      const res = await allAdminClient(pageItemLimit, pgNo, searchQuery,type)
+      const res = await allAdminClient(pageItemLimit, pgNo, searchQuery,"","",type)
       // console.log("allAdminClient", res?.data?.data);
       if (res?.data?.success && res?.data?.data) {
         setData([...res?.data?.data])

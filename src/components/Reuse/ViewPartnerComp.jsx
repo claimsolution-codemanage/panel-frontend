@@ -244,6 +244,30 @@ export default function ViewPartnerComp({viewPartner,id,role,editUrl,isEdit,atta
                                             </div>
                                         </div>
 
+                                        <div className="bg-color-1 my-5 p-3 p-md-5 rounded-2 shadow">
+                                            <div className="border-3 border-primary border-bottom py-2">
+                                                <h6 className="text-primary fs-3">Professional Details</h6>
+                                            </div>
+                                            <div className="row row-cols-1 row-cols-md-3 mt-5">
+                                                <div className="mb-2 d-flex text-break align-items-center gap-3">
+                                                    <h6 className="fw-bold">Working company name</h6>
+                                                    <p className=" h6 text-capitalize">{data[0]?.profile?.companyName}</p>
+                                                </div>
+                                                <div className="mb-2 d-flex text-break align-items-center gap-3">
+                                                    <h6 className="fw-bold">Working company address</h6>
+                                                    <p className=" h6 text-capitalize">{data[0]?.profile?.companyAddress}</p>
+                                                </div>
+                                                <div className="mb-2 d-flex text-break align-items-center gap-3">
+                                                    <h6 className="fw-bold">Offical contact No</h6>
+                                                    <p className=" h6 text-capitalize">{data[0]?.profile?.officalContactNo}</p>
+                                                </div>
+                                                <div className="mb-1 d-flex text-break align-items-center gap-3">
+                                                    <h6 className="fw-bold">Offical email Id</h6>
+                                                    <p className="h6 ">{data[0]?.profile?.officalEmailId}</p>
+                                                </div>
+                                            </div>                                           
+                                        </div>
+
                                       {role?.toLowerCase()!=="partner" &&  <div className="bg-color-1 my-5 p-3 p-md-5 rounded-2 shadow">
                                             <div className="border-3 border-primary border-bottom py-2">
                                                 <h6 className="text-primary text-center fs-3">Banking Details</h6>

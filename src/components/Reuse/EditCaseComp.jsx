@@ -15,6 +15,7 @@ import { complaintType } from "../../utils/constant"
 import {checkNumber,checkPhoneNo, getCheckStorage} from '../../utils/helperFunction'
 import { LuFileAudio } from "react-icons/lu"
 import DocumentPreview from "../DocumentPreview"
+import TextEditor from "../TextEditor"
 
 export default function EditCaseComp({viewCase,updateCase,attachementUpload,addCase,role,successUrl,id}) {
     const [uploadAttachement,setUploadAttachement] = useState({status:0,message:""})
@@ -157,36 +158,7 @@ export default function EditCaseComp({viewCase,updateCase,attachementUpload,addC
             setError(false)
         }
 
-        // if (caseDetailsFormik?.values?.policyType?.toLowerCase() == "other" || caseDetailsFormik?.values?.complaintType?.toLowerCase() == "other") {
-        //     if (!others.policy || !others.complaint) {
-        //         setError(true)
-        //     } else {
-        //         setError(false)
-        //     }
-
-        // } else {
-        //     setError(false)
-        // }
     }, [others, caseDetailsFormik?.values])
-
-    // console.log("error---",error);
-
-    // useEffect(()=>{
-    //     const policyType = caseDetailsFormik?.values?.policyType
-    //     if(isUpdatedPolicyType){
-    //         caseDetailsFormik.setFieldValue("complaintType","")
-    //     }
-    //     if (policyType == "Life Insurance") {
-    //         setComplaintPolicyType([...LifeInsuranceList])
-    //     } else if (policyType == "General Insurance") {
-    //         setComplaintPolicyType([...generalInsuranceList])
-    //     } else if (policyType == "Health Insurance") {
-    //         setComplaintPolicyType([...healthInsuranceList])
-    //     }else{
-    //         setComplaintPolicyType([...otherInsuranceList])
-    //     }
-    // },
-    // [caseDetailsFormik?.values?.policyType])
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -490,7 +462,8 @@ export default function EditCaseComp({viewCase,updateCase,attachementUpload,addC
                             </div>
                             <div className="row">
                                 <div className="mb-3 col-12">
-                                    <textarea className={`form-control ${caseDetailsFormik?.touched?.problemStatement && caseDetailsFormik?.errors?.problemStatement && "border-danger"}`} placeholder="Describe problem" name="problemStatement" value={caseDetailsFormik?.values?.problemStatement} onChange={handleChange} rows={5} cols={5} ></textarea>
+                                    <TextEditor value={caseDetailsFormik?.values?.problemStatement} handleOnChange={(val)=>caseDetailsFormik.setFieldValue("problemStatement",val)}/>
+                                    {/* <textarea className={`form-control ${caseDetailsFormik?.touched?.problemStatement && caseDetailsFormik?.errors?.problemStatement && "border-danger"}`} placeholder="Describe problem 123" name="problemStatement" value={caseDetailsFormik?.values?.problemStatement} onChange={handleChange} rows={5} cols={5} ></textarea> */}
                                     {caseDetailsFormik?.touched?.problemStatement && caseDetailsFormik?.errors?.problemStatement ? (
                                         <span className="text-danger">{caseDetailsFormik?.errors?.problemStatement}</span>
                                     ) : null}

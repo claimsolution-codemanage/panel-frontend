@@ -6,7 +6,7 @@ import { toast } from 'react-toastify';
 
 
 
-export default function ChangeBranch({ branch,onBranchChange,type,handleBranch}) {
+export default function ChangeBranch({ branch,onBranchChange,type,handleBranch,getRefreshData}) {
     const [error,setError] = useState("")
 
     const close =()=>{
@@ -21,6 +21,7 @@ export default function ChangeBranch({ branch,onBranchChange,type,handleBranch})
               if (res?.data?.success) {
                   toast.success(res?.data?.message)
                   close()
+                  if(getRefreshData) getRefreshData()
               }
             } catch (error) {
               if (error && error?.response?.data?.message) {

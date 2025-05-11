@@ -29,11 +29,11 @@ import { SiMicrosoftexcel } from "react-icons/si";
 import { CiFilter } from "react-icons/ci";
 import { CiAlignBottom } from 'react-icons/ci'
 import { IoShareSocialOutline } from "react-icons/io5";
-import SharePartnerModal from "../../../components/Common/sharePartnerModal"
 import ChangeBranch from "../../../components/changeBranch"
 import AddEmpRefModal from "../../../components/addEmpRefModal"
 import { VscGitPullRequestGoToChanges } from "react-icons/vsc"
 import {IoPersonAddOutline} from 'react-icons/io5'
+import ShareSectionModal from "../../../components/Common/shareSectionModal"
 
 export default function AllAdminPartner() {
   const state = useContext(AppContext)
@@ -230,7 +230,7 @@ export default function AllAdminPartner() {
         <div className="mx-5 p-3">
           <div className="">
             <div className=" border-end">
-              <div className="bg-color-1 border-0 border-5 border-primary border-start card mx-1 my-4 p-2 shadow">
+              <div className="bg-color-1 border-5 border-primary border-start card mx-1 my-4 p-2 shadow">
                 <div className='d-flex align-items-center justify-content-around'>
                   <div className="text-center ">
                     <h3 className='fw-bold h2'>{noOfPartner ? noOfPartner : 0}</h3>
@@ -349,7 +349,7 @@ export default function AllAdminPartner() {
           </div>
           {changeStatus?.show && <SetStatusOfProfile changeStatus={changeStatus} hide={() => setChangeStatus({ show: false, details: {} })} type="Partner" handleChanges={handleChanges} />}
           {deletePartner?.status && <ConfirmationModal show={deletePartner?.status} id={deletePartner?.id} hide={() => setDeletePartner({ status: false, id: "" })} heading="Are you sure?" text={deletePartner?.text ? deletePartner?.text : "Your want to delete this partner"} handleComfirmation={adminDeletePartnerById} />}
-          {partnerShareModal.status && <SharePartnerModal handleShareCase={adminSharePartnerToSaleEmp} partnerShareModal={partnerShareModal} close={() => { setPatnerShareModal({ value: [], status: false }); setSharePartner([]) }} getSaleEmp={adminGetSaleEmployee}/>}
+          {partnerShareModal.status && <ShareSectionModal show={partnerShareModal?.status} shareValue={partnerShareModal?.value} getRefreshData={getAllPartner} shareOf="sharePartners" handleShareCase={adminSharePartnerToSaleEmp} close={() => { setPatnerShareModal({ value: [], status: false }); setSharePartner([]) }} getSaleEmp={adminGetSaleEmployee}/>}
           {empRef?.status && <AddEmpRefModal empRef={empRef} onChangeEmpRef={setEmpRef}  handleApi={adminAddPartnerRefToEmp}/>}
           {changeBranch?.status && <ChangeBranch branch={changeBranch}  onBranchChange={setChangeBranch} type="partner" handleBranch={adminChangeBranch}/>}
         </div>

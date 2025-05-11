@@ -507,3 +507,73 @@ export const paymentInitialValues = {
   transactionDate: "",
   paymentMode: ""
 };
+
+export const partnerProfileInitialValue = {
+  profilePhoto: "",
+  consultantName: "",
+  consultantCode: "",
+  associateWithUs: "",
+  primaryEmail: "",
+  alternateEmail: "",
+  primaryMobileNo: "",
+  alternateMobileNo: "",
+  whatsupNo: "",
+  panNo: "",
+  aadhaarNo: "",
+  dob: "",
+  gender: "",
+  businessName: "",
+  companyName: "",
+  natureOfBusiness: "",
+  designation: "",
+  areaOfOperation: "",
+  workAssociation: "",
+  state: "",
+  district: "",
+  city: "",
+  pinCode: "",
+  about: "",
+  kycPhoto: "",
+  kycAadhaar: "",
+  kycAadhaarBack: "",
+  kycPan: "",
+  address: "",
+}
+
+export const partnerProfileValidationSchema = yup.object({
+  consultantName: yup.string().required("Consultant name is required"),
+  primaryEmail: yup.string().email("Invalid email").required("Primary email is required"),
+  primaryMobileNo: yup.string().required("Primary mobile is required"),
+  aadhaarNo: yup.string().required("Aadhaar is required"),
+  dob: yup.date().required("DOB is required"),
+  gender: yup.string().required("Gender is required"),
+  state: yup.string().required("State is required"),
+  city: yup.string().required("City is required"),
+  pinCode: yup.string().required("PIN is required"),
+  address: yup.string().required("Address is required"),
+})
+
+export const partnerBankInitialValue = {
+  bankName: "",
+  bankAccountNo: "",
+  bankBranchName: "",
+  gstNo: "",
+  panNo: "",
+  ifscCode: "",
+  upiId: "",
+  cancelledChequeImg: "",
+  gstCopyImg: "",
+}
+
+export const partnerBankValidationSchema = yup.object({
+  bankName: yup.string().required("Bank name is required"),
+  bankAccountNo: yup.string().required("Account number is required"),
+  bankBranchName: yup.string().required("Bank branch name is required"),
+  gstNo: yup.string().min(15,"Max 15 character").max(15,"Max 15 character"),
+  panNo:yup.string().min(10,"Min 10 character").max(10,"Max 10 character").required("PAN no is required"),
+  ifscCode: yup.string().required("IFSC code is required"),
+  upiId:yup.string(),
+  cancelledChequeImg: yup.string(),
+  gstCopyImg:yup.string(),
+})
+

@@ -246,11 +246,11 @@ export default function PrivateNavbar() {
                     <MdNotificationsActive />
                     <div className=''>Notification</div>
                 </Link>
-            <Link to="/employee/all client" className={`d-flex align-items-center mx-2 px-2 py-2 gap-3 text-white   ${location.pathname.includes("client") && "active_item"}`}  >
+            </>}
+            {(["operation","branch","sales"]?.includes(empType?.toLowerCase())) && <Link to="/employee/all client" className={`d-flex align-items-center mx-2 px-2 py-2 gap-3 text-white   ${location.pathname.includes("client") && "active_item"}`}  >
             <FaUserTag />
             <div className=''>All Client</div>
-            </Link>
-            </>}
+            </Link>}
 
             {(empType?.toLowerCase() =="finance" || empType?.toLowerCase() =="operation" || empType?.toLowerCase() =="sales" || 
             empType?.toLowerCase() =="Sathi Team".toLowerCase() || empType?.toLowerCase() =="branch") && <>

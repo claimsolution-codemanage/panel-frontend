@@ -407,12 +407,12 @@ export const adminSetPartnerStatus = (_id, status) => {
   return axios.put(`${API_BASE}/api/admin/changePartnerStatus?_id=${_id}&status=${!status}`)
 }
 
-export const allAdminClient = (pageItemLimit = "", pageNo = "", searchQuery = "", type,startDate="",endDate="") => {
+export const allAdminClient = (pageItemLimit = "", pageNo = "", searchQuery = "",startDate="",endDate="",type="") => {
   setheader()
   return axios.get(`${API_BASE}/api/admin/ViewAllClient?limit=${pageItemLimit}&pageNo=${pageNo}&search=${searchQuery}&type=${type}&startDate=${startDate}&endDate=${endDate}`)
 }
 
-export const adminAllClientDownload = (searchQuery = "", type,startDate,endDate) => {
+export const adminAllClientDownload = (searchQuery="",startDate="",endDate="",type="") => {
   setheader()
   return axios({
     method: 'GET',
@@ -515,6 +515,11 @@ export const adminShareCaseToEmployee = (data) => {
 export const adminSharePartnerToSaleEmp = (data) => {
   setheader()
   return axios.put(`${API_BASE}/api/admin/addSharePartner`, data)
+}
+
+export const adminShareClientToSaleEmp = (data) => {
+  setheader()
+  return axios.put(`${API_BASE}/api/admin/shareClient`, data)
 }
 
 export const adminAddPartnerRefToEmp = (data) => {
@@ -1162,6 +1167,11 @@ export const empDownloadAllEmp = (pageItemLimit = "", pageNo = "", searchQuery =
 export const empOpSharePartnerToSaleEmp = (data) => {
   setheader()
   return axios.put(`${API_BASE}/api/employee/operation/addSharePartner`, data)
+}
+
+export const empOpShareClientToSaleEmp = (data) => {
+  setheader()
+  return axios.put(`${API_BASE}/api/employee/operation/shareClient`, data)
 }
 
 export const empAddPartnerRefToEmp = (data) => {
