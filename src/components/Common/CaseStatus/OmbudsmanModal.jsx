@@ -8,7 +8,7 @@ import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
 import { formatDateToISO } from "../../../utils/helperFunction";
 
-const OmbudsmanFormModal = ({ caseId, show, close, getCaseById, groDetails, createOrUpdateApi, attachementUpload }) => {
+const OmbudsmanFormModal = ({ caseId, show, close, getCaseById, details, createOrUpdateApi, attachementUpload }) => {
     const [saving, setSaving] = useState(false)
     const [loading, setLoading] = useState({ status: false, id: null })
 
@@ -110,15 +110,23 @@ const OmbudsmanFormModal = ({ caseId, show, close, getCaseById, groDetails, crea
     };
 
     useEffect(() => {
-        if (groDetails) {
-            formik.setValues(groDetails)
-            const { paymentDetailsId = {} } = groDetails
+        if (details) {
+            formik.setValues(details)
+            const { paymentDetailsId = {} } = details
             const updateKeys = ["paymentMode", "dateOfPayment", "utrNumber", "bankName", "chequeNumber", "chequeDate", "transactionDate", "amount"]
             updateKeys?.forEach(ele => {
                 formik.setFieldValue(ele, paymentDetailsId[ele] || "")
             })
         }
-    }, [groDetails])
+    }, [details])
+
+        const handleClearApproval = ()=>{
+        formik.setFieldValue("approved",false)
+        formik.setFieldValue("approvalDate","")
+        formik.setFieldValue("approvedAmount","")
+        formik.setFieldValue("approvalLetter","")
+        formik.setFieldValue("approvalLetterPrivate",false)
+    }
 
 
     return (
@@ -502,6 +510,7 @@ const OmbudsmanFormModal = ({ caseId, show, close, getCaseById, groDetails, crea
                                                         <div className="text-danger">{formik.errors.approvalLetter}</div>
                                                     )}
                                                 </div>
+                                            <div onClick={handleClearApproval} className="btn btn-primary w-auto h-auto">Clear</div>
                                             </div>
                                         </div>
                                     )}

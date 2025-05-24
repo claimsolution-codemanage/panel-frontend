@@ -9,6 +9,7 @@ export default function AllAdminClient() {
          listDownload={adminAllClientDownload}
          endableEdit={true}
          editPath={`/admin/edit-client`}
+         viewPath={`/admin/client details`}
          enableClientShare={true}
          shareClient={adminShareClientToSaleEmp}
          getSaleEmp={adminGetSaleEmployee}

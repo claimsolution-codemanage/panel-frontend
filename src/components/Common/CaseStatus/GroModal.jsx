@@ -120,6 +120,14 @@ const GROFormModal = ({ caseId, show, close, getCaseById, groDetails, createOrUp
         }
     }, [groDetails])
 
+    const handleClearApproval = ()=>{
+        formik.setFieldValue("approved",false)
+        formik.setFieldValue("approvalDate","")
+        formik.setFieldValue("approvedAmount","")
+        formik.setFieldValue("approvalLetter","")
+        formik.setFieldValue("approvalLetterPrivate",false)
+    }
+
     return (
         <Modal
             show={show}
@@ -371,6 +379,7 @@ const GROFormModal = ({ caseId, show, close, getCaseById, groDetails, createOrUp
                                                         <div className="text-danger">{formik.errors.approvalLetter}</div>
                                                     )}
                                                 </div>
+                                            <div onClick={handleClearApproval} className="btn btn-primary w-auto h-auto">Clear</div>
                                             </div>
                                         </div>
                                     )}

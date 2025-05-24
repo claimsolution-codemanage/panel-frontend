@@ -122,7 +122,8 @@ export const groInitialValues = {
   amount: "",
   transactionDate: "",
   paymentMode: "",
-  approvalLetter:""
+  approvalLetter:"",
+  approvalLetterPrivate:false
 };
 
 export const groValidationSchema = yup.object().shape({
@@ -278,7 +279,8 @@ export const ombudsmanInitialValues = {
   amount: "",
   transactionDate: "",
   paymentMode: "",
-  approvalLetter:""
+  approvalLetter:"",
+  approvalLetterPrivate:false
 };
 
 export const ombudsmanValidationSchema = yup.object().shape({

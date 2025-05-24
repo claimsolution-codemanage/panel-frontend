@@ -18,7 +18,7 @@ import CaseDetails from "../Common/ViewCaseSection/CaseDetails"
 import DocumentSection from "../Common/ViewCaseSection/DocumentSection"
 
 
-export default function ViewCaseComp({ id, getCase, role, attachementUpload, addCaseDoc,
+export default function ViewCaseComp({ id, getCase, role,empType, attachementUpload, addCaseDoc,
     editUrl, addCaseCommit, viewPartner, viewClient, editCaseProcess, addCaseProcess, addReference,
     deleteReference, deleteDoc, isAddRefence, isAddCaseProcess, isAddCommit,
     isViewProfile, setCaseDocStatus, viewEmp, paymentDetailsApi, accessPayment, isCaseFormAccess, createOrUpdateCaseFormApi
@@ -120,12 +120,12 @@ export default function ViewCaseComp({ id, getCase, role, attachementUpload, add
 
                                             {/* case gro form*/}
                                             {((data[0]?.caseFrom?.toLowerCase() == "client" && data[0]?.currentStatus?.toLowerCase() == "gro") || data?.[0]?.caseGroDetails) &&
-                                                <GroSection id={id} role={role} isCaseFormAccess={isCaseFormAccess} getCaseById={getCaseById} status={data?.[0]?.currentStatus} groDetails={data?.[0]?.caseGroDetails} createOrUpdateApi={createOrUpdateCaseFormApi} attachementUpload={attachementUpload} />
+                                                <GroSection id={id} role={role} empType={empType} isCaseFormAccess={isCaseFormAccess} getCaseById={getCaseById} status={data?.[0]?.currentStatus} groDetails={data?.[0]?.caseGroDetails} createOrUpdateApi={createOrUpdateCaseFormApi} attachementUpload={attachementUpload} />
                                             }
 
                                             {/* case ombudsman form*/}
                                             {((data[0]?.caseFrom?.toLowerCase() == "client" && data[0]?.currentStatus?.toLowerCase()?.includes("ombudsman")) || data?.[0]?.caseOmbudsmanDetails) &&
-                                                <OmbudsmanSection id={id} role={role} isCaseFormAccess={isCaseFormAccess} getCaseById={getCaseById} status={data?.[0]?.currentStatus} groDetails={data?.[0]?.caseOmbudsmanDetails} createOrUpdateApi={createOrUpdateCaseFormApi} attachementUpload={attachementUpload} />
+                                                <OmbudsmanSection id={id} role={role} empType={empType}  isCaseFormAccess={isCaseFormAccess} getCaseById={getCaseById} status={data?.[0]?.currentStatus} details={data?.[0]?.caseOmbudsmanDetails} createOrUpdateApi={createOrUpdateCaseFormApi} attachementUpload={attachementUpload} />
                                             }
 
                                             {/* payment details */}

@@ -5,7 +5,7 @@ import DocumentPreview from '../../DocumentPreview'
 import { Link } from 'react-router-dom'
 import OmbudsmanFormModal from '../CaseStatus/OmbudsmanModal'
 
-export default function OmbudsmanSection({ id,role, status, isCaseFormAccess, getCaseById, groDetails, createOrUpdateApi, attachementUpload }) {
+export default function OmbudsmanSection({ id,role,empType, status, isCaseFormAccess, getCaseById, details, createOrUpdateApi, attachementUpload }) {
     const [showGroStatus, setShowGroStatus] = useState(false)
     return (
         <>
@@ -13,37 +13,38 @@ export default function OmbudsmanSection({ id,role, status, isCaseFormAccess, ge
                 <div className="border-3 border-primary border-bottom py-2 mb-5">
                     <div className="d-flex justify-content-between">
                         <div className="text-primary text-center fs-4">Ombudsman Details</div>
-                        {isCaseFormAccess && (status?.toLowerCase()?.includes("ombudsman") || groDetails) && <div className="d-flex gap-1 btn btn-primary" onClick={() => setShowGroStatus(true)}>
+                        {isCaseFormAccess && (status?.toLowerCase()?.includes("ombudsman") || details) && <div className="d-flex gap-1 btn btn-primary" onClick={() => setShowGroStatus(true)}>
                             <span><CiEdit /></span>
                             <div>Ombudsman</div>
                         </div>}
                     </div>
                 </div>
 
-                {groDetails && <div>
+                {details && <div>
                     <div className="row">
                         <div className="col-md-4">
                             <label className="form-label">Method:</label>
-                            <span> {groDetails?.method}</span>
+                            <span> {details?.method}</span>
                         </div>
                         <div className="col-md-4">
                             <label className="form-label">Complaint Number:</label>
-                            <span> {groDetails?.complaintNumber}</span>
+                            <span> {details?.complaintNumber}</span>
                         </div>
                         <div className="col-md-4">
                             <label className="form-label">Ombudsman Filing Date:</label>
-                            <span> {groDetails?.filingDate && getFormateDMYDate(groDetails?.filingDate)}</span>
+                            <span> {details?.filingDate && getFormateDMYDate(details?.filingDate)}</span>
                         </div>
-                        {!["partner","client"]?.includes(role?.toLowerCase()) && <>
+                        {(role?.toLowerCase()=="admin" || (role?.toLowerCase()=="employee" && empType?.toLowerCase()==="operation")) && <>
                             <div className="col-md-4">
                             <label className="form-label">Partner Fee (%):</label>
-                            <span> {groDetails?.partnerFee}</span>
+                            <span> {details?.partnerFee}</span>
                         </div>
                         <div className="col-md-4">
                             <label className="form-label">Consultant Fee (%):</label>
-                            <span> {groDetails?.consultantFee}</span>
+                            <span> {details?.consultantFee}</span>
                         </div>
                         </>}
+                        
 
                     </div>
 
@@ -51,7 +52,7 @@ export default function OmbudsmanSection({ id,role, status, isCaseFormAccess, ge
 
 
                     {/* Status Updates */}
-                    <div className="card-body overflow-auto">
+                    {details?.statusUpdates?.length!=0 &&  <div className="card-body overflow-auto">
                         <div className="mt-4 rounded-2 shadow">
                             <span className='d-flex align-items-center justify-content-center my-2 text-primary  fs-5 fw-bold'>Status</span>
                             <div className="table-responsive">
@@ -66,7 +67,7 @@ export default function OmbudsmanSection({ id,role, status, isCaseFormAccess, ge
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        {groDetails?.statusUpdates?.map((item, ind) => <tr key={item._id} className="border-2 border-bottom border-light text-center">
+                                        {details?.statusUpdates?.map((item, ind) => <tr key={item._id} className="border-2 border-bottom border-light text-center">
                                             <th scope="row">{ind + 1}</th>
                                             <td className="text-nowrap "><p className="mb-1">{item?.status}</p></td>
                                             <td className="text-nowrap "><p className="mb-1">{item?.remarks}</p></td>
@@ -92,10 +93,11 @@ export default function OmbudsmanSection({ id,role, status, isCaseFormAccess, ge
 
                             </div>
                         </div>
-                    </div>
+                    </div>}
+                   
 
                     {/* Query Handling */}
-                    <div className="card-body overflow-auto">
+                    {details?.queryHandling?.length!=0 && <div className="card-body overflow-auto">
                         <div className="mt-4 rounded-2 shadow">
                             <div className="table-responsive">
                                 <span className='d-flex align-items-center justify-content-center my-2 text-primary  fs-5 fw-bold'>Query</span>
@@ -109,7 +111,7 @@ export default function OmbudsmanSection({ id,role, status, isCaseFormAccess, ge
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        {groDetails?.queryHandling?.map((item, ind) => <tr key={item._id} className="border-2 border-bottom border-light text-center">
+                                        {details?.queryHandling?.map((item, ind) => <tr key={item._id} className="border-2 border-bottom border-light text-center">
                                             <th scope="row">{ind + 1}</th>
                                             <td className="text-nowrap "><p className="mb-1">{item?.date && getFormateDMYDate(item?.date)}</p></td>
                                             <td className="text-nowrap "><p className="mb-1">{item?.remarks}</p></td>
@@ -135,10 +137,11 @@ export default function OmbudsmanSection({ id,role, status, isCaseFormAccess, ge
 
                             </div>
                         </div>
-                    </div>
+                    </div>}
+                    
 
                     {/* Query reply Handling */}
-                    <div className="card-body overflow-auto">
+                    {details?.queryReply?.length!=0 &&  <div className="card-body overflow-auto">
                         <div className="rounded-2 shadow">
                             <div className="table-responsive">
                                 <span className='d-flex align-items-center justify-content-center my-2 text-primary  fs-5 fw-bold'>Query Reply</span>
@@ -153,7 +156,7 @@ export default function OmbudsmanSection({ id,role, status, isCaseFormAccess, ge
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        {groDetails?.queryHandling?.map((item, ind) => <tr key={item._id} className="border-2 border-bottom border-light text-center">
+                                        {details?.queryReply?.map((item, ind) => <tr key={item._id} className="border-2 border-bottom border-light text-center">
                                             <th scope="row">{ind + 1}</th>
                                             <td className="text-nowrap "><p className="mb-1">{item?.date && getFormateDMYDate(item?.date)}</p></td>
                                             <td className="text-nowrap "><p className="mb-1">{item?.remarks}</p></td>
@@ -180,10 +183,11 @@ export default function OmbudsmanSection({ id,role, status, isCaseFormAccess, ge
                                 </table>
                             </div>
                         </div>
-                    </div>
+                    </div>}
+                   
 
                     {/* hearing schedule */}
-                    <div className="card-body overflow-auto">
+                    {details?.hearingSchedule?.length!=0 && <div className="card-body overflow-auto">
                         <div className="mt-4 rounded-2 shadow">
                             <div className="table-responsive">
                                 <span className='d-flex align-items-center justify-content-center my-2 text-primary  fs-5 fw-bold'>Hearing schedule</span>
@@ -197,7 +201,7 @@ export default function OmbudsmanSection({ id,role, status, isCaseFormAccess, ge
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        {groDetails?.hearingSchedule?.map((item, ind) => <tr key={item._id} className="border-2 border-bottom border-light text-center">
+                                        {details?.hearingSchedule?.map((item, ind) => <tr key={item._id} className="border-2 border-bottom border-light text-center">
                                             <th scope="row">{ind + 1}</th>
                                             <td className="text-nowrap "><p className="mb-1">{item?.date && getFormateDMYDate(item?.date)}</p></td>
                                             <td className="text-nowrap "><p className="mb-1">{item?.remarks}</p></td>
@@ -223,10 +227,11 @@ export default function OmbudsmanSection({ id,role, status, isCaseFormAccess, ge
 
                             </div>
                         </div>
-                    </div>
+                    </div>}
+                  
 
                     {/* award part */}
-                    <div className="card-body overflow-auto">
+                    {details?.awardPart?.length!=0 && <div className="card-body overflow-auto">
                         <div className="mt-4 rounded-2 shadow">
                             <div className="table-responsive">
                                 <span className='d-flex align-items-center justify-content-center my-2 text-primary  fs-5 fw-bold'>Award Part</span>
@@ -241,7 +246,7 @@ export default function OmbudsmanSection({ id,role, status, isCaseFormAccess, ge
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        {groDetails?.awardPart?.map((item, ind) => <tr key={item._id} className="border-2 border-bottom border-light text-center">
+                                        {details?.awardPart?.map((item, ind) => <tr key={item._id} className="border-2 border-bottom border-light text-center">
                                             <th scope="row">{ind + 1}</th>
                                             <td className="text-nowrap "><p className="mb-1">{item?.date && getFormateDMYDate(item?.date)}</p></td>
                                             <td className="text-nowrap "><p className="mb-1">{item?.remarks}</p></td>
@@ -268,10 +273,10 @@ export default function OmbudsmanSection({ id,role, status, isCaseFormAccess, ge
 
                             </div>
                         </div>
-                    </div>
+                    </div>} 
 
                     {/* Approval Section */}
-                    <div className="card-body overflow-auto">
+                    {details?.approved &&  <div className="card-body overflow-auto">
                         <div className="rounded-2 shadow">
                             <div className="table-responsive">
                                 <span className='d-flex align-items-center justify-content-center my-2 text-primary fs-5 fw-bold'>Approval</span>
@@ -286,36 +291,36 @@ export default function OmbudsmanSection({ id,role, status, isCaseFormAccess, ge
                                     </thead>
                                     <tbody>
                                         <tr className="border-2 border-bottom border-light text-center">
-                                            <th scope="row">{groDetails?.approvedAmount && 1}</th>
-                                            <td className="text-nowrap "><p className="mb-1">{groDetails?.approvalDate && getFormateDMYDate(groDetails?.approvalDate)}</p></td>
-                                            <td className="text-nowrap "><p className="mb-1">{groDetails?.approvedAmount}</p></td>
+                                            <th scope="row">{details?.approvedAmount && 1}</th>
+                                            <td className="text-nowrap "><p className="mb-1">{details?.approvalDate && getFormateDMYDate(details?.approvalDate)}</p></td>
+                                            <td className="text-nowrap "><p className="mb-1">{details?.approvedAmount}</p></td>
                                             <td className="text-nowrap ">
-                                                {groDetails?.approvalLetter && <div className="align-items-center bg-color-7 d-flex flex-column justify-content-center rounded-3" style={{ maxWidth: '250px' }}>
+                                                {details?.approvalLetter && <div className="align-items-center bg-color-7 d-flex flex-column justify-content-center rounded-3" style={{ maxWidth: '250px' }}>
                                                     <div className="w-100 p-2">
                                                         <div className="dropdown float-end cursor-pointer">
                                                             <i className="bi bi-three-dots-vertical" data-bs-toggle="dropdown" aria-expanded="false"></i>
                                                             <ul className="dropdown-menu">
-                                                                <li><div className="dropdown-item"><Link to={`${getCheckStorage(groDetails?.approvalLetter) || "#!"}`} target="_blank">View</Link></div></li>
+                                                                <li><div className="dropdown-item"><Link to={`${getCheckStorage(details?.approvalLetter) || "#!"}`} target="_blank">View</Link></div></li>
                                                             </ul>
                                                         </div>
                                                     </div>
                                                     <div className="d-flex flex-column justify-content-center align-items-center">
-                                                        {getCheckStorage(groDetails?.approvalLetter) && <DocumentPreview height='150px' url={getCheckStorage(groDetails?.approvalLetter)} />}
+                                                        {getCheckStorage(details?.approvalLetter) && <DocumentPreview height='150px' url={getCheckStorage(details?.approvalLetter)} />}
                                                     </div>
                                                 </div>}
-
                                             </td>
                                         </tr>
                                     </tbody>
                                 </table>
                             </div>
                         </div>
-                    </div>
+                    </div>}
+                   
 
                 </div>}
 
             </div>
-            {showGroStatus && <OmbudsmanFormModal caseId={id} show={showGroStatus} close={() => setShowGroStatus(false)} getCaseById={getCaseById} groDetails={groDetails} createOrUpdateApi={createOrUpdateApi} attachementUpload={attachementUpload} />}
+            {showGroStatus && <OmbudsmanFormModal caseId={id} show={showGroStatus} close={() => setShowGroStatus(false)} getCaseById={getCaseById} details={details} createOrUpdateApi={createOrUpdateApi} attachementUpload={attachementUpload} />}
         </>
     )
 }

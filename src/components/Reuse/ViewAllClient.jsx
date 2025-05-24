@@ -27,7 +27,7 @@ import ChangeBranch from "../changeBranch";
 
 
 export default function ViewAllClient(props) {
-    const { getList, listDownload, endableEdit, editPath, role, enableClientShare, shareClient, getSaleEmp, changeBranchApi,
+    const { getList, listDownload, endableEdit, editPath,viewPath, role, enableClientShare, shareClient, getSaleEmp, changeBranchApi,
         deleteClientByIdApi, setClientStatusApi, enableChangeBranch, enableDeleteClient, enableClientStatus,showTooltip } = props
     const stateContext = useContext(AppContext)
     const empType = stateContext?.myAppData?.details?.empType
@@ -255,7 +255,7 @@ export default function ViewAllClient(props) {
                                             {enableClientShare && <td className="text-nowrap"><input className="form-check-input" name="shareClient" type="checkbox" checked={shareClientList.includes(item?._id)} onChange={(e) => handleShareOnchange(e, item?._id)} id="flexCheckDefault" /></td>}
                                             <th scope="row" className="text-nowrap">{ind + 1}</th>
                                             <td className="text-nowrap"><span className="d-flex align-items-center gap-2">
-                                                <span style={{ height: 30, width: 30, borderRadius: 30 }} className="cursor-pointer bg-success text-white d-flex align-items-center justify-content-center" onClick={() => navigate(`/employee/client details/${item._id}`, { state: { filter, back: location?.pathname, path: location?.pathname } })}><HiMiniEye /></span>
+                                                <span style={{ height: 30, width: 30, borderRadius: 30 }} className="cursor-pointer bg-success text-white d-flex align-items-center justify-content-center" onClick={() => navigate(`${viewPath}/${item._id}`, { state: { filter, back: location?.pathname, path: location?.pathname } })}><HiMiniEye /></span>
                                                 {endableEdit && <>
                                                     <Link to={`${editPath}/${item?._id}`} state={{ filter, back: location?.pathname, path: location?.pathname }} style={{ height: 30, width: 30, borderRadius: 30 }} className="cursor-pointer bg-info text-white d-flex align-items-center justify-content-center"><CiEdit className="fs-5 text-dark" /></Link>
                                                 </>}

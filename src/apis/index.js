@@ -704,7 +704,10 @@ export const adminGetEmpJoiningFormApi = (empId) => {
   return axios.get(`${API_BASE}/api/admin/employee/admingetEmpJoiningForm?empId=${empId}`)
 }
 
-
+export const adminAddCaseFileByIdApi = (_id, data) => {
+  setheader()
+  return axios.post(`${API_BASE}/api/admin/adminAddCaseFile?_id=${_id}`, data)
+}
 
 
 
@@ -1225,4 +1228,9 @@ export const empAllStatementDownload = (startDate = "", endDate = "",partnerId="
 export const empFindCaseByFileNoApi= (fileNo="") => {
   setheader()
   return axios.get(`${API_BASE}/api/employee/employeeFindCaseByFileNo?fileNo=${fileNo}`)
+}
+
+export const empAddCaseFileByIdApi = (_id, data) => {
+  setheader()
+  return axios.post(`${API_BASE}/api/employee/empAddCaseFile?_id=${_id}`, data)
 }

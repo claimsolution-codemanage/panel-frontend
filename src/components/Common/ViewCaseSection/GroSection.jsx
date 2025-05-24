@@ -6,7 +6,7 @@ import { FaFileWord } from 'react-icons/fa6'
 import DocumentPreview from '../../DocumentPreview'
 import { Link } from 'react-router-dom'
 
-export default function GroSection({ id,role, status, isCaseFormAccess, getCaseById, groDetails, createOrUpdateApi, attachementUpload }) {
+export default function GroSection({ id,role,empType, status, isCaseFormAccess, getCaseById, groDetails, createOrUpdateApi, attachementUpload }) {
     const [showGroStatus, setShowGroStatus] = useState(false)
     return (
         <>
@@ -28,7 +28,7 @@ export default function GroSection({ id,role, status, isCaseFormAccess, getCaseB
                                 <label htmlFor="specialCase" className="ms-2">Special Case {groDetails?.specialCase ? "✅" : "❎"}</label>
                             </div>
                         </div>
-                        {!["partner","client"]?.includes(role?.toLowerCase()) && <>
+                        {(role?.toLowerCase()=="admin" || (role?.toLowerCase()=="employee" && empType?.toLowerCase()==="operation")) && <>
                             <div className="col-md-4">
                             <label className="form-label">Partner Fee (%):</label>
                             <span> {groDetails?.partnerFee}</span>
@@ -47,7 +47,7 @@ export default function GroSection({ id,role, status, isCaseFormAccess, getCaseB
 
 
                     {/* Status Updates */}
-                    <div className="card-body overflow-auto">
+                    {groDetails?.groStatusUpdates?.length!=0 &&  <div className="card-body overflow-auto">
                         <div className="mt-4 rounded-2 shadow">
                             <span className='d-flex align-items-center justify-content-center my-2 text-primary  fs-5 fw-bold'>Status</span>
                             <div className="table-responsive">
@@ -88,10 +88,11 @@ export default function GroSection({ id,role, status, isCaseFormAccess, getCaseB
 
                             </div>
                         </div>
-                    </div>
+                    </div>}
+                   
 
                     {/* Query Handling */}
-                    <div className="card-body overflow-auto">
+                    {groDetails?.queryHandling?.length!=0 &&  <div className="card-body overflow-auto">
                         <div className="mt-4 rounded-2 shadow">
                             <div className="table-responsive">
                                 <span className='d-flex align-items-center justify-content-center my-2 text-primary  fs-5 fw-bold'>Query</span>
@@ -131,10 +132,11 @@ export default function GroSection({ id,role, status, isCaseFormAccess, getCaseB
 
                             </div>
                         </div>
-                    </div>
+                    </div>}
+                   
 
                     {/* Query reply Handling */}
-                    <div className="card-body overflow-auto">
+                    {groDetails?.queryReply?.length!=0 && <div className="card-body overflow-auto">
                         <div className="rounded-2 shadow">
                             <div className="table-responsive">
                                 <span className='d-flex align-items-center justify-content-center my-2 text-primary  fs-5 fw-bold'>Query Reply</span>
@@ -149,7 +151,7 @@ export default function GroSection({ id,role, status, isCaseFormAccess, getCaseB
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        {groDetails?.queryHandling?.map((item, ind) => <tr key={item._id} className="border-2 border-bottom border-light text-center">
+                                        {groDetails?.queryReply?.map((item, ind) => <tr key={item._id} className="border-2 border-bottom border-light text-center">
                                             <th scope="row">{ind + 1}</th>
                                             <td className="text-nowrap "><p className="mb-1">{item?.date && getFormateDMYDate(item?.date)}</p></td>
                                             <td className="text-nowrap "><p className="mb-1">{item?.remarks}</p></td>
@@ -169,18 +171,16 @@ export default function GroSection({ id,role, status, isCaseFormAccess, getCaseB
                                                     </div>
                                                 </div>
                                             </td>
-
-
                                         </tr>)}
                                     </tbody>
                                 </table>
                             </div>
                         </div>
-                    </div>
+                    </div>}
+                    
 
                     {/* Approval Section */}
-
-                    <div className="card-body overflow-auto">
+                    {groDetails?.approved &&   <div className="card-body overflow-auto">
                         <div className="rounded-2 shadow">
                             <div className="table-responsive">
                                 <span className='d-flex align-items-center justify-content-center my-2 text-primary fs-5 fw-bold'>Approval</span>
@@ -219,7 +219,8 @@ export default function GroSection({ id,role, status, isCaseFormAccess, getCaseB
                                 </table>
                             </div>
                         </div>
-                    </div>
+                    </div>}
+                  
 
                 </div>}
 

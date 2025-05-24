@@ -1,6 +1,6 @@
 import { API_BASE_IMG, employeeAttachementUpload } from "../../../apis/upload"
 import { useParams } from "react-router-dom"
-import { employeeGetCaseById,employeeChangeCaseStatus,empAddCaseReference,empRemoveCaseReference, empAddOrUpdatePayment, empOpCreateOrUpdateCaseFormApi } from "../../../apis"
+import { employeeGetCaseById,employeeChangeCaseStatus,empAddCaseReference,empRemoveCaseReference, empAddOrUpdatePayment, empOpCreateOrUpdateCaseFormApi, empAddCaseFileByIdApi } from "../../../apis"
 import { AppContext } from "../../../App"
 import { useContext } from "react"
 import { employeeAddCaseComment } from "../../../apis"
@@ -15,6 +15,7 @@ export default function EmployeeViewCase() {
           <ViewCaseComp id={param?._id} 
       getCase={employeeGetCaseById} 
       role={"employee"}
+      empType={empType}
       viewEmp={"/employee/profile/"}  
       attachementUpload={employeeAttachementUpload}
       editUrl={empType?.toLowerCase()==="operation" && "/employee/edit-case/"} 
@@ -34,6 +35,7 @@ export default function EmployeeViewCase() {
       paymentDetailsApi={empAddOrUpdatePayment}
       isCaseFormAccess={empType?.toLowerCase()==="operation"}
       createOrUpdateCaseFormApi={empOpCreateOrUpdateCaseFormApi}
+      addCaseDoc={empAddCaseFileByIdApi}
       />
     </>)
 }

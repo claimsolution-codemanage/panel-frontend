@@ -13,6 +13,7 @@ export default function EmployeeAllClient() {
       listDownload={empClientDownload}
       endableEdit={empType?.toLowerCase() == "operation"}
       editPath={`/employee/edit-client`}
+      viewPath={`/employee/client details`}
       enableClientShare={empType?.toLowerCase() == "operation"}
       shareClient={empOpShareClientToSaleEmp}
       getSaleEmp={empOpGetSaleEmp}

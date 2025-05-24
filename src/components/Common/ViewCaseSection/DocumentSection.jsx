@@ -82,9 +82,9 @@ export default function DocumentSection({ role, data, getCaseById, attachementUp
                     <div className="d-flex gap-3 justify-content-center text-primary text-center fs-4">
                         {fileInfo?.type && <IoArrowBackCircleOutline className="fs-3" onClick={() => setFileInfo({ type: null, list: [] })} style={{ cursor: "pointer" }} />}
                         <span className="text-capitalize">{fileInfo?.type || "Document List"}</span>
-                        {(role?.toLowerCase() == "client" || role?.toLowerCase() == "partner") && <div>
+                        <div>
                             <span onClick={() => setUploadingDocs(true)} className="bg-primary d-flex justify-content-center align-items-center text-white" style={{ cursor: 'pointer', height: '2rem', width: '2rem', borderRadius: '2rem' }}><IoMdAdd /></span>
-                        </div>}
+                        </div>
                     </div></div>
                 <div className="row row-cols-1 row-cols-md-4 align-items-center">
 
