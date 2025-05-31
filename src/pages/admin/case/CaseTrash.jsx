@@ -8,7 +8,7 @@ import 'react-date-range/dist/styles.css'; // main style file
 import 'react-date-range/dist/theme/default.css'; // theme css file
 import { getFormateDMYDate, getFormateDate } from "../../../utils/helperFunction"
 import ReactPaginate from 'react-paginate';
-import ChangeStatusModal from "../../../components/Common/changeStatusModal"
+import ChangeStatusModal from "../../../components/Common/Modal/changeStatusModal"
 import { useLocation, useNavigate } from "react-router-dom"
 import {BiLeftArrow} from 'react-icons/bi'
 import {BiRightArrow} from 'react-icons/bi'
@@ -16,16 +16,15 @@ import { adminChangeCaseStatus,adminShareCaseToEmployee } from "../../../apis"
 import Loader from "../../../components/Common/loader"
 import { IoShareSocialOutline } from "react-icons/io5";
 import { CiFilter } from "react-icons/ci";
-import ShareCaseModal from "../../../components/Common/shareCaseModal"
+import ShareCaseModal from "../../../components/Common/Modal/shareCaseModal"
 import loash from 'lodash'
 import { AiOutlineDelete } from "react-icons/ai";
-import ConfirmationModal from "../../../components/Common/confirmationModal"
-import { adminDeleteCaseById } from "../../../apis"
-import { adminSetCaseIsActive } from "../../../apis"
-import SetStatusOfProfile from "../../../components/Common/setStatusModal"
+import ConfirmationModal from "../../../components/Common/Modal/confirmationModal"
+import { adminDeleteCaseById,adminSetCaseIsActive } from "../../../apis"
+import SetStatusOfProfile from "../../../components/Common/Modal/setStatusModal"
 import {FaTrashRestoreAlt} from 'react-icons/fa'
-import DateSelect from "../../../components/Common/DateSelect"
-import { SiMicrosoftexcel } from "react-icons/si";
+
+import DateSelect from "../../../components/Common/Modal/DateSelect"
 import { adminAttachementUpload } from "../../../apis/upload"
  
 export default function AdminTrashCase() {

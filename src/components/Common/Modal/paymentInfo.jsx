@@ -1,9 +1,6 @@
-import React from 'react'
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
-import { useEffect, useRef, useState } from 'react';
-import { toast } from 'react-toastify';
-import { getFormateDMYDate } from '../../utils/helperFunction';
+import { getFormateDMYDate } from '../../../utils/helperFunction';
 
 export default function PaymentInfo({ show, hide, details }) {
     // console.log("payment Details",details);

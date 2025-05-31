@@ -1,52 +1,37 @@
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
-import { useRef, useState } from 'react';
-import { toast } from 'react-toastify';
+import { useContext, useRef, useState } from 'react';
 import { IoMdAdd } from 'react-icons/io'
-import { docType } from '../utils/constant';
-import DocumentPreview from './DocumentPreview';
-import { TiDeleteOutline } from 'react-icons/ti';
-import { getFileTypeFromExtension } from '../utils/helperFunction';
+import { docType, empDocType } from '../../../utils/constant';
+import { AppContext } from '../../../App';
+import { TiDeleteOutline } from "react-icons/ti";
+import DocumentPreview from '../../DocumentPreview';
+import { getFileTypeFromExtension } from '../../../utils/helperFunction';
 
-export default function AddDocsModal({ _id, uploadingDocs,getCaseById, setUploadingDocs, handleCaseDocsUploading, attachementUpload }) {
-    const docRef = useRef()
+
+export default function AddNewCaseDocsModal({uploadingDocs,setUploadingDocs, handleCaseDocsUploading, attachementUpload,type }) {
+    const appState = useContext(AppContext)
     const [data, setData] = useState([])
     const [docInfo,setDocInfo] = useState({isPrivate:false,docName:"",otherDocName:""})
+    const userDetails = appState?.myAppData?.details
+    const hasAccess = userDetails?.role?.toLowerCase()=="admin" || userDetails?.empType?.toLowerCase()=="operation"   
+    const docRef = useRef()
     const [loading, setLoading] = useState({ status: false, code: 0, type: "", message: "" })
-
     const handleSumbit = async (e) => {
         e.preventDefault()
-        setLoading({ status: true, code: 1, type: "submit", message: "files adding.." })
-        try {
-            const payload = data?.map(ele=>{
-                return {
-                        ...ele,
-                        docName:docInfo?.otherDocName ? docInfo?.otherDocName : docInfo?.docName,
-                        new:true,
-                        isPrivate:false
-                }
-            }) 
-            const res = await handleCaseDocsUploading(_id, {caseDocs:payload})
-            if (res?.data?.success) {
-                toast.success(res?.data?.message)
-                setData([])
-                getCaseById && getCaseById()
-                setDocInfo({isPrivate:false,docName:"",otherDocName:""})
-                setLoading({ status: false, code: 1, type: "submit", message: res?.data?.message })
-                setUploadingDocs(false)
+        const payload = data?.map(ele=>{
+            return {
+                    ...ele,
+                    docName:docInfo?.otherDocName ? docInfo?.otherDocName : docInfo?.docName,
+                    isPrivate:docInfo?.isPrivate
             }
-        } catch (error) {
-            if (error && error?.response?.data?.message) {
-                setLoading({ status: false, code: 2, type: "submit", message: error?.response?.data?.message })
-            } else {
-                setLoading({ status: false, code: 2, type: "submit", message: "Something went wrong" })
-            }
-        }
-        setTimeout(() => {
-            setLoading({ status: false, code: 0, type: "", message: "" })
-        }, 3000);
-    }
+        }) 
 
+        handleCaseDocsUploading(payload)
+        setData([])
+        setDocInfo({isPrivate:false,docName:"",otherDocName:""})
+        setUploadingDocs(false)
+    }
 
     // verify supported docs
     const handleAttachment = async (e) => {
@@ -147,6 +132,7 @@ export default function AddDocsModal({ _id, uploadingDocs,getCaseById, setUpload
         setData(updatedList)
     }
 
+
     return (
         <Modal
             show={uploadingDocs}
@@ -162,18 +148,26 @@ export default function AddDocsModal({ _id, uploadingDocs,getCaseById, setUpload
                     <div className='d-flex flex-column text-primary text-center h6 justify-content-center'>
                         <span>Add upto 5 files at a time</span>
                     </div>
-                    <div className="mb-3 ">
-                <label for="docType" className={`form-label`}>Document Type*</label>
+                    {hasAccess && type!="docEmp" && <div class="form-check form-switch">
+                <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckChecked" checked={docInfo?.isPrivate} onChange={(e)=>setDocInfo({...docInfo,isPrivate:e?.target?.checked})}/>
+                <label class="form-check-label" for="private">Private</label>
+                </div>}
+               
+                <div className="mb-3 ">
+                <label htmlFor="docType" className={`form-label`}>Document Type*</label>
                 <select className={`form-select `} id="complaintType" name="complaintType" value={docInfo?.docName} onChange={(e)=>setDocInfo({...docInfo,otherDocName:"",docName:e?.target?.value})} aria-label="Default select example">
                 <option value="">--Select Document Type</option>
-                {docType?.map(type=><option value={type.value}>{type.label}</option>)}
+                {
+                type=="docEmp" ? empDocType?.map(type=><option key={type?.value} value={type.value}>{type.label}</option>)
+                : docType?.map(type=><option key={type?.value} value={type.value}>{type.label}</option>)
+                }
                 </select>
-                {data?.docName?.toLowerCase()=="other" &&<>
+                {docInfo?.docName?.toLowerCase()=="other" &&<>
                 <input type="text" className="form-control mt-2" placeholder={"Document Name"} value={docInfo?.otherDocName} onChange={(e)=>e?.target?.value?.length<60 && setDocInfo({...docInfo,otherDocName:e?.target?.value})} />
                 <p>Document name have maximum 60 characters</p>
                 </> }
                 </div>
-                <div className="row row-cols-1 row-cols-md-2 row-cols-lg-3 p-0 m-0">
+                    <div className="row row-cols-1 row-cols-md-2 row-cols-lg-3 p-0 m-0">
                         {data?.map((doc,ind)=><div key={doc?.docURL} className="align-items-center m-2 p-0 bg-color-7 d-flex flex-column justify-content-center rounded-3">
                             <div onClick={()=>handleRemoveDoc(doc,ind)} className='text-danger fs-3 cursor-pointer'><TiDeleteOutline/></div>
                             <div className="d-flex flex-column justify-content-center align-items-center">
@@ -186,7 +180,6 @@ export default function AddDocsModal({ _id, uploadingDocs,getCaseById, setUpload
                         }
                     </div>
 
-             
                     <p className={`text-center ${loading.code == 2 ? 'text-danger' : 'text-success'}`}>{loading?.message}</p>
                    {!data?.length ? <div className="d-flex justify-content-center gap-3 mb-3">
                         <span onClick={() =>{ if(!loading.status){

@@ -1,22 +1,12 @@
 import { useEffect, useState } from "react"
-import { policyType, generalInsuranceList, healthInsuranceList, LifeInsuranceList,otherInsuranceList } from "../../utils/constant"
+import { generalInsuranceList, healthInsuranceList, LifeInsuranceList,otherInsuranceList } from "../../utils/constant"
 import { clientAddNewCase } from "../../apis"
 import { toast } from 'react-toastify'
-import { FaCircleArrowDown } from 'react-icons/fa6'
-import { LuPcCase } from 'react-icons/lu'
-import { CiEdit } from 'react-icons/ci'
-import { IoArrowBackCircleOutline } from 'react-icons/io5'
 import { useNavigate } from "react-router-dom"
-import { insuranceCompany } from "../../utils/constant"
 import { isNaN, useFormik } from 'formik'
 import * as yup from 'yup'
-import { allState } from "../../utils/constant"
 import { clientAttachementUpload } from "../../apis/upload"
-import { FaFilePdf, FaFileImage,FaFileWord } from 'react-icons/fa6'
 import { useRef } from "react"
-import { IoMdAdd } from 'react-icons/io'
-import {checkNumber} from '../../utils/helperFunction'
-import AddNewCaseDocsModal from "../../components/Common/addNewCaseDoc"
 import AddCaseComp from "../../components/Reuse/AddCaseComp"
 
 export default function ClientNewCase() {

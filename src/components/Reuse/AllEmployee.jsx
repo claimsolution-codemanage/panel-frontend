@@ -8,11 +8,11 @@ import { CiEdit } from 'react-icons/ci'
 import { Link, useLocation, useNavigate } from "react-router-dom"
 import {BiLeftArrow} from 'react-icons/bi'
 import {BiRightArrow} from 'react-icons/bi'
-import SetStatusOfProfile from "../../components/Common/setStatusModal"
+import SetStatusOfProfile from "../Common/Modal/setStatusModal";
 import Loader from "../../components/Common/loader"
 import loash from 'lodash'
 import { AiOutlineDelete } from "react-icons/ai";
-import ConfirmationModal from "../../components/Common/confirmationModal";
+import ConfirmationModal from "../Common/Modal/confirmationModal";
 import EditEmployeeModal from "../../components/editEmployeeModal";
 import { TbReportAnalytics } from "react-icons/tb";
 import { FaUserFriends } from "react-icons/fa";

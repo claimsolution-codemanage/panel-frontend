@@ -3,7 +3,7 @@ import { useState, useEffect } from "react"
 import { toast } from 'react-toastify'
 import { CiEdit } from 'react-icons/ci'
 import { useNavigate } from "react-router-dom"
-import AddJobModal from "../../../components/Common/addJobModal"
+import AddJobModal from "../../../components/Common/Modal/addJobModal"
 import { adminAddJob,viewAllJob,adminRemoveJobById } from "../../../apis"
 import {MdOutlineDelete} from 'react-icons/md'
 import Button from 'react-bootstrap/Button';

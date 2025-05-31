@@ -9,7 +9,7 @@ import { getFormateDMYDate, getFormateDate } from "../../../utils/helperFunction
 import ReactPaginate from 'react-paginate';
 import { CiEdit } from 'react-icons/ci'
 import { IoArrowBackCircleOutline } from 'react-icons/io5'
-import ChangeStatusModal from "../../../components/Common/changeStatusModal"
+import ChangeStatusModal from "../../../components/Common/Modal/changeStatusModal"
 import { useLocation, useNavigate } from "react-router-dom"
 import { BiLeftArrow } from 'react-icons/bi'
 import { BiRightArrow } from 'react-icons/bi'
@@ -17,16 +17,15 @@ import { adminChangeCaseStatus, adminShareCaseToEmployee, adminViewPartnerReport
 import Loader from "../../../components/Common/loader"
 import { IoShareSocialOutline } from "react-icons/io5";
 import { CiFilter } from "react-icons/ci";
-import { TbZoomReset } from "react-icons/tb";
-import ShareCaseModal from "../../../components/Common/shareCaseModal"
+import ShareCaseModal from "../../../components/Common/Modal/shareCaseModal"
 import loash from 'lodash'
 import { AiOutlineDelete } from "react-icons/ai";
 import { VscGitPullRequestGoToChanges } from 'react-icons/vsc'
 import { adminSetCaseIsActive } from "../../../apis"
-import SetStatusOfProfile from "../../../components/Common/setStatusModal"
+import SetStatusOfProfile from "../../../components/Common/Modal/setStatusModal"
 import { CiAlignBottom } from 'react-icons/ci'
 import { useParams } from "react-router-dom"
-import DateSelect from "../../../components/Common/DateSelect"
+import DateSelect from "../../../components/Common/Modal/DateSelect"
 import { SiMicrosoftexcel } from "react-icons/si";
 import { adminAttachementUpload } from "../../../apis/upload"
 

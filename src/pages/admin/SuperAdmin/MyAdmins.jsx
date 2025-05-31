@@ -1,21 +1,15 @@
-import React from 'react'
 import { CiEdit } from 'react-icons/ci'
-import { FaCircleArrowDown } from 'react-icons/fa6'
-import { LuPcCase } from 'react-icons/lu'
-import { IoArrowBackCircleOutline } from 'react-icons/io5'
-import ChangeStatusModal from "../../../components/Common/changeStatusModal"
 import { useNavigate } from "react-router-dom"
 import {BiLeftArrow} from 'react-icons/bi'
 import {BiRightArrow} from 'react-icons/bi'
-import SetStatusOfProfile from "../../../components/Common/setStatusModal"
-import { adminSetEmployeeStatus,adminGetAllEmployee,superAdminDeleteAdminById,superAdminGetAllAdmins,superAdminSetAdminIsActive } from "../../../apis"
+import SetStatusOfProfile from '../../../components/Common/Modal/setStatusModal'
+import {superAdminDeleteAdminById,superAdminGetAllAdmins,superAdminSetAdminIsActive } from "../../../apis"
 import Loader from "../../../components/Common/loader"
 import { useState,useEffect } from 'react'
 import { AiOutlineDelete } from "react-icons/ai";
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import { RiDeleteBin2Line } from "react-icons/ri";
-import {FaTrashRestoreAlt} from 'react-icons/fa'
 import {BsSearch} from 'react-icons/bs'
 import ReactPaginate from 'react-paginate'
 import {toast} from 'react-toastify'

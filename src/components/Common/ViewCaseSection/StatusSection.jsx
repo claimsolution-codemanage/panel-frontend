@@ -2,7 +2,7 @@ import React, { useContext, useState } from 'react'
 import { AppContext } from '../../../App'
 import { CiEdit } from 'react-icons/ci'
 import { getFormateDMYDate } from '../../../utils/helperFunction'
-import ChangeStatusModal from '../changeStatusModal'
+import ChangeStatusModal from '../Modal/changeStatusModal'
 import EditCaseStatusModal from '../EditCaseStatus'
 
 export default function StatusSection({ isAddCaseProcess, id, role, details, getCaseById, processSteps, addCaseProcess, attachementUpload, editCaseProcess }) {

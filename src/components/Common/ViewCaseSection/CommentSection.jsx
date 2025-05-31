@@ -2,7 +2,7 @@ import React, { useContext, useState } from 'react'
 import { IoMdAdd } from 'react-icons/io'
 import { AppContext } from "../../../App"
 import { getFormateDMYDate } from '../../../utils/helperFunction'
-import AddCaseCommit from '../addCaseCommit'
+import AddCaseCommit from '../Modal/addCaseCommit'
 
 
 export default function CommentSection({ caseCommit, role,id,getCaseById,addCaseCommit }) {

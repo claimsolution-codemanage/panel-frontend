@@ -13,12 +13,11 @@ import Loader from "../../components/Common/loader";
 import { AppContext } from "../../App"
 import { useContext } from "react"
 import loash from 'lodash'
-import DateSelect from "../../components/Common/DateSelect"
+import DateSelect from "../Common/Modal/DateSelect";
 import { CiFilter } from "react-icons/ci";
-import ConfirmationModal from "../Common/confirmationModal";
-import { CiEdit } from 'react-icons/ci'
+import ConfirmationModal from "../Common/Modal/confirmationModal";
 import { AiOutlineDelete } from "react-icons/ai";
-import SetStatusOfProfile from "../Common/setStatusModal";
+import SetStatusOfProfile from "../Common/Modal/setStatusModal";
 import {FaTrashRestoreAlt} from 'react-icons/fa'
 import { getCheckStorage } from "../../utils/helperFunction";
 

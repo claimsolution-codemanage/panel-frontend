@@ -1,5 +1,5 @@
-import { useNavigate, useParams } from "react-router-dom";
-import { adminUpdatePartnerProfile, adminUpdatePartnerBankingDetails, adminGetEmpProfile, adminUpdateEmployeeById } from "../../../apis";
+import {useParams } from "react-router-dom";
+import {  adminGetEmpProfile, adminUpdateEmployeeById } from "../../../apis";
 import { adminAttachementUpload,adminImageUpload } from "../../../apis/upload";
 import EditEmployeeComp from "../../../components/Reuse/EditEmployee";
 

@@ -1,10 +1,7 @@
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect,useState } from 'react';
 import { toast } from 'react-toastify';
-import { useNavigate } from 'react-router-dom';
-import { IoMdAdd } from 'react-icons/io'
-import { adminGetAllEmployee,adminGetNormalEmployee } from '../../apis';
 import HashLoader from "react-spinners/HashLoader";
 import { IoIosShareAlt } from "react-icons/io";
 import ReactPaginate from 'react-paginate';

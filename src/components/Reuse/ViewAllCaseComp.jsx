@@ -1,39 +1,28 @@
-import { allAdminCase } from "../../apis"
 import { useState, useEffect } from "react"
 import { toast } from 'react-toastify'
 import { HiMiniEye } from 'react-icons/hi2'
 import { BsSearch } from 'react-icons/bs'
 import { caseStatus } from "../../utils/constant"
-import { DateRange } from 'react-date-range';
 import 'react-date-range/dist/styles.css'; // main style file
 import 'react-date-range/dist/theme/default.css'; // theme css file
 import { getFormateDMYDate, getFormateDate } from "../../utils/helperFunction"
 import ReactPaginate from 'react-paginate';
 import { CiEdit } from 'react-icons/ci'
-import { FaCircleArrowDown } from 'react-icons/fa6'
-import { LuPcCase } from 'react-icons/lu'
 import { IoArrowBackCircleOutline } from 'react-icons/io5'
-import ChangeStatusModal from "../../components/Common/changeStatusModal"
+import ChangeStatusModal from "../Common/Modal/changeStatusModal"
 import { useLocation, useNavigate } from "react-router-dom"
 import { BiLeftArrow } from 'react-icons/bi'
 import { BiRightArrow } from 'react-icons/bi'
-import { adminChangeCaseStatus, adminShareCaseToEmployee, adminAllCaseDownload } from "../../apis"
 import Loader from "../../components/Common/loader"
 import { IoShareSocialOutline } from "react-icons/io5";
 import { CiFilter } from "react-icons/ci";
-import { TbZoomReset } from "react-icons/tb";
-import ShareCaseModal from "../../components/Common/shareCaseModal"
+import ShareCaseModal from "../Common/Modal/shareCaseModal"
 import loash from 'lodash'
-import { CopyToClipboard } from 'react-copy-to-clipboard';
-import { BsClipboard, BsClipboardCheck } from "react-icons/bs";
 import { AiOutlineDelete } from "react-icons/ai";
-import ConfirmationModal from "../../components/Common/confirmationModal"
-import { adminDeleteCaseById } from "../../apis"
 import { VscGitPullRequestGoToChanges } from 'react-icons/vsc'
-import { adminSetCaseIsActive } from "../../apis"
-import SetStatusOfProfile from "../../components/Common/setStatusModal"
+import SetStatusOfProfile from "../Common/Modal/setStatusModal"
 import { CiAlignBottom } from 'react-icons/ci'
-import DateSelect from "../../components/Common/DateSelect"
+import DateSelect from "../Common/Modal/DateSelect"
 import { SiMicrosoftexcel } from "react-icons/si";
 import { Link } from "react-router-dom"
 

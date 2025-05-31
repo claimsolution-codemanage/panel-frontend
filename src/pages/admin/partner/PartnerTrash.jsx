@@ -5,19 +5,19 @@ import { HiMiniEye } from 'react-icons/hi2'
 import { BsSearch } from 'react-icons/bs'
 import 'react-date-range/dist/styles.css'; // main style file
 import 'react-date-range/dist/theme/default.css'; // theme css file
-import { getFormateDMYDate, getFormateDate } from "../../../utils/helperFunction"
+import { getFormateDMYDate } from "../../../utils/helperFunction"
 import ReactPaginate from 'react-paginate';
 import { useLocation, useNavigate } from "react-router-dom"
 import { BiLeftArrow } from 'react-icons/bi'
 import { BiRightArrow } from 'react-icons/bi'
-import SetStatusOfProfile from "../../../components/Common/setStatusModal"
+import SetStatusOfProfile from "../../../components/Common/Modal/setStatusModal"
 import { adminSetPartnerStatus } from "../../../apis"
 import Loader from "../../../components/Common/loader"
 import { useContext } from "react"
 import { AppContext } from "../../../App"
 import { deleteToken } from "../../../utils/helperFunction"
 import { AiOutlineDelete } from "react-icons/ai";
-import ConfirmationModal from "../../../components/Common/confirmationModal"
+import ConfirmationModal from "../../../components/Common/Modal/confirmationModal"
 import { adminDeletePartnerById } from "../../../apis"
 import loash from 'lodash'
 

@@ -13,7 +13,7 @@ import Loader from "../../../components/Common/loader"
 import { useContext } from "react"
 import { AppContext } from "../../../App"
 import { AiOutlineDelete } from "react-icons/ai";
-import ConfirmationModal from "../../../components/Common/confirmationModal"
+import ConfirmationModal from "../../../components/Common/Modal/confirmationModal";
 import loash from 'lodash'
 import { AdminViewAllComplaint } from "../../../apis"
 import { adminRemoveComplaintById } from "../../../apis"

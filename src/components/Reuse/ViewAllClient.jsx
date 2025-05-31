@@ -14,16 +14,16 @@ import Loader from "../../components/Common/loader"
 import loash from 'lodash'
 import { AppContext } from "../../App"
 import { useContext } from "react"
-import DateSelect from "../../components/Common/DateSelect"
+import DateSelect from "../Common/Modal/DateSelect";
 import { CiFilter } from "react-icons/ci";
 import { SiMicrosoftexcel } from "react-icons/si"
-import ShareSectionModal from "../Common/shareSectionModal";
+import ShareSectionModal from "../Common/Modal/shareSectionModal";
 import { IoShareSocialOutline } from "react-icons/io5";
 import { VscGitPullRequestGoToChanges } from "react-icons/vsc";
 import { AiOutlineDelete } from "react-icons/ai";
-import SetStatusOfProfile from "../Common/setStatusModal";
-import ConfirmationModal from "../Common/confirmationModal";
-import ChangeBranch from "../changeBranch";
+import SetStatusOfProfile from "../Common/Modal/setStatusModal";
+import ConfirmationModal from "../Common/Modal/confirmationModal";
+import ChangeBranch from "../Common/Modal/changeBranch";
 
 
 export default function ViewAllClient(props) {

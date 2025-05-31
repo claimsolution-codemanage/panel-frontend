@@ -4,8 +4,8 @@ import { useLocation, useNavigate } from 'react-router-dom'
 import { useParams } from "react-router-dom"
 import { IoArrowBackCircleOutline } from 'react-icons/io5'
 import Loader from "../../components/Common/loader"
-import ChangeStatusModal from "../../components/Common/changeStatusModal"
-import AddAdminTagModal from "../../components/Common/AddAdminTagModal"
+import ChangeStatusModal from "../Common/Modal/changeStatusModal"
+import AddAdminTagModal from "../Common/Modal/AddAdminTagModal"
 import { FaTags } from 'react-icons/fa'
 import { adminSetPartnerTag } from "../../apis"
 import { Link } from "react-router-dom"

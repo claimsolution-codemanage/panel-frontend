@@ -8,32 +8,32 @@ import 'react-date-range/dist/theme/default.css'; // theme css file
 import { getFormateDMYDate, getFormateDate } from "../../../utils/helperFunction"
 import ReactPaginate from 'react-paginate';
 import { CiEdit } from 'react-icons/ci'
-import { IoArrowBackCircleOutline, IoNewspaperOutline } from 'react-icons/io5'
+import { IoNewspaperOutline } from 'react-icons/io5'
 import { useLocation, useNavigate } from "react-router-dom"
 import { BiLeftArrow } from 'react-icons/bi'
 import { BiRightArrow } from 'react-icons/bi'
-import SetStatusOfProfile from "../../../components/Common/setStatusModal"
+import SetStatusOfProfile from "../../../components/Common/Modal/setStatusModal"
 import { adminSetPartnerStatus,adminSharePartnerToSaleEmp,adminAddPartnerRefToEmp } from "../../../apis"
 import Loader from "../../../components/Common/loader"
 import { useContext } from "react"
 import { AppContext } from "../../../App"
 import { deleteToken } from "../../../utils/helperFunction"
 import { AiOutlineDelete } from "react-icons/ai";
-import ConfirmationModal from "../../../components/Common/confirmationModal"
+import ConfirmationModal from "../../../components/Common/Modal/confirmationModal"
 import { adminDeletePartnerById,adminChangeBranch } from "../../../apis"
 import { TbReportAnalytics } from "react-icons/tb";
 import loash from 'lodash'
 import { Link } from "react-router-dom"
-import DateSelect from "../../../components/Common/DateSelect"
+import DateSelect from "../../../components/Common/Modal/DateSelect"
 import { SiMicrosoftexcel } from "react-icons/si";
 import { CiFilter } from "react-icons/ci";
 import { CiAlignBottom } from 'react-icons/ci'
 import { IoShareSocialOutline } from "react-icons/io5";
-import ChangeBranch from "../../../components/changeBranch"
-import AddEmpRefModal from "../../../components/addEmpRefModal"
+import ChangeBranch from "../../../components/Common/Modal/changeBranch"
+import AddEmpRefModal from "../../../components/Common/Modal/addEmpRefModal"
 import { VscGitPullRequestGoToChanges } from "react-icons/vsc"
 import {IoPersonAddOutline} from 'react-icons/io5'
-import ShareSectionModal from "../../../components/Common/shareSectionModal"
+import ShareSectionModal from "../../../components/Common/Modal/shareSectionModal"
 
 export default function AllAdminPartner() {
   const state = useContext(AppContext)

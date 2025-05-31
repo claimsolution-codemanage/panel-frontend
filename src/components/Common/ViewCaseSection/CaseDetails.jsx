@@ -4,7 +4,7 @@ import { getFormateDMYDate } from '../../../utils/helperFunction'
 import { toast } from 'react-toastify'
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
-import AddReferenceModal from '../addReferenceModal';
+import AddReferenceModal from '../Modal/addReferenceModal';
 
 export default function CaseDetails({ data, role, isViewProfile, editUrl, viewClient, isAddRefence, viewEmp, getCaseById, addReference,deleteReference,viewPartner }) {
     const [removeCaseReference, setRemoveCaseReference] = useState({ status: false, type: null, loading: false })

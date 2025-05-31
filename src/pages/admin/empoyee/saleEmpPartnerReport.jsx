@@ -12,18 +12,18 @@ import { IoArrowBackCircleOutline, IoNewspaperOutline } from 'react-icons/io5'
 import { useNavigate, useParams } from "react-router-dom"
 import { BiLeftArrow } from 'react-icons/bi'
 import { BiRightArrow } from 'react-icons/bi'
-import SetStatusOfProfile from "../../../components/Common/setStatusModal"
+import SetStatusOfProfile from "../../../components/Common/Modal/setStatusModal"
 import { adminSetPartnerStatus } from "../../../apis"
 import Loader from "../../../components/Common/loader"
 import { useContext } from "react"
 import { AppContext } from "../../../App"
 import { deleteToken } from "../../../utils/helperFunction"
-import ConfirmationModal from "../../../components/Common/confirmationModal"
+import ConfirmationModal from "../../../components/Common/Modal/confirmationModal"
 import { adminDeletePartnerById } from "../../../apis"
 import { TbReportAnalytics } from "react-icons/tb";
 import loash from 'lodash'
 import { Link } from "react-router-dom"
-import DateSelect from "../../../components/Common/DateSelect"
+import DateSelect from "../../../components/Common/Modal/DateSelect"
 import { SiMicrosoftexcel } from "react-icons/si";
 import { CiFilter } from "react-icons/ci";
 import { CiAlignBottom } from 'react-icons/ci'
@@ -237,7 +237,7 @@ export default function AdminSaleEmpPartnerReport() {
         <div className="mx-5 p-3">
           <div className="">
             <div className=" border-end">
-              <div className="bg-color-1 border-0 border-5 border-primary border-start card mx-1 my-4 p-2 shadow">
+              <div className="bg-color-1 border-5 border-primary border-start card mx-1 my-4 p-2 shadow">
                 <div className='d-flex align-items-center justify-content-around'>
                   <div className="text-center ">
                     <h3 className='fw-bold h2'>{noOfPartner ? noOfPartner : 0}</h3>

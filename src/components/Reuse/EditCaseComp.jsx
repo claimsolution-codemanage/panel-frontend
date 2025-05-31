@@ -1,19 +1,18 @@
 import { useEffect, useState } from "react"
-import { policyType,allState, generalInsuranceList, healthInsuranceList, LifeInsuranceList,otherInsuranceList } from "../../utils/constant"
+import { policyType,allState } from "../../utils/constant"
 import { toast } from 'react-toastify'
 import { useLocation, useNavigate } from "react-router-dom"
 import { isNaN, useFormik } from 'formik'
 import * as yup from 'yup'
-import { FaFilePdf, FaFileImage,FaFileWord } from 'react-icons/fa6'
+import {FaFileWord } from 'react-icons/fa6'
 import { IoArrowBackCircleOutline } from 'react-icons/io5'
 import { useRef } from "react"
 import { IoMdAdd } from 'react-icons/io'
 import { useParams } from "react-router-dom"
 import Loader from "../../components/Common/loader"
-import AddNewCaseDocsModal from "../Common/addNewCaseDoc"
+import AddNewCaseDocsModal from "../Common/Modal/addNewCaseDoc"
 import { complaintType } from "../../utils/constant"
 import {checkNumber,checkPhoneNo, getCheckStorage} from '../../utils/helperFunction'
-import { LuFileAudio } from "react-icons/lu"
 import DocumentPreview from "../DocumentPreview"
 import TextEditor from "../TextEditor"
 

@@ -2,20 +2,15 @@ import "react-image-upload/dist/index.css";
 import { useState, useEffect, useRef } from "react";
 import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 import { formatDateToISO } from "../../utils/helperFunction";
-import { BsCameraFill } from 'react-icons/bs'
 import { toast } from 'react-toastify'
 import { IoArrowBackCircleOutline } from 'react-icons/io5'
 import Loader from "../../components/Common/loader";
 import { validateUploadFile } from "../../utils/helperFunction";
 import { checkPhoneNo, checkNumber } from "../../utils/helperFunction";
-import { getCheckStorage } from "../../utils/helperFunction";
 import { useFormik } from "formik";
 import { empJoiningFormInitialValues, empJoiningFormValidationSchema } from "../../utils/validation";
 import PhoneInput from "react-phone-input-2";
-import DocumentPreview from "../../components/DocumentPreview";
-import { MdOutlineCancel } from "react-icons/md";
-import { IoMdAdd } from "react-icons/io";
-import AddNewCaseDocsModal from "../../components/Common/addNewCaseDoc";
+import AddNewCaseDocsModal from "./Modal/addNewCaseDoc";
 
 export default function EmpJoiningForm({ getEmpJoiningFormApi, addOrUpdateJoiningFormApi, imageUpload, id, attachementUpload }) {
     const param = useParams()

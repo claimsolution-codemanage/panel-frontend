@@ -1,11 +1,5 @@
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
-import { useEffect, useState } from 'react';
-import { toast } from 'react-toastify';
-import { useFormik } from "formik";
-import * as Yup from "yup";
-import {checkNumber} from '../../../utils/helperFunction'
-import { formatDateToISO } from '../../../utils/helperFunction';
 import PaymentDetails from '../SubPart/PaymentDetails';
 
 export default function PaymentModal({ show, close,formik,saving}) {

@@ -14,13 +14,13 @@ import { AppContext } from "../../App"
 import { useContext } from "react"
 import loash from 'lodash'
 import { CiAlignBottom } from 'react-icons/ci'
-import PaymentInfo from "../../components/Common/paymentInfo";
-import DateSelect from "../../components/Common/DateSelect"
+import PaymentInfo from "../Common/Modal/paymentInfo";
+import DateSelect from "../Common/Modal/DateSelect";
 import { CiFilter } from "react-icons/ci";
-import ConfirmationModal from "../Common/confirmationModal";
+import ConfirmationModal from "../Common/Modal/confirmationModal";
 import { CiEdit } from 'react-icons/ci'
 import { AiOutlineDelete } from "react-icons/ai";
-import SetStatusOfProfile from "../Common/setStatusModal";
+import SetStatusOfProfile from "../Common/Modal/setStatusModal";
 import {FaTrashRestoreAlt} from 'react-icons/fa'
 import { getFormateDMYDate } from "../../utils/helperFunction";
 import EditInvoiceStatusModal from "../Common/EditInvoiceStatus";
@@ -263,7 +263,7 @@ export default function AllInvoiceComp({viewAllInvoice,payInvoice,viewInvoiceUrl
         <div className="m-0 m-md-5 p-md-4">
           <div className="row row-cols-1 row-cols-md-2">
             <div className="border-end">
-              <div className="bg-color-1 border-0 border-5 border-primary border-start card mx-1 my-4 p-2 shadow">
+              <div className="bg-color-1 border-5 border-primary border-start card mx-1 my-4 p-2 shadow">
                 <div className='d-flex align-items-center justify-content-around'>
                   <div className="text-center ">
                     <h3 className='fw-bold h2'>{noOfInvoice ? noOfInvoice : 0}</h3>
@@ -274,7 +274,7 @@ export default function AllInvoiceComp({viewAllInvoice,payInvoice,viewInvoiceUrl
             </div>
 
             <div className=" border-end">
-              <div className="bg-color-1 border-0 border-5 border-primary border-start card mx-1 my-4 p-2 shadow">
+              <div className="bg-color-1 border-5 border-primary border-start card mx-1 my-4 p-2 shadow">
                 <div className='d-flex align-items-center justify-content-around'>
                   <div className="text-center ">
                     <h3 className='fw-bold h2'>{totalInvoiceAmt ? totalInvoiceAmt : 0}</h3>

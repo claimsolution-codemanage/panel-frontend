@@ -1,44 +1,37 @@
-import { allAdminPartner, adminAllPartnerDownload } from "../../apis"
 import { useState, useEffect } from "react"
 import { toast } from 'react-toastify'
 import { HiMiniEye } from 'react-icons/hi2'
 import { BsSearch } from 'react-icons/bs'
-import { caseStatus } from "../../utils/constant"
-import { DateRangePicker } from 'react-date-range';
-import { DateRange } from 'react-date-range';
 import 'react-date-range/dist/styles.css'; // main style file
 import 'react-date-range/dist/theme/default.css'; // theme css file
 import { getFormateDMYDate, getFormateDate } from "../../utils/helperFunction"
 import ReactPaginate from 'react-paginate';
 import { CiEdit } from 'react-icons/ci'
-import { FaCircleArrowDown } from 'react-icons/fa6'
-import { LuPcCase } from 'react-icons/lu'
 import { IoArrowBackCircleOutline, IoNewspaperOutline, IoPersonAddOutline } from 'react-icons/io5'
-import ChangeStatusModal from "../Common/changeStatusModal"
 import { useLocation, useNavigate } from "react-router-dom"
 import { BiLeftArrow } from 'react-icons/bi'
 import { BiRightArrow } from 'react-icons/bi'
-import SetStatusOfProfile from "../Common/setStatusModal"
-import { adminSetPartnerStatus,adminSharePartnerToSaleEmp,empAddPartnerRefToEmp } from "../../apis"
+import SetStatusOfProfile from "../Common/Modal/setStatusModal";
+import { empAddPartnerRefToEmp } from "../../apis"
 import Loader from "../Common/loader"
 import { useContext } from "react"
 import { AppContext } from "../../App"
 import { deleteToken } from "../../utils/helperFunction"
 import { AiOutlineDelete } from "react-icons/ai";
-import ConfirmationModal from "../Common/confirmationModal"
+import ConfirmationModal from "../Common/Modal/confirmationModal"
 import { adminDeletePartnerById } from "../../apis"
 import { TbReportAnalytics } from "react-icons/tb";
 import loash from 'lodash'
 import { Link } from "react-router-dom"
-import DateSelect from "../Common/DateSelect"
+import DateSelect from "../Common/Modal/DateSelect";
 import { SiMicrosoftexcel } from "react-icons/si";
 import { CiFilter } from "react-icons/ci";
 import { CiAlignBottom } from 'react-icons/ci'
 import { IoShareSocialOutline } from "react-icons/io5";
-import ChangeBranch from "../changeBranch"
+import ChangeBranch from "../Common/Modal/changeBranch";
 import { VscGitPullRequestGoToChanges } from "react-icons/vsc"
-import AddEmpRefModal from "../addEmpRefModal"
-import ShareSectionModal from "../Common/shareSectionModal"
+import AddEmpRefModal from "../Common/Modal/addEmpRefModal"
+import ShareSectionModal from "../Common/Modal/shareSectionModal"
 
 
 export default function AllPartnerComp({empId,getPartner,editUrl,viewUrl,showType,isShare,partnerShare,isEmpRefAccess,

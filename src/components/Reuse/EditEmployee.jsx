@@ -17,7 +17,7 @@ import PhoneInput from "react-phone-input-2";
 import DocumentPreview from "../DocumentPreview";
 import { MdOutlineCancel } from "react-icons/md";
 import { IoMdAdd } from "react-icons/io";
-import AddNewCaseDocsModal from "../Common/addNewCaseDoc";
+import AddNewCaseDocsModal from "../Common/Modal/addNewCaseDoc";
 
 export default function EditEmployeeComp({ getProfile, updateProfile, imageUpload, id, attachementUpload,joiningFormUrl }) {
     const param = useParams()

@@ -8,16 +8,13 @@ import { useLocation, useNavigate, useParams } from "react-router-dom"
 import { BiLeftArrow } from 'react-icons/bi'
 import { BiRightArrow } from 'react-icons/bi'
 import Loader from "../Common/loader"
-import { IoShareSocialOutline } from "react-icons/io5";
 import { CiFilter } from "react-icons/ci";
-import DateSelect from "../Common/DateSelect"
+import DateSelect from "../Common/Modal/DateSelect";
 import { SiMicrosoftexcel } from "react-icons/si";
-import { Link } from "react-router-dom"
 import CreateOrUpdateStatmentModal from "./createOrUpdateStatementModal";
 import { AppContext } from "../../App";
 import StatementPdf from "../Common/PdfConvert/StatementPdf";
 import html2pdf from 'html2pdf.js'
-import html2canvas from 'html2canvas';
 
 
 export default function ViewAllStatement({getStatementApi,type,excelDownloadApi,fileDetailApi}) {

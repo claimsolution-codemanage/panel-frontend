@@ -9,13 +9,13 @@ import ReactPaginate from 'react-paginate';
 import { useLocation, useNavigate } from "react-router-dom"
 import {BiLeftArrow} from 'react-icons/bi'
 import {BiRightArrow} from 'react-icons/bi'
-import SetStatusOfProfile from "../../../components/Common/setStatusModal"
+import SetStatusOfProfile from "../../../components/Common/Modal/setStatusModal";
 import { adminSetClientStatus,allAdminClient } from "../../../apis"
 import Loader from "../../../components/Common/loader"
 import loash from 'lodash'
 import { adminDeleteClientById } from "../../../apis"
 import { AiOutlineDelete } from "react-icons/ai";
-import ConfirmationModal from "../../../components/Common/confirmationModal"
+import ConfirmationModal from "../../../components/Common/Modal/confirmationModal";
 import {FaTrashRestoreAlt} from 'react-icons/fa'
  
 export default function AdminTrashClient() {
