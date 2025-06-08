@@ -23,11 +23,12 @@ export default function GroSection({ id,role,empType, status, isCaseFormAccess, 
 
                 {groDetails && <div>
                     <div className="row">
-                        <div className="col-md-4">
+                        {groDetails?.specialCase && <div className="col-md-4">
                             <div>
                                 <label htmlFor="specialCase" className="ms-2">Special Case {groDetails?.specialCase ? "✅" : "❎"}</label>
                             </div>
-                        </div>
+                        </div>}
+                        
                         {(role?.toLowerCase()=="admin" || (role?.toLowerCase()=="employee" && empType?.toLowerCase()==="operation")) && <>
                             <div className="col-md-4">
                             <label className="form-label">Partner Fee (%):</label>

@@ -533,9 +533,9 @@ export const adminAddCaseCommit = (data) => {
   return axios.put(`${API_BASE}/api/admin/addCaseCommit`, data)
 }
 
-export const adminDashboardData = () => {
+export const adminDashboardData = (year="") => {
   setheader()
-  return axios.get(`${API_BASE}/api/admin/dashboard`)
+  return axios.get(`${API_BASE}/api/admin/dashboard?year=${year}`)
 }
 
 export const adminAddJob = (data) => {
@@ -835,14 +835,14 @@ export const clientPayInvoiceById = (invoiceId, caseId) => {
 }
 
 
-export const clientDashboardData = () => {
+export const clientDashboardData = (year="") => {
   setheader()
-  return axios.get(`${API_BASE}/api/client/getClientDashboardData`)
+  return axios.get(`${API_BASE}/api/client/getClientDashboardData?year=${year}`)
 }
 
-export const partnerDashboardData = () => {
+export const partnerDashboardData = (year="") => {
   setheader()
-  return axios.get(`${API_BASE}/api/partner/getpartnerDashboard`)
+  return axios.get(`${API_BASE}/api/partner/getpartnerDashboard?year=${year}`)
 }
 
 
@@ -866,9 +866,9 @@ export const employeSignIn = (data) => {
   setheader()
   return axios.post(`${API_BASE}/api/employee/signin`, data)
 }
-export const allEmployeeDashboardData = () => {
+export const allEmployeeDashboardData = (year="") => {
   setheader()
-  return axios.get(`${API_BASE}/api/employee/all/dashboard`)
+  return axios.get(`${API_BASE}/api/employee/all/dashboard?year=${year}`)
 }
 
 export const employeResetPassword = (data) => {

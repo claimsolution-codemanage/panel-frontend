@@ -15,11 +15,7 @@ import {CiAlignBottom} from 'react-icons/ci'
 import Loader from '../../../components/Common/loader';
 import { useState } from 'react';
 import { allMonths } from '../../../utils/constant';
-import { Link } from 'react-router-dom';
 
-
-
-// import faker from 'faker';
 ChartJS.register(ArcElement, Tooltip, Legend);
 ChartJS.register(
   CategoryScale,
@@ -46,13 +42,13 @@ export default function AdminDasboard() {
   const [employee,setEmployee] = useState({})
   const [noOfPartner,setNoOfPartner] = useState(0)
   const empType  = state?.myAppData?.details?.empType
+  const [selectedYear,setSelectedYear] = useState(new Date().getFullYear())
 
-  useEffect(() => {
-    async function fetch() {
+
+  const getDashboardDetails = async()=>{
       setLoading(true)
       try {
-        const res = await allEmployeeDashboardData()
-        // console.log("allEmployeeDashboardData", res?.data);
+        const res = await allEmployeeDashboardData(selectedYear)
         if (res?.data?.success) {
           if(res?.data?.graphData){
             setGraphData(res?.data?.graphData)
@@ -67,7 +63,6 @@ export default function AdminDasboard() {
             setNoOfPartner(res?.data?.noOfPartner)
           }
           setLoading(false)
-
         }
       } catch (error) {
         if (error && error?.response?.data?.message) {
@@ -75,10 +70,12 @@ export default function AdminDasboard() {
         } else {
           toast.error("Something went wrong")
         }
-        // console.log("adminGetAllEmployee error", error);
       }
-    } fetch()
-  }, [])
+  }
+
+  useEffect(() => {
+   getDashboardDetails()
+  }, [selectedYear])
 
 
   const options = {
@@ -93,18 +90,6 @@ export default function AdminDasboard() {
     },
   };
   
-  
-  // const data = {
-  //   labels: graphData?.map(data=>{return `${allMonths[data?._id?.month]}`}),
-  //   datasets: [
-  //     {
-  //       label: 'Cases',
-  //       data: graphData?.map(data=>{return data?.totalCases}),
-  //       borderColor: 'rgb(255, 99, 132)',
-  //       backgroundColor: 'rgba(255, 99, 132, 0.5)',
-  //     },
-  //   ],
-  // };
 
   const data = {
     labels: graphData?.map(data=>{return `${allMonths[data?._id?.month-1]}`}),
@@ -120,7 +105,6 @@ export default function AdminDasboard() {
   
   const data1 = {  
     labels: chartData?.length===0 ? ["No Case"]  : chartData[0]?.allCase?.map(data=>{return data?._id}) ,
-    // ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
     datasets: [
       {
         label: 'Case',
@@ -148,6 +132,16 @@ export default function AdminDasboard() {
     ],
   };
 
+  const getAllYearOptions = ()=>{
+    const options = []
+    const currentYear = new Date().getFullYear()
+    const startYear = 2024
+    for (let i = currentYear-startYear; i >= 0; i--) {
+      options.push(startYear+i) 
+    }
+    return options
+  }
+
   return (
     <> 
      {loading?<Loader/> : 
@@ -174,7 +168,15 @@ export default function AdminDasboard() {
                 <div className="col-12">
                     <div className="card p-3 mx-4 mt-4 rounded-4 bg-color-1 border-none border-0 shadow">
                     <div className="border-3 border-primary border-bottom py-2">
+                      <div className='d-flex justify-content-between'>
                             <h6 className="h1 fw-bold">Welcome to your Dashboard</h6>
+                            <div className='d-flex gap-1 align-items-center justify-content-center'>
+                              <p className='p-0 m-0'>Year</p>
+                            <select className="form-select w-auto h-auto" name="year" id="year" value={selectedYear} onChange={(e)=>setSelectedYear(e?.target?.value)}>
+                                {getAllYearOptions().map(ele=><option value={ele}>{ele}</option>)}
+                            </select>
+                            </div>
+                      </div>
                             </div>
                         <div className='row row-cols-1 row-cols-md-3 mt-2'>
                           <div className='d-flex align-items-center gap-2'>
@@ -200,7 +202,7 @@ export default function AdminDasboard() {
           <div className="mx-4">
             <div className="row">
             <div className="col-md-3 border-end">
-                <div className="bg-color-1 border-0 border-5 border-primary border-start card mx-1 my-4 p-2 shadow">
+                <div className="bg-color-1 border-5 border-primary border-start card mx-1 my-4 p-2 shadow">
                     <div className='d-flex align-items-center justify-content-around'>
                   <div className="text-center ">
                     <h3 className='fw-bold h2'>{chartData[0]?.totalCase ? chartData[0]?.totalCase :0}</h3>
@@ -210,7 +212,7 @@ export default function AdminDasboard() {
                   </div></div>
               </div>
                   <div className="col-md-3 border-end">
-                <div className="bg-color-1 border-0 border-5 border-primary border-start card mx-1 my-4 p-2 shadow">
+                <div className="bg-color-1 border-5 border-primary border-start card mx-1 my-4 p-2 shadow">
                     <div className='d-flex align-items-center justify-content-around'>
                   <div className="text-center ">
                     <h3 className='fw-bold h2'>{chartData[0]?.totalCaseAmount ?chartData[0]?.totalCaseAmount:0}</h3>
@@ -220,7 +222,7 @@ export default function AdminDasboard() {
                   </div></div>
               </div>
               <div className="col-md-3 border-end">
-                <div className="bg-color-1 border-0 border-5 border-primary border-start card mx-1 my-4 p-2 shadow">
+                <div className="bg-color-1 border-5 border-primary border-start card mx-1 my-4 p-2 shadow">
                     <div className='d-flex align-items-center justify-content-around'>
                   <div className="text-center ">
                     <h3 className='fw-bold h2'>{noOfPartner}</h3>
@@ -231,7 +233,7 @@ export default function AdminDasboard() {
               </div>
               
               {chartData[0]?.allCase?.map(data=> <div key={data?._id} className="col-md-3 border-end">
-                <div className="bg-color-1 border-0 border-5 border-primary border-start card mx-1 my-4 p-2 shadow">
+                <div className="bg-color-1 border-5 border-primary border-start card mx-1 my-4 p-2 shadow">
                     <div className='d-flex align-items-center justify-content-around'>
                   <div className="text-center ">
                     <h3 className='fw-bold h2'>{data?.totalCases}</h3>

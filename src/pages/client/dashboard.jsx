@@ -31,7 +31,7 @@ ChartJS.register(
 
 
 
-import { adminDashboardData,clientDashboardData } from '../../apis';
+import { clientDashboardData } from '../../apis';
 import {toast} from 'react-toastify'
 import { useEffect } from 'react';
 
@@ -40,38 +40,37 @@ export default function ClientDasboard() {
   const [chartData,setChartData] = useState([]) 
   const [graphData,setGraphData] = useState([]) 
   const [clientDetails,setClientDetails] = useState({})
+  const [selectedYear, setSelectedYear] = useState(new Date().getFullYear())
+  
 
+  const getDashboardDetails = async()=>{
+    try {
+      setLoading(true)
+      const res = await clientDashboardData(selectedYear)
+      if (res?.data?.success) {
+        if(res?.data?.graphData){
+          setGraphData(res?.data?.graphData)
+        }
+        if(res?.data?.pieChartData){
+          setChartData(res?.data?.pieChartData)
+        }
+        if(res?.data?.clientNeccessaryData){
+          setClientDetails(res?.data?.clientNeccessaryData)
+        }
+        setLoading(false)
+      }
+    } catch (error) {
+      if (error && error?.response?.data?.message) {
+        toast.error(error?.response?.data?.message)
+      } else {
+        toast.error("Something went wrong")
+      }
+    }
+  }
 
   useEffect(() => {
-    async function fetch() {
-      setLoading(true)
-      try {
-        const res = await clientDashboardData()
-        // console.log("clientDashboardDatae", res?.data);
-        if (res?.data?.success) {
-          if(res?.data?.graphData){
-            setGraphData(res?.data?.graphData)
-          }
-          if(res?.data?.pieChartData){
-            setChartData(res?.data?.pieChartData)
-          }
-          if(res?.data?.clientNeccessaryData){
-            setClientDetails(res?.data?.clientNeccessaryData)
-          }
-          setLoading(false)
-
-        }
-      } catch (error) {
-        if (error && error?.response?.data?.message) {
-          toast.error(error?.response?.data?.message)
-        } else {
-          toast.error("Something went wrong")
-        }
-        // console.log("adminGetAllEmployee error", error);
-      }
-    } fetch()
-  }, [])
-
+    getDashboardDetails()
+  }, [selectedYear])
 
   const options = {
     responsive: true,
@@ -140,7 +139,16 @@ export default function ClientDasboard() {
     timeZoneName: 'short'
   };
 
-  // console.log("data",chartData,graphData);
+  const getAllYearOptions = () => {
+    const options = []
+    const currentYear = new Date().getFullYear()
+    const startYear = 2024
+    for (let i = currentYear - startYear; i >= 0; i--) {
+      options.push(startYear + i)
+    }
+    return options
+  }  
+
   return (
     <> 
      {loading?<Loader/> : 
@@ -172,9 +180,15 @@ export default function ClientDasboard() {
             <div className="row">
                 <div className="col-12">
                     <div className="card p-3  mx-md-4 mt-4 rounded-4 bg-color-1 border-none border-0 shadow">
-                    <div className="border-3 border-primary border-bottom py-2">
-                            <h6 className="h1 fw-bold">Welcome to your Dashboard</h6>
-                            </div>
+                      <div className='d-flex justify-content-between'>
+                    <h6 className="h1 fw-bold">Welcome to your Dashboard</h6>
+                    <div className='d-flex gap-1 align-items-center justify-content-center'>
+                      <p className='p-0 m-0'>Year</p>
+                      <select className="form-select w-auto h-auto" name="year" id="year" value={selectedYear} onChange={(e) => setSelectedYear(e?.target?.value)}>
+                        {getAllYearOptions().map(ele => <option value={ele}>{ele}</option>)}
+                      </select>
+                    </div>
+                  </div>
                         <p className='mt-4'><span className='text-capitalize fw-bold'>{clientDetails?.fullName},</span> you can view the overall data of your case details.</p>
                     </div>
                 </div>
@@ -184,7 +198,7 @@ export default function ClientDasboard() {
           <div className="mx-md-4">
             <div className="row">
             <div className="col-md-3 border-end">
-                <div className="bg-color-1 border-0 border-5 border-primary border-start card mx-1 my-4 p-2 shadow">
+                <div className="bg-color-1 border-5 border-primary border-start card mx-1 my-4 p-2 shadow">
                     <div className='d-flex align-items-center justify-content-around'>
                   <div className="text-center ">
                     <h3 className='fw-bold h2'>{chartData[0]?.totalCase ? chartData[0]?.totalCase : 0}</h3>
@@ -195,7 +209,7 @@ export default function ClientDasboard() {
                   </div>
               </div>
               <div className="col-md-3 border-end">
-              <div className="bg-color-1 border-0 border-5 border-primary border-start card mx-1 my-4 p-2 shadow">
+              <div className="bg-color-1 border-5 border-primary border-start card mx-1 my-4 p-2 shadow">
                     <div className='d-flex align-items-center justify-content-around'>
                   <div className="text-center ">
                     <h3 className='fw-bold h2'>{chartData[0]?.totalCaseAmount ? chartData[0]?.totalCaseAmount : 0}</h3>
@@ -206,7 +220,7 @@ export default function ClientDasboard() {
                   </div>
                   </div>
               {chartData[0]?.allCase?.map(data=> <div key={data?._id} className="col-md-3 border-end">
-                <div className="bg-color-1 border-0 border-5 border-primary border-start card mx-1 my-4 p-2 shadow">
+                <div className="bg-color-1 border-5 border-primary border-start card mx-1 my-4 p-2 shadow">
                     <div className='d-flex align-items-center justify-content-around'>
                   <div className="text-center ">
                     <h3 className='fw-bold h2'>{data?.totalCases}</h3>
