@@ -41,7 +41,7 @@ export default function CaseDetails({ data, role, isViewProfile, editUrl, viewCl
                     <div className="border-3 border-primary border-bottom mb-5">
                         <div className="d-flex align-items-center justify-content-between">
                             <h6 className="text-primary text-capitalize text-center fs-3">{data[0]?.caseFrom}</h6>
-                            {isViewProfile && <Link state={{ filter: location?.state?.filter, back: location?.pathname }} to={data[0]?.caseFrom == "partner" ? `${viewPartner}${data[0]?.partnerId}` : (data[0]?.caseFrom == "client" ? `${viewClient}${data[0]?.clientId}` : `${viewEmp}${data[0]?.empSaleId}`)} className="btn btn-primary">View</Link>}
+                            {isViewProfile && <Link state={{ filter: location?.state?.filter, back: location?.pathname }} to={data[0]?.caseFrom == "partner" ? `${viewPartner}${data[0]?.partnerObjId}` : (data[0]?.caseFrom == "client" ? `${viewClient}${data[0]?.clientObjId}` : `${viewEmp}${data[0]?.empObjId}`)} className="btn btn-primary">View</Link>}
                         </div>
                     </div>
                     <div className="row">
@@ -52,27 +52,27 @@ export default function CaseDetails({ data, role, isViewProfile, editUrl, viewCl
                         {data[0]?.caseFrom == "partner" &&
                             <div className="mb-2 d-flex align-items-center gap-3 col-12 col-md-4">
                                 <h6 className="fw-bold">Partner Name</h6>
-                                <p className=" h6 text-capitalize">{data[0]?.partnerName}</p>
+                                <p className=" h6 text-capitalize">{data[0]?.partnerDetails?.profile?.consultantName}</p>
                             </div>
                         }
-                        {data[0]?.consultantCode && <div className="mb-2 d-flex align-items-center gap-3 col-12 col-md-4">
+                        {["partner","client"]?.includes(data[0]?.caseFrom?.toLowerCase()) && <div className="mb-2 d-flex align-items-center gap-3 col-12 col-md-4">
                             <h6 className="fw-bold">{data[0]?.caseFrom?.toLowerCase() == "client" ? "Customer Code" : "Consultant Code"} </h6>
-                            <p className=" h6 text-capitalize">{data[0]?.consultantCode}</p>
+                            <p className=" h6 text-capitalize">{data[0]?.caseFrom?.toLowerCase() == "client" ? data[0]?.clientDetails?.profile?.consultantCode :data[0]?.partnerDetails?.profile?.consultantCode}</p>
                         </div>}
 
-                        {data[0]?.partnerId && <div className="mb-2 d-flex align-items-center gap-3 col-12 col-md-4">
+                        {data[0]?.partnerObjId && <div className="mb-2 d-flex align-items-center gap-3 col-12 col-md-4">
                             <h6 className="fw-bold">Reference of partner </h6>
-                            <Link to={`${viewPartner}${data[0]?.partnerId}`} state={{ filter: location?.state?.filter, back: location?.pathname }} className="h6 text-decoration-underline text-capitalize">View</Link>
+                            <Link to={`${viewPartner}${data[0]?.partnerObjId}`} state={{ filter: location?.state?.filter, back: location?.pathname }} className="h6 text-decoration-underline text-capitalize">View</Link>
                         </div>}
-                        {data[0]?.empSaleId && <div className="mb-2 d-flex align-items-center gap-3 col-12 col-md-4">
+                        {data[0]?.empObjId && <div className="mb-2 d-flex align-items-center gap-3 col-12 col-md-4">
                             <h6 className="fw-bold">Reference of employee</h6>
-                            <Link to={`${viewEmp}${data[0]?.empSaleId}`} state={{ filter: location?.state?.filter, back: location?.pathname }} className="h6 text-decoration-underline text-capitalize">View</Link>
+                            <Link to={`${viewEmp}${data[0]?.empObjId}`} state={{ filter: location?.state?.filter, back: location?.pathname }} className="h6 text-decoration-underline text-capitalize">View</Link>
                         </div>}
 
                         {data[0]?.caseFrom != "client" &&
                             <div className="mb-2 d-flex align-items-center gap-3 col-12 col-md-12">
                                 <h6 className="fw-bold">Mapping Id</h6>
-                                <p className=" h6 text-break">{data[0]?.caseFrom == "partner" ? `partnerId=${data[0]?.partnerId}` : `empSaleId=${data[0]?.empSaleId}`}&{data[0]?.caseFrom == "partner" ? "partnerCaseId" : "empSaleCaseId"}={data[0]?._id}</p>
+                                <p className=" h6 text-break">{data[0]?.caseFrom == "partner" ? `partnerId=${data[0]?.partnerObjId}` : `empSaleId=${data[0]?.empObjId}`}&{data[0]?.caseFrom == "partner" ? "partnerCaseId" : "empSaleCaseId"}={data[0]?._id}</p>
                             </div>
                         }
 
@@ -88,7 +88,7 @@ export default function CaseDetails({ data, role, isViewProfile, editUrl, viewCl
 
                             {isAddRefence && <>
 
-                                {data[0]?.caseFrom == "client" && ((data[0]?.partnerId || data[0]?.partnerReferenceCaseDetails) || (data[0]?.empSaleId || data[0]?.empSaleReferenceCaseDetails)) && <button className="btn btn-warning text-white" onClick={() => setRemoveCaseReference({ ...removeCaseReference, status: true })}>Remove Reference</button>}
+                                {data[0]?.caseFrom == "client" && (data[0]?.partnerObjId || data[0]?.empObjId) && <button className="btn btn-warning text-white" onClick={() => setRemoveCaseReference({ ...removeCaseReference, status: true })}>Remove Reference</button>}
                                 {data[0]?.caseFrom == "client" && <button className="btn btn-success text-white" onClick={() => setAddCaseReference({ show: true, _id: data[0]?._id })}>Add Reference</button>}
                             </>}
                         </div>}
@@ -193,7 +193,7 @@ export default function CaseDetails({ data, role, isViewProfile, editUrl, viewCl
                     </div>
                 </div>
             </div>
-            {addCaseReference?.show && <AddReferenceModal showAddCaseReference={addCaseReference} hide={() => setAddCaseReference({ show: false, _id: "" })} addReferenceCase={addReference} />}
+            {addCaseReference?.show && <AddReferenceModal showAddCaseReference={addCaseReference} getCaseById={getCaseById} hide={() => setAddCaseReference({ show: false, _id: "" })} addReferenceCase={addReference} />}
 
             {/* for case unmerge */}
             <Modal
@@ -211,8 +211,8 @@ export default function CaseDetails({ data, role, isViewProfile, editUrl, viewCl
                     <div className="mb-3 col-12">
                         <select className="form-select w-100" name="Type" value={removeCaseReference.type} onChange={(e) => setRemoveCaseReference({ ...removeCaseReference, type: e?.target?.value })} >
                             <option value="">--select remove reference type</option>
-                            {(data[0]?.partnerId || data[0]?.partnerReferenceCaseDetails) && <option value="partner">Partner</option>}
-                            {(data[0]?.empSaleId || data[0]?.empSaleReferenceCaseDetails) && <option value="sale-emp">Sale</option>}
+                            {data[0]?.partnerObjId && <option value="partner">Partner</option>}
+                            {data[0]?.empObjId && <option value="sale-emp">Sale</option>}
                         </select>
                     </div>
 

@@ -35,7 +35,7 @@ import ShareSectionModal from "../Common/Modal/shareSectionModal"
 
 
 export default function AllPartnerComp({empId,getPartner,editUrl,viewUrl,showType,isShare,partnerShare,isEmpRefAccess,
-    isTrash,unactive,isDelete,isDownload,downloadPartner,role,reportUrl,isChangeBranch,handleBrachChange,isBack,getSaleEmp,
+    isTrash,unactive,isDelete,isDownload,downloadPartner,role,reportUrl,isChangeBranch,handleBrachChange,isBack,getSaleEmp,showTooltip,
   statement}) {
   const state = useContext(AppContext)
   const [data, setData] = useState([])
@@ -251,7 +251,7 @@ export default function AllPartnerComp({empId,getPartner,editUrl,viewUrl,showTyp
           </div>
         </div>}
 
-        <div className="m-0 m-md-5 p-md-4">
+        <div className="m-0 m-md-5 p-md-4 custom-tooltip-wrapper ">
           <div className="bg-color-1 p-3 p-md-5 rounded-2 shadow">
             <div className="d-flex flex gap-2">
 
@@ -319,7 +319,16 @@ export default function AllPartnerComp({empId,getPartner,editUrl,viewUrl,showTyp
                         </span></td>
                       <td className="text-nowrap">{item?.branchId}</td>
                       {showType &&  <td className="text-nowrap text-capitalize">{(item?.salesId?.type && item?.salesId?.fullName) ? `${item?.salesId?.fullName} | ${item?.salesId?.type} | ${item?.salesId?.designation}` : "-"}</td>}
-                      <td className="text-nowrap">{item?.profile?.consultantName}</td>
+                      {/* <td className="text-nowrap">{item?.profile?.consultantName}</td> */}
+                      <td className="text-nowrap">
+                        <span className="text-capitalize">
+                          {item?.profile?.consultantName}
+                          {item?.share?.length && showTooltip ? <span className="custom-tooltip-text">
+                            {item?.share?.map(sh => <span className="badge text-bg-primary">{`${sh?.emp?.fullName} | ${sh?.emp?.type} | ${sh?.emp?.designation} | ${sh?.emp?.branchId}`}</span>)}
+                          </span> : ""}
+
+                        </span>
+                      </td>
                       <td className="text-nowrap">{item?.profile?.primaryMobileNo}</td>
                       <td className="text-nowrap">{item?.profile?.primaryEmail}</td>
                       <td className="text-nowrap">{item?.profile?.consultantCode}</td>

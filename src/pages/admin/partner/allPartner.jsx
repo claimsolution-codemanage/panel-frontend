@@ -61,9 +61,6 @@ export default function AllAdminPartner() {
   const [sharePartner, setSharePartner] = useState([])
 
 
-
-
-
   const getAllPartner = async () => {
     setLoading(true)
     try {
@@ -309,7 +306,16 @@ export default function AllAdminPartner() {
                         </span></td>
                       <td className="text-nowrap">{item?.branchId}</td>
                       <td className="text-nowrap text-capitalize">{(item?.salesId?.type && item?.salesId?.fullName) ? `${item?.salesId?.fullName} | ${item?.salesId?.type} | ${item?.salesId?.designation}` : "-"}</td>
-                      <td className="text-nowrap">{item?.profile?.consultantName}</td>
+                      {/* <td className="text-nowrap">{item?.profile?.consultantName}</td> */}
+                       <td className="text-nowrap">
+                        <span className="custom-tooltip-wrapper text-capitalize">
+                          {item?.profile?.consultantName}
+                          {item?.share?.length  ? <span className="custom-tooltip-text">
+                            {item?.share?.map(sh => <span className="badge text-bg-primary">{`${sh?.emp?.fullName} | ${sh?.emp?.type} | ${sh?.emp?.designation} | ${sh?.emp?.branchId}`}</span>)}
+                          </span> : ""}
+
+                        </span>
+                      </td>
                       <td className="text-nowrap">{item?.profile?.primaryMobileNo}</td>
                       <td className="text-nowrap">{item?.profile?.primaryEmail}</td>
                       <td className="text-nowrap">{item?.profile?.consultantCode}</td>

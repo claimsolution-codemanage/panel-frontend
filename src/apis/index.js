@@ -456,9 +456,9 @@ export const adminDownloadAllEmp = (pageItemLimit = "", pageNo = "", searchQuery
   })
 }
 
-export const adminGetNormalEmployee = (pageItemLimit = "", pageNo = "", searchQuery = "") => {
+export const adminGetNormalEmployee = (pageItemLimit = "", pageNo = "", searchQuery = "",isAddEmp="") => {
   setheader()
-  return axios.get(`${API_BASE}/api/admin/normal-employee?limit=${pageItemLimit}&pageNo=${pageNo}&search=${searchQuery}`)
+  return axios.get(`${API_BASE}/api/admin/normal-employee?limit=${pageItemLimit}&pageNo=${pageNo}&search=${searchQuery}&isAddEmp=${isAddEmp}`)
 }
 
 export const adminGetSaleEmployee = (pageItemLimit = "", pageNo = "", searchQuery = "") => {
@@ -876,9 +876,9 @@ export const employeResetPassword = (data) => {
   return axios.post(`${API_BASE}/api/employee/resetPassword`, data)
 }
 
-export const employeeAllCase = (pageItemLimit = "", pageNo = "", searchQuery = "", statusType = "", startDate = "", endDate = "",type=true,empId) => {
+export const employeeAllCase = (pageItemLimit = "", pageNo = "", searchQuery = "", statusType = "", startDate = "", endDate = "",type=true,empId="",id="",isReject="") => {
   setheader()
-  return axios.get(`${API_BASE}/api/employee/viewAllCase?limit=${pageItemLimit}&pageNo=${pageNo}&search=${searchQuery}&status=${statusType}&startDate=${startDate}&endDate=${endDate}&type=${type}&empId=${empId}`)
+  return axios.get(`${API_BASE}/api/employee/viewAllCase?limit=${pageItemLimit}&pageNo=${pageNo}&search=${searchQuery}&status=${statusType}&startDate=${startDate}&endDate=${endDate}&type=${type}&empId=${empId}&isReject=${isReject}`)
 }
 
 export const empOpCreateOrUpdateCaseFormApi = (data) => {

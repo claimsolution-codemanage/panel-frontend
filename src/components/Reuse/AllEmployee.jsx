@@ -247,6 +247,8 @@ export default function AllEmployee(props) {
              <th scope="col" className="text-nowrap">Team Added by</th>
               <th scope="col" className="text-nowrap">Employee Name</th>
              <th scope="col" className="text-nowrap">Emp Id</th>
+             <th scope="col" className="text-nowrap">Manager</th>
+             <th scope="col" className="text-nowrap">Head</th>
               <th scope="col" className="text-nowrap" >Mobile No</th>
               <th scope="col" className="text-nowrap" >Email Id</th>
               <th scope="col" className="text-nowrap" >Department</th> 
@@ -273,6 +275,8 @@ export default function AllEmployee(props) {
               <td className="text-nowrap">{(item?.referEmpId?.fullName && item?.referEmpId?.type) ? `${item?.referEmpId?.fullName} | ${item?.referEmpId?.type} | ${item?.referEmpId?.designation}` : "-"}</td>
               <td className="text-nowrap">{item?.fullName}</td>
               <td className="text-nowrap ">{item?.empId}</td> 
+              <td className="text-nowrap">{(item?.managerId?.fullName && item?.managerId?.type) ? `${item?.managerId?.fullName} | ${item?.managerId?.type} | ${item?.managerId?.designation}` : "-"}</td>
+              <td className="text-nowrap">{(item?.headEmpId?.fullName && item?.headEmpId?.type) ? `${item?.headEmpId?.fullName} | ${item?.headEmpId?.type} | ${item?.headEmpId?.designation}` : "-"}</td>
               <td className="text-nowrap">{item?.mobileNo}</td>
               <td className="text-nowrap">{item?.email}</td>
               <td className="text-nowrap text-capitalize">{item?.type}</td> 

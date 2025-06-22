@@ -37,6 +37,7 @@ import EmpNotification from "../pages/employee/setting/allNotification"
 import EmployeeAddPartner from '../pages/employee/sales/addPartner'
 import ViewAllStatement from "../components/Reuse/ViewAllStatement"
 import Statement from "../components/Reuse/Statement"
+import EmployeeRejectCase from "../pages/employee/cases/allRejectCase"
 
 export const employeeRoutes = [
     <Route path='/employee/signin' element={<PanelTemplate><EmployeeSignIn/></PanelTemplate>}/>,
@@ -48,6 +49,7 @@ export const employeeRoutes = [
   <Route path='/employee/all case' element={<EmployeeTemplate><EmployeeAllCase/></EmployeeTemplate>}/>,
   <Route path='/employee/all case/:_id' element={<EmployeeTemplate><EmployeeAllCase/></EmployeeTemplate>}/>,
   <Route path='/employee/view case/:_id' element={<EmployeeTemplate><EmployeeViewCase/></EmployeeTemplate>}/>,
+  <Route path='/employee/reject-cases'  element={<EmployeeTemplate><EmployeeRejectCase/></EmployeeTemplate>}/>,
   <Route path='/employee/all partner' element={<EmployeeTemplate><EmployeeAllPartner/></EmployeeTemplate>}/>,
   <Route path='/employee/all partner/:_id' element={<EmployeeTemplate><EmployeeAllPartner/></EmployeeTemplate>}/>,
   <Route path='/employee/partner details/:_id' element={<EmployeeTemplate><EmployeePartnerDetails/></EmployeeTemplate>}/>,

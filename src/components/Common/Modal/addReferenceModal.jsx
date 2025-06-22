@@ -5,7 +5,7 @@ import {toast} from 'react-toastify'
 import { useFormik } from 'formik';
 import * as yup from 'yup'
 
-export default function AddReferenceModal({showAddCaseReference,hide,addReferenceCase}) {
+export default function AddReferenceModal({showAddCaseReference,hide,addReferenceCase,getCaseById}) {
     const [loading,setLoading] = useState(false)
 
 
@@ -24,6 +24,7 @@ const caseReferenceFormik = useFormik({
                 hide()
                 toast.success(res?.data?.message)
                 setLoading(false)
+                if(getCaseById){ getCaseById()}
             }
         } catch (error) {
             if(error && error?.response?.data?.message){

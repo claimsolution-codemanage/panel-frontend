@@ -274,7 +274,7 @@ export default function PrivateNavbar() {
             </>}
 
 
-            <Link to="/employee/all case" className={`d-flex align-items-center mx-2 px-2 py-2 gap-3 text-white   ${location.pathname.includes("case") && !location.pathname.includes("add-case") && "active_item"}`}  >
+            <Link to="/employee/all case" className={`d-flex align-items-center mx-2 px-2 py-2 gap-3 text-white   ${location.pathname.includes("case") && !location.pathname.includes("reject-case") && !location.pathname.includes("add-case") && "active_item"}`}  >
                 <SiReaddotcv />
                     <div className=''>All Case</div>
             </Link>
@@ -315,6 +315,10 @@ export default function PrivateNavbar() {
              <div className=''>Commission</div>
             </Link>
             </>}
+            <Link to="/employee/reject-cases" className={`d-flex align-items-center mx-2 px-2 py-2 gap-3 text-white   ${location.pathname.includes("/employee/reject-cases") && "active_item"}`}  >
+                    <MdOutlineCancelPresentation />
+                    <div className=''>Reject Case</div>
+                </Link>
                 <Link to="/employee/reset password" className={`d-flex align-items-center mx-2 px-2 py-2 gap-3 text-white   ${location.pathname == "/employee/reset%20password" && "active_item"}`}  >
                     <IoSettingsOutline />
                     <div className=''>Setting</div>

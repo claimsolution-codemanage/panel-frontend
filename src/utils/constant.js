@@ -158,3 +158,20 @@ export const empDocType =[
     {label:"Education Qualification",value:"Education Qualification"},
     {label: "Other",value: "Other"},
 ]
+
+export const empDepartmentOptions = [
+    {label:"Operation",value:"Operation"},
+    {label:"Branch",value:"Branch"},
+    {label:"Sales",value:"Sales"},
+    {label:"Legal",value:"Legal"},
+    {label:"Finance",value:"Finance"},
+    {label:"HR",value:"HR"},
+    {label:"Medical Executive(Doctor)",value:"Medical Executive(Doctor)"},
+    {label:"Civil(Surveyor)",value:"Civil(Surveyor)"},
+    {label:"Sathi Team",value:"Sathi Team"},
+]
+export const empDesignationOptions = [
+    {label:"Executive",value:"Executive"},
+    {label:"Manager",value:"Manager"},
+    {label:"Head",value:"Head"},
+]

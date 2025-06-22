@@ -39,7 +39,7 @@ export default function ViewAllStatement({getStatementApi,type,excelDownloadApi,
       endDate: new Date(),
     }
   );
-  const roleAccess = ["admin","finance","operation"]
+  const roleAccess = ["admin","finance","operation","sathi team"]
   const excelDownloadAccess = ((roleAccess?.includes(state?.myAppData?.details?.role?.toLowerCase())) || (roleAccess?.includes(state?.myAppData?.details?.empType?.toLowerCase())))
 
 
@@ -168,7 +168,7 @@ export default function ViewAllStatement({getStatementApi,type,excelDownloadApi,
   };
 
   useEffect(()=>{
-    const type = ["admin","finance","operation","partner"]
+    const type = ["admin","finance","operation","partner","sathi team"]
     if(!((type?.includes(state?.myAppData?.details?.role?.toLowerCase())) || (type?.includes(state?.myAppData?.details?.empType?.toLowerCase())))){
         navigate(-1)
     }

@@ -1,5 +1,5 @@
 import { adminChangeCaseStatus, adminShareCaseToEmployee, adminAllCaseDownload,adminGetNormalEmployee, adminSetCaseIsActive } from "../../../apis"
-import { adminSetCaseDocIsActive,allAdminCase } from "../../../apis"
+import { allAdminCase } from "../../../apis"
 import { adminAttachementUpload } from "../../../apis/upload"
 import ViewAllCaseComp from "../../../components/Reuse/ViewAllCaseComp"
 
@@ -19,7 +19,7 @@ export default function AdminRejectCase() {
       isRemoveCase={true}
       isAddRefence={true}
       isDownload={true}
-      isShare={true}
+      isShare={false}
       isReject={true}
       getNormalEmp={adminGetNormalEmployee}
       caseShare={adminShareCaseToEmployee}

@@ -59,7 +59,7 @@ export default function ViewAllCaseComp({getCases,downloadCase,role,viewUrl,
   );
 
 
-
+console.log("isrehect",isReject)
 
 
   const handleReset = () => {
@@ -353,7 +353,7 @@ export default function ViewAllCaseComp({getCases,downloadCase,role,viewUrl,
                     <td className="text-nowrap">{item?.createdAt && getFormateDMYDate(item?.createdAt)}</td>
                    {(role?.toLowerCase()!="client" && role?.toLowerCase()!="partner" ) && <td className="text-nowrap text-capitalize">{item?.caseFrom}</td>}
                    {(role?.toLowerCase()!="client" && role?.toLowerCase()!="partner" ) && <td className="text-nowrap text-capitalize" >{item?.employeeDetails?.fullName ? `${item?.employeeDetails?.fullName} | ${item?.employeeDetails?.type} | ${item?.employeeDetails?.designation}`  : "-"}</td> }
-                   {(role?.toLowerCase()!="client" && role?.toLowerCase()!="partner" ) && <td className="text-nowrap text-capitalize" >{item?.partnerDetails?.fullName || "-"}</td> }
+                   {(role?.toLowerCase()!="client" && role?.toLowerCase()!="partner" ) && <td className="text-nowrap text-capitalize" >{item?.partnerDetails?.profile?.consultantName || "-"}</td> }
                    {/* {(role?.toLowerCase()!="client" && role?.toLowerCase()!="partner" ) && <td className="text-nowrap text-capitalize" >{item?.partnerCode || "-"}</td> } */}
                     <td className="text-nowrap">{item?.name}</td>
                     <td className="text-nowrap">{item?.mobileNo}</td>

@@ -579,3 +579,38 @@ export const partnerBankValidationSchema = yup.object({
   gstCopyImg:yup.string(),
 })
 
+export const addEmpInitialValue = {
+fullName: "", 
+email: "", 
+empId: "", 
+branchId: "", 
+mobileNo: "", 
+type: "", 
+designation: "",
+headEmpId:"",
+managerId:""
+}
+
+export const addEmpValidationSchema = yup.object({
+  fullName: yup.string().required("Required"),
+  email: yup.string().required("Required"),
+  empId: yup.string().required("Required"),
+  branchId: yup.string().required("Required"),
+  mobileNo: yup.string().min(12, "Min digit 12").max(12, "Max digit 12").required("Required"),
+  type: yup.string().required("Required"),
+  designation: yup.string().required("Required"),
+  headEmpId: yup.mixed().test("headEmpId", "Required",
+    function (value) {
+      if (!value?.value) {
+        return false
+      }
+      return true
+    }),
+  managerId: yup.mixed().test("headEmpId", "Required",
+    function (value) {
+      if (!value?.value) {
+        return false
+      }
+      return true
+    }),
+})

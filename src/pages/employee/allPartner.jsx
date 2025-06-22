@@ -33,6 +33,7 @@ export default function EmployeeAllPartner() {
       isType={empType?.toLowerCase()!="operation" }
       isEmpRefAccess={empType?.toLowerCase()=="operation" }
       statement={empType?.toLowerCase()=='operation' || empType?.toLowerCase()=='finance'}
+      showTooltip={empType?.toLowerCase()=="operation"}
       />
 </>)
 }

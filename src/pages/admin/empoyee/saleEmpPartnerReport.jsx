@@ -318,7 +318,7 @@ export default function AdminSaleEmpPartnerReport() {
                       <td className="text-nowrap">{item?.profile?.primaryMobileNo}</td>
                       <td className="text-nowrap">{item?.profile?.primaryEmail}</td>
                       <td className="text-nowrap">{item?.profile?.consultantCode}</td>
-                        <td className="text-nowrap">{item?.profile?.associateWithUs && getFormateDMYDate(item?.profile?.associateWithUs)}</td>
+                        <td className="text-nowrap">{item?.profile?.xassociateWithUs && getFormateDMYDate(item?.profile?.associateWithUs)}</td>
                       <td className="text-nowrap">{item?.profile?.workAssociation}</td>
                       <td className="text-nowrap">{item?.profile?.areaOfOperation}</td>
                       {/* <td className="text-nowrap">{item?.profile?.state}</td>
