@@ -305,7 +305,7 @@ export default function AllAdminPartner() {
 
                         </span></td>
                       <td className="text-nowrap">{item?.branchId}</td>
-                      <td className="text-nowrap text-capitalize">{(item?.salesId?.type && item?.salesId?.fullName) ? `${item?.salesId?.fullName} | ${item?.salesId?.type} | ${item?.salesId?.designation}` : "-"}</td>
+                      <td className="text-nowrap text-capitalize">{(item?.addedBy?.type && item?.addedBy?.fullName) ? `${item?.addedBy?.fullName} | ${item?.addedBy?.type} | ${item?.addedBy?.designation}` : "-"}</td>
                       {/* <td className="text-nowrap">{item?.profile?.consultantName}</td> */}
                        <td className="text-nowrap">
                         <span className="custom-tooltip-wrapper text-capitalize">
