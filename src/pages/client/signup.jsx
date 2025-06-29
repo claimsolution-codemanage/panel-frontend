@@ -12,62 +12,19 @@ import { getJwtDecode } from '../../utils/helperFunction'
 import PhoneInput from 'react-phone-input-2'
 import 'react-phone-input-2/lib/style.css'
 import { useFormik } from 'formik'
-import * as yup from 'yup'
 import { Helmet } from "react-helmet";
+import { clientSignUpInitialValue, clientSignUpValidationSchema } from '../../utils/validation'
 
 
 export default function ClientSignUp() {
-    const [data, setData] = useState({ fullName: "", email: "", mobileNo: "", password: "", agreement: false })
     const state = useContext(AppContext)
     const [loading, setLoading] = useState(false)
     const [view, setView] = useState(false)
     const navigate = useNavigate()
 
-    const handleOnchange = (e) => {
-        const { name, value } = e.target
-        setData({ ...data, [name]: value })
-    }
-
-
-    const handleSumbit = async (e) => {
-        e.preventDefault()
-        setLoading(true)
-        try {
-            const res = await clientSignUp(data)
-            if (res?.data?.success) {
-                const token = res?.headers["x-auth-token"]
-                if (token) {
-                    setToken(token)
-                    const details = getJwtDecode(token)
-                    state?.setMyAppData({ isLogin: false, details: details })
-                    toast.success(res?.data?.message)
-                    navigate("/client/email otp verify")
-                    // console.log("client sign up", res);
-                }
-                setLoading(false)
-            }
-        } catch (error) {
-            if (error && error?.response?.data?.message) {
-                toast.error(error?.response?.data?.message)
-            } else {
-                toast.error("Something went wrong")
-            }
-            // console.log("signup error", error);
-            setLoading(false)
-        }
-    }
-
     const UserDetailsFormik = useFormik({
-        initialValues: {
-            fullName: "", email: "", mobileNo: "", password: "", agreement: false
-        },
-        validationSchema: yup.object().shape({
-            fullName: yup.string().required("Please enter your Full Name"),
-            email: yup.string().email("Enter valid Email").required("Please enter your Email"),
-            password: yup.string().required("Please enter your Password"),
-            mobileNo:yup.string().required("Please enter your Mobile No."),
-            agreement:yup.bool()
-        }),
+        initialValues: clientSignUpInitialValue,
+        validationSchema: clientSignUpValidationSchema,
         onSubmit: async (values) => {
             setLoading(true)
             try {
@@ -97,12 +54,11 @@ export default function ClientSignUp() {
     })
 
 
-
     return (
         <>
-                   <Helmet>
-        <link rel="canonical" href="http://claimsolution.in/client/signup" />
-      </Helmet>
+            <Helmet>
+                <link rel="canonical" href="http://claimsolution.in/client/signup" />
+            </Helmet>
             <div className="py-5 mt-auto mt-md-0">
                 <div className="container-px-5 ">
                     <div className="">
@@ -129,7 +85,7 @@ export default function ClientSignUp() {
                                                     <span className="text-danger">{UserDetailsFormik?.errors?.email}</span>
                                                 ) : null}
                                             </div>
-                                          
+
                                             <div className="mb-3 mt-3">
                                                 <PhoneInput
                                                     country={'in'}
@@ -138,7 +94,7 @@ export default function ClientSignUp() {
                                                     // autoFormat={true}
                                                     placeholder="+91 12345-67890"
                                                     onlyCountries={['in']}
-                                                    value={data.mobileNo} onChange={phone => phone.startsWith(+91) ? UserDetailsFormik.setFieldValue("mobileNo",phone ) : UserDetailsFormik.setFieldValue("mobileNo",+91 + phone)} />
+                                                    value={UserDetailsFormik?.values?.mobileNo} onChange={phone => phone.startsWith(+91) ? UserDetailsFormik.setFieldValue("mobileNo", phone) : UserDetailsFormik.setFieldValue("mobileNo", +91 + phone)} />
                                                 {UserDetailsFormik?.touched?.mobileNo && UserDetailsFormik?.errors?.mobileNo ? (
                                                     <span className="text-danger">{UserDetailsFormik?.errors?.mobileNo}</span>
                                                 ) : null}
@@ -152,8 +108,8 @@ export default function ClientSignUp() {
                                                         </span>
                                                     </div>
                                                     {UserDetailsFormik?.touched?.password && UserDetailsFormik?.errors?.password ? (
-                                                    <span className="text-danger">{UserDetailsFormik?.errors?.password}</span>
-                                                ) : null}
+                                                        <span className="text-danger">{UserDetailsFormik?.errors?.password}</span>
+                                                    ) : null}
                                                 </div>
                                             </div>
                                             <div class="form-check">

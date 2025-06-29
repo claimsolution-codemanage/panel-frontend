@@ -21,15 +21,16 @@ import ConfirmationModal from "../Common/Modal/confirmationModal";
 import { CiEdit } from 'react-icons/ci'
 import { AiOutlineDelete } from "react-icons/ai";
 import SetStatusOfProfile from "../Common/Modal/setStatusModal";
-import {FaTrashRestoreAlt} from 'react-icons/fa'
+import { FaTrashRestoreAlt } from 'react-icons/fa'
 import { getFormateDMYDate } from "../../utils/helperFunction";
 import EditInvoiceStatusModal from "../Common/EditInvoiceStatus";
 import { MdCurrencyRupee } from "react-icons/md";
 import { SiMicrosoftexcel } from "react-icons/si";
+import PaginateField from "../Common/PaginateField";
 
-export default function AllInvoiceComp({viewAllInvoice,payInvoice,viewInvoiceUrl,role,
-  isEdit,isDelete,editInvoiceUrl,unactiveInvoice,isTrash,deleteInvoice,paidAccess,handlePaid,
-  downloadAccess,downloadApi
+export default function AllInvoiceComp({ viewAllInvoice, payInvoice, viewInvoiceUrl, role,
+  isEdit, isDelete, editInvoiceUrl, unactiveInvoice, isTrash, deleteInvoice, paidAccess, handlePaid,
+  downloadAccess, downloadApi
 }) {
   const state = useContext(AppContext)
   const location = useLocation()
@@ -40,25 +41,25 @@ export default function AllInvoiceComp({viewAllInvoice,payInvoice,viewInvoiceUrl
   const [loading, setLoading] = useState(true)
   const [downloadLoading, setDownloadLoading] = useState({ status: false, data: [], _id: [] })
   const [statusType, setStatusType] = useState("")
-  const [pageItemLimit, setPageItemLimit] = useState(location?.pathname==location?.state?.path && location?.state?.filter?.pageItemLimit ? location?.state?.filter?.pageItemLimit :10)
+  const [pageItemLimit, setPageItemLimit] = useState(location?.pathname == location?.state?.path && location?.state?.filter?.pageItemLimit ? location?.state?.filter?.pageItemLimit : 10)
   const [showCalender, setShowCalender] = useState(false)
-  const [searchQuery, setSearchQuery] = useState(location?.pathname==location?.state?.path && location?.state?.filter?.searchQuery ? location?.state?.filter?.searchQuery :"")
+  const [searchQuery, setSearchQuery] = useState(location?.pathname == location?.state?.path && location?.state?.filter?.searchQuery ? location?.state?.filter?.searchQuery : "")
   const [noOfInvoice, setNoOfInvoice] = useState(0)
   const [totalInvoiceAmt, setTotalInvoiceAmt] = useState(0)
-  const [pgNo, setPgNo] = useState(location?.pathname==location?.state?.path && location?.state?.filter?.pgNo ? location?.state?.filter?.pgNo :1)
+  const [pgNo, setPgNo] = useState(location?.pathname == location?.state?.path && location?.state?.filter?.pgNo ? location?.state?.filter?.pgNo : 1)
   const [changeStatus, setChangeStatus] = useState({ status: false, details: "" })
   const [isActiveInvoice, setIsActiveInvoice] = useState({ status: false, details: {} })
   const [paymentDetails, setPaymentDetails] = useState({ status: false, details: {} })
   const [checkOutDetails, setCheckOutDetails] = useState({ status: false, encData: null, clientCode: null })
-  const [changeInvoiceStatus, setChangeInvoiceStatus] = useState({status:false,_id:null})
+  const [changeInvoiceStatus, setChangeInvoiceStatus] = useState({ status: false, _id: null })
   const [downloading, setDownloading] = useState(false)
 
   const [dateRange, setDateRange] = useState(
-    location?.pathname==location?.state?.path && location?.state?.filter?.dateRange ?
-     location?.state?.filter?.dateRange : {
-      startDate: new Date("2024/01/01"),
-      endDate: new Date(),
-    }
+    location?.pathname == location?.state?.path && location?.state?.filter?.dateRange ?
+      location?.state?.filter?.dateRange : {
+        startDate: new Date("2024/01/01"),
+        endDate: new Date(),
+      }
   );
 
   const handleReset = () => {
@@ -113,7 +114,7 @@ export default function AllInvoiceComp({viewAllInvoice,payInvoice,viewInvoiceUrl
 
       }
     } catch (error) {
-      console.log("error",error);
+      console.log("error", error);
       if (error && error?.response?.data?.message) {
         toast.error(error?.response?.data?.message)
       } else {
@@ -143,7 +144,7 @@ export default function AllInvoiceComp({viewAllInvoice,payInvoice,viewInvoiceUrl
   //     } else {
   //       setDownloading(false)
   //     }
-      
+
   //   } catch (error) {
   //     console.log("error", error);
   //     if (error && error?.response?.data?.message) {
@@ -160,15 +161,15 @@ export default function AllInvoiceComp({viewAllInvoice,payInvoice,viewInvoiceUrl
       const startDate = dateRange.startDate ? getFormateDate(dateRange.startDate) : "";
       const endDate = dateRange.endDate ? getFormateDate(dateRange.endDate) : "";
       setDownloading(true);
-  
+
       // Step 1: Fetch File Data
       const res = await downloadApi(searchQuery, startDate, endDate, true);
-  
+
       if (res?.status === 200) {
         // Step 2: Create Blob URL
         const blob = new Blob([res.data], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" });
         const url = window.URL.createObjectURL(blob);
-  
+
         // Step 3: Create and Trigger Download
         const a = document.createElement("a");
         a.href = url;
@@ -178,7 +179,7 @@ export default function AllInvoiceComp({viewAllInvoice,payInvoice,viewInvoiceUrl
         document.body.appendChild(a);
         a.click();
         window.URL.revokeObjectURL(url);
-  
+
         // Notify Success
         toast.success("Download successful!");
       } else {
@@ -192,7 +193,7 @@ export default function AllInvoiceComp({viewAllInvoice,payInvoice,viewInvoiceUrl
       setDownloading(false);
     }
   };
-  
+
 
   useEffect(() => {
     getViewAllInvoice()
@@ -202,7 +203,7 @@ export default function AllInvoiceComp({viewAllInvoice,payInvoice,viewInvoiceUrl
     if (!isActiveInvoice.status && !changeStatus?.show && !changeInvoiceStatus?.status) {
       getViewAllInvoice()
     }
-  }, [isActiveInvoice,changeStatus,changeInvoiceStatus])
+  }, [isActiveInvoice, changeStatus, changeInvoiceStatus])
 
   useEffect(() => {
     if (searchQuery) {
@@ -237,14 +238,15 @@ export default function AllInvoiceComp({viewAllInvoice,payInvoice,viewInvoiceUrl
       } else {
         toast.error("Something went wrong")
       }
-    }}
-
-    const filter = {
-      pageItemLimit,
-      pgNo,
-      searchQuery,
-      dateRange
     }
+  }
+
+  const filter = {
+    pageItemLimit,
+    pgNo,
+    searchQuery,
+    dateRange
+  }
 
   return (<>
     {loading ? <Loader /> :
@@ -289,7 +291,7 @@ export default function AllInvoiceComp({viewAllInvoice,payInvoice,viewInvoiceUrl
           <input type="hidden" name="encData" value={checkOutDetails.encData} id="frm1" />
           <input type="hidden" name="clientCode" value={checkOutDetails.clientCode} id="frm2" />
         </form>}
-    
+
 
         <div className="m-0 m-md-5 p-md-4">
           <div className="bg-color-1 p-3 p-md-5 rounded-2 shadow">
@@ -305,7 +307,7 @@ export default function AllInvoiceComp({viewAllInvoice,payInvoice,viewInvoiceUrl
                   <div className="col-12 col-md-7 d-flex gap-3">
                     <div className="btn btn-primary" onClick={() => setShowCalender(!showCalender)}><CiFilter /></div>
                     <div className="btn btn-primary" onClick={() => handleReset()}>Reset</div>
-                    {downloadAccess &&  <button className={`btn btn-primary fs-5 ${downloading && "disabled"}`} disabled={downloading} onClick={() => !downloading && handleDownload()}>{downloading ? <span className="spinner-border-md"></span> : <SiMicrosoftexcel />}</button>}
+                    {downloadAccess && <button className={`btn btn-primary fs-5 ${downloading && "disabled"}`} disabled={downloading} onClick={() => !downloading && handleDownload()}>{downloading ? <span className="spinner-border-md"></span> : <SiMicrosoftexcel />}</button>}
                   </div>
                   <div className="col-12 col-md-3">
                   </div>
@@ -331,7 +333,7 @@ export default function AllInvoiceComp({viewAllInvoice,payInvoice,viewInvoiceUrl
                     <th scope="col" className="text-nowrap">Action</th>
                     <th scope="col" className="text-nowrap">Type</th>
                     <th scope="col" className="text-nowrap" >Date</th>
-                     {role?.toLowerCase()!="client" && <th scope="col" className="text-nowrap" >Branch ID</th>}
+                    {role?.toLowerCase() != "client" && <th scope="col" className="text-nowrap" >Branch ID</th>}
                     <th scope="col" className="text-nowrap" >Invoice</th>
                     <th scope="col" className="text-nowrap"  >Name</th>
                     <th scope="col" className="text-nowrap"  >Email</th>
@@ -344,32 +346,32 @@ export default function AllInvoiceComp({viewAllInvoice,payInvoice,viewInvoiceUrl
                   {data.map((item, ind) => <tr key={ind} className="border-2 text-nowrap border-bottom border-light text-center">
                     <th scope="row">{ind + 1}</th>
                     <td><span className="d-flex gap-2">
-                      <span style={{ cursor: "pointer", height: 30, width: 30, borderRadius: 30 }} className="bg-warning text-white d-flex align-items-center justify-content-center" onClick={() => navigate(`${viewInvoiceUrl}${item._id}`,{state:{filter,back:location?.pathname,path:location?.pathname}})}><HiMiniEye /></span>
-                    {isEdit &&!isTrash && !item?.isPaid && <span style={{ cursor: "pointer",height:30,width:30,borderRadius:30 }} className="bg-success text-white d-flex align-items-center justify-content-center" onClick={() => navigate(`${editInvoiceUrl}${item._id}`,{state:{filter,back:location?.pathname,path:location?.pathname}})}><CiEdit /></span>}
-                    {isDelete && !item?.isPaid && <span style={{ cursor: "pointer", height: 30, width: 30, borderRadius: 30 }} className={`${isTrash ? "bg-success" :"bg-danger"}  text-white d-flex align-items-center justify-content-center`} onClick={() =>setChangeStatus({ show: true, details: { _id: item._id, currentStatus: item?.isActive, name: item?.invoiceNo, recovery: false } })}>{isTrash ? <FaTrashRestoreAlt/> : <AiOutlineDelete />} </span>}
-                    {isTrash && !item?.isPaid && <span style={{ cursor: "pointer", height: 30, width: 30, borderRadius: 30 }} className={`bg-danger  text-white d-flex align-items-center justify-content-center`} onClick={() =>setIsActiveInvoice({ status: true, details: { _id: item._id,invoiceNo:item?.invoiceNo} })}><AiOutlineDelete /> </span>}
-                    {!isTrash && paidAccess && !item?.isPaid && <span style={{ cursor: "pointer",height:30,width:30,borderRadius:30 }} className="bg-success text-white d-flex align-items-center justify-content-center" onClick={() => setChangeInvoiceStatus({status:true,_id:item._id})}><MdCurrencyRupee /></span>}
+                      <span style={{ cursor: "pointer", height: 30, width: 30, borderRadius: 30 }} className="bg-warning text-white d-flex align-items-center justify-content-center" onClick={() => navigate(`${viewInvoiceUrl}${item._id}`, { state: { filter, back: location?.pathname, path: location?.pathname } })}><HiMiniEye /></span>
+                      {isEdit && !isTrash && !item?.isPaid && <span style={{ cursor: "pointer", height: 30, width: 30, borderRadius: 30 }} className="bg-success text-white d-flex align-items-center justify-content-center" onClick={() => navigate(`${editInvoiceUrl}${item._id}`, { state: { filter, back: location?.pathname, path: location?.pathname } })}><CiEdit /></span>}
+                      {isDelete && !item?.isPaid && <span style={{ cursor: "pointer", height: 30, width: 30, borderRadius: 30 }} className={`${isTrash ? "bg-success" : "bg-danger"}  text-white d-flex align-items-center justify-content-center`} onClick={() => setChangeStatus({ show: true, details: { _id: item._id, currentStatus: item?.isActive, name: item?.invoiceNo, recovery: false } })}>{isTrash ? <FaTrashRestoreAlt /> : <AiOutlineDelete />} </span>}
+                      {isTrash && !item?.isPaid && <span style={{ cursor: "pointer", height: 30, width: 30, borderRadius: 30 }} className={`bg-danger  text-white d-flex align-items-center justify-content-center`} onClick={() => setIsActiveInvoice({ status: true, details: { _id: item._id, invoiceNo: item?.invoiceNo } })}><AiOutlineDelete /> </span>}
+                      {!isTrash && paidAccess && !item?.isPaid && <span style={{ cursor: "pointer", height: 30, width: 30, borderRadius: 30 }} className="bg-success text-white d-flex align-items-center justify-content-center" onClick={() => setChangeInvoiceStatus({ status: true, _id: item._id })}><MdCurrencyRupee /></span>}
 
                     </span>
                     </td>
                     <td className="text-nowrap">
-                      {item?.isOffice ? <span  className={`badge bg-danger`}>Office</span> 
-                      :  
-                      <>{item?.isPaid ?
-                        <span onClick={() => setPaymentDetails({ status: true, details: item })} className={`badge cursor-pointer bg-success`}>Paid</span>
-                        : <>
-                          {tranactionLoading?.id == item._id ?
-                            <span className={`spinner-border spinner-border-sm cursor-pointer text-primary`} role="status" aria-hidden={true}></span>
-                            : <span onClick={() => role?.toLowerCase()!=="client" || tranactionLoading?.status ? () => {} : generateTransaction(item?._id, item?.caseId)} className={`badge bg-primary ${role?.toLowerCase()==="client" && "cursor-pointer"}`}>To pay</span>
-                          }
-                        </>
-                      }</>
-                    }
-                    
+                      {item?.isOffice ? <span className={`badge bg-danger`}>Office</span>
+                        :
+                        <>{item?.isPaid ?
+                          <span onClick={() => setPaymentDetails({ status: true, details: item })} className={`badge cursor-pointer bg-success`}>Paid</span>
+                          : <>
+                            {tranactionLoading?.id == item._id ?
+                              <span className={`spinner-border spinner-border-sm cursor-pointer text-primary`} role="status" aria-hidden={true}></span>
+                              : <span onClick={() => role?.toLowerCase() !== "client" || tranactionLoading?.status ? () => { } : generateTransaction(item?._id, item?.caseId)} className={`badge bg-primary ${role?.toLowerCase() === "client" && "cursor-pointer"}`}>To pay</span>
+                            }
+                          </>
+                        }</>
+                      }
+
 
                     </td>
                     <td className="text-nowrap">{item?.createdAt && getFormateDMYDate(item?.createdAt)}</td>
-                    {role?.toLowerCase()!="client" && <td className="text-nowrap">{item?.branchId}</td>}
+                    {role?.toLowerCase() != "client" && <td className="text-nowrap">{item?.branchId}</td>}
                     <td className="text-nowrap">{item?.invoiceNo}</td>
                     <td className="text-nowrap">{item?.receiver?.name}</td>
                     <td className="text-nowrap">{item?.receiver?.email}</td>
@@ -383,30 +385,12 @@ export default function AllInvoiceComp({viewAllInvoice,payInvoice,viewInvoiceUrl
             </div>
 
             <div className="d-flex flex align-items-center justify-content-center">
-
-              <ReactPaginate
-                breakLabel="..."
-                nextLabel={<BiRightArrow />}
-                onPageChange={handlePageClick}
-                pageRangeDisplayed={4}
-                breakClassName={""}
-                marginPagesDisplayed={1}
-                pageCount={Math.ceil(noOfInvoice / pageItemLimit) || 1}
-                previousLabel={<BiLeftArrow />}
-                className="d-flex flex gap-2"
-                pageClassName="border border-primary paginate-li"
-                previousClassName="paginate-li bg-color-3"
-                nextClassName="paginate-li bg-color-3"
-                activeClassName="bg-primary text-white"
-                renderOnZeroPageCount={null}
-                forcePage={pgNo - 1}
-              />
+              <PaginateField pgNo={pgNo} pageCount={Math.ceil(noOfInvoice / pageItemLimit) || 1} handlePageClick={handlePageClick} />
             </div>
-
           </div>
         </div>
         {changeStatus?.show && <SetStatusOfProfile changeStatus={changeStatus} hide={() => setChangeStatus({ show: false, details: {} })} type="Invoice" handleChanges={handleChanges} />}
-        {isActiveInvoice.status && <ConfirmationModal show={isActiveInvoice.status} hide={()=>setIsActiveInvoice({status:false,details:{}})} id={isActiveInvoice.details?._id} handleComfirmation={deleteInvoice} heading={"Are you sure"} text={`You want to permanent delete invoice ${isActiveInvoice.details?.invoiceNo}`}/>}
+        {isActiveInvoice.status && <ConfirmationModal show={isActiveInvoice.status} hide={() => setIsActiveInvoice({ status: false, details: {} })} id={isActiveInvoice.details?._id} handleComfirmation={deleteInvoice} heading={"Are you sure"} text={`You want to permanent delete invoice ${isActiveInvoice.details?.invoiceNo}`} />}
         {paymentDetails?.status && <PaymentInfo show={paymentDetails.status} hide={() => setPaymentDetails({ status: false, details: {} })} details={paymentDetails?.details} />}
         {changeInvoiceStatus?.status && <EditInvoiceStatusModal changeInvoiceStatus={changeInvoiceStatus} setChangeInvoiceStatus={setChangeInvoiceStatus} handleInvoiceStatus={handlePaid} />}
 

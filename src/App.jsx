@@ -70,23 +70,6 @@ export default function App(){
    <AppContext.Provider value={{myAppData,setMyAppData}}>
   {/* <Navbar/> */}
   <Routes>
-    {/* <Route path='/' element={<PublicTemplate><Home/></PublicTemplate>}/> */}
-    {/* <Route path='/about-us' element={<PublicTemplate><About/></PublicTemplate>}/> */}
-    {/* <Route path='/contact-us' element={<PublicTemplate><Contact/></PublicTemplate>}/> */}
-    {/* <Route path='/Health-insurance-claim-solution' element={<PublicTemplate><Health_Insurance/></PublicTemplate>}/> */}
-    {/* <Route path='/General-Insurance-Claim-Solution' element={<PublicTemplate><Any_Insurance_Claim_Solution/></PublicTemplate>}/> */}
-    {/* <Route path='/Life-Insurance-Claim-Solution' element={<PublicTemplate><Death_Claim_Solution/></PublicTemplate> }/> */}
-    {/* <Route path='/Motor-Insurance-Claim-Solution' element={<PublicTemplate><Motor_Insurance_Claim_Solution/></PublicTemplate>}/> */}
-    {/* <Route path='/blogs' element={<BlogTemplate><Blogs/></BlogTemplate>}/> */}
-    {/* <Route path='/blog/:topic' element={<BlogTemplate><ViewBlogs/></BlogTemplate>}/> */}
-    {/* <Route path='/career' element={<PublicTemplate><Career/></PublicTemplate>} /> */}
-    {/* <Route path='/partnership' element={<PublicTemplate><Patnership/></PublicTemplate>} /> */}
-    {/* <Route path='/policy' element={<PublicTemplate><Policy/></PublicTemplate>} /> */}
-    {/* <Route path='/feedback' element={<PublicTemplate><Feedback/></PublicTemplate>}/> */}
-    {/* <Route path='/terms-and-condition' element={<PublicTemplate><TermsAndCondition/></PublicTemplate>}/>
-    <Route path='/partner/service agreement' element={<PublicTemplate><PartnerAgreement/></PublicTemplate>}/>
-    <Route path='/client/service agreement' element={<PublicTemplate><ClientAgreement/></PublicTemplate>}/> */}
-
     <Route path='/' element={<PanelTemplate><ClientSignIn/></PanelTemplate>}/>
     <Route path='/terms-and-condition' element={<TermsAndCondition/>}/>
     <Route path='/partner/service agreement' element={<><PartnerAgreement/></>}/>

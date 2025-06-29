@@ -1,5 +1,6 @@
+import { formatDateToISO } from "../../../utils/helperFunction"
 
-export default function FormInputField({ name = "", type = "text", label = "",disable=false, placeholder = "", formik = "", handleOnChange = "" }) {
+export default function FormDateInputField({ name = "", type = "text", label = "",disable=false, placeholder = "", formik = "", handleOnChange = "" }) {
     const { errors, touched, values } = formik
     const isInVaild = touched[name] && errors[name]
     return (
@@ -7,10 +8,10 @@ export default function FormInputField({ name = "", type = "text", label = "",di
             <div className="mb-3">
                 {label && <label htmlFor={name} className='col-form-label'>{label}</label>}
                 <input
-                    type={type}
+                    type={"date"}
                     name={name}
                     placeholder={placeholder}
-                    value={values[name]}
+                    value={values[name]? formatDateToISO(values[name]) : ''}
                     onChange={(e) => handleOnChange(e, name)}
                     onBlur={formik.handleBlur}
                     disable={disable}

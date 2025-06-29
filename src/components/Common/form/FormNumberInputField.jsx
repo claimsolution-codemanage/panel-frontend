@@ -1,5 +1,6 @@
+import { checkPhoneNo } from "../../../utils/helperFunction"
 
-export default function FormInputField({ name = "", type = "text", label = "",disable=false, placeholder = "", formik = "", handleOnChange = "" }) {
+export default function FormNumberInputField({ name = "", type = "number",digit=10, label = "",disable=false, placeholder = "", formik = "", handleOnChange = "" }) {
     const { errors, touched, values } = formik
     const isInVaild = touched[name] && errors[name]
     return (
@@ -7,11 +8,11 @@ export default function FormInputField({ name = "", type = "text", label = "",di
             <div className="mb-3">
                 {label && <label htmlFor={name} className='col-form-label'>{label}</label>}
                 <input
-                    type={type}
+                    type={"text"}
                     name={name}
                     placeholder={placeholder}
                     value={values[name]}
-                    onChange={(e) => handleOnChange(e, name)}
+                    onChange={(e) => checkPhoneNo(e?.target?.value, digit) && handleOnChange(e, name)}
                     onBlur={formik.handleBlur}
                     disable={disable}
                     className="form-control" />

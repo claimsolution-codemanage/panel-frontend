@@ -289,8 +289,6 @@ export default function AllAdminPartner() {
                     {data.map((item, ind) => <tr key={item._id} className="border-2 border-bottom border-light text-center">
                     <td className="text-nowrap"><input class="form-check-input" name="sharePartner" type="checkbox" checked={sharePartner.includes(item?._id)} onChange={(e) => handleShareOnchange(e, item?._id)} id="flexCheckDefault" /></td>
                       <th scope="row" className="text-nowrap">{ind + 1}</th>
-                      {/* <td className="text-nowrap"> <span className={`badge ${item?.isActive ? "bg-primary" : "bg-danger"}`}>{item?.isActive ? "Active" : "Unactive"}</span> </td> */}
-                      {/* <td className="text-nowrap"><span className="d-flex align-items-center gap-2"><span style={{ cursor: "pointer" }} onClick={() => navigate(`/admin/partner details/${item._id}`)}><HiMiniEye /></span><span style={{ cursor: "pointer" }} onClick={() => setChangeStatus({ show: true, details: {_id:item._id,currentStatus:item?.isActive} })}><CiEdit /></span></span></td> */}
                       <td className="text-nowrap">
                         <span className="d-flex gap-2">
                           <span style={{ cursor: "pointer", height: 30, width: 30, borderRadius: 30 }} className="bg-warning text-white d-flex align-items-center justify-content-center" onClick={() => navigate(`/admin/view-partner-report/${item._id}`,{state:{filter,back:location?.pathname,path:location?.pathname}})}><TbReportAnalytics className="fs-5" /></span>
@@ -313,7 +311,6 @@ export default function AllAdminPartner() {
                           {item?.share?.length  ? <span className="custom-tooltip-text">
                             {item?.share?.map(sh => <span className="badge text-bg-primary">{`${sh?.emp?.fullName} | ${sh?.emp?.type} | ${sh?.emp?.designation} | ${sh?.emp?.branchId}`}</span>)}
                           </span> : ""}
-
                         </span>
                       </td>
                       <td className="text-nowrap">{item?.profile?.primaryMobileNo}</td>

@@ -11,64 +11,18 @@ import { BsEyeFill } from "react-icons/bs";
 import { useFormik } from 'formik'
 import * as yup from 'yup'
 import { Helmet } from "react-helmet";
+import { signInOrSignUpInitialValue, signInOrSignUpValidationSchema } from "../../utils/validation"
 
 export default function SignIn() {
-    const [data, setData] = useState({ email: "", password: "" })
     const [disable, setDisable] = useState(false)
     const navigate = useNavigate()
     const [view, setView] = useState(false)
     const state = useContext(AppContext)
 
-    const handleOnchange = (e) => {
-        const { name, value } = e.target;
-        setData({ ...data, [name]: value })
-    }
-
-    const handleSumbit = async (e) => {
-        e.preventDefault()
-        setDisable(true)
-        try {
-            const res = await signin(data)
-            // console.log("/partner/dashboard", res);
-            if (res?.data?.success) {
-                const token = res?.headers["x-auth-token"]
-                if (token) {
-                    setheader()
-                    setToken(token)
-                    const details = getJwtDecode(token)
-                    // console.log("details", details);
-                    if (details?.isLogin) {
-                        state?.setMyAppData({ isLogin: true, details: details })
-                        // navigate("/partner/dashboard");
-                        navigate("/partner/dashboard")
-                        toast.success(res?.data?.message)
-                        // console.log("navigate", "/partner/dashboard");
-                    }
-
-                }
-                setDisable(false)
-            }
-            setDisable(false)
-        } catch (error) {
-            if (error && error?.response?.data?.message) {
-                toast.error(error?.response?.data?.message)
-            } else {
-                toast.error("Something went wrong")
-            }
-            // console.log("signup error", error);
-            setDisable(false)
-        }
-    }
 
     const UserDetailsFormik = useFormik({
-        initialValues: {
-            email: "",
-            password: "",
-        },
-        validationSchema: yup.object().shape({
-            email: yup.string().email("Enter valid Email").required("Please enter your Email"),
-            password: yup.string().required("Please enter your Password"),
-        }),
+        initialValues:signInOrSignUpInitialValue,
+        validationSchema:signInOrSignUpValidationSchema,
         onSubmit: async (values) => {
             setDisable(true)
             try {

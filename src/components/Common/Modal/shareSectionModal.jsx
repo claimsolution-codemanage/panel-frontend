@@ -28,9 +28,11 @@ export default function ShareSectionModal({show,shareValue, handleShareCase, clo
     const fetchOptions = debounce(fetchEmpList, 3000)
 
     const handleShare = async () => {
+        if(!selectEmployee?.value) return
         try {
             setShareLoading(true)
-            const sendData = { shareEmployee: selectEmployee?.map(emp=>emp?.value), [shareOf]: shareValue }
+            // const sendData = { shareEmployee: selectEmployee?.map(emp=>emp?.value), [shareOf]: shareValue }
+            const sendData = { shareEmployee: [selectEmployee?.value], [shareOf]: shareValue }
             const res = await handleShareCase(sendData)
             if (res?.data?.success) {
                 setShareLoading(false)
@@ -48,6 +50,9 @@ export default function ShareSectionModal({show,shareValue, handleShareCase, clo
         }
     }
 
+    console.log("selectEmployee",selectEmployee);
+    
+
     return (
         <Modal
             show={show}
@@ -63,7 +68,7 @@ export default function ShareSectionModal({show,shareValue, handleShareCase, clo
                         </div>
                         <div className="">
                             <AsyncSelect
-                                isMulti
+                                // isMulti
                                 cacheOptions
                                 defaultOptions
                                 className='text-capitalize'
@@ -77,7 +82,7 @@ export default function ShareSectionModal({show,shareValue, handleShareCase, clo
                 </Modal.Body>
                 <Modal.Footer>
                     <div className="d-flex  justify-content-center">
-                        <Button disabled={shareLoading || !selectEmployee?.length} className={`d-flex align-items-center justify-content-center gap-3 btn btn-primary ${shareLoading && "disabled"}`} onClick={handleShare}>
+                        <Button disabled={shareLoading || !selectEmployee?.value} className={`d-flex align-items-center justify-content-center gap-3 btn btn-primary ${shareLoading && "disabled"}`} onClick={handleShare}>
                             {shareLoading ? <span className="spinner-border spinner-border-sm" role="status" aria-hidden={true}></span> : <span><IoIosShareAlt /> Share</span>}
                         </Button>
                     </div>

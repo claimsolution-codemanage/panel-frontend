@@ -11,65 +11,19 @@ import { setToken } from "../../utils/helperFunction"
 import PhoneInput from 'react-phone-input-2'
 import 'react-phone-input-2/lib/style.css'
 import { useFormik } from 'formik'
-import * as yup from 'yup'
 import { Helmet } from "react-helmet";
+import { partnerSignUpInitialValue, partnerSignUpValidationSchema } from "../../utils/validation"
 
 
 export default function SignUp() {
     const state = useContext(AppContext)
-    const [data, setData] = useState({ fullName: "", email: "", mobileNo: "", password: "", workAssociation: "", areaOfOperation: "",agreement:false })
     const [disable, setDisable] = useState(false)
     const [view, setView] = useState(false)
     const navigate = useNavigate()
 
-    const handleOnchange = (e) => {
-        const { name, value } = e.target
-        setData({ ...data, [name]: value })
-    }
-
-
-    const handleSumbit = async (e) => {
-        e.preventDefault()
-        setDisable(true)
-        try {
-            const res = await signUp(data)
-            if (res?.data?.success) {
-                const token = res?.headers["x-auth-token"]
-                if (token) {
-                    setToken(token)
-                    toast.success(res?.data?.message)
-                    navigate("/partner/email otp verify")
-                    // console.log("sign up");
-                    // console.log("sign up", res);
-                }
-                setDisable(false)
-            }
-        } catch (error) {
-            if (error && error?.response?.data?.message) {
-                toast.error(error?.response?.data?.message)
-            } else {
-                toast.error("Something went wrong")
-            }
-            // console.log("signup error", error);
-            setDisable(false)
-        }
-    }
-
-    
     const UserDetailsFormik = useFormik({
-        initialValues: {
-            fullName: "", email: "", mobileNo: "", password: "",workAssociation: "", areaOfOperation: "", agreement: false,
-                
-        },
-        validationSchema: yup.object().shape({
-            fullName: yup.string().required("Please enter your Full Name"),
-            email: yup.string().email("Enter valid Email").required("Please enter your Email"),
-            password: yup.string().min(8,"Password must have minimum 8 character").required("Please enter your Password"),
-            mobileNo:yup.string().required("Please enter your Mobile No."),
-            workAssociation:yup.string().required("Please select your Work Association"),
-            areaOfOperation:yup.string().required("Please enter your Area of Operation"),
-            agreement:yup.bool()
-        }),
+        initialValues: partnerSignUpInitialValue,
+        validationSchema: partnerSignUpValidationSchema,
         onSubmit: async (values) => {
             setDisable(true)
             try {
@@ -80,8 +34,6 @@ export default function SignUp() {
                         setToken(token)
                         toast.success(res?.data?.message)
                         navigate("/partner/email otp verify")
-                        // console.log("sign up");
-                        // console.log("sign up", res);
                     }
                     setDisable(false)
                 }
@@ -97,8 +49,6 @@ export default function SignUp() {
         }
     })
 
-
-    // console.log("data",data);
 
     return (<>
                <Helmet>

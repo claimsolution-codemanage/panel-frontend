@@ -32,6 +32,7 @@ import ChangeBranch from "../Common/Modal/changeBranch";
 import { VscGitPullRequestGoToChanges } from "react-icons/vsc"
 import AddEmpRefModal from "../Common/Modal/addEmpRefModal"
 import ShareSectionModal from "../Common/Modal/shareSectionModal"
+import PaginateField from "../Common/PaginateField";
 
 
 export default function AllPartnerComp({empId,getPartner,editUrl,viewUrl,showType,isShare,partnerShare,isEmpRefAccess,
@@ -251,19 +252,19 @@ export default function AllPartnerComp({empId,getPartner,editUrl,viewUrl,showTyp
           </div>
         </div>}
 
-        <div className="m-0 m-md-5 p-md-4 custom-tooltip-wrapper ">
+        <div className="m-0 m-md-5 p-md-4 ">
           <div className="bg-color-1 p-3 p-md-5 rounded-2 shadow">
-            <div className="d-flex flex gap-2">
+            <div className="d-block d-md-flex flex gap-2">
 
               <div className="form-control px-2 d-flex gap-2">
                 <span className=""><BsSearch className="text-black" /></span>
 
                 <input className="w-50" value={searchQuery} onChange={(e) => handleSearchQuery(e.target.value)} placeholder="Search.." style={{ outline: "none", border: 0 }} />
               </div>
-              <div className="btn btn-primary fs-5" onClick={() => setShowCalender(!showCalender)}><CiFilter /></div>
-              <div className="btn btn-primary fs-5" onClick={() => handleReset()}>Reset</div>
-              {isDownload &&  <button className={`btn btn-primary fs-5 ${downloading && "disabled"}`} disabled={downloading} onClick={() => !downloading && handleDownload()}>{downloading ? <span className="spinner-border-sm"></span> : <SiMicrosoftexcel />}</button>}
-              {sharePartner?.length > 0 && <div className="btn btn-primary fs-5" onClick={() => setPatnerShareModal({ status: true, value: sharePartner })}><IoShareSocialOutline /></div>}
+              <div className="btn btn-primary fs-5 m-2 m-md-0" onClick={() => setShowCalender(!showCalender)}><CiFilter /></div>
+              <div className="btn btn-primary fs-5 m-2 m-md-0" onClick={() => handleReset()}>Reset</div>
+              {isDownload &&  <button className={`btn btn-primary fs-5 m-2 m-md-0 ${downloading && "disabled"}`} disabled={downloading} onClick={() => !downloading && handleDownload()}>{downloading ? <span className="spinner-border-sm"></span> : <SiMicrosoftexcel />}</button>}
+              {sharePartner?.length > 0 && <div className="btn btn-primary fs-5 m-2 m-md-0" onClick={() => setPatnerShareModal({ status: true, value: sharePartner })}><IoShareSocialOutline /></div>}
               <div className="">
                 <select className="form-select" name="pageItemLimit" value={pageItemLimit} onChange={(e) => { setPageItemLimit(e.target.value); setPgNo(1) }} aria-label="Default select example">
                   <option value="">Items</option>
@@ -306,13 +307,13 @@ export default function AllPartnerComp({empId,getPartner,editUrl,viewUrl,showTyp
                       {/* <td className="text-nowrap"><span className="d-flex align-items-center gap-2"><span style={{ cursor: "pointer" }} onClick={() => navigate(`/admin/partner details/${item._id}`)}><HiMiniEye /></span><span style={{ cursor: "pointer" }} onClick={() => setChangeStatus({ show: true, details: {_id:item._id,currentStatus:item?.isActive} })}><CiEdit /></span></span></td> */}
                       <td className="text-nowrap">
                         <span className="d-flex gap-2">
-                          <span style={{ cursor: "pointer", height: 30, width: 30, borderRadius: 30 }} className="bg-warning text-white d-flex align-items-center justify-content-center" onClick={() => navigate(`${reportUrl}${item._id}`,{state:{filter,back:location?.pathname,path:location?.pathname}})}><TbReportAnalytics className="fs-5" /></span>
-                          {editUrl && <Link to={`${editUrl}${item?._id}`} state={{filter,back:location?.pathname,path:location?.pathname}} style={{ height: 30, width: 30, borderRadius: 30 }} className="cursor-pointer bg-info text-white d-flex align-items-center justify-content-center"><CiEdit className="fs-5 text-dark" /></Link> }
-                          <span style={{ cursor: "pointer", height: 30, width: 30, borderRadius: 30 }} className="bg-primary text-white d-flex align-items-center justify-content-center" onClick={() => navigate(`${viewUrl}${item._id}`,{state:{filter,back:location?.pathname,path:location?.pathname}})}><HiMiniEye /></span>
-                          {statement &&  <Link to={`/employee/statement/partner/${item?._id}`} state={{filter,back:location?.pathname,path:location?.pathname}}  style={{ cursor: "pointer", height: 30, width: 30, borderRadius: 30 }} className="bg-primary text-white d-flex align-items-center justify-content-center"><IoNewspaperOutline /></Link>}
-                          {isChangeBranch && <span style={{ cursor: "pointer", height: 30, width: 30, borderRadius: 30 }} className="bg-success text-white d-flex align-items-center justify-content-center" onClick={() => setChangeBranch({ ...changeBranch,status:true,_id:item?._id,branchId:item?.branchId})}><VscGitPullRequestGoToChanges /></span>}
-                          {isEmpRefAccess  && <span style={{ cursor: "pointer", height: 30, width: 30, borderRadius: 30 }} className="bg-secondary text-white d-flex align-items-center justify-content-center" onClick={() => setEmpRef({partnerId:item._id,status:true})}><IoPersonAddOutline /></span>}
-                          {isTrash && <span style={{ cursor: "pointer", height: 30, width: 30, borderRadius: 30 }} className="bg-danger text-white d-flex align-items-center justify-content-center" onClick={() => setChangeStatus({ show: true, details: { _id: item._id, currentStatus: item?.isActive, name: item?.profile?.consultantName, recovery: false } })}><AiOutlineDelete /></span>}
+                          <span title="report" style={{ cursor: "pointer", height: 30, width: 30, borderRadius: 30 }} className="bg-warning text-white d-flex align-items-center justify-content-center" onClick={() => navigate(`${reportUrl}${item._id}`,{state:{filter,back:location?.pathname,path:location?.pathname}})}><TbReportAnalytics className="fs-5" /></span>
+                          {editUrl && <Link title="edit" to={`${editUrl}${item?._id}`} state={{filter,back:location?.pathname,path:location?.pathname}} style={{ height: 30, width: 30, borderRadius: 30 }} className="cursor-pointer bg-info text-white d-flex align-items-center justify-content-center"><CiEdit className="fs-5 text-dark" /></Link> }
+                          <span title="view" style={{ cursor: "pointer", height: 30, width: 30, borderRadius: 30 }} className="bg-primary text-white d-flex align-items-center justify-content-center"  onClick={() => navigate(`${viewUrl}${item._id}`,{state:{filter,back:location?.pathname,path:location?.pathname}})}><HiMiniEye /></span>
+                          {statement &&  <Link title="statement" to={`/employee/statement/partner/${item?._id}`} state={{filter,back:location?.pathname,path:location?.pathname}}  style={{ cursor: "pointer", height: 30, width: 30, borderRadius: 30 }} className="bg-primary text-white d-flex align-items-center justify-content-center"><IoNewspaperOutline /></Link>}
+                          {isChangeBranch && <span title="branch-change" style={{ cursor: "pointer", height: 30, width: 30, borderRadius: 30 }} className="bg-success text-white d-flex align-items-center justify-content-center" onClick={() => setChangeBranch({ ...changeBranch,status:true,_id:item?._id,branchId:item?.branchId})}><VscGitPullRequestGoToChanges /></span>}
+                          {isEmpRefAccess  && <span title="add-reference" style={{ cursor: "pointer", height: 30, width: 30, borderRadius: 30 }} className="bg-secondary text-white d-flex align-items-center justify-content-center" onClick={() => setEmpRef({partnerId:item._id,status:true})}><IoPersonAddOutline /></span>}
+                          {isTrash && <span title="delete" style={{ cursor: "pointer", height: 30, width: 30, borderRadius: 30 }} className="bg-danger text-white d-flex align-items-center justify-content-center" onClick={() => setChangeStatus({ show: true, details: { _id: item._id, currentStatus: item?.isActive, name: item?.profile?.consultantName, recovery: false } })}><AiOutlineDelete /></span>}
 
                           {/* <span style={{ cursor: "pointer",height:30,width:30,borderRadius:30 }} className="bg-danger text-white d-flex align-items-center justify-content-center" onClick={() => setDeletePartner({status:true,id:item?._id,text:`Your want to delete ${item?.profile?.consultantName} partner`})}><AiOutlineDelete /></span> */}
 
@@ -321,12 +322,11 @@ export default function AllPartnerComp({empId,getPartner,editUrl,viewUrl,showTyp
                       {showType &&  <td className="text-nowrap text-capitalize">{(item?.addedBy?.type && item?.addedBy?.fullName) ? `${item?.addedBy?.fullName} | ${item?.addedBy?.type} | ${item?.addedBy?.designation}` : "-"}</td>}
                       {/* <td className="text-nowrap">{item?.profile?.consultantName}</td> */}
                       <td className="text-nowrap">
-                        <span className="text-capitalize">
+                        <span className="custom-tooltip-wrapper text-capitalize">
                           {item?.profile?.consultantName}
-                          {item?.share?.length && showTooltip ? <span className="custom-tooltip-text">
+                          {item?.share?.length  ? <span className="custom-tooltip-text">
                             {item?.share?.map(sh => <span className="badge text-bg-primary">{`${sh?.emp?.fullName} | ${sh?.emp?.type} | ${sh?.emp?.designation} | ${sh?.emp?.branchId}`}</span>)}
                           </span> : ""}
-
                         </span>
                       </td>
                       <td className="text-nowrap">{item?.profile?.primaryMobileNo}</td>
@@ -344,24 +344,7 @@ export default function AllPartnerComp({empId,getPartner,editUrl,viewUrl,showTyp
               </div>
 
               <div className="d-flex flex align-items-center justify-content-center">
-
-                <ReactPaginate
-                  breakLabel="..."
-                  nextLabel={<BiRightArrow />}
-                  onPageChange={handlePageClick}
-                  pageRangeDisplayed={4}
-                  breakClassName={""}
-                  marginPagesDisplayed={1}
-                  pageCount={Math.ceil(noOfPartner / pageItemLimit) || 1}
-                  previousLabel={<BiLeftArrow />}
-                  className="d-flex flex gap-2"
-                  pageClassName="border border-primary paginate-li"
-                  previousClassName="paginate-li bg-color-3"
-                  nextClassName="paginate-li bg-color-3"
-                  activeClassName="bg-primary text-white"
-                  renderOnZeroPageCount={null}
-                  forcePage={pgNo > 0 ? pgNo - 1 : 0}
-                />
+                  <PaginateField pgNo={pgNo} pageCount={Math.ceil(noOfPartner / pageItemLimit) || 1} handlePageClick={handlePageClick}/>
               </div>
             </div>
 

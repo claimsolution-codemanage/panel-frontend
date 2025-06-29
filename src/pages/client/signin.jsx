@@ -12,58 +12,21 @@ import { getJwtDecode } from '../../utils/helperFunction'
 import { useFormik } from 'formik'
 import * as yup from 'yup'
 import { Helmet } from "react-helmet";
+import { signInOrSignUpInitialValue, signInOrSignUpValidationSchema } from '../../utils/validation'
 
 
 export default function ClientSignIn() {
     const state = useContext(AppContext)
-    const [data, setData] = useState({ email: "", password: "" })
     const [view, setView] = useState(false)
     const [loading, setLoading] = useState(false)
     const navigate = useNavigate()
 
-    const handleOnchange = (e) => {
-        const { name, value } = e.target
-        setData({ ...data, [name]: value })
-    }
-
-
-    const handleSumbit = async (e) => {
-        e.preventDefault()
-        setLoading(true)
-        try {
-            const res = await clientSignIn(data)
-            if (res?.data?.success) {
-                const token = res?.headers["x-auth-token"]
-                if (token) {
-                    setToken(token)
-                    const details = getJwtDecode(token)
-                    state?.setMyAppData({ isLogin: true, details: details })
-                    toast.success(res?.data?.message)
-                    navigate("/client/dashboard")
-                    // console.log("client sign up", res);
-                }
-                setLoading(false)
-            }
-        } catch (error) {
-            if (error && error?.response?.data?.message) {
-                toast.error(error?.response?.data?.message)
-            } else {
-                toast.error("Something went wrong")
-            }
-            // console.log("signup error", error);
-            setLoading(false)
-        }
-    }
+    console.log("state asd",state);
+    
 
     const UserDetailsFormik = useFormik({
-        initialValues: {
-            email: "",
-            password: "",
-        },
-        validationSchema: yup.object().shape({
-            email: yup.string().email("Enter valid Email").required("Please enter your Email"),
-            password: yup.string().required("Please enter your Password"),
-        }),
+        initialValues:signInOrSignUpInitialValue,
+        validationSchema: signInOrSignUpValidationSchema,
         onSubmit: async (values) => {
             setLoading(true)
             try {
@@ -86,7 +49,7 @@ export default function ClientSignIn() {
                 } else {
                     toast.error("Something went wrong")
                 }
-                // console.log("signup error", error);
+                console.log("signup error", error);
                 setLoading(false)
             }
         }

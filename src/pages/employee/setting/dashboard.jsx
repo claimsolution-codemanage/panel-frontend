@@ -149,7 +149,7 @@ export default function AdminDasboard() {
         <div className="container-fluid">
           <div className="row">
             <div className="col-12">
-                <div className="card mx-4 p-3 border-0 shadow rounded-4 mt-3">
+                <div className="card mx-0 mx-md-4 p-3 border-0 shadow rounded-4 mt-3">
                   <div className='d-flex flex-column flex-lg-row align-items-center justify-content-between'>
                     <div className='d-flex align-items-center'>
                       <div  className="nav__logo">
@@ -166,7 +166,7 @@ export default function AdminDasboard() {
             <div className="row">
             
                 <div className="col-12">
-                    <div className="card p-3 mx-4 mt-4 rounded-4 bg-color-1 border-none border-0 shadow">
+                    <div className="card p-3 mx-0 mx-md-4 mt-4 rounded-4 bg-color-1 border-none border-0 shadow">
                     <div className="border-3 border-primary border-bottom py-2">
                       <div className='d-flex justify-content-between'>
                             <h6 className="h1 fw-bold">Welcome to your Dashboard</h6>
@@ -199,7 +199,7 @@ export default function AdminDasboard() {
             </div>
         </div>
         <div className="container-fluid">
-          <div className="mx-4">
+          <div className="mx-0 mx-md-4">
             <div className="row">
             <div className="col-md-3 border-end">
                 <div className="bg-color-1 border-5 border-primary border-start card mx-1 my-4 p-2 shadow">
@@ -247,13 +247,13 @@ export default function AdminDasboard() {
           </div>
         </div>
         <div className="container-fluid my-2">
-          <div className="row px-4 h-100">
+          <div className="row px-0 px-md-4 h-100">
             <div className="col-12 col-md-8 h-100">
               <div className="card border-0 rounded-4 shadow p-4">
                 <Line options={options} data={data} />
               </div>
             </div>
-            <div className="col-12 col-md-4 h-100">
+            <div className="col-12 col-md-4 h-100 mt-4 mt-md-0">
               <div className="card border-0 rounded-4 shadow p-4">
                 <div className="">
                   <Pie data={data1} />

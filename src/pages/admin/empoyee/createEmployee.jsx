@@ -7,9 +7,9 @@ import { adminGetNormalEmployee,adminCreateNewEmployee } from "../../../apis"
 import { addEmpInitialValue, addEmpValidationSchema } from "../../../utils/validation"
 import { useFormik } from "formik"
 import FormInputField from "../../../components/Common/form/FormInput"
-import FormEmpSelect from "../../../components/Common/form/FormEmpSelect"
 import FormSelectField from "../../../components/Common/form/FormSelectField"
 import FormPhoneInputField from "../../../components/Common/form/FormPhoneInput"
+import FormEmpSelectField from '../../../components/Common/form/FormEmpSelect'
 
 
 export default function AdminCreateNewEmployee() {
@@ -78,8 +78,8 @@ export default function AdminCreateNewEmployee() {
                                 <FormPhoneInputField name="mobileNo" label="Phone" formik={formik} handleOnChange={(e,name)=>formik.setFieldValue(name,e)}/>
                                 <FormSelectField name="type" label="Department" options={empDepartmentOptions} formik={formik} handleOnChange={(e,name)=>formik.handleChange(e)}/>
                                 <FormSelectField name="designation" label="Designation" options={empDesignationOptions} formik={formik} handleOnChange={(e,name)=>formik.handleChange(e)}/>
-                                <FormEmpSelect getEmpList={handleEmpOptionsList} name="managerId" label="Manager of employee"  formik={formik} handleOnChange={(e,name)=>formik.setFieldValue(name,e)}/>
-                                <FormEmpSelect getEmpList={handleEmpOptionsList} name="headEmpId" label="Head of employee"  formik={formik} handleOnChange={(e,name)=>formik.setFieldValue(name,e)}/>
+                                <FormEmpSelectField getEmpList={handleEmpOptionsList} name="managerId" label="Manager of employee"  formik={formik} handleOnChange={(e,name)=>formik.setFieldValue(name,e)}/>
+                                <FormEmpSelectField getEmpList={handleEmpOptionsList} name="headEmpId" label="Head of employee"  formik={formik} handleOnChange={(e,name)=>formik.setFieldValue(name,e)}/>
                             </div>
                             <div className="d-flex  justify-content-center">
                                 <div aria-disabled={loading} className={`d-flex align-items-center justify-content-center gap-3 btn btn-primary w-100 ${loading && "disabled"}`} onClick={formik.handleSubmit}>

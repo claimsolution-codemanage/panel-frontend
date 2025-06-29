@@ -24,11 +24,12 @@ import { AiOutlineDelete } from "react-icons/ai";
 import SetStatusOfProfile from "../Common/Modal/setStatusModal";
 import ConfirmationModal from "../Common/Modal/confirmationModal";
 import ChangeBranch from "../Common/Modal/changeBranch";
+import PaginateField from "../Common/PaginateField";
 
 
 export default function ViewAllClient(props) {
-    const { getList, listDownload, endableEdit, editPath,viewPath, role, enableClientShare, shareClient, getSaleEmp, changeBranchApi,
-        deleteClientByIdApi, setClientStatusApi, enableChangeBranch, enableDeleteClient, enableClientStatus,showTooltip } = props
+    const { getList, listDownload, endableEdit, editPath, viewPath, role, enableClientShare, shareClient, getSaleEmp, changeBranchApi,
+        deleteClientByIdApi, setClientStatusApi, enableChangeBranch, enableDeleteClient, enableClientStatus, showTooltip } = props
     const stateContext = useContext(AppContext)
     const empType = stateContext?.myAppData?.details?.empType
     const [data, setData] = useState([])
@@ -211,16 +212,16 @@ export default function ViewAllClient(props) {
 
                 <div className="m-md-5 p-md-4">
                     <div className="bg-color-1 p-3 p-md-5 rounded-2 shadow">
-                        <div className="d-flex flex gap-2">
+                        <div className="d-block d-md-flex flex gap-2">
 
                             <div className="form-control px-2 d-flex gap-2">
                                 <span className=""><BsSearch className="text-black" /></span>
                                 <input className="w-100" value={searchQuery} onChange={(e) => handleSearchQuery(e.target.value)} placeholder="Search.." style={{ outline: "none", border: 0 }} />
                             </div>
-                            <div className="btn btn-primary" onClick={() => setShowCalender(!showCalender)}><CiFilter /></div>
-                            <div className="btn btn-primary" onClick={() => handleReset()}>Reset</div>
-                            {shareClientList?.length > 0 && <div className="btn btn-primary fs-5" onClick={() => setShareModal({ status: true, value: shareClientList })}><IoShareSocialOutline /></div>}
-                            {listDownload && <button className={`btn btn-primary fs-5 ${downloading && "disabled"}`} disabled={downloading} onClick={() => !downloading && handleDownload()}>{downloading ? <span className="spinner-border-sm"></span> : <SiMicrosoftexcel />}</button>}
+                            <div className="btn btn-primary m-2 m-md-0" onClick={() => setShowCalender(!showCalender)}><CiFilter /></div>
+                            <div className="btn btn-primary m-2 m-md-0" onClick={() => handleReset()}>Reset</div>
+                            {shareClientList?.length > 0 && <div className="btn btn-primary fs-5 m-2 m-md-0" onClick={() => setShareModal({ status: true, value: shareClientList })}><IoShareSocialOutline /></div>}
+                            {listDownload && <button className={`btn btn-primary m-2 m-md-0 fs-5 ${downloading && "disabled"}`} disabled={downloading} onClick={() => !downloading && handleDownload()}>{downloading ? <span className="spinner-border-sm"></span> : <SiMicrosoftexcel />}</button>}
                             <div className="">
                                 <select className="form-select" name="pageItemLimit" value={pageItemLimit} onChange={(e) => setPageItemLimit(e.target.value)} aria-label="Default select example">
                                     <option value="">No. of Items</option>
@@ -287,24 +288,7 @@ export default function ViewAllClient(props) {
                             </div>
 
                             <div className="d-flex flex align-items-center justify-content-center">
-
-                                <ReactPaginate
-                                    breakLabel="..."
-                                    nextLabel={<BiRightArrow />}
-                                    onPageChange={handlePageClick}
-                                    pageRangeDisplayed={4}
-                                    breakClassName={""}
-                                    marginPagesDisplayed={1}
-                                    pageCount={Math.ceil(noOfClient / pageItemLimit) || 1}
-                                    previousLabel={<BiLeftArrow />}
-                                    className="d-flex flex gap-2"
-                                    pageClassName="border border-primary paginate-li"
-                                    previousClassName="paginate-li bg-color-3"
-                                    nextClassName="paginate-li bg-color-3"
-                                    activeClassName="bg-primary text-white"
-                                    renderOnZeroPageCount={null}
-                                    forcePage={pgNo > 0 ? pgNo - 1 : 0}
-                                />
+                                <PaginateField pgNo={pgNo} pageCount={Math.ceil(noOfClient / pageItemLimit) || 1} handlePageClick={handlePageClick} />
                             </div>
                         </div>
                     </div>
