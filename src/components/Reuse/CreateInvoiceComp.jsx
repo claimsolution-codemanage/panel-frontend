@@ -1,9 +1,8 @@
-import React, { useEffect, useState, useRef } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import SenderModal from '../Common/InvoiceComp/SenderModal'
 import ReceiverModal from '../Common/InvoiceComp/receiverModal'
 import AddItem from '../Common/InvoiceComp/AddItem'
 import { useFormik } from 'formik'
-import * as Yup from 'yup';
 import { IoIosAddCircle } from "react-icons/io";
 import { LuClipboardEdit } from "react-icons/lu";
 import { TiDelete } from "react-icons/ti";
@@ -11,18 +10,18 @@ import EditItem from '../Common/InvoiceComp/editItem'
 import { BiMessageSquareEdit } from "react-icons/bi";
 import { useReactToPrint } from 'react-to-print';
 import { toast } from 'react-toastify'
-import { financeEmployeeCreateInvoice } from '../../apis'
-import { useLocation, useNavigate, useParams } from 'react-router-dom'
-import {ToWords} from 'to-words'
+import { useLocation, useNavigate, useSearchParams } from 'react-router-dom'
+import { ToWords } from 'to-words'
 import { invoiceFormatDate } from '../../utils/helperFunction'
 import { IoArrowBackCircleOutline } from 'react-icons/io5'
+import { itemInvInitalValues, itemInvValidationSchema, receiverInvInitalValues, receiverValidationSchema, senderInvInitalValues, senderValidationSchema } from '../../utils/validation'
 
-export default function CreateInvoiceComp({createInvoice,clientId,caseId,viewInvoiceUrl,isOffice}) {
+export default function CreateInvoiceComp({ createInvoice, clientId, caseId, viewInvoiceUrl, isOffice,fileDetailApi }) {
+  const [searchParams,setSearchParams] =useSearchParams()
   const navigate = useNavigate()
   const toWords = new ToWords()
   const printRef = useRef()
   const location = useLocation()
-  const caseParam = useParams()
   const [loading, setLoading] = useState(false)
   const [showSender, setShowSender] = useState(false)
   const [showReceiver, setShowReceiver] = useState(false)
@@ -30,106 +29,41 @@ export default function CreateInvoiceComp({createInvoice,clientId,caseId,viewInv
   const [showEditItem, setShowEditItem] = useState({ status: false, data: {}, id: "" })
   const [finalDetails, setFinalDetails] = useState({ subAmt: 0, gstAmt: 0, totalAmt: 0, billDate: new Date().getTime() })
 
-
-  // console.log("caseParam",caseParam);
-
   const senderFormik = useFormik({
-    initialValues: {
-      name: "ADAKIYA CONSULTANCY SERVICES PVT.LTD",
-      address: "A-4 & 5, 3rd Floor, Rajupark, Devli Road, Near Domino's Pizza, New Delhi -110080,India",
-      state: "Delhi",
-      country: "IN",
-      pinCode: "110062",
-      gstNo: "07AAYCA7531P1ZR",
-      panNo: "AAYCA7531P",
-      email: "claimsolution.in@gmail.com",
-      mobileNo: "011 49858616"
-    },
-    validationSchema: Yup.object().shape({
-      name: Yup.string().required('Sender name is required'),
-      address: Yup.string().required('Sender address is required'),
-      state: Yup.string().required('Sender state is required'),
-      country: Yup.string().required('Sender country is required'),
-      pinCode: Yup.string().required('Sender pin code is required'),
-      gstNo: Yup.string().required('Sender GST number is required'),
-      panNo: Yup.string().required('Sender PAN number is required'),
-      email: Yup.string().email('Invalid email').required('Sender email is required'),
-      mobileNo: Yup.string().required('Sender mobile number is required'),
-    }),
-    onSubmit: async (values) => {
-      // console.log("sender", values);
-      setShowSender(false)
-    }
+    initialValues: senderInvInitalValues,
+    validationSchema: senderValidationSchema,
+    onSubmit: () => setShowSender(false)
   })
 
   const receiverFormik = useFormik({
-    initialValues: {
-      name: "",
-      address: "",
-      state: "",
-      country: "IN",
-      pinCode: "",
-      gstNo: "",
-      panNo: "",
-      email: "",
-      mobileNo: ""
-    },
-    validationSchema: Yup.object().shape({
-      name: Yup.string().required('Receiver name is required'),
-      address: Yup.string().required('Receiver address is required'),
-      state: Yup.string().required('Receiver state is required'),
-      country: Yup.string().required('Receiver country is required'),
-      pinCode: Yup.string().required('Receiver pin code is required'),
-      gstNo: Yup.string(),
-      panNo: Yup.string(),
-      email: Yup.string().email('Receiver Invalid email'),
-      mobileNo: Yup.string(),
-    }),
-    onSubmit: async (values) => {
-      setShowReceiver(false)
-    }
+    initialValues: receiverInvInitalValues,
+    validationSchema: receiverValidationSchema,
+    onSubmit: () => setShowReceiver(false)
   })
 
+  const handleInvoiceItem = async (values) => {
+    const rate = values.quantity && values.quantity !== 0
+      ? (values.amt / (1 + values.gstRate / 100) * values.quantity).toFixed(2)
+      : (values?.amt / (1 + values?.gstRate / 100)).toFixed(2);
+
+    const convertItem = {
+      ...values,
+      rate: rate,
+      gstAmt: values.quantity && values.quantity !== 0
+        ? (values.amt * values.quantity - rate).toFixed(2)
+        : (values.amt - rate).toFixed(2),
+      totalAmt: values.quantity && values.quantity !== 0
+        ? (values.amt * values.quantity).toFixed(2)
+        : (values.amt),
+    };
+    setInvoiceItems({ status: false, data: [...invoiceItems.data, convertItem] })
+    invoiceItemsFormik.resetForm()
+  }
+
   const invoiceItemsFormik = useFormik({
-    initialValues: {
-    //   name: "",
-      description: "",
-      quantity: 0,
-      gstRate: 12,
-      rate: 0,
-      gstAmt: 0,
-      amt: 0,
-      totalAmt: 0
-
-    },
-    validationSchema: Yup.object().shape({
-    //   name: Yup.string().required('Item name is required'),
-      description: Yup.string().required('Item description is required'),
-      quantity: Yup.number().required('Quantity is required'),
-      gstRate: Yup.number().required('GST rate is required'),
-      rate: Yup.number(),
-      gstAmt: Yup.number(),
-      amt: Yup.number().required('Amount is required'),
-      totalAmt: Yup.number(),
-    }),
-    onSubmit: async (values) => {
-      const rate = values.quantity && values.quantity !== 0
-        ? (values.amt / (1 + values.gstRate / 100) * values.quantity).toFixed(2)
-        : (values?.amt / (1 + values?.gstRate / 100)).toFixed(2);
-
-      const convertItem = {
-        ...values,
-        rate: rate,
-        gstAmt: values.quantity && values.quantity !== 0
-          ? (values.amt * values.quantity - rate).toFixed(2)
-          : (values.amt - rate).toFixed(2),
-        totalAmt: values.quantity && values.quantity !== 0
-          ? (values.amt * values.quantity).toFixed(2)
-          : (values.amt),
-      };
-      setInvoiceItems({ status: false, data: [...invoiceItems.data, convertItem] })
-      invoiceItemsFormik.resetForm()
-    }
+    initialValues: itemInvInitalValues,
+    validationSchema: itemInvValidationSchema,
+    onSubmit: handleInvoiceItem
   })
 
   const handleEditSave = (updatedItem, id) => {
@@ -169,65 +103,67 @@ export default function CreateInvoiceComp({createInvoice,clientId,caseId,viewInv
 
   const handleSave = async () => {
     // console.log("error:", senderFormik.initialErrors, receiverFormik.isValidating, invoiceItemsFormik.errors);
-    if(isOffice || (clientId && caseId)){
-        try {
-          if (Object.keys(senderFormik.errors).length > 0 || !senderFormik.isValid) {
-            // console.log("senderFormik.errors", senderFormik.errors);
-            let errorFields = ""
-            Object.keys(senderFormik.errors).map(error => errorFields += error + ", ")
-            toast.error(`Please enter sender ${errorFields} required fields`)
-            return
-          }
-          if (Object.keys(receiverFormik.errors).length > 0 || !receiverFormik.isValid) {
-            let errorFields = ""
-            Object.keys(receiverFormik.errors).map(error => errorFields += error + ", ")
-            toast.error(`Please enter receiver ${errorFields} required fields`)
-            return
-          }
-          if (Object.keys(invoiceItemsFormik.errors).length > 0 || !invoiceItemsFormik.isValid) {
-            let errorFields = ""
-            Object.keys(invoiceItemsFormik.errors).map(error => errorFields += error + ", ")
-            toast.error(`Please enter invoice items ${errorFields} required fields`)
-            return
-          }
-          if (invoiceItems.data.length == 0) {
-            toast.error("Invoice must have 1 item")
-            return
-          }
-          const payload = {
-            sender: senderFormik.values,
-            receiver: receiverFormik.values,
-            invoiceItems: invoiceItems.data,
-            subAmt: finalDetails.subAmt,
-            gstAmt: finalDetails.gstAmt,
-            totalAmt: finalDetails.totalAmt,
-            billDate: finalDetails.billDate
-          }
-          setLoading(true)
-          const res = await createInvoice(payload,clientId,caseId)
-          if (res?.data?.success && res.status==200) {
-            toast.success(res?.data?.message)
-            setLoading(false)
-            if(res?.data?._id){
-              navigate(`${viewInvoiceUrl}${res?.data?._id}`)
-            }
-          }
-        } catch (error) {
+    if (isOffice || (clientId && caseId)) {
+      try {
+        if (Object.keys(senderFormik.errors).length > 0 || !senderFormik.isValid) {
+          // console.log("senderFormik.errors", senderFormik.errors);
+          let errorFields = ""
+          Object.keys(senderFormik.errors).map(error => errorFields += error + ", ")
+          toast.error(`Please enter sender ${errorFields} required fields`)
+          return
+        }
+        if (Object.keys(receiverFormik.errors).length > 0 || !receiverFormik.isValid) {
+          let errorFields = ""
+          Object.keys(receiverFormik.errors).map(error => errorFields += error + ", ")
+          toast.error(`Please enter receiver ${errorFields} required fields`)
+          return
+        }
+        if (Object.keys(invoiceItemsFormik.errors).length > 0 || !invoiceItemsFormik.isValid) {
+          let errorFields = ""
+          Object.keys(invoiceItemsFormik.errors).map(error => errorFields += error + ", ")
+          toast.error(`Please enter invoice items ${errorFields} required fields`)
+          return
+        }
+        if (invoiceItems.data.length == 0) {
+          toast.error("Invoice must have 1 item")
+          return
+        }
+        const payload = {
+          sender: senderFormik.values,
+          receiver: receiverFormik.values,
+          invoiceItems: invoiceItems.data,
+          subAmt: finalDetails.subAmt,
+          gstAmt: finalDetails.gstAmt,
+          totalAmt: finalDetails.totalAmt,
+          billDate: finalDetails.billDate
+        }
+        setLoading(true)
+        let clientObjId = clientId || searchParams?.get("clientId")
+        let caseObjId = caseId || searchParams?.get("caseId")
+        const res = await createInvoice(payload, clientObjId, caseObjId)
+        if (res?.data?.success && res.status == 200) {
+          toast.success(res?.data?.message)
           setLoading(false)
-          if (error && error?.response?.data?.message) {
-            toast.error(error?.response?.data?.message)
-          } else {
-            toast.error("Something went wrong")
+          if (res?.data?._id) {
+            navigate(`${viewInvoiceUrl}${res?.data?._id}`)
           }
         }
+      } catch (error) {
+        setLoading(false)
+        if (error && error?.response?.data?.message) {
+          toast.error(error?.response?.data?.message)
+        } else {
+          toast.error("Something went wrong")
+        }
+      }
     }
   }
 
   const handleBack = () => {
-    if(location?.state?.filter && location?.state?.back){
-        navigate(location?.state?.back,{state:{...location?.state,back:location?.pathname}});
-    }else{
-        navigate(-1)
+    if (location?.state?.filter && location?.state?.back) {
+      navigate(location?.state?.back, { state: { ...location?.state, back: location?.pathname } });
+    } else {
+      navigate(-1)
     }
   };
 
@@ -258,13 +194,13 @@ export default function CreateInvoiceComp({createInvoice,clientId,caseId,viewInv
                       <h5 className="font-size-15 mb-1">Invoice Date</h5>
                       {/* <p>{finalDetails.billDate}</p> */}
                       <div className="form-group">
-                <input type="date" name='' value={invoiceFormatDate(finalDetails.billDate)} onChange={(e) => setFinalDetails((pre)=>{return{...pre,billDate:e?.target?.value && new Date(e?.target?.value).getTime()}})} className={`form-control`} id="billDate" />
-              </div>
+                        <input type="date" name='' value={invoiceFormatDate(finalDetails.billDate)} onChange={(e) => setFinalDetails((pre) => { return { ...pre, billDate: e?.target?.value && new Date(e?.target?.value).getTime() } })} className={`form-control`} id="billDate" />
+                      </div>
                     </div>
                   </div>
                   <div className='sender w-50'>
-                  <div className="my-2">
-                      <img className="img-fluid" width={150} height={300} src="/Images/icons/company-logo.png" alt="logo"/>
+                    <div className="my-2">
+                      <img className="img-fluid" width={150} height={300} src="/Images/icons/company-logo.png" alt="logo" />
                     </div>
                     <div className="mb-4">
                       <h4 className="mb-1 text-muted text-capitalize">{senderFormik?.values?.name}</h4>
@@ -430,7 +366,7 @@ export default function CreateInvoiceComp({createInvoice,clientId,caseId,viewInv
                         </tr>
                         <tr>
                           <td colSpan={10} className="fw-semibold border-0">
-                          {!isNaN(finalDetails?.totalAmt)&& `Total Amount(In words): ${toWords?.convert(Number(finalDetails?.totalAmt),{currency:true,ignoreZeroCurrency:true})}`}  
+                            {!isNaN(finalDetails?.totalAmt) && `Total Amount(In words): ${toWords?.convert(Number(finalDetails?.totalAmt), { currency: true, ignoreZeroCurrency: true })}`}
                           </td>
                         </tr>
                       </tbody>
@@ -449,20 +385,12 @@ export default function CreateInvoiceComp({createInvoice,clientId,caseId,viewInv
         {/* end table responsive */}
         <div className="d-print-none mt-4">
           <div className="float-end">
-            {/* <button
-              onClick={handlePrint}
-              className="btn btn-primary me-1">
-              <IoPrint className='fs-4' />
-            </button> */}
-            {/* <button onClick={handleSave} className="btn btn-primary ">
-              Save
-            </button> */}
           </div>
         </div>
       </div>
 
       {showSender && <SenderModal show={showSender} onHide={() => setShowSender(false)} formik={senderFormik} data={senderFormik.values} handleChange={(field, value) => senderFormik.setFieldValue(field, value)} onSave={senderFormik.handleSubmit} />}
-      {showReceiver && <ReceiverModal show={showReceiver} onHide={() => setShowReceiver(false)} formik={receiverFormik} data={receiverFormik.values} handleChange={(field, value) => receiverFormik.setFieldValue(field, value)} onSave={receiverFormik.handleSubmit} />}
+      {showReceiver && <ReceiverModal show={showReceiver} onHide={() => setShowReceiver(false)} formik={receiverFormik} data={receiverFormik.values} handleChange={(field, value) => receiverFormik.setFieldValue(field, value)} onSave={receiverFormik.handleSubmit} fileDetailApi={fileDetailApi}/>}
       {invoiceItems.status && <AddItem show={invoiceItems.status} onHide={() => setInvoiceItems({ ...invoiceItems, status: false })} formik={invoiceItemsFormik} data={invoiceItemsFormik.values} handleChange={(field, value) => invoiceItemsFormik.setFieldValue(field, value)} onSave={invoiceItemsFormik.handleSubmit} />}
       {showEditItem.status && <EditItem show={showEditItem.status} onHide={() => setShowEditItem({ ...showEditItem, status: false })} data={showEditItem.data} id={showEditItem.id} onSave={(updateItem, id) => handleEditSave(updateItem, id)} />}
 

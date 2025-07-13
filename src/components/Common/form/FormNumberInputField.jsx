@@ -15,7 +15,7 @@ export default function FormNumberInputField({ name = "", type = "number",digit=
                     onChange={(e) => checkPhoneNo(e?.target?.value, digit) && handleOnChange(e, name)}
                     onBlur={formik.handleBlur}
                     disable={disable}
-                    className="form-control" />
+                    className={`form-control ${isInVaild && "is-invalid"}`} />
                 {isInVaild && <p className='text-danger'>{isInVaild}</p>}
             </div>
         </div>

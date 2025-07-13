@@ -4,6 +4,7 @@ import { caseStatus } from '../../../utils/constant';
 import { useState } from 'react';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
+import TextEditor from '../../TextEditor';
 
 export default function ChangeStatusModal({ changeStatus, setChangeStatus, handleCaseStatus,getCaseById, role,attachementUpload }) {
     const [data, setData] = useState({ _id: changeStatus?.details?._id, status: "", remark: ""})
@@ -74,8 +75,10 @@ export default function ChangeStatusModal({ changeStatus, setChangeStatus, handl
                         </select>
                     </div>
                     <div className="mb-3 col-12">
+                     <TextEditor value={data?.remark || ""} handleOnChange={(val)=>setData({...data,remark:val})}/>
+                        
                         {/* <label for="mobileNo." className="form-label">About you</label> */}
-                        <textarea className="form-control" name="remark" value={data.remark} onChange={hangleOnchange} placeholder="Case Remark..." rows={5} cols={5} ></textarea>
+                        {/* <textarea className="form-control" name="remark" value={data.remark} onChange={hangleOnchange} placeholder="Case Remark..." rows={5} cols={5} ></textarea> */}
                     </div>
                 </div>
 

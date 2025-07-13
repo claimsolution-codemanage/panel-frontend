@@ -1,6 +1,5 @@
-import React, { useEffect, useState, useRef } from 'react'
-import { financeEmployeeCreateInvoice } from '../../../../apis'
-import { useNavigate, useParams } from 'react-router-dom'
+import { empFindCaseByFileNoApi, financeEmployeeCreateInvoice } from '../../../../apis'
+import {  useParams } from 'react-router-dom'
 import CreateInvoiceComp from '../../../../components/Reuse/CreateInvoiceComp'
 
 // not for client --> office 
@@ -14,6 +13,8 @@ export default function EmployeeAddInvoice() {
         caseId={caseParam?.caseId}
         isOffice={true}
         viewInvoiceUrl={"/employee/view-invoice/"}
+        fileDetailApi={empFindCaseByFileNoApi}
+        
       />
     </div>
   )

@@ -1,6 +1,6 @@
 import React from 'react'
 import CreateInvoiceComp from '../../../components/Reuse/CreateInvoiceComp'
-import { adminCreateInvoice } from '../../../apis'
+import { adminCreateInvoice, adminFindCaseByFileNoApi } from '../../../apis'
 import { useNavigate, useParams } from 'react-router-dom'
 
 export default function AdminAddInvoice() {
@@ -12,6 +12,7 @@ export default function AdminAddInvoice() {
     caseId={caseParam?.caseId}
     isOffice={true}
     viewInvoiceUrl={"/admin/view-invoice/"}
+    fileDetailApi={adminFindCaseByFileNoApi}
     />
   )
 }

@@ -615,6 +615,10 @@ export const adminEditInvoice = (_id, data) => {
   return axios.put(`${API_BASE}/api/admin/editInvoiceById?_id=${_id}`, data)
 }
 
+export const adminEditInvoiceNoApi = (data) => {
+  setheader()
+  return axios.put(`${API_BASE}/api/admin/editInvoiceNo`, data)
+}
 
 export const adminPaidInvoice = (data) => {
   setheader()
@@ -1013,6 +1017,11 @@ export const financeEmployeeCreateInvoice = (data, clientId='', caseId='') => {
 export const financeEmployeeEditInvoice = (_id, data) => {
   setheader()
   return axios.put(`${API_BASE}/api/employee/finance/editInvoiceById?_id=${_id}`, data)
+}
+
+export const financeEmpEditInvoiceNoApi = (data) => {
+  setheader()
+  return axios.put(`${API_BASE}/api/employee/finance/editInvoiceNo`, data)
 }
 
 export const financeEmployeeUnactiveInvoice = (_id, type) => {

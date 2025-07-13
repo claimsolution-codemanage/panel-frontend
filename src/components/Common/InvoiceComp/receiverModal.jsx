@@ -1,16 +1,48 @@
-import React from 'react'
-import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
-import { allState } from '../../../utils/constant';
+import { allStateOptions } from '../../../utils/constant';
+import { useState } from 'react';
+import { toast } from 'react-toastify';
+import FormInputField from '../form/FormInput';
+import FormSelectField from '../form/FormSelectField';
+import FormNumberInputField from '../form/FormNumberInputField';
+import { useSearchParams } from 'react-router-dom';
 
-export default function ReceiverModal({ show, onHide, formik, data, handleChange, onSave }) {
-  // console.log("receiver", formik.errors);
+export default function ReceiverModal({ show, onHide, formik, onSave,fileDetailApi }) {
+    const [search,setSearch] = useState(false)
+    const [searchParams,setSearchParams] =useSearchParams()
 
-  const handleOnChange = (e) => {
-    const { name, value } = e.target
-    // console.log(name, value);
-    handleChange(name, value)
+const handleSearch = async()=>{
+  if(formik.values?.fileNo){
+    try {
+      setSearch(true)
+       const res = await fileDetailApi(formik.values?.fileNo)
+       const data = res?.data?.data?.[0]
+       if(data){
+        const {email="",name="",mobileNo="",address="",pinCode="",city="",state="",clientObjId="",_id=""} = data
+        formik.setFieldValue("email",email)
+        formik.setFieldValue("name",name)
+        formik.setFieldValue("mobileNo",mobileNo)
+        formik.setFieldValue("address",address)
+        formik.setFieldValue("pinCode",pinCode)
+        formik.setFieldValue("city",city)
+        formik.setFieldValue("state",state)
+         if (clientObjId && _id) {
+           setSearchParams({ clientId:clientObjId,caseId: _id })
+         }
+        toast.success("Success")
+       }
+      setSearch(false)
+    } catch (error) {
+      console.log("error", error);
+      if (error && error?.response?.data?.message) {
+        toast.error(error?.response?.data?.message)
+      } else {
+        toast.error("Failed to download")
+      }
+      setSearch(false)      
+    }
   }
+}
 
   return (
     <div>
@@ -29,61 +61,21 @@ export default function ReceiverModal({ show, onHide, formik, data, handleChange
               </button>
             </div>
             <div className="modal-body">
-              <form className='row row-cols-12 row-cols-2 p-2'>
-                <div className="form-group px-2">
-                  <label for="recipient-name" className="col-form-label">Name*:</label>
-                  <input type="text" name='name' value={data.name} onChange={(e) => handleOnChange(e)} className={`form-control ${formik.errors.name && formik.touched.name && "border-danger"}`} id="recipient-name" />
-                  <p className='text-danger'>{formik.touched.name && formik.errors.name}</p>
-                </div>
-                <div className="form-group px-2">
-                  <label for="recipient-name" className="col-form-label">Email:</label>
-                  <input type="email" name='email' value={data.email} onChange={(e) => handleOnChange(e)} className={`form-control ${formik.errors.email && formik.touched.email && "border-danger"}`} id="recipient-name" />
-                  <p className='text-danger'>{formik.touched.email && formik.errors.email}</p>
-
-                </div>
-                <div className="form-group px-2">
-                  <label for="recipient-name" className="col-form-label">Mobile No:</label>
-                  <input type="text" name='mobileNo' value={data.mobileNo} onChange={(e) => handleOnChange(e)} className={`form-control ${formik.errors.mobileNo && formik.touched.mobileNo && "border-danger"}`} id="recipient-name" />
-                  <p className='text-danger'>{formik.touched.mobileNo && formik.errors.mobileNo}</p>
-
-                </div>
-                <div className="form-group px-2">
-                  <label for="recipient-name" className="col-form-label">Gst No:</label>
-                  <input type="text" name='gstNo' value={data.gstNo} onChange={(e) => handleOnChange(e)} className={`form-control ${formik.errors.gstNo && formik.touched.gstNo && "border-danger"}`} id="recipient-name" />
-                  <p className='text-danger'>{formik.touched.gstNo && formik.errors.gstNo}</p>
-
-                </div>
-                <div className="form-group px-2">
-                  <label for="recipient-name" className="col-form-label">Pan No:</label>
-                  <input type="text" name='panNo' value={data.panNo} onChange={(e) => handleOnChange(e)} className={`form-control ${formik.errors.panNo && formik.touched.panNo && "border-danger"}`} id="recipient-name" />
-                  <p className='text-danger'>{formik.touched.panNo && formik.errors.panNo}</p>
-
-                </div>
-                <div className="form-group px-2">
-                  <label for="recipient-name" className="col-form-label">Address*:</label>
-                  <input type="text" name='address' value={data.address} onChange={(e) => handleOnChange(e)} className={`form-control ${formik.errors.address && formik.touched.address && "border-danger"}`} id="recipient-name" />
-                  <p className='text-danger'>{formik.touched.address && formik.errors.address}</p>
-
-                </div>
-                <div className="form-group px-2">
-                  <label for="recipient-name" className="col-form-label">State*:</label>
-                  <select name='state' value={data.state} onChange={(e) => handleOnChange(e)} className={`form-select ${formik.errors.state && formik.touched.state && "border-danger"}`} aria-label="Default select example">
-                    <option>Select State</option>
-                    {allState?.map(state => <option value={state}>{state}</option>)}
-                  </select>
-                  <p className='text-danger'>{formik.touched.state && formik.errors.state}</p>
-                </div>
-                {/* <div className="form-group px-2">
-                    <label for="recipient-name" className="col-form-label">Country:</label>
-                    <input type="text" name='country' value={data.country} onChange={(e) => handleOnChange(e)} className={`form-control ${formik.errors.country && formik.touched.country && "border-danger"}`} id="recipient-name" />
-                    <p className='text-danger'>{formik.touched.country && formik.errors.country}</p>
-                  </div> */}
-                <div className="form-group px-2">
-                  <label for="recipient-name" className="col-form-label">PinCode*:</label>
-                  <input type="text" name='pinCode' value={data.pinCode} onChange={(e) => handleOnChange(e)} className={`form-control ${formik.errors.pinCode && formik.touched.pinCode && "border-danger"}`} id="recipient-name" />
-                  <p className='text-danger'>{formik.touched.pinCode && formik.errors.pinCode}</p>
-                </div>
-              </form>
+              <div className='row row-cols-12 row-cols-2 p-2'>
+                <FormInputField name="name" type="text" label="Name*:" formik={formik} handleOnChange={(e, name) => formik?.handleChange(e)} />
+                <FormInputField name="email" type="text" label="Email:" formik={formik} handleOnChange={(e, name) => formik?.handleChange(e)} />
+                {/* <FormInputField name="mobileNo" type="text" label="Mobile No:" formik={formik} handleOnChange={(e, name) => formik?.handleChange(e)} /> */}
+                <FormNumberInputField name="mobileNo" type="text" label="Mobile No:" digit={10} formik={formik} handleOnChange={(e, name) => formik?.handleChange(e)} />
+                <FormInputField name="gstNo" type="text" label="Gst No:" formik={formik} handleOnChange={(e, name) => formik?.handleChange(e)} />
+                <FormInputField name="panNo" type="text" label="PAN No:" formik={formik} handleOnChange={(e, name) => formik?.handleChange(e)} />
+                <FormInputField name="address" type="text" label="Address*:" formik={formik} handleOnChange={(e, name) => formik?.handleChange(e)} />
+                <FormSelectField name="state" label="State" options={allStateOptions} formik={formik} handleOnChange={(e, name) => formik?.handleChange(e)} />
+                <FormNumberInputField name="pinCode" type="text" label="PinCode*:" digit={6} formik={formik} handleOnChange={(e, name) => formik?.handleChange(e)} />
+                  <div className='d-flex w-100 align-items-center gap-2'>
+                    <FormNumberInputField name="fileNo" type="text" label="File No:" digit={20} formik={formik} handleOnChange={(e, name) => formik?.handleChange(e)} />
+                    <button type='button' className='btn btn-sm btn-primary' disabled={search || !formik.values?.fileNo?.trim()}  onClick={handleSearch}>Search</button>
+                  </div>
+              </div>
             </div>
             <div className="modal-footer">
               <button onClick={() => onHide()} type="button" className="btn btn-primary" data-dismiss="modal">Close</button>

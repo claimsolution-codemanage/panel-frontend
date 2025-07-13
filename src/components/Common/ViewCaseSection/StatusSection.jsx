@@ -46,7 +46,7 @@ export default function StatusSection({ isAddCaseProcess, id, role, details, get
                                     <td className="text-nowrap "> {item?.createdAt && <p className="mb-1">{getFormateDMYDate(item?.createdAt)}</p>}</td>
                                     <td className="text-nowrap ">{item?.status && <p className={`mb-1 badge ${(item?.status?.toLowerCase() == "reject" ? "bg-danger" : (item?.status?.toLowerCase() == "pending" ? "bg-warning" : (item?.status?.toLowerCase() == "resolve" ? "bg-success" : "bg-primary")))}`}>{item?.status}</p>}</td>
                                     {role?.toLowerCase() == "admin" && <td className="text-nowrap "> <p className="mb-1 text-capitalize">{item?.consultant ? item?.consultant : "System"} </p></td>}
-                                    <td className="text-break col-4">{item?.remark && <p className="mb-1 text-center">{item?.remark}</p>}</td>
+                                    <td className="text-break col-4">{item?.remark && <div className='text-editor' dangerouslySetInnerHTML={{__html:item?.remark}}></div>}</td>
                                 </tr>)}
                             </tbody>
                         </table>

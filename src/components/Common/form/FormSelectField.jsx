@@ -7,7 +7,7 @@ export default function FormSelectField({ name = "", type = "text", label = "", 
             <div className="mb-3">
                 {label && <label htmlFor={name} className='col-form-label'>{label}</label>}
                 <select
-                    className="form-select"
+                    className={`form-select ${isInVaild && "is-invalid"}`}
                     name={name} value={values[name]}
                     onChange={(e) => handleOnChange(e, name)}
                     onBlur={formik.handleBlur}

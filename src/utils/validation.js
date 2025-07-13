@@ -703,3 +703,84 @@ export const clientSignUpValidationSchema = yup.object({
   mobileNo: yup.string().required("Please enter your Mobile No."),
   agreement: yup.bool()
 })
+
+// invoice sender validation
+export const senderInvInitalValues = {
+  name: "ADAKIYA CONSULTANCY SERVICES PVT.LTD",
+  address: "A-4 & 5, 3rd Floor, Rajupark, Devli Road, Near Domino's Pizza, New Delhi -110080,India",
+  state: "Delhi",
+  country: "IN",
+  pinCode: "110062",
+  gstNo: "07AAYCA7531P1ZR",
+  panNo: "AAYCA7531P",
+  email: "claimsolution.in@gmail.com",
+  mobileNo: "011 49858616"
+}
+export const senderValidationSchema = yup.object().shape({
+  name: yup.string().required('Sender name is required'),
+  address: yup.string().required('Sender address is required'),
+  state: yup.string().required('Sender state is required'),
+  country: yup.string().required('Sender country is required'),
+  pinCode: yup.string().required('Sender pin code is required'),
+  gstNo: yup.string().required('Sender GST number is required'),
+  panNo: yup.string().required('Sender PAN number is required'),
+  email: yup.string().email('Invalid email').required('Sender email is required'),
+  mobileNo: yup.string().required('Sender mobile number is required'),
+})
+
+// invoice receiver validation
+export const receiverInvInitalValues = {
+  name: "",
+  address: "",
+  state: "",
+  country: "IN",
+  pinCode: "",
+  gstNo: "",
+  panNo: "",
+  email: "",
+  mobileNo: ""
+}
+export const receiverValidationSchema = yup.object().shape({
+  name: yup.string().required('Receiver name is required'),
+  address: yup.string().required('Receiver address is required'),
+  state: yup.string().required('Receiver state is required'),
+  country: yup.string().required('Receiver country is required'),
+  pinCode: yup.string().required('Receiver pin code is required'),
+  gstNo: yup.string(),
+  panNo: yup.string(),
+  email: yup.string().email('Receiver Invalid email'),
+  mobileNo: yup.string(),
+})
+
+// invoice item validation
+export const itemInvInitalValues = {
+  //   name: "",
+  description: "",
+  quantity: 0,
+  gstRate: 12,
+  rate: 0,
+  gstAmt: 0,
+  amt: 0,
+  totalAmt: 0
+}
+export const itemInvValidationSchema = yup.object().shape({
+  //   name: yup.string().required('Item name is required'),
+  description: yup.string().required('Item description is required'),
+  quantity: yup.number().required('Quantity is required'),
+  gstRate: yup.number().required('GST rate is required'),
+  rate: yup.number(),
+  gstAmt: yup.number(),
+  amt: yup.number().required('Amount is required'),
+  totalAmt: yup.number(),
+})
+
+export const invNoInitalValues = {
+ invoiceNo:"",
+ _id:"",
+ loading:false,
+ show:false
+}
+export const invNoValidationSchema = yup.object().shape({
+  invoiceNo: yup.string().required('Required'),
+  _id: yup.string().required('Required'),
+})

@@ -14,7 +14,7 @@ export default function FormInputField({ name = "", type = "text", label = "",di
                     onChange={(e) => handleOnChange(e, name)}
                     onBlur={formik.handleBlur}
                     disable={disable}
-                    className="form-control" />
+                    className={`form-control ${isInVaild && "is-invalid"}`} />
                 {isInVaild && <p className='text-danger'>{isInVaild}</p>}
             </div>
         </div>
