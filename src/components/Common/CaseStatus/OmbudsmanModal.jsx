@@ -128,6 +128,10 @@ const OmbudsmanFormModal = ({ caseId, show, close, getCaseById, details, createO
         formik.setFieldValue("approvalLetterPrivate",false)
     }
 
+const handleRadioChange = (e, name, type) => {
+  formik.setFieldValue(`${name}.byMail`, type === "byMail");
+  formik.setFieldValue(`${name}.byCourier`, type === "byCourier");
+};
 
     return (
         <Modal
@@ -252,7 +256,7 @@ const OmbudsmanFormModal = ({ caseId, show, close, getCaseById, details, createO
                             <div className="card shadow mt-3 ">
                                 <div className="card-header bg-primary text-white d-flex justify-content-between">
                                     <span>Query</span>
-                                    <button type="button" className="btn btn-light btn-sm" onClick={() => formik.setFieldValue("queryHandling", [...formik.values.queryHandling, { date: "", remarks: "", isPrivate: false, attachment: "" }])}>
+                                    <button type="button" className="btn btn-light btn-sm" onClick={() => formik.setFieldValue("queryHandling", [...formik.values.queryHandling, { date: "", remarks: "",byMail: true, byCourier: false, isPrivate: false, attachment: "" }])}>
                                         + Add Query
                                     </button>
                                 </div>
@@ -262,17 +266,29 @@ const OmbudsmanFormModal = ({ caseId, show, close, getCaseById, details, createO
                                             <>
                                                 {formik.values.queryHandling.map((ele, index) => (
                                                     <div className="row mb-2" key={index}>
-                                                        <div className="col-md-5 mb-2 mb-md-0">
+                                                        <div className="col-md-3 mb-2 mb-md-0">
+                                                            <input type="date" className="form-control" name={`queryHandling.${index}.date`} value={ele?.date ? formatDateToISO(ele?.date) : ""} onChange={formik.handleChange} onBlur={formik.handleBlur} />
+                                                            {formik.touched.queryHandling?.[index]?.date && formik.errors.queryHandling?.[index]?.date && (
+                                                                <div className="text-danger">{formik.errors.queryHandling?.[index]?.date}</div>
+                                                            )}
+                                                        </div>
+                                                        <div className="col-md-3 mb-2 mb-md-0">
                                                             <input type="text" placeholder="remarks" className="form-control" name={`queryHandling.${index}.remarks`} value={ele?.remarks} onChange={formik.handleChange} onBlur={formik.handleBlur} />
                                                             {formik.touched.queryHandling?.[index]?.remarks && formik.errors.queryHandling?.[index]?.remarks && (
                                                                 <div className="text-danger">{formik.errors.queryHandling?.[index]?.remarks}</div>
                                                             )}
                                                         </div>
-                                                        <div className="col-md-4 mb-2 mb-md-0">
-                                                            <input type="date" className="form-control" name={`queryHandling.${index}.date`} value={ele?.date ? formatDateToISO(ele?.date) : ""} onChange={formik.handleChange} onBlur={formik.handleBlur} />
-                                                            {formik.touched.queryHandling?.[index]?.date && formik.errors.queryHandling?.[index]?.date && (
-                                                                <div className="text-danger">{formik.errors.queryHandling?.[index]?.date}</div>
-                                                            )}
+                                                        <div className="col-md-3  mb-2 mb-md-0">
+                                                            <div className="d-flex  gap-2">
+                                                                <div>
+                                                                    <input type="radio" name={`recivedby-${index}`} id="byMail1" checked={ele?.byMail} onClick={(e) =>handleRadioChange(e,`queryHandling.${index}`,"byMail")} />
+                                                                    <label htmlFor="byMail1" className="ms-2">Mail</label>
+                                                                    <input type="radio" name={`recivedby-${index}`} id="byCourier1" checked={ele?.byCourier} onClick={(e) => handleRadioChange(e,`queryHandling.${index}`,"byCourier")} />
+                                                                    <label htmlFor="byCourier1" className="ms-2">Courier</label>
+                                                                </div>
+                                                                <div>
+                                                                </div>
+                                                            </div>
                                                         </div>
 
                                                         <div className="col-md-3 mb-2 mb-md-0">
@@ -326,9 +342,9 @@ const OmbudsmanFormModal = ({ caseId, show, close, getCaseById, details, createO
                                                         <div className="col-md-3  mb-2 mb-md-0">
                                                             <div className="d-flex  gap-2">
                                                                 <div>
-                                                                    <input type="radio" name={`sendby-${index}`} id="byMail" checked={ele?.byMail} onChange={(e) => formik?.setFieldValue(`queryReply.${index}.byMail`, e?.target?.checked)} />
+                                                                    <input type="radio" name={`sendby-${index}`} id="byMail" checked={ele?.byMail} onChange={(e) =>handleRadioChange(e,`queryReply.${index}`,"byMail")} />
                                                                     <label htmlFor="byMail" className="ms-2">Mail</label>
-                                                                    <input type="radio" name={`sendby-${index}`} id="byCourier" checked={ele?.byCourier} onChange={(e) => formik?.setFieldValue(`queryReply.${index}.byCourier`, e?.target?.checked)} />
+                                                                    <input type="radio" name={`sendby-${index}`} id="byCourier" checked={ele?.byCourier} onChange={(e) =>handleRadioChange(e,`queryReply.${index}`,"byCourier")} />
                                                                     <label htmlFor="byCourier" className="ms-2">Courier</label>
                                                                 </div>
                                                                 <div>

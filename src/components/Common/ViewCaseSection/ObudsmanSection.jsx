@@ -107,6 +107,7 @@ export default function OmbudsmanSection({ id,role,empType, status, isCaseFormAc
                                             <th scope="col" className="text-nowrap">S.no</th>
                                             <th scope="col" className="text-nowrap">Date</th>
                                             <th scope="col" className="text-nowrap">Remarks</th>
+                                            <th scope="col" className="text-nowrap">Deliver</th>
                                             <th scope="col" className="text-nowrap" >Attachment</th>
                                         </tr>
                                     </thead>
@@ -115,6 +116,7 @@ export default function OmbudsmanSection({ id,role,empType, status, isCaseFormAc
                                             <th scope="row">{ind + 1}</th>
                                             <td className="text-nowrap "><p className="mb-1">{item?.date && getFormateDMYDate(item?.date)}</p></td>
                                             <td className="text-nowrap "><p className="mb-1">{item?.remarks}</p></td>
+                                            <td className="text-nowrap "><p className="mb-1">{item?.byMail ? "Mail" : "Courier"}</p></td>
                                             <td className="text-nowrap ">
                                                 <div className="align-items-center bg-color-7 d-flex flex-column justify-content-center rounded-3" style={{ maxWidth: '250px' }}>
                                                     <div className="w-100 p-2">

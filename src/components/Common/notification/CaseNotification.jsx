@@ -2,10 +2,8 @@ import { useEffect, useState } from "react"
 import { toast } from 'react-toastify'
 import Loader from "../loader"
 import { Link } from "react-router-dom"
-import { getFormateDMYDate } from "../../../utils/helperFunction"
 import { MdMarkChatRead, MdNotificationsActive } from "react-icons/md"
-import { LuBadgeCheck } from "react-icons/lu"
-
+import moment from "moment/moment"
 export default function ViewAllNotification({getNotificationApi,viewUrl,updateNotificationApi}) {
     const [data, setData] = useState([])
     const [loading, setLoading] = useState(false)
@@ -95,6 +93,7 @@ export default function ViewAllNotification({getNotificationApi,viewUrl,updateNo
                                             </div>
                                             </div>
                                         <p>{item?.message} <Link to={`${viewUrl}${item?.caseId?._id}`}>view...</Link></p>
+                                        <p className="badge bg-primary">{moment(item?.createdAt).format("DD-MM-YYYY")}</p>
                                         </div>
                                     </div>
                                     </div>)}
