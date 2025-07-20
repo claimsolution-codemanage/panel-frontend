@@ -649,7 +649,6 @@ export const signInOrSignUpValidationSchema = yup.object({
           const domainPart = value.split('@')[1];
           if (!domainPart) return false;
           // If matches allowed list OR is not in public list (i.e. a business email)
-          return true
           return allowedEmailDomains?.includes(`@${domainPart?.toLowerCase()}`);
         }
       ),
