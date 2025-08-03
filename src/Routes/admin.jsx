@@ -47,6 +47,7 @@ import Statement from "../components/Reuse/Statement";
 import AdminNotification from "../pages/admin/other/allNotification";
 import AdminEditEmployee from "../pages/admin/empoyee/EditEmployee";
 import JoiningFormComp from "../pages/admin/empoyee/JoiningForm";
+import AllStatement from "../pages/admin/statement/AllStatement";
 
 {/* for admin */}
 export const adminRoutes = [
@@ -91,7 +92,7 @@ export const adminRoutes = [
   <Route path='/admin/reject-cases'  element={<AdminTemplate><AdminRejectCase/></AdminTemplate>}/>,
   <Route path='/admin/statement/partner/:partnerId'  element={<AdminTemplate><ViewAllStatement getStatementApi={adminAllStatment} excelDownloadApi={adminAllStatementDownload} fileDetailApi={adminFindCaseByFileNoApi} type={"admin"}/></AdminTemplate>}/>,
   <Route path='/admin/statement/employee/:empId'  element={<AdminTemplate><ViewAllStatement getStatementApi={adminAllStatment} excelDownloadApi={adminAllStatementDownload} fileDetailApi={adminFindCaseByFileNoApi} type={"admin"}/></AdminTemplate>}/>,
-  <Route path='/admin/statement'  element={<AdminTemplate><Statement getStatementApi={adminStatements} excelDownloadApi={adminAllStatementDownload} fileDetailApi={adminFindCaseByFileNoApi} type={"admin"}/></AdminTemplate>}/>,
+  <Route path='/admin/statement'  element={<AdminTemplate><AllStatement/></AdminTemplate>}/>,
   <Route path='/admin/notification'  element={<AdminTemplate><AdminNotification/></AdminTemplate>}/>,
 
 ]

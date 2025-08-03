@@ -784,3 +784,15 @@ export const invNoValidationSchema = yup.object().shape({
   invoiceNo: yup.string().required('Required'),
   _id: yup.string().required('Required'),
 })
+
+// invoice status
+export const invStatusInitalValues = {
+  _id:"",
+  status:"paid",
+  remark:""
+}
+export const invStatusValidationSchema = yup.object().shape({
+ _id : yup.string().required('Required'),
+ status : yup.string().required('Required'),
+ remark : yup.string(),
+})

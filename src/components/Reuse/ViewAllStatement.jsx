@@ -15,6 +15,7 @@ import CreateOrUpdateStatmentModal from "./createOrUpdateStatementModal";
 import { AppContext } from "../../App";
 import StatementPdf from "../Common/PdfConvert/StatementPdf";
 import html2pdf from 'html2pdf.js'
+import PaginateField from "../Common/PaginateField";
 
 
 export default function ViewAllStatement({getStatementApi,type,excelDownloadApi,fileDetailApi}) {
@@ -341,24 +342,7 @@ export default function ViewAllStatement({getStatementApi,type,excelDownloadApi,
             </div>
 
             <div className="d-flex flex align-items-center justify-content-center">
-
-              <ReactPaginate
-                breakLabel="..."
-                nextLabel={<BiRightArrow />}
-                onPageChange={handlePageClick}
-                pageRangeDisplayed={4}
-                pageCount={Math.ceil(noOfData / pageItemLimit) || 1}
-                previousLabel={<BiLeftArrow />}
-                className="d-flex flex gap-2"
-                breakClassName={""}
-                marginPagesDisplayed={1}
-                pageClassName="border border-primary paginate-li"
-                previousClassName="paginate-li bg-color-3"
-                nextClassName="paginate-li bg-color-3"
-                activeClassName="bg-primary text-white"
-                forcePage={pgNo > 0 ? pgNo - 1 : 0}
-                renderOnZeroPageCount={null}
-              />
+            <PaginateField pgNo={pgNo} pageCount={Math.ceil(noOfData / pageItemLimit) || 1} handlePageClick={handlePageClick} />
             </div>
 
           </div>

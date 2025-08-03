@@ -625,6 +625,11 @@ export const adminPaidInvoice = (data) => {
   return axios.put(`${API_BASE}/api/admin/paidInvoiceById`, data)
 }
 
+export const adminChangeStatementStatusApi = (data) => {
+  setheader()
+  return axios.put(`${API_BASE}/api/admin/adminChangeStatementStatus`, data)
+}
+
 export const adminUnactiveInvoice = (_id,type) => {
   setheader()
   return axios.put(`${API_BASE}/api/admin/unActiveInvoiceById?_id=${_id}&type=${type}`)
@@ -1150,6 +1155,11 @@ export const empOperationChangeBranch = (data) => {
 export const empOperationPaidInvoice = (data) => {
   setheader()
   return axios.put(`${API_BASE}/api/employee/finance/paidInvoiceById`,data)
+}
+
+export const empOperationStatementUpdateApi = (data) => {
+  setheader()
+  return axios.put(`${API_BASE}/api/employee/emp/empOpChangeStatementStatus`,data)
 }
 
 export const getEmpProfile = (_id) => {

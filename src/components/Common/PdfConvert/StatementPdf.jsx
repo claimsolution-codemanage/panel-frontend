@@ -1,10 +1,7 @@
-import React from 'react';
 import { getFormateDMYDate } from '../../../utils/helperFunction';
 import { BsGlobe2, BsPersonCircle } from 'react-icons/bs';
-import { FaFacebook, FaPhoneAlt, FaYoutube } from 'react-icons/fa';
+import {  FaPhoneAlt } from 'react-icons/fa';
 import { MdEmail } from 'react-icons/md';
-import { SiInstagram } from 'react-icons/si';
-import { AiFillTwitterCircle } from 'react-icons/ai';
 
 const chunkArray = (array, chunk_size) => {
   let index = 0;

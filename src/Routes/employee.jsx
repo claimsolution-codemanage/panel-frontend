@@ -38,6 +38,7 @@ import EmployeeAddPartner from '../pages/employee/sales/addPartner'
 import ViewAllStatement from "../components/Reuse/ViewAllStatement"
 import Statement from "../components/Reuse/Statement"
 import EmployeeRejectCase from "../pages/employee/cases/allRejectCase"
+import AllStatement from "../pages/employee/statement/AllStatement"
 
 export const employeeRoutes = [
     <Route path='/employee/signin' element={<PanelTemplate><EmployeeSignIn/></PanelTemplate>}/>,
@@ -73,7 +74,7 @@ export const employeeRoutes = [
   <Route path='/employee/statement/partner/:partnerId'  element={<EmployeeTemplate><ViewAllStatement getStatementApi={empOpAllStatment} excelDownloadApi={empAllStatementDownload} fileDetailApi={empFindCaseByFileNoApi} type={"operation"}/></EmployeeTemplate>}/>,
   <Route path='/employee/statement/employee/:empId'  element={<EmployeeTemplate><ViewAllStatement getStatementApi={empOpAllStatment} excelDownloadApi={empAllStatementDownload} fileDetailApi={empFindCaseByFileNoApi} type={"operation"}/></EmployeeTemplate>}/>,
   <Route path='/employee/statement/sathi-team/:empId'  element={<EmployeeTemplate><ViewAllStatement getStatementApi={empOpAllStatment} excelDownloadApi={empAllStatementDownload} fileDetailApi={empFindCaseByFileNoApi} type={"sathi team"}/></EmployeeTemplate>}/>,
-  <Route path='/employee/statement'  element={<EmployeeTemplate><Statement getStatementApi={empOpStatments} excelDownloadApi={empAllStatementDownload} fileDetailApi={empFindCaseByFileNoApi} type={"operation"}/></EmployeeTemplate>}/>,
+  <Route path='/employee/statement'  element={<EmployeeTemplate><AllStatement/></EmployeeTemplate>}/>,
   <Route path='/employee/notification'  element={<EmployeeTemplate><EmpNotification/></EmployeeTemplate>}/>,
 
 ]

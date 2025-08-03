@@ -15,8 +15,14 @@ import loash from 'lodash'
 import CreateOrUpdateStatmentModal from "./createOrUpdateStatementModal";
 import { BsSearch } from "react-icons/bs";
 import { AppContext } from "../../App";
+import { MdCurrencyRupee } from "react-icons/md";
+import EditInvoiceStatusModal from "../Common/EditInvoiceStatus";
+import PaginateField from "../Common/PaginateField";
+import StatementPdf from "../Common/PdfConvert/StatementPdf";
+import { LuDownload } from "react-icons/lu";
+import html2pdf from "html2pdf.js";
 
-export default function Statement({getStatementApi,type,excelDownloadApi,fileDetailApi}) {
+export default function Statement({getStatementApi,type,excelDownloadApi,fileDetailApi,paidAccess ,statementStatusUpdateApi}) {
 const state = useContext(AppContext)
   const searchRef = useRef()
   const [data, setData] = useState([])
@@ -32,6 +38,8 @@ const state = useContext(AppContext)
   const [pgNo, setPgNo] = useState(1)
   const [statementOf,setStatementOf] = useState({})
   const [downloading, setDownloading] = useState(false)
+  const [changeInvoiceStatus, setChangeInvoiceStatus] = useState({ status: false, _id: null })
+  const [downloadDetails,setDownloadDetails] = useState({data:[],statementOf:{},dateRange:{startDate:new Date(),endDate:new Date()},download:false})
   const [dateRange, setDateRange] = useState(
    {
       startDate: new Date("2024/01/01"),
@@ -47,8 +55,6 @@ const state = useContext(AppContext)
     setPageItemLimit(10)
     setDateRange([{ startDate: new Date("2024/01/01"), endDate: new Date() }])
   }
-
-  // console.log("daterange", dateRange)
 
   const getAllStatement = async () => {
     setLoading(true)
@@ -71,9 +77,41 @@ const state = useContext(AppContext)
     }
   }
 
-  // console.log("statementOf",statementOf);
-  
+  const downloadPdf = async()=>{
+    try {
+      const element = document.getElementById("statement-pdf");
+       const options = {
+         margin:       0.2,
+         filename:     'statement.pdf',
+         image:        { type: 'jpeg', quality: 1 },
+         html2canvas: { scale: 3, windowWidth: 1200 },
+         jsPDF:        { unit: 'in', format: 'a4', orientation: 'landscape' }
+       };
+       if(element){
+         setTimeout(() => {
+           html2pdf().from(element).set(options).save();
+           setDownloadDetails({...downloadDetails,download:false})
+           toast.success("Successfully statement downloaded")
+         }, 2000);
+       }
+    } catch (error) {
+      console.log(error);
+      setDownloadDetails({...downloadDetails,download:false})
+     toast.error("Failed to downloaded")
+    }
+  }
 
+  const handleDownloadPdf = async(item)=>{
+    setDownloadDetails({
+      ...downloadDetails,
+      data:[item],download:true,
+      statementOf:{[item?.partnerDetails ? "partner" :"employee"]:item?.partnerDetails || item?.empDetails},
+      dateRange:{startDate:item?.createdAt,endDate:item?.updatedAt}
+    })
+    setTimeout(() => {
+      downloadPdf()
+    }, 1000);
+  }
   useEffect(() => {
     if (getStatementApi && !showStatement.status) {
       getAllStatement()
@@ -105,7 +143,6 @@ const state = useContext(AppContext)
         const endDate = dateRange.endDate ? getFormateDate(dateRange.endDate) : ""
         setDownloading(true)
         const res = await excelDownloadApi(startDate, endDate)
-        // console.log("res", res);
         if (res?.status == 200) {
           const url = window.URL.createObjectURL(new Blob([res.data]));
           const a = document.createElement('a');
@@ -155,6 +192,7 @@ const state = useContext(AppContext)
 
   }, [searchQuery, isSearch])
 
+
   return (<>
     {loading ? <Loader /> :
       <div>
@@ -162,7 +200,6 @@ const state = useContext(AppContext)
         <DateSelect show={showCalender} hide={() => setShowCalender(false)} onFilter={getAllStatement} dateRange={dateRange} setDateRange={setDateRange} />
         <div className="d-flex justify-content-between bg-color-1 text-primary fs-5 px-4 py-3 shadow">
           <div className="d-flex flex align-items-center gap-3">
-            {/* <IoArrowBackCircleOutline className="fs-3"  onClick={() => navigate("/admin/dashboard")} style={{ cursor: "pointer" }} /> */}
             <div className="d-flex flex align-items-center gap-1">
               <span>Statement</span>
             </div>
@@ -208,6 +245,7 @@ const state = useContext(AppContext)
                     <th scope="col" className="text-nowrap" >SL No</th>
                     {(type== "admin"||type=="operation" ) && 
                     <th scope="col" className="text-nowrap" >Action</th>}
+                    <th scope="col" className="text-nowrap">Status</th>
                     <th scope="col" className="text-nowrap">Partner Name</th>
                     <th scope="col" className="text-nowrap">Employee Name</th>
                     <th scope="col" className="text-nowrap">Case Login Date</th>
@@ -227,8 +265,15 @@ const state = useContext(AppContext)
                 <tbody>
                   {data.map((item, ind) => <tr key={item._id} className="border-2 border-bottom border-light text-center">
                     <th scope="row">{ind + 1}</th> 
-                    {(type== "admin"||type=="operation" ) &&  <th><span  style={{ height: 30, width: 30, borderRadius: 30 }} onClick={()=>setShowStatement({...showStatement,status:!showStatement?.status,data:item})} className="cursor-pointer bg-primary text-white d-flex align-items-center justify-content-center"><CiEdit className="fs-5 text-white" /></span>
-                    </th> }    
+                    <th>
+                      <div className="d-flex gap-2">
+                    {(type== "admin"||type=="operation" ) && <span  style={{ height: 30, width: 30, borderRadius: 30 }} onClick={()=>setShowStatement({...showStatement,status:!showStatement?.status,data:item})} className="cursor-pointer bg-primary text-white d-flex align-items-center justify-content-center"><CiEdit className="fs-5 text-white" /></span>}    
+                    {paidAccess && <span style={{ cursor: "pointer", height: 30, width: 30, borderRadius: 30 }} className="bg-success text-white d-flex align-items-center justify-content-center" onClick={() => setChangeInvoiceStatus({ status: true, _id: item?._id })}><MdCurrencyRupee /></span>}
+                    <span style={{ cursor: "pointer", height: 30, width: 30, borderRadius: 30 }} className="bg-primary text-white d-flex align-items-center justify-content-center" onClick={() => !downloadDetails?.download && handleDownloadPdf(item)}>{(downloadDetails?.data?.[0]?._id==item?._id && downloadDetails?.download) ? <span className="spinner-border spinner-border-sm" role="status" aria-hidden={true}></span> : <LuDownload/>}</span>
+                      </div>
+                    </th>
+                    
+                    <td><span className={`badge ${item?.isPaid ? "bg-success":"bg-primary"}`}>{item?.isPaid ? "Paid" : "Unpaid"}</span></td>
                    <td className="text-nowrap">{item?.partnerDetails?.profile?.consultantName || "-"}</td>
                    <td className="text-nowrap">{item?.empDetails?.fullName || "-"}</td>
                    <td className="text-nowrap">{item?.caseLogin && getFormateDMYDate(item?.caseLogin)}</td>
@@ -252,29 +297,15 @@ const state = useContext(AppContext)
             </div>
 
             <div className="d-flex flex align-items-center justify-content-center">
-
-              <ReactPaginate
-                breakLabel="..."
-                nextLabel={<BiRightArrow />}
-                onPageChange={handlePageClick}
-                pageRangeDisplayed={4}
-                pageCount={Math.ceil(noOfData / pageItemLimit) || 1}
-                previousLabel={<BiLeftArrow />}
-                className="d-flex flex gap-2"
-                breakClassName={""}
-                marginPagesDisplayed={1}
-                pageClassName="border border-primary paginate-li"
-                previousClassName="paginate-li bg-color-3"
-                nextClassName="paginate-li bg-color-3"
-                activeClassName="bg-primary text-white"
-                forcePage={pgNo > 0 ? pgNo - 1 : 0}
-                renderOnZeroPageCount={null}
-              />
+              <PaginateField pgNo={pgNo} pageCount={Math.ceil(noOfData / pageItemLimit) || 1} handlePageClick={handlePageClick} />
             </div>
 
           </div>
         </div>
           <CreateOrUpdateStatmentModal show={showStatement?.status} data={showStatement?.data} hide={()=>setShowStatement({...showStatement,status:!showStatement?.status})}  type={type} all={showStatement?.create} fileDetailApi={fileDetailApi}/>
+          {changeInvoiceStatus?.status && <EditInvoiceStatusModal fetchDetails={getAllStatement} changeInvoiceStatus={changeInvoiceStatus} type="statement" setChangeInvoiceStatus={setChangeInvoiceStatus} handleInvoiceStatus={statementStatusUpdateApi} />}
+          <StatementPdf data={downloadDetails?.data} statementOf={downloadDetails?.statementOf} dateRange={downloadDetails?.dateRange}/>
+      
       </div>}
   </>)
 }

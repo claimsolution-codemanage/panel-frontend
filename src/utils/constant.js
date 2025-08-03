@@ -110,7 +110,8 @@ export const partnerType =[
 export const caseStatus = ["Pending","Accept","Under Expert Review","Processing",
 "Gro","Ombudsman stage","Query","Resolve","Reject","Others","Ombudsman Hearing date on",
 "Ombudsman hearing done","Ombudsman Award","Ombudsman dismissed/ Refer to legal team",
-"Case file in court","Settlement","Payment","Refer to the Legal Team","Process for the Legal"
+"Case file in court","Settlement","Payment","Refer to the Legal Team","Process for the Legal",
+"IRDAI Stage", "Reimbursment Claim Filling"
 ];
 
 
@@ -236,3 +237,8 @@ export const allowedEmailDomains = [
   "@tutanota.com",
   "@hushmail.com"
 ];
+
+export const invStatusOptions = [
+    {label:"Paid",value:"paid"},
+    {label:"Unpaid",value:"unpaid"},
+]

@@ -124,37 +124,6 @@ export default function AllInvoiceComp({ viewAllInvoice, payInvoice, viewInvoice
     }
   }
 
-  // const handleDownload = async () => {
-  //   try {
-  //     const startDate = dateRange.startDate ? getFormateDate(dateRange.startDate) : ""
-  //     const endDate = dateRange.endDate ? getFormateDate(dateRange.endDate) : ""
-  //     setDownloading(true)
-  //     const res = await downloadApi(searchQuery, startDate, endDate,true)
-  //     console.log("res", res?.data);
-  //     if (res?.status == 200) {
-  //       const url = window.URL.createObjectURL(new Blob([res.data]));
-  //       const a = document.createElement('a');
-  //       a.href = url;
-  //       a.download = 'invoice.xlsx'; 
-  //       document.body.appendChild(a);
-  //       a.click();
-  //       window.URL.revokeObjectURL(url);
-  //       toast.success("Download the excel")
-  //       setDownloading(false)
-  //     } else {
-  //       setDownloading(false)
-  //     }
-
-  //   } catch (error) {
-  //     console.log("error", error);
-  //     if (error && error?.response?.data?.message) {
-  //       toast.error(error?.response?.data?.message)
-  //     } else {
-  //       toast.error("Failed to download")
-  //     }
-  //     setDownloading(false)
-  //   }
-  // }
 
   const handleDownload = async () => {
     try {
@@ -200,10 +169,10 @@ export default function AllInvoiceComp({ viewAllInvoice, payInvoice, viewInvoice
   }, [pageItemLimit, pgNo,])
 
   useEffect(() => {
-    if (!isActiveInvoice.status && !changeStatus?.show && !changeInvoiceStatus?.status) {
+    if (!isActiveInvoice.status && !changeStatus?.show) {
       getViewAllInvoice()
     }
-  }, [isActiveInvoice, changeStatus, changeInvoiceStatus])
+  }, [isActiveInvoice, changeStatus])
 
   useEffect(() => {
     if (searchQuery) {
@@ -350,12 +319,12 @@ export default function AllInvoiceComp({ viewAllInvoice, payInvoice, viewInvoice
                       {isEdit && !isTrash && !item?.isPaid && <span style={{ cursor: "pointer", height: 30, width: 30, borderRadius: 30 }} className="bg-success text-white d-flex align-items-center justify-content-center" onClick={() => navigate(`${editInvoiceUrl}${item._id}`, { state: { filter, back: location?.pathname, path: location?.pathname } })}><CiEdit /></span>}
                       {isDelete && !item?.isPaid && <span style={{ cursor: "pointer", height: 30, width: 30, borderRadius: 30 }} className={`${isTrash ? "bg-success" : "bg-danger"}  text-white d-flex align-items-center justify-content-center`} onClick={() => setChangeStatus({ show: true, details: { _id: item._id, currentStatus: item?.isActive, name: item?.invoiceNo, recovery: false } })}>{isTrash ? <FaTrashRestoreAlt /> : <AiOutlineDelete />} </span>}
                       {isTrash && !item?.isPaid && <span style={{ cursor: "pointer", height: 30, width: 30, borderRadius: 30 }} className={`bg-danger  text-white d-flex align-items-center justify-content-center`} onClick={() => setIsActiveInvoice({ status: true, details: { _id: item._id, invoiceNo: item?.invoiceNo } })}><AiOutlineDelete /> </span>}
-                      {!isTrash && paidAccess && !item?.isPaid && <span style={{ cursor: "pointer", height: 30, width: 30, borderRadius: 30 }} className="bg-success text-white d-flex align-items-center justify-content-center" onClick={() => setChangeInvoiceStatus({ status: true, _id: item._id })}><MdCurrencyRupee /></span>}
+                      {!isTrash && paidAccess && <span style={{ cursor: "pointer", height: 30, width: 30, borderRadius: 30 }} className="bg-success text-white d-flex align-items-center justify-content-center" onClick={() => setChangeInvoiceStatus({ status: true, _id: item._id })}><MdCurrencyRupee /></span>}
 
                     </span>
                     </td>
                     <td className="text-nowrap">
-                      {item?.isOffice ? <span className={`badge bg-danger`}>Office</span>
+                      {item?.isOffice ? <span className={`badge bg-danger`}>Office {item?.isPaid ? "Paid" : "Unpaid"}</span>
                         :
                         <>{item?.isPaid ?
                           <span onClick={() => setPaymentDetails({ status: true, details: item })} className={`badge cursor-pointer bg-success`}>Paid</span>
@@ -392,7 +361,7 @@ export default function AllInvoiceComp({ viewAllInvoice, payInvoice, viewInvoice
         {changeStatus?.show && <SetStatusOfProfile changeStatus={changeStatus} hide={() => setChangeStatus({ show: false, details: {} })} type="Invoice" handleChanges={handleChanges} />}
         {isActiveInvoice.status && <ConfirmationModal show={isActiveInvoice.status} hide={() => setIsActiveInvoice({ status: false, details: {} })} id={isActiveInvoice.details?._id} handleComfirmation={deleteInvoice} heading={"Are you sure"} text={`You want to permanent delete invoice ${isActiveInvoice.details?.invoiceNo}`} />}
         {paymentDetails?.status && <PaymentInfo show={paymentDetails.status} hide={() => setPaymentDetails({ status: false, details: {} })} details={paymentDetails?.details} />}
-        {changeInvoiceStatus?.status && <EditInvoiceStatusModal changeInvoiceStatus={changeInvoiceStatus} setChangeInvoiceStatus={setChangeInvoiceStatus} handleInvoiceStatus={handlePaid} />}
+        {changeInvoiceStatus?.status && <EditInvoiceStatusModal fetchDetails={getViewAllInvoice} changeInvoiceStatus={changeInvoiceStatus} type="invoice" setChangeInvoiceStatus={setChangeInvoiceStatus} handleInvoiceStatus={handlePaid} />}
 
       </div >
     }

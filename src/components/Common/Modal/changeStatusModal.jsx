@@ -76,9 +76,6 @@ export default function ChangeStatusModal({ changeStatus, setChangeStatus, handl
                     </div>
                     <div className="mb-3 col-12">
                      <TextEditor value={data?.remark || ""} handleOnChange={(val)=>setData({...data,remark:val})}/>
-                        
-                        {/* <label for="mobileNo." className="form-label">About you</label> */}
-                        {/* <textarea className="form-control" name="remark" value={data.remark} onChange={hangleOnchange} placeholder="Case Remark..." rows={5} cols={5} ></textarea> */}
                     </div>
                 </div>
 
