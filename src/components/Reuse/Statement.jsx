@@ -47,10 +47,6 @@ const state = useContext(AppContext)
     }
   );
 
-
-
-
-
   const handleReset = () => {
     setPageItemLimit(10)
     setDateRange([{ startDate: new Date("2024/01/01"), endDate: new Date() }])
@@ -196,7 +192,6 @@ const state = useContext(AppContext)
   return (<>
     {loading ? <Loader /> :
       <div>
-
         <DateSelect show={showCalender} hide={() => setShowCalender(false)} onFilter={getAllStatement} dateRange={dateRange} setDateRange={setDateRange} />
         <div className="d-flex justify-content-between bg-color-1 text-primary fs-5 px-4 py-3 shadow">
           <div className="d-flex flex align-items-center gap-3">

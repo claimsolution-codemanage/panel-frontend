@@ -83,7 +83,7 @@ export default function AdminDashboard() {
   };
 
   const data = {
-    labels: graphData?.map(data => { return `${allMonths[data?._id?.month - 1]}` }),
+    labels: graphData?.map(data => { return `${allMonths[data?._id?.month-1]}` }),
     datasets: [
       {
         label: 'Cases',
@@ -129,7 +129,7 @@ export default function AdminDashboard() {
     const currentYear = new Date().getFullYear()
     const startYear = 2024
     for (let i = currentYear - startYear; i >= 0; i--) {
-      options.push(startYear + i)
+      options.push({label:`${startYear + i}-${startYear + i+1}`,value:startYear + i})
     }
     return options
   }
@@ -163,7 +163,7 @@ export default function AdminDashboard() {
                     <div className='d-flex gap-1 align-items-center justify-content-center'>
                       <p className='p-0 m-0'>Year</p>
                       <select className="form-select w-auto h-auto" name="year" id="year" value={selectedYear} onChange={(e) => setSelectedYear(e?.target?.value)}>
-                        {getAllYearOptions().map(ele => <option value={ele}>{ele}</option>)}
+                        {getAllYearOptions()?.map(ele => <option value={ele?.value}>{ele?.label}</option>)}
                       </select>
                     </div>
                   </div>

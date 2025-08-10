@@ -653,6 +653,23 @@ export const signInOrSignUpValidationSchema = yup.object({
         }
       ),
 })
+export const partnerSignInValidationSchema = yup.object({
+  password: yup.string().required("Please enter your Password"),
+  email: yup.string().email("Enter valid Email").required("Please enter your Email")
+      .test(
+        "allowed-domain",
+        "Email domain not supported",
+        (value) => {
+          if (!value) return false;
+          // Allow business users with custom domains
+          const domainPart = value.split('@')[1];
+          if (!domainPart) return false;
+          // If matches allowed list OR is not in public list (i.e. a business email)
+          return true
+          // return allowedEmailDomains?.includes(`@${domainPart?.toLowerCase()}`);
+        }
+      ),
+})
 
 export const partnerSignUpInitialValue = {
 fullName: "", email: "", mobileNo: "", password: "",workAssociation: "", areaOfOperation: "", agreement: false,
@@ -668,8 +685,9 @@ export const partnerSignUpValidationSchema = yup.object({
         // Allow business users with custom domains
         const domainPart = value.split('@')[1];
         if (!domainPart) return false;
-        // If matches allowed list OR is not in public list (i.e. a business email)
-        return allowedEmailDomains?.includes(`@${domainPart?.toLowerCase()}`);
+        // If matches allowed list OR is not in public list (i.e. a business email).
+        return true
+        // return allowedEmailDomains?.includes(`@${domainPart?.toLowerCase()}`);
       }
     ),
   fullName: yup.string().required("Please enter your Full Name"),

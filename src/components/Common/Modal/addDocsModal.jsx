@@ -56,7 +56,7 @@ export default function AddDocsModal({ _id, uploadingDocs,getCaseById, setUpload
     const handleAttachment = async (e) => {
         const files = e.target.files;
     
-        if (files && files.length <= 5) {
+        if (files && files.length <= 20) {
             const allSelectedFiles = [...files];
             const maxSize = 150 * 1024 * 1024; // 150MB
     
@@ -164,7 +164,7 @@ export default function AddDocsModal({ _id, uploadingDocs,getCaseById, setUpload
                         <h6 className="text-primary text-center fs-3">Add Files</h6>
                     </div>
                     <div className='d-flex flex-column text-primary text-center h6 justify-content-center'>
-                        <span>Add upto 5 files at a time</span>
+                        <span>Add upto 20 files with maximum size 150MB</span>
                     </div>
                 {hasAccess && type!="docEmp" && <div class="form-check form-switch">
                 <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckChecked" checked={docInfo?.isPrivate} onChange={(e)=>setDocInfo({...docInfo,isPrivate:e?.target?.checked})}/>

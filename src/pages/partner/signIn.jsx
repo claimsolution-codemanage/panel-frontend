@@ -11,7 +11,7 @@ import { BsEyeFill } from "react-icons/bs";
 import { useFormik } from 'formik'
 import * as yup from 'yup'
 import { Helmet } from "react-helmet";
-import { signInOrSignUpInitialValue, signInOrSignUpValidationSchema } from "../../utils/validation"
+import { partnerSignInValidationSchema, signInOrSignUpInitialValue, } from "../../utils/validation"
 
 export default function SignIn() {
     const [disable, setDisable] = useState(false)
@@ -22,7 +22,7 @@ export default function SignIn() {
 
     const UserDetailsFormik = useFormik({
         initialValues:signInOrSignUpInitialValue,
-        validationSchema:signInOrSignUpValidationSchema,
+        validationSchema:partnerSignInValidationSchema,
         onSubmit: async (values) => {
             setDisable(true)
             try {
