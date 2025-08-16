@@ -441,7 +441,7 @@ export const adminGetEmpProfile = (_id) => {
   return axios.get(`${API_BASE}/api/admin/employee/profile?_id=${_id}`)
 }
 
-export const adminGetAllEmployee = (pageItemLimit = "", pageNo = "", searchQuery = "",type=true,empType) => {
+export const adminGetAllEmployee = (pageItemLimit = "", pageNo = "", searchQuery = "",type="",empType) => {
   setheader()
   return axios.get(`${API_BASE}/api/admin/adminViewAllEmployee?limit=${pageItemLimit}&pageNo=${pageNo}&search=${searchQuery}&type=${type}&empType=${empType}`)
 }
@@ -890,6 +890,21 @@ export const employeeAllCase = (pageItemLimit = "", pageNo = "", searchQuery = "
   return axios.get(`${API_BASE}/api/employee/viewAllCase?limit=${pageItemLimit}&pageNo=${pageNo}&search=${searchQuery}&status=${statusType}&startDate=${startDate}&endDate=${endDate}&type=${type}&empId=${empId}&isReject=${isReject}`)
 }
 
+export const empSetCaseIsActiveApi = (_id, status) => {
+  setheader()
+  return axios.put(`${API_BASE}/api/employee/changeCaseIsActive?_id=${_id}&status=${!status}`)
+}
+
+export const empSetCaseDocIsActive = (_id, status) => {
+  setheader()
+  return axios.put(`${API_BASE}/api/employee/unActiveDoc?_id=${_id}&status=${!status}`)
+}
+
+export const empAllCaseDoc = (pageItemLimit = "", pageNo = "", searchQuery = "", startDate = "", endDate = "") => {
+  setheader()
+  return axios.get(`${API_BASE}/api/employee/allUnactiveCaseDoc?limit=${pageItemLimit}&pageNo=${pageNo}&search=${searchQuery}&startDate=${startDate}&endDate=${endDate}`)
+}
+
 export const empOpCreateOrUpdateCaseFormApi = (data) => {
   setheader()
   return axios.post(`${API_BASE}/api/employee/opeation/empOpCreateOrUpdateCaseForm`, data)
@@ -925,11 +940,21 @@ export const employeeGetPartnerById = (_id) => {
   return axios.get(`${API_BASE}/api/employee/viewPartnerById?_id=${_id}`)
 }
 
-
-
-export const employeeAllClient = (pageItemLimit = "", pageNo = "", searchQuery = "",startDate="",endDate="") => {
+export const empSetPartnerStatus = (_id, status) => {
   setheader()
-  return axios.get(`${API_BASE}/api/employee/viewAllClient?limit=${pageItemLimit}&pageNo=${pageNo}&search=${searchQuery}&startDate=${startDate}&endDate=${endDate}`)
+  return axios.put(`${API_BASE}/api/employee/changePartnerStatus?_id=${_id}&status=${!status}`)
+}
+
+
+
+export const employeeAllClient = (pageItemLimit = "", pageNo = "", searchQuery = "",startDate="",endDate="",type="") => {
+  setheader()
+  return axios.get(`${API_BASE}/api/employee/viewAllClient?limit=${pageItemLimit}&pageNo=${pageNo}&search=${searchQuery}&startDate=${startDate}&endDate=${endDate}&type=${type}`)
+}
+
+export const empSetClientStatusApi = (_id, status) => {
+  setheader()
+  return axios.put(`${API_BASE}/api/employee/changeClientStatus?_id=${_id}&status=${!status}`)
 }
 
 
@@ -1055,9 +1080,9 @@ export const financeEmployeeDownloadInvoiceById = (_id) => {
 }
 
 
-export const financeEmployeeViewAllInvoice = (pageItemLimit = "", pageNo = "", searchQuery = "", startDate = "", endDate = "") => {
+export const financeEmployeeViewAllInvoice = (pageItemLimit = "", pageNo = "", searchQuery = "", startDate = "", endDate = "",type="") => {
   setheader()
-  return axios.get(`${API_BASE}/api/employee/finance/viewAllInvoice?limit=${pageItemLimit}&pageNo=${pageNo}&search=${searchQuery}&startDate=${startDate}&endDate=${endDate}&type=${true}`)
+  return axios.get(`${API_BASE}/api/employee/finance/viewAllInvoice?limit=${pageItemLimit}&pageNo=${pageNo}&search=${searchQuery}&startDate=${startDate}&endDate=${endDate}&type=${type}`)
 }
 
 export const empDownloadAllInvoiceApi = (searchQuery = "", startDate = "", endDate = "",type=true) => {
@@ -1117,9 +1142,14 @@ export const empDownloadAllPartner = (searchQuery = "",type,startDate="",endDate
 }
 
 
-export const empGetAllEmployee = (pageItemLimit = "", pageNo = "", searchQuery = "",type=true) => {
+export const empGetAllEmployee = (pageItemLimit = "", pageNo = "", searchQuery = "",type) => {
   setheader()
   return axios.get(`${API_BASE}/api/employee/head/allEmployee?limit=${pageItemLimit}&pageNo=${pageNo}&search=${searchQuery}&type=${type}`)
+}
+
+export const empSetEmployeeStatus = (_id, status) => {
+  setheader()
+  return axios.put(`${API_BASE}/api/employee/setIsActiveEmployee?_id=${_id}&status=${!status}`)
 }
 
 export const empGetSathiEmployee = (pageItemLimit = "", pageNo = "", searchQuery = "",type=true,empType,empId) => {

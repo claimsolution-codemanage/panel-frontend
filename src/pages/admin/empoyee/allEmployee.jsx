@@ -13,6 +13,7 @@ export default function AllAdminEmployee() {
   isedit={true}
   getEmployee={adminGetAllEmployee}
   isTrash={false}
+  isDelete={true}
   isDownload={true}
   getDownload={adminDownloadAllEmp}
   isActive={adminSetEmployeeStatus}

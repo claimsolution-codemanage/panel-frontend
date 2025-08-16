@@ -25,7 +25,7 @@ import { IoArrowBackCircleOutline, IoNewspaperOutline } from "react-icons/io5";
 import PaginateField from "../Common/PaginateField";
 
 export default function AllEmployee(props) {
-  const { page, empId, getEmployee, isTrash, isActive, deleteEmployeeId,
+  const { page, empId, getEmployee, isTrash,isDelete, isActive, deleteEmployeeId,
     updateEmployee, role, caseUrl, partnerUrl, isedit, viewSathiUrl, isDownload, getDownload,
     isBack, statement, statementUrl, editEmpUrl } = props
 
@@ -267,7 +267,7 @@ export default function AllEmployee(props) {
                         {!isTrash && isedit && <span className="bg-warning text-white" style={{ cursor: "pointer", height: 30, width: 30, borderRadius: 30 }} onClick={() => handleEditDetails(item)}><CiEdit /></span>}
                         {!isTrash && statement && item?.type?.toLowerCase() == "sathi team" && <Link to={`${statementUrl}/${item?._id}`} state={{ filter, back: location?.pathname, path: location?.pathname }} style={{ cursor: "pointer", height: 30, width: 30, borderRadius: 30 }} className="bg-primary text-white d-flex align-items-center justify-content-center"><IoNewspaperOutline /></Link>}
                         {!isTrash && viewSathiUrl && (item?.type?.toLowerCase() == "sales" || item?.type?.toLowerCase() == "branch") && <span className="bg-warning text-white" style={{ cursor: "pointer", height: 30, width: 30, borderRadius: 30 }} onClick={() => navigate(`${viewSathiUrl}${item._id}`, { state: { filter, back: location?.pathname, path: location?.pathname } })}><FaUserTag /></span>}
-                        {role?.toLowerCase() == "admin" && <span className={`${!isTrash ? "bg-danger" : "bg-success"}  text-white`} style={{ cursor: "pointer", height: 30, width: 30, borderRadius: 30 }} onClick={() => setChangeStatus({ show: true, details: { _id: item._id, currentStatus: item?.isActive, name: item?.fullName } })}>{isTrash ? <FaTrashRestoreAlt /> : <AiOutlineDelete />} </span>}
+                        {(isTrash || isDelete) && <span className={`${!isTrash ? "bg-danger" : "bg-success"}  text-white`} style={{ cursor: "pointer", height: 30, width: 30, borderRadius: 30 }} onClick={() => setChangeStatus({ show: true, details: { _id: item._id, currentStatus: !isTrash, name: item?.fullName } })}>{isTrash ? <FaTrashRestoreAlt /> : <AiOutlineDelete />} </span>}
                         {isTrash && role?.toLowerCase() == "admin" && <span className="bg-danger text-white" style={{ cursor: "pointer", height: 30, width: 30, borderRadius: 30 }} onClick={() => setDeleteEmployee({ status: true, id: item?._id, text: `Your want to parmanent delete ${item?.fullName} employee` })}><AiOutlineDelete /></span>}
                       </span></td>
 

@@ -6,9 +6,6 @@ import { getToken,getJwtDecode } from "../utils/helperFunction"
 import { useLocation } from 'react-router-dom';
 import {RxHamburgerMenu} from 'react-icons/rx'
 import {RxCrossCircled} from 'react-icons/rx'
-import { employeeAuthenticate } from "../apis"
-import { deleteToken } from "../utils/helperFunction"
-import {toast} from 'react-toastify'
 import Loader from "../components/Common/loader"
 
 
@@ -19,32 +16,11 @@ export default function EmployeeTemplate({children}){
     const [loading,setLoading] = useState(false)
     const navigate= useNavigate()
     const location = useLocation()
-    // console.log("my state",state);
-
-    // useEffect(()=>{
-    //     async function fetch(){
-    //         try {
-    //             const res = await employeeAuthenticate()
-    //             setLoading(false)
-    //         } catch (error) {
-    //                 deleteToken()
-    //                 state?.setMyAppData({ isLogin: false, details: {} })
-    //                 navigate("/employee/signin")
-    //             if(error && error?.response?.data?.message){
-    //                 toast.error(error?.response?.data?.message)
-    //             }else{
-    //                 toast.error("Something went wrong")
-    //             }
-    //         }
-    //     }fetch()
-    //  },[location])
-
 
     useEffect(()=>{
         const token = getToken()
         if(token){
             const details = getJwtDecode(token)
-            // console.log(details);
             if(details?.role=="Employee"){
             }else{
                 navigate("/employee/signin")

@@ -11,6 +11,7 @@ export default function AdminAllInvoice() {
     role={"admin"}
     isEdit={true}
     isDelete={true}
+    isPerDelete={false}
     isTrash={false}
     paidAccess={true}
     handlePaid={adminPaidInvoice}

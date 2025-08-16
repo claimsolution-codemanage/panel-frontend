@@ -29,7 +29,7 @@ import { SiMicrosoftexcel } from "react-icons/si";
 import PaginateField from "../Common/PaginateField";
 
 export default function AllInvoiceComp({ viewAllInvoice, payInvoice, viewInvoiceUrl, role,
-  isEdit, isDelete, editInvoiceUrl, unactiveInvoice, isTrash, deleteInvoice, paidAccess, handlePaid,
+  isEdit, isDelete,isPerDelete, editInvoiceUrl, unactiveInvoice, isTrash, deleteInvoice, paidAccess, handlePaid,
   downloadAccess, downloadApi
 }) {
   const state = useContext(AppContext)
@@ -88,7 +88,7 @@ export default function AllInvoiceComp({ viewAllInvoice, payInvoice, viewInvoice
       const startDate = dateRange?.startDate ? getFormateDate(dateRange?.startDate) : ""
       const endDate = dateRange?.endDate ? getFormateDate(dateRange?.endDate) : ""
       // console.log("start", startDate, "end", endDate);
-      const res = await viewAllInvoice(pageItemLimit, pgNo, searchQuery, startDate, endDate)
+      const res = await viewAllInvoice(pageItemLimit, pgNo, searchQuery, startDate, endDate,!isTrash)
       // console.log("allAdminCase", res?.data?.data);
       if (res?.data?.success && res?.data?.data) {
         setData([...res?.data?.data])
@@ -318,7 +318,7 @@ export default function AllInvoiceComp({ viewAllInvoice, payInvoice, viewInvoice
                       <span style={{ cursor: "pointer", height: 30, width: 30, borderRadius: 30 }} className="bg-warning text-white d-flex align-items-center justify-content-center" onClick={() => navigate(`${viewInvoiceUrl}${item._id}`, { state: { filter, back: location?.pathname, path: location?.pathname } })}><HiMiniEye /></span>
                       {isEdit && !isTrash && !item?.isPaid && <span style={{ cursor: "pointer", height: 30, width: 30, borderRadius: 30 }} className="bg-success text-white d-flex align-items-center justify-content-center" onClick={() => navigate(`${editInvoiceUrl}${item._id}`, { state: { filter, back: location?.pathname, path: location?.pathname } })}><CiEdit /></span>}
                       {isDelete && !item?.isPaid && <span style={{ cursor: "pointer", height: 30, width: 30, borderRadius: 30 }} className={`${isTrash ? "bg-success" : "bg-danger"}  text-white d-flex align-items-center justify-content-center`} onClick={() => setChangeStatus({ show: true, details: { _id: item._id, currentStatus: item?.isActive, name: item?.invoiceNo, recovery: false } })}>{isTrash ? <FaTrashRestoreAlt /> : <AiOutlineDelete />} </span>}
-                      {isTrash && !item?.isPaid && <span style={{ cursor: "pointer", height: 30, width: 30, borderRadius: 30 }} className={`bg-danger  text-white d-flex align-items-center justify-content-center`} onClick={() => setIsActiveInvoice({ status: true, details: { _id: item._id, invoiceNo: item?.invoiceNo } })}><AiOutlineDelete /> </span>}
+                      {isPerDelete && !item?.isPaid && <span style={{ cursor: "pointer", height: 30, width: 30, borderRadius: 30 }} className={`bg-danger  text-white d-flex align-items-center justify-content-center`} onClick={() => setIsActiveInvoice({ status: true, details: { _id: item._id, invoiceNo: item?.invoiceNo } })}><AiOutlineDelete /> </span>}
                       {!isTrash && paidAccess && <span style={{ cursor: "pointer", height: 30, width: 30, borderRadius: 30 }} className="bg-success text-white d-flex align-items-center justify-content-center" onClick={() => setChangeInvoiceStatus({ status: true, _id: item._id })}><MdCurrencyRupee /></span>}
 
                     </span>

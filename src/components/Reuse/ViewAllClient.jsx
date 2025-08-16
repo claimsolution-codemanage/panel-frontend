@@ -69,7 +69,7 @@ export default function ViewAllClient(props) {
         try {
             const startDate = dateRange?.startDate ? getFormateDate(dateRange?.startDate) : ""
             const endDate = dateRange?.endDate ? getFormateDate(dateRange?.endDate) : ""
-            const res = await getList(pageItemLimit, pgNo, searchQuery, startDate, endDate)
+            const res = await getList(pageItemLimit, pgNo, searchQuery, startDate, endDate,true)
             if (res?.data?.success && res?.data?.data) {
                 setData([...res?.data?.data])
                 setNoOfClient(res?.data?.noOfClient)

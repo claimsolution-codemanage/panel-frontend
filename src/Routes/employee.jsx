@@ -39,6 +39,12 @@ import ViewAllStatement from "../components/Reuse/ViewAllStatement"
 import Statement from "../components/Reuse/Statement"
 import EmployeeRejectCase from "../pages/employee/cases/allRejectCase"
 import AllStatement from "../pages/employee/statement/AllStatement"
+import EmpAllPartnersTrash from "../pages/employee/trash/AllPartnersTrash"
+import EmpAllCaseTrash from "../pages/employee/trash/AllCaseTrash"
+import EmpAllClientTrash from "../pages/employee/trash/AllClientTrash"
+import EmpAllInvoiceTrash from "../pages/employee/trash/AllInvoiceTrash"
+import EmpAllDocumentTrash from "../pages/employee/trash/AllDocumentTrash"
+import EmpAllEmployeeTrash from "../pages/employee/trash/AllEmployeeTrash"
 
 export const employeeRoutes = [
     <Route path='/employee/signin' element={<PanelTemplate><EmployeeSignIn/></PanelTemplate>}/>,
@@ -76,6 +82,13 @@ export const employeeRoutes = [
   <Route path='/employee/statement/sathi-team/:empId'  element={<EmployeeTemplate><ViewAllStatement getStatementApi={empOpAllStatment} excelDownloadApi={empAllStatementDownload} fileDetailApi={empFindCaseByFileNoApi} type={"sathi team"}/></EmployeeTemplate>}/>,
   <Route path='/employee/statement'  element={<EmployeeTemplate><AllStatement/></EmployeeTemplate>}/>,
   <Route path='/employee/notification'  element={<EmployeeTemplate><EmpNotification/></EmployeeTemplate>}/>,
+
+  <Route path='/employee/all-trash-partner' element={<EmployeeTemplate><EmpAllPartnersTrash/></EmployeeTemplate>}/>,
+  <Route path='/employee/all-trash-client' element={<EmployeeTemplate><EmpAllClientTrash/></EmployeeTemplate>}/>,
+  <Route path='/employee/all-trash-case' element={<EmployeeTemplate><EmpAllCaseTrash/></EmployeeTemplate>}/>,
+  <Route path='/employee/all-trash-invoice'  element={<EmployeeTemplate><EmpAllInvoiceTrash/></EmployeeTemplate>}/>,
+  <Route path='/employee/all-trash-doc'  element={<EmployeeTemplate><EmpAllDocumentTrash/></EmployeeTemplate>}/>,
+  <Route path='/employee/all-trash-employee'  element={<EmployeeTemplate><EmpAllEmployeeTrash/></EmployeeTemplate>}/>,
 
 ]
 {/* <Route path='/employee/all-trash-invoice'  element={<EmployeeTemplate><EmployeeInvoiceTrash/></EmployeeTemplate>}/> */}

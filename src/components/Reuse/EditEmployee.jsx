@@ -146,7 +146,7 @@ export default function EditEmployeeComp({ getProfile, updateProfile,getEmpListA
         return getEmpListApi(limit, page, inputValue, true)
     }
 
-    console.log("emp",empFormik?.values);
+    console.log("emp",empFormik?.errors);
     
 
     return (<>
