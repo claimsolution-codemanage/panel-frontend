@@ -27,7 +27,8 @@ export default function EmployeeViewCase() {
       isAddRefence={empType?.toLowerCase()==="operation"}
       isViewProfile={empType?.toLowerCase()==="operation" || empType?.toLowerCase()==="branch" || (empType?.toLowerCase()==="sales" && designation?.toLowerCase()==="manager")}
       isAddCaseProcess={empType?.toLowerCase()==="operation"}
-      isAddCommit={empType?.toLowerCase()==="operation" || empType?.toLowerCase()==="branch" || (empType?.toLowerCase()===" " && designation?.toLowerCase()==="manager")}
+      // isAddCommit={empType?.toLowerCase()==="operation" || empType?.toLowerCase()==="branch" || (empType?.toLowerCase()===" " && designation?.toLowerCase()==="manager")}
+      isAddCommit={true}
       deleteReference={empRemoveCaseReference}
       deleteDoc={()=>{}}
       addCaseCommit={employeeAddCaseComment}
