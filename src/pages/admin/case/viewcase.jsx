@@ -33,6 +33,7 @@ export default function AdminViewCase() {
       isCaseFormAccess={true}
       createOrUpdateCaseFormApi={adminCreateOrUpdateCaseFormApi}
       addCaseDoc={adminAddCaseFileByIdApi}
+      privateCommit={true}
       />
     </>)
 }

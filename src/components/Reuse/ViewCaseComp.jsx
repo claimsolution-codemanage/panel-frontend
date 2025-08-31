@@ -21,7 +21,8 @@ import DocumentSection from "../Common/ViewCaseSection/DocumentSection"
 export default function ViewCaseComp({ id, getCase, role,empType, attachementUpload, addCaseDoc,
     editUrl, addCaseCommit, viewPartner, viewClient, editCaseProcess, addCaseProcess, addReference,
     deleteReference, deleteDoc, isAddRefence, isAddCaseProcess, isAddCommit,
-    isViewProfile, setCaseDocStatus, viewEmp, paymentDetailsApi, accessPayment, isCaseFormAccess, createOrUpdateCaseFormApi
+    isViewProfile, setCaseDocStatus, viewEmp, paymentDetailsApi, accessPayment, isCaseFormAccess, createOrUpdateCaseFormApi,
+    privateCommit
 }) {
 
     const [data, setData] = useState([])
@@ -132,7 +133,7 @@ export default function ViewCaseComp({ id, getCase, role,empType, attachementUpl
                                             {data[0]?.caseFrom?.toLowerCase() == "client" && <PaymentSection id={id} accessPayment={accessPayment} getCaseById={getCaseById} paymentDetailsApi={paymentDetailsApi} casePayment={data[0]?.casePayment} />}
 
                                             {/* case comment */}
-                                            {isAddCommit && <CommentSection id={id} addCaseCommit={addCaseCommit} role={role} getCaseById={getCaseById} caseCommit={data[0]?.caseCommit} />}
+                                            {isAddCommit && <CommentSection id={id} privateCommit={privateCommit} addCaseCommit={addCaseCommit} role={role} getCaseById={getCaseById} caseCommit={data[0]?.caseCommit} />}
                                         </div>
                                     </div>
 

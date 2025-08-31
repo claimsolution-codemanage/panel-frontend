@@ -37,6 +37,7 @@ export default function EmployeeViewCase() {
       isCaseFormAccess={empType?.toLowerCase()==="operation"}
       createOrUpdateCaseFormApi={empOpCreateOrUpdateCaseFormApi}
       addCaseDoc={empAddCaseFileByIdApi}
+      privateCommit={empType?.toLowerCase()==="operation"}
       />
     </>)
 }

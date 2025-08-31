@@ -3,12 +3,12 @@ import Modal from 'react-bootstrap/Modal';
 import {useState } from 'react';
 import { toast } from 'react-toastify';
 
-export default function AddCaseCommit({ show,handleCaseCommit,getCaseById,close,id }) {
-    const [data,setData] = useState({_id:id,Comment:""})
+export default function AddCaseCommit({ show,handleCaseCommit,getCaseById,close,id,privateCommit }) {
+    const [data,setData] = useState({_id:id,comment:"",isPrivate:false})
     const [commitLoading,setCommitLoading] = useState(false)
 
       const handleCommit =async()=>{
-        if(data?.Comment?.trim()?.length>=3){
+        if(data?.comment?.trim()?.length>=3){
             try {
               setCommitLoading(true)
               const res = await handleCaseCommit(data)
@@ -48,8 +48,12 @@ export default function AddCaseCommit({ show,handleCaseCommit,getCaseById,close,
                     <div className="border-3 border-primary border-bottom mb-5">
                         <h6 className="text-primary text-center fs-3">Case Comment</h6>
                     </div>
+                             {privateCommit && <div class="form-check form-switch">
+                <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckChecked" value={data?.isPrivate} checked={data?.isPrivate} onChange={(e)=>setData({...data,isPrivate:e?.target?.checked})}/>
+                <label class="form-check-label" for="private">Private</label>
+                </div>}
                     <div className="mb-3 col-12">
-                        <textarea className="form-control" name="remark" value={data.Comment} onChange={(e)=>setData({...data,Comment:e.target.value})} placeholder="Case Comment..." rows={5} cols={5} ></textarea>
+                        <textarea className="form-control" name="remark" value={data?.comment} onChange={(e)=>setData({...data,comment:e.target.value})} placeholder="Case Comment..." rows={5} cols={5} ></textarea>
                     </div>
                 </div>
 

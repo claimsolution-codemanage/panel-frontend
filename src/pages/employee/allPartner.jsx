@@ -1,4 +1,4 @@
-import { employeeAllPartner,empDownloadAllPartner,empOperationChangeBranch,empOpGetSaleEmp,empOpSharePartnerToSaleEmp } from "../../apis"
+import { employeeAllPartner,empDownloadAllPartner,empOperationChangeBranch,empOpGetSaleEmp,empOpSharePartnerToSaleEmp, empAddPartnerRefToEmp } from "../../apis"
 import { useContext } from "react"
 import { AppContext } from "../../App"
 import AllPartnerComp from "../../components/Reuse/AllPartnerComp"
@@ -34,6 +34,7 @@ export default function EmployeeAllPartner() {
       isEmpRefAccess={empType?.toLowerCase()=="operation" }
       statement={empType?.toLowerCase()=='operation' || empType?.toLowerCase()=='finance'}
       showTooltip={empType?.toLowerCase()=="operation"}
+      addPartnerRefToEmp={empAddPartnerRefToEmp}
       />
 </>)
 }

@@ -5,7 +5,7 @@ import { getFormateDMYDate } from '../../../utils/helperFunction'
 import AddCaseCommit from '../Modal/addCaseCommit'
 
 
-export default function CommentSection({ caseCommit, role,id,getCaseById,addCaseCommit }) {
+export default function CommentSection({ caseCommit, role,id,getCaseById,addCaseCommit,privateCommit }) {
     const state = useContext(AppContext)
     const [caseCommitModal, setCaseCommitModal] = useState(false)
     
@@ -40,7 +40,7 @@ export default function CommentSection({ caseCommit, role,id,getCaseById,addCase
                     </div>)}
                 </div>
             </div>
-        {caseCommitModal && <AddCaseCommit show={caseCommitModal} id={id} close={() => { setCaseCommitModal(false) }} getCaseById={getCaseById} handleCaseCommit={addCaseCommit} />}
+        {caseCommitModal && <AddCaseCommit privateCommit={privateCommit} show={caseCommitModal} id={id} close={() => { setCaseCommitModal(false) }} getCaseById={getCaseById} handleCaseCommit={addCaseCommit} />}
             
         </>
     )

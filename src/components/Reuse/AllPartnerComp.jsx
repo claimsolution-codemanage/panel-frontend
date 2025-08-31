@@ -12,7 +12,6 @@ import { useLocation, useNavigate } from "react-router-dom"
 import { BiLeftArrow } from 'react-icons/bi'
 import { BiRightArrow } from 'react-icons/bi'
 import SetStatusOfProfile from "../Common/Modal/setStatusModal";
-import { empAddPartnerRefToEmp } from "../../apis"
 import Loader from "../Common/loader"
 import { useContext } from "react"
 import { AppContext } from "../../App"
@@ -37,7 +36,8 @@ import PaginateField from "../Common/PaginateField";
 
 export default function AllPartnerComp({empId,getPartner,editUrl,viewUrl,showType,isShare,partnerShare,isEmpRefAccess,
     isTrash,unactive,isDelete,isDownload,downloadPartner,role,reportUrl,isChangeBranch,handleBrachChange,isBack,getSaleEmp,showTooltip,
-  statement}) {
+  statement,addPartnerRefToEmp
+}) {
   const state = useContext(AppContext)
   const [data, setData] = useState([])
   const navigate = useNavigate()
@@ -62,10 +62,6 @@ export default function AllPartnerComp({empId,getPartner,editUrl,viewUrl,showTyp
   const [changeBranch,setChangeBranch] = useState({loading:false,branchId:null,status:false,_id:null})
   const [sharePartner, setSharePartner] = useState([])
   const [empRef,setEmpRef] = useState({partnerId:null,status:false})
-
-
-
-
 
   const getAllPartner = async () => {
     setLoading(true)
@@ -353,7 +349,7 @@ export default function AllPartnerComp({empId,getPartner,editUrl,viewUrl,showTyp
           {deletePartner?.status && <ConfirmationModal show={deletePartner?.status} id={deletePartner?.id} hide={() => setDeletePartner({ status: false, id: "" })} heading="Are you sure?" text={deletePartner?.text ? deletePartner?.text : "Your want to delete this partner"} handleComfirmation={adminDeletePartnerById} />}
           {partnerShareModal.status && <ShareSectionModal show={partnerShareModal?.status} shareValue={partnerShareModal?.value} handleShareCase={partnerShare} getRefreshData={getAllPartner} shareOf="sharePartners" close={() => { setPatnerShareModal({ value: [], status: false }); setSharePartner([]) }} getSaleEmp={getSaleEmp}/>}
           {changeBranch?.status && <ChangeBranch branch={changeBranch}  onBranchChange={setChangeBranch} type="partner" handleBranch={handleBrachChange}/>}
-          {empRef?.status && <AddEmpRefModal empRef={empRef} onChangeEmpRef={setEmpRef}  handleApi={empAddPartnerRefToEmp}/>}
+          {empRef?.status && <AddEmpRefModal empRef={empRef} onChangeEmpRef={setEmpRef}  handleApi={addPartnerRefToEmp}/>}
         </div>
 
       </div>}
