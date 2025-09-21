@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom"
 import ViewCaseComp from "../../components/Reuse/ViewCaseComp"
 import { clientAttachementUpload } from "../../apis/upload"
 import { clientAddCaseFileById } from "../../apis"
+import { clientGetCaseFormByIdApi } from "../../apis/case/form/clientCaseFormApi"
 
 
 
@@ -17,6 +18,7 @@ export default function ClientViewCase() {
         addCaseDoc={clientAddCaseFileById}
         accessPayment={false}
         paymentDetailsApi={()=>{}}
+        caseFormDetailApi={clientGetCaseFormByIdApi}
         />
     </>)
 }

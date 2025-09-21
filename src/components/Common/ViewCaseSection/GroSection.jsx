@@ -5,6 +5,7 @@ import { formatDateToISO, getCheckStorage, getFormateDMYDate } from '../../../ut
 import { FaFileWord } from 'react-icons/fa6'
 import DocumentPreview from '../../DocumentPreview'
 import { Link } from 'react-router-dom'
+import CaseFormModal from '../case/form/CaseFormModal'
 
 export default function GroSection({ id,role,empType, status, isCaseFormAccess, getCaseById, groDetails, createOrUpdateApi, attachementUpload }) {
     const [showGroStatus, setShowGroStatus] = useState(false)
@@ -188,7 +189,10 @@ export default function GroSection({ id,role,empType, status, isCaseFormAccess, 
                 </div>}
 
             </div>
-            {showGroStatus && <GROFormModal caseId={id} show={showGroStatus} close={() => setShowGroStatus(false)} getCaseById={getCaseById} groDetails={groDetails} createOrUpdateApi={createOrUpdateApi} attachementUpload={attachementUpload} />}
+            {/* {showGroStatus && <GROFormModal caseId={id} show={showGroStatus} close={() => setShowGroStatus(false)} getCaseById={getCaseById} groDetails={groDetails} createOrUpdateApi={createOrUpdateApi} attachementUpload={attachementUpload} />} */}
+
+            {showGroStatus && <CaseFormModal formType={"gro"} caseId={id} show={showGroStatus} close={() => setShowGroStatus(false)} getCaseById={getCaseById} groDetails={groDetails} createOrUpdateApi={createOrUpdateApi} attachementUpload={attachementUpload} />}
+
         </>
     )
 }

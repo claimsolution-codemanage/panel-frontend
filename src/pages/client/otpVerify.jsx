@@ -1,6 +1,5 @@
 import OtpInput from 'react-otp-input';
 import { useState } from 'react'
-import { clientEmailVerify } from '../../apis';
 import { toast } from 'react-toastify'
 import { useNavigate } from 'react-router-dom';
 import { setToken } from '../../utils/helperFunction';
@@ -11,6 +10,7 @@ import {MdMailLock} from 'react-icons/md'
 import { Link } from 'react-router-dom';
 import { useEffect } from 'react';
 import { clientResendOtp } from '../../apis';
+import { clientEmailVerifyApi } from '../../apis/auth/userAuthApi';
 
 
 export default function ClientOtpVerify() {
@@ -25,7 +25,7 @@ export default function ClientOtpVerify() {
         if(otp.length==6){
             setDisable(true)
             try {
-                const res = await clientEmailVerify({ otp: otp })
+                const res = await clientEmailVerifyApi({ otp: otp })
                 // console.log("res", res);
                 if (res?.data?.success) {
                     setOtp("")

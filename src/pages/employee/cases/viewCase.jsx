@@ -1,10 +1,11 @@
 import { API_BASE_IMG, employeeAttachementUpload } from "../../../apis/upload"
 import { useParams } from "react-router-dom"
-import { employeeGetCaseById,employeeChangeCaseStatus,empAddCaseReference,empRemoveCaseReference, empAddOrUpdatePayment, empOpCreateOrUpdateCaseFormApi, empAddCaseFileByIdApi } from "../../../apis"
+import { employeeChangeCaseStatus,empAddCaseReference,empRemoveCaseReference, empAddOrUpdatePayment, empAddCaseFileByIdApi, employeeGetCaseById } from "../../../apis"
 import { AppContext } from "../../../App"
 import { useContext } from "react"
 import { employeeAddCaseComment } from "../../../apis"
 import ViewCaseComp from "../../../components/Reuse/ViewCaseComp"
+import { empCreateOrUpdateCaseFormApi, empGetCaseFormById } from "../../../apis/case/form/caseFormApi"
 
 export default function EmployeeViewCase() {
     const state = useContext(AppContext)
@@ -35,9 +36,10 @@ export default function EmployeeViewCase() {
       accessPayment={empType?.toLowerCase()==="operation"}
       paymentDetailsApi={empAddOrUpdatePayment}
       isCaseFormAccess={empType?.toLowerCase()==="operation"}
-      createOrUpdateCaseFormApi={empOpCreateOrUpdateCaseFormApi}
+      createOrUpdateCaseFormApi={empCreateOrUpdateCaseFormApi}
       addCaseDoc={empAddCaseFileByIdApi}
       privateCommit={empType?.toLowerCase()==="operation"}
+      caseFormDetailApi={empGetCaseFormById}
       />
     </>)
 }

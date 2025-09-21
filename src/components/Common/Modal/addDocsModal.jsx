@@ -96,7 +96,7 @@ export default function AddDocsModal({ _id, uploadingDocs,getCaseById, setUpload
                 status: false,
                 code: 2,
                 type: "uploading",
-                message: "Please select up to 5 files",
+                message: "Please select up to 20 files",
             });
         }
     };

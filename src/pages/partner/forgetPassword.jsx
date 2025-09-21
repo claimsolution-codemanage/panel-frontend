@@ -1,11 +1,8 @@
 import { Link } from 'react-router-dom'
 import { useNavigate } from 'react-router-dom'
 import { useState } from 'react'
-import { useContext } from 'react'
-import { AppContext } from '../../App'
 import {toast} from 'react-toastify'
-import { partnerForgetPassword } from '../../apis'
-import { setToken } from '../../utils/helperFunction'
+import { partnerForgetPasswordApi } from '../../apis/auth/partnerAuthApi'
 
 
 export default function PartnerForgetPassword(){
@@ -23,15 +20,9 @@ export default function PartnerForgetPassword(){
     e.preventDefault()
     setLoading(true)
     try {
-        const res = await partnerForgetPassword(data)
+        const res = await partnerForgetPasswordApi(data)
         if(res?.data?.success){
             toast.success(res?.data?.message)
-            // const token =  res?.headers["x-auth-token"]
-            // if(token){
-            //     setToken(token)         
-            //     navigate("/client/otp verify")
-            //     console.log("client sign up",res);
-            // }
             setLoading(false)
         }
 } catch (error) {

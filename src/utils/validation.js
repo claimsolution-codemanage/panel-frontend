@@ -2,43 +2,43 @@ import * as yup from 'yup'
 import { allowedEmailDomains } from './constant'
 
 export const empInitialValues = {
-    docs:[],
-    profileImg:"",
-    fullName:"",
-    type:"",
-    designation:"",
-    mobileNo:"",
-    branchId:"",
-    bankName:"",
-    bankBranchName:"",
-    bankAccountNo:"",
-    panNo:"",
-    dob:"",
-    address:"",
-    gender:"",
-    district:"",
-    city:"",
-    state:"",
-    pinCode:"",
-    managerId:"",
-    headEmpId:""
+  docs: [],
+  profileImg: "",
+  fullName: "",
+  type: "",
+  designation: "",
+  mobileNo: "",
+  branchId: "",
+  bankName: "",
+  bankBranchName: "",
+  bankAccountNo: "",
+  panNo: "",
+  dob: "",
+  address: "",
+  gender: "",
+  district: "",
+  city: "",
+  state: "",
+  pinCode: "",
+  managerId: "",
+  headEmpId: ""
 }
 
 export const empValidationSchema = yup.object().shape({
-    fullName: yup.string().required("Full name is required"),
-    type:yup.string().required("Department is required"),
-    designation:yup.string().required("Designation is required"),
-    mobileNo:yup.string().required("Mobile number is required"),
-    branchId:yup.string().required("Branch ID is required"),
-    bankName:yup.string(),
-    bankBranchName:yup.string(),
-    bankAccountNo:yup.string(),
-    panNo:yup.string(),
-    address:yup.string(),
-    DOB: yup.string(),
-    pinCode: yup.string(),
-    city: yup.string(),
-    state: yup.string(),
+  fullName: yup.string().required("Full name is required"),
+  type: yup.string().required("Department is required"),
+  designation: yup.string().required("Designation is required"),
+  mobileNo: yup.string().required("Mobile number is required"),
+  branchId: yup.string().required("Branch ID is required"),
+  bankName: yup.string(),
+  bankBranchName: yup.string(),
+  bankAccountNo: yup.string(),
+  panNo: yup.string(),
+  address: yup.string(),
+  DOB: yup.string(),
+  pinCode: yup.string(),
+  city: yup.string(),
+  state: yup.string(),
   docs: yup.array(),
   headEmpId: yup.mixed().test("headEmpId", "Required",
     function (value) {
@@ -57,392 +57,64 @@ export const empValidationSchema = yup.object().shape({
 })
 
 export const empJoiningFormInitialValues = {
-    name: "",
-    fatherName: "",
-    correspondenceAddress: "",
-    permanentAddress: "",
-    telephone: "",
-    mobile: "",
-    email: "",
-    dateOfBirth: "",
-    maritalStatus: "",
-    panCardNo: "",
-    bloodGroup: "",
-    emergencyContact: { name: "", relation: "", contactNo: "" },
-    educationalDetails: [{ degree: "", university: "", from: "", to: "", percentage: "", specialization: "" }],
-    employmentDetails: [{ organization: "", designation: "", from: "", to: "", annualCTC: "" }],
-    familyDetails: [{ name: "", relation: "", occupation: "", dateOfBirth: "" }],
-    professionalReferences: [{ name: "", organization: "", designation: "", contactNo: "" }],
-    signature: "",
-    place: "",
-  }
+  name: "",
+  fatherName: "",
+  correspondenceAddress: "",
+  permanentAddress: "",
+  telephone: "",
+  mobile: "",
+  email: "",
+  dateOfBirth: "",
+  maritalStatus: "",
+  panCardNo: "",
+  bloodGroup: "",
+  emergencyContact: { name: "", relation: "", contactNo: "" },
+  educationalDetails: [{ degree: "", university: "", from: "", to: "", percentage: "", specialization: "" }],
+  employmentDetails: [{ organization: "", designation: "", from: "", to: "", annualCTC: "" }],
+  familyDetails: [{ name: "", relation: "", occupation: "", dateOfBirth: "" }],
+  professionalReferences: [{ name: "", organization: "", designation: "", contactNo: "" }],
+  signature: "",
+  place: "",
+}
 
-  export const empJoiningFormValidationSchema = yup.object().shape({
-    name: yup.string().required("Name is required"),
-    mobile: yup.string().matches(/^\d{12}$/, "Invalid mobile number").required("Mobile number is required"),
-    telephone: yup.string().matches(/^\d{10}$/, "Invalid number"),
-    email: yup.string().email("Invalid email").required("Email is required"),
-    dateOfBirth: yup.date().required("Date of birth is required"),
-    emergencyContact: yup.object().shape({
-      name: yup.string().required("Contact name is required"),
-      contactNo: yup.string().matches(/^\d{10}$/, "Invalid contact number").required("Contact number is required"),
-    }),
-    educationalDetails: yup.array().of(
-        yup.object().shape({
-          degree: yup.string().required("Degree is required"),
-          university: yup.string().required("University is required"),
-          from: yup.string().required("From is required"),
-          to: yup.string().required("To is required"),
-        })
-      ),
-      employmentDetails: yup.array().of(
-        yup.object().shape({
-          organization: yup.string().required("Organization is required"),
-          designation: yup.string().required("Designation is required"),
-          from: yup.string().required("From is required"),
-          to: yup.string().required("To is required"),
-        })
-      ),
-      familyDetails: yup.array().of(
-        yup.object().shape({
-          name: yup.string().required("Name is required"),
-          relation: yup.string().required("Relation is required"),
-        })
-      ),
-      professionalReferences: yup.array().of(
-        yup.object().shape({
-          name: yup.string().required("Name is required"),
-          organization: yup.string().required("Organization is required"),
-        })
-      ),
-  });
-
-
-export const groInitialValues = {
-  specialCase:false,
-  partnerFee:"",
-  consultantFee:"",
-  groFilingDate: "",
-  groStatusUpdates: [],
-  queryHandling: [],
-  approved: false,
-  approvalDate:"",
-  approvedAmount: "",
-  attachments: [],
-  queryReply: [],
-  isSettelment: false,
-  dateOfPayment: "",
-  utrNumber: "",
-  bankName: "",
-  chequeNumber: "",
-  chequeDate: "",
-  amount: "",
-  transactionDate: "",
-  paymentMode: "",
-  approvalLetter:"",
-  approvalLetterPrivate:false
-};
-
-export const groValidationSchema = yup.object().shape({
-  partnerFee:yup.number().typeError("Must be number").min(0,"Must be minimum 0").test(
-    "partnerFee",
-    "Partner fee is required",
-    function (value) {
-      const { isSettelment,specialCase } = this.parent;
-      return (isSettelment || specialCase) ? value && !isNaN(value) : true
-    }),
-  consultantFee:yup.number().typeError("Must be number").min(0,"Must be minimum 0").test(
-    "consultantFee",
-    "Consultant fee is required",
-    function (value) {
-      const { approved, specialCase } = this.parent;
-      return (approved || specialCase) ? value && !isNaN(value) : true
-    }),
-  groStatusUpdates: yup.array().of(
+export const empJoiningFormValidationSchema = yup.object().shape({
+  name: yup.string().required("Name is required"),
+  mobile: yup.string().matches(/^\d{12}$/, "Invalid mobile number").required("Mobile number is required"),
+  telephone: yup.string().matches(/^\d{10}$/, "Invalid number"),
+  email: yup.string().email("Invalid email").required("Email is required"),
+  dateOfBirth: yup.date().required("Date of birth is required"),
+  emergencyContact: yup.object().shape({
+    name: yup.string().required("Contact name is required"),
+    contactNo: yup.string().matches(/^\d{10}$/, "Invalid contact number").required("Contact number is required"),
+  }),
+  educationalDetails: yup.array().of(
     yup.object().shape({
-      status: yup.string().required("Status is required"),
-      remarks: yup.string(),
-      date: yup.string().required("Date is required"),
-      attachment: yup.string().required("Attachment is required"),
+      degree: yup.string().required("Degree is required"),
+      university: yup.string().required("University is required"),
+      from: yup.string().required("From is required"),
+      to: yup.string().required("To is required"),
     })
   ),
-  queryHandling: yup.array().of(
+  employmentDetails: yup.array().of(
     yup.object().shape({
-      remarks: yup.string().required("Remarks is required"),
-      date: yup.string().required("Date is required"),
-      attachment: yup.string().required("Attachment is required"),
+      organization: yup.string().required("Organization is required"),
+      designation: yup.string().required("Designation is required"),
+      from: yup.string().required("From is required"),
+      to: yup.string().required("To is required"),
     })
   ),
-  queryReply: yup.array().of(
+  familyDetails: yup.array().of(
     yup.object().shape({
-      remarks: yup.string().required("Remarks is required"),
-      date: yup.string().required("Date is required"),
-      attachment: yup.string().required("Attachment is required"),
+      name: yup.string().required("Name is required"),
+      relation: yup.string().required("Relation is required"),
     })
   ),
-  groFilingDate: yup.string().required("Filing Date is required"),
-  approvedAmount: yup.string().test(
-    "approved",
-    "Approved amount is required",
-    function (value) {
-      const { approved } = this.parent;
-      return approved ?  approved && value > 0 :true
-    }),
-  approvalDate: yup.string().test(
-    "approved",
-    "Approved date is required",
-    function (value) {
-      const { approved } = this.parent;
-      return approved ?  approved && value:true
-    }),
-  paymentMode: yup.string()
-    .test(
-      "Payment mode is required","Payment mode is required",
-      function (value) {
-        const { isSettelment } = this.parent;
-        return !isSettelment || (value && value.trim() !== "");
-      }
-    ),
-  dateOfPayment: yup.date().test("required-datepayment", "Date of payment is required",
-    function (value) {
-      const { isSettelment } = this.parent;
-      return !isSettelment || value;
-    }
-  ),
-  utrNumber: yup.string()
-    .test(
-      "is-required-htmlFor-upi","UTR Number is required for UPI",
-      function (value) {
-        const { paymentMode, isSettelment } = this.parent;
-        return !isSettelment || (paymentMode !== "UPI" || (value && value.trim() !== ""));
-      }
-    ),
-
-  bankName: yup.string()
-    .test(
-      "is-required-htmlFor-bank-modes",
-      "Bank Name is required",
-      function (value) {
-        const { paymentMode, isSettelment } = this.parent;
-        return !isSettelment || !["Cheque", "Net Banking"].includes(paymentMode) || (value && value.trim() !== "");
-      }
-    ),
-
-  chequeNumber: yup.string()
-    .test(
-      "is-required-htmlFor-cheque",
-      "Cheque Number is required",
-      function (value) {
-        const { paymentMode, isSettelment } = this.parent;
-        return !isSettelment || paymentMode !== "Cheque" || (value && value.trim() !== "");
-      }
-    ),
-
-  chequeDate: yup.date()
-    .test(
-      "is-required-htmlFor-cheque",
-      "Cheque Date is required",
-      function (value) {
-        const { paymentMode, isSettelment } = this.parent;
-        return !isSettelment || paymentMode !== "Cheque" || !!value;
-      }
-    ),
-
-  amount: yup.number()
-    .test(
-      "is-required-htmlFor-cheque",
-      "Amount is required",
-      function (value) {
-        const { paymentMode, isSettelment } = this.parent;
-        return !isSettelment || (value && !isNaN(value));
-      }
-    )
-    .typeError("Amount must be a number"),
-
-  transactionDate: yup.date()
-    .test(
-      "is-required-htmlFor-net-banking",
-      "Transaction Date is required",
-      function (value) {
-        const { paymentMode, isSettelment } = this.parent;
-        return !isSettelment || paymentMode !== "Net Banking" || !!value;
-      }
-    ),
-
-});
-
-export const ombudsmanInitialValues = {
-  specialCase:false,
-  partnerFee:"",
-  consultantFee:"",
-  filingDate: "",
-  complaintNumber:"",
-  method:"online",
-  statusUpdates: [],
-  queryHandling: [],
-  approved: false,
-  approvalDate:"",
-  approvedAmount: "",
-  attachments: [],
-  queryReply: [],
-  hearingSchedule:[],
-  awardPart:[],
-  isSettelment: false,
-  dateOfPayment: "",
-  utrNumber: "",
-  bankName: "",
-  chequeNumber: "",
-  chequeDate: "",
-  amount: "",
-  transactionDate: "",
-  paymentMode: "",
-  approvalLetter:"",
-  approvalLetterPrivate:false
-};
-
-export const ombudsmanValidationSchema = yup.object().shape({
-  partnerFee:yup.number().typeError("Must be number").min(0,"Must be minimum 0").test(
-    "partnerFee",
-    "Partner fee is required",
-    function (value) {
-      const { isSettelment,specialCase } = this.parent;
-      return (isSettelment || specialCase) ? value && !isNaN(value) : true
-    }),
-  consultantFee:yup.number().typeError("Must be number").min(0,"Must be minimum 0").test(
-    "consultantFee",
-    "Consultant fee is required",
-    function (value) {
-      const { approved, specialCase } = this.parent;
-      return (approved || specialCase) ? value && !isNaN(value) : true
-    }),
-  statusUpdates: yup.array().of(
+  professionalReferences: yup.array().of(
     yup.object().shape({
-      status: yup.string().required("Status is required"),
-      remarks: yup.string(),
-      date: yup.string().required("Date is required"),
-      attachment: yup.string().required("Attachment is required"),
+      name: yup.string().required("Name is required"),
+      organization: yup.string().required("Organization is required"),
     })
   ),
-  queryHandling: yup.array().of(
-    yup.object().shape({
-      remarks: yup.string().required("Remarks is required"),
-      date: yup.string().required("Date is required"),
-      attachment: yup.string().required("Attachment is required"),
-    })
-  ),
-  queryReply: yup.array().of(
-    yup.object().shape({
-      remarks: yup.string().required("Remarks is required"),
-      date: yup.string().required("Date is required"),
-      attachment: yup.string().required("Attachment is required"),
-    })
-  ),
-  hearingSchedule: yup.array().of(
-    yup.object().shape({
-      remarks: yup.string().required("Remarks is required"),
-      date: yup.string().required("Date is required"),
-      attachment: yup.string().required("Attachment is required"),
-    })
-  ),
-  awardPart: yup.array().of(
-    yup.object().shape({
-      type: yup.string().required("Type is required"),
-      remarks: yup.string().required("Remarks is required"),
-      date: yup.string().required("Date is required"),
-      attachment: yup.string().required("Attachment is required"),
-    })
-  ),
-  filingDate: yup.string().required("Filing Date is required"),
-  complaintNumber: yup.string().required("Complaint number is required"),
-  method: yup.string().required("Method is required"),
-  approvedAmount: yup.string().test(
-    "approved",
-    "Approved amount is required",
-    function (value) {
-      const { approved } = this.parent;
-      return approved ?  approved && value:true
-    }),
-  approvalDate: yup.string().test(
-    "approved",
-    "Approved date is required",
-    function (value) {
-      const { approved } = this.parent;
-      return approved ?  value:true
-    }),
-  paymentMode: yup.string()
-    .test(
-      "Payment mode is required","Payment mode is required",
-      function (value) {
-        const { isSettelment } = this.parent;
-        return !isSettelment || (value && value.trim() !== "");
-      }
-    ),
-  dateOfPayment: yup.date().test("required-datepayment", "Date of payment is required",
-    function (value) {
-      const { isSettelment } = this.parent;
-      return !isSettelment || value;
-    }
-  ),
-  utrNumber: yup.string()
-    .test(
-      "is-required-htmlFor-upi","UTR Number is required for UPI",
-      function (value) {
-        const { paymentMode, isSettelment } = this.parent;
-        return !isSettelment || (paymentMode !== "UPI" || (value && value.trim() !== ""));
-      }
-    ),
-
-  bankName: yup.string()
-    .test(
-      "is-required-htmlFor-bank-modes",
-      "Bank Name is required",
-      function (value) {
-        const { paymentMode, isSettelment } = this.parent;
-        return !isSettelment || !["Cheque", "Net Banking"].includes(paymentMode) || (value && value.trim() !== "");
-      }
-    ),
-
-  chequeNumber: yup.string()
-    .test(
-      "is-required-htmlFor-cheque",
-      "Cheque Number is required",
-      function (value) {
-        const { paymentMode, isSettelment } = this.parent;
-        return !isSettelment || paymentMode !== "Cheque" || (value && value.trim() !== "");
-      }
-    ),
-
-  chequeDate: yup.date()
-    .test(
-      "is-required-htmlFor-cheque",
-      "Cheque Date is required",
-      function (value) {
-        const { paymentMode, isSettelment } = this.parent;
-        return !isSettelment || paymentMode !== "Cheque" || !!value;
-      }
-    ),
-
-  amount: yup.number()
-    .test(
-      "is-required-htmlFor-cheque",
-      "Amount is required",
-      function (value) {
-        const { paymentMode, isSettelment } = this.parent;
-        return !isSettelment || (value && !isNaN(value));
-      }
-    )
-    .typeError("Amount must be a number"),
-
-  transactionDate: yup.date()
-    .test(
-      "is-required-htmlFor-net-banking",
-      "Transaction Date is required",
-      function (value) {
-        const { paymentMode, isSettelment } = this.parent;
-        return !isSettelment || paymentMode !== "Net Banking" || !!value;
-      }
-    ),
-
 });
 
 // Dynamic validation schema based on form value of paymentMode
@@ -515,7 +187,7 @@ export const paymentValidationSchema = yup.object({
       }
     ),
 })
-    
+
 export const paymentInitialValues = {
   dateOfPayment: "",
   utrNumber: "",
@@ -588,24 +260,24 @@ export const partnerBankValidationSchema = yup.object({
   bankName: yup.string().required("Bank name is required"),
   bankAccountNo: yup.string().required("Account number is required"),
   bankBranchName: yup.string().required("Bank branch name is required"),
-  gstNo: yup.string().min(15,"Max 15 character").max(15,"Max 15 character"),
-  panNo:yup.string().min(10,"Min 10 character").max(10,"Max 10 character").required("PAN no is required"),
+  gstNo: yup.string().min(15, "Max 15 character").max(15, "Max 15 character"),
+  panNo: yup.string().min(10, "Min 10 character").max(10, "Max 10 character").required("PAN no is required"),
   ifscCode: yup.string().required("IFSC code is required"),
-  upiId:yup.string(),
+  upiId: yup.string(),
   cancelledChequeImg: yup.string(),
-  gstCopyImg:yup.string(),
+  gstCopyImg: yup.string(),
 })
 
 export const addEmpInitialValue = {
-fullName: "", 
-email: "", 
-empId: "", 
-branchId: "", 
-mobileNo: "", 
-type: "", 
-designation: "",
-headEmpId:"",
-managerId:""
+  fullName: "",
+  email: "",
+  empId: "",
+  branchId: "",
+  mobileNo: "",
+  type: "",
+  designation: "",
+  headEmpId: "",
+  managerId: ""
 }
 
 export const addEmpValidationSchema = yup.object({
@@ -640,39 +312,39 @@ export const signInOrSignUpInitialValue = {
 export const signInOrSignUpValidationSchema = yup.object({
   password: yup.string().required("Please enter your Password"),
   email: yup.string().email("Enter valid Email").required("Please enter your Email")
-      .test(
-        "allowed-domain",
-        "Email domain not supported",
-        (value) => {
-          if (!value) return false;
-          // Allow business users with custom domains
-          const domainPart = value.split('@')[1];
-          if (!domainPart) return false;
-          // If matches allowed list OR is not in public list (i.e. a business email)
-          return allowedEmailDomains?.includes(`@${domainPart?.toLowerCase()}`);
-        }
-      ),
+    .test(
+      "allowed-domain",
+      "Email domain not supported",
+      (value) => {
+        if (!value) return false;
+        // Allow business users with custom domains
+        const domainPart = value.split('@')[1];
+        if (!domainPart) return false;
+        // If matches allowed list OR is not in public list (i.e. a business email)
+        return allowedEmailDomains?.includes(`@${domainPart?.toLowerCase()}`);
+      }
+    ),
 })
 export const partnerSignInValidationSchema = yup.object({
   password: yup.string().required("Please enter your Password"),
   email: yup.string().email("Enter valid Email").required("Please enter your Email")
-      .test(
-        "allowed-domain",
-        "Email domain not supported",
-        (value) => {
-          if (!value) return false;
-          // Allow business users with custom domains
-          const domainPart = value.split('@')[1];
-          if (!domainPart) return false;
-          // If matches allowed list OR is not in public list (i.e. a business email)
-          return true
-          // return allowedEmailDomains?.includes(`@${domainPart?.toLowerCase()}`);
-        }
-      ),
+    .test(
+      "allowed-domain",
+      "Email domain not supported",
+      (value) => {
+        if (!value) return false;
+        // Allow business users with custom domains
+        const domainPart = value.split('@')[1];
+        if (!domainPart) return false;
+        // If matches allowed list OR is not in public list (i.e. a business email)
+        return true
+        // return allowedEmailDomains?.includes(`@${domainPart?.toLowerCase()}`);
+      }
+    ),
 })
 
 export const partnerSignUpInitialValue = {
-fullName: "", email: "", mobileNo: "", password: "",workAssociation: "", areaOfOperation: "", agreement: false,
+  fullName: "", email: "", mobileNo: "", password: "", workAssociation: "", areaOfOperation: "", agreement: false,
 }
 
 export const partnerSignUpValidationSchema = yup.object({
@@ -699,7 +371,7 @@ export const partnerSignUpValidationSchema = yup.object({
 })
 
 export const clientSignUpInitialValue = {
-fullName: "", email: "", mobileNo: "", password: "", agreement: false
+  fullName: "", email: "", mobileNo: "", password: "", agreement: false
 }
 
 export const clientSignUpValidationSchema = yup.object({
@@ -793,10 +465,10 @@ export const itemInvValidationSchema = yup.object().shape({
 })
 
 export const invNoInitalValues = {
- invoiceNo:"",
- _id:"",
- loading:false,
- show:false
+  invoiceNo: "",
+  _id: "",
+  loading: false,
+  show: false
 }
 export const invNoValidationSchema = yup.object().shape({
   invoiceNo: yup.string().required('Required'),
@@ -805,12 +477,12 @@ export const invNoValidationSchema = yup.object().shape({
 
 // invoice status
 export const invStatusInitalValues = {
-  _id:"",
-  status:"paid",
-  remark:""
+  _id: "",
+  status: "paid",
+  remark: ""
 }
 export const invStatusValidationSchema = yup.object().shape({
- _id : yup.string().required('Required'),
- status : yup.string().required('Required'),
- remark : yup.string(),
+  _id: yup.string().required('Required'),
+  status: yup.string().required('Required'),
+  remark: yup.string(),
 })

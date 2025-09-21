@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useFormik, FormikProvider, FieldArray } from "formik";
 import * as Yup from "yup";
 import PaymentDetails from "../SubPart/PaymentDetails";
-import { ombudsmanInitialValues, ombudsmanValidationSchema } from "../../../utils/validation";
+import { ombudsmanInitialValues, ombudsmanValidationSchema } from "../../../utils/validations/case/form/caseFormValidation";
 import { toast } from "react-toastify";
 import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';

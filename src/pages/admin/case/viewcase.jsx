@@ -1,9 +1,10 @@
-import { adminAddCaseFileByIdApi, adminAddOrUpdatePayment, adminCreateOrUpdateCaseFormApi, adminGetCaseById } from "../../../apis"
+import { adminAddCaseFileByIdApi, adminAddOrUpdatePayment, adminGetCaseById } from "../../../apis"
 import { useParams } from "react-router-dom"
 import { adminDeleteCaseDocById,adminUpdateClientCaseFee,adminSetCaseDocIsActive,adminEditCaseProcessById,adminChangeCaseStatus, adminAddCaseCommit, adminRemoveCaseReference } from "../../../apis"
 import { adminAddCaseReference } from "../../../apis"
 import { adminAttachementUpload } from "../../../apis/upload"
 import ViewCaseComp from "../../../components/Reuse/ViewCaseComp"
+import { adminCreateOrUpdateCaseFormApi, adminGetCaseFormById } from "../../../apis/case/form/caseFormApi"
 
 export default function AdminViewCase() {
     const param = useParams()
@@ -32,6 +33,7 @@ export default function AdminViewCase() {
       paymentDetailsApi={adminAddOrUpdatePayment}
       isCaseFormAccess={true}
       createOrUpdateCaseFormApi={adminCreateOrUpdateCaseFormApi}
+      caseFormDetailApi={adminGetCaseFormById}
       addCaseDoc={adminAddCaseFileByIdApi}
       privateCommit={true}
       />

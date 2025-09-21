@@ -16,13 +16,14 @@ import StatusSection from "../Common/ViewCaseSection/StatusSection"
 import OmbudsmanSection from "../Common/ViewCaseSection/ObudsmanSection"
 import CaseDetails from "../Common/ViewCaseSection/CaseDetails"
 import DocumentSection from "../Common/ViewCaseSection/DocumentSection"
+import ViewCaseForm from "../Common/case/form/CaseFormList"
 
 
 export default function ViewCaseComp({ id, getCase, role,empType, attachementUpload, addCaseDoc,
     editUrl, addCaseCommit, viewPartner, viewClient, editCaseProcess, addCaseProcess, addReference,
     deleteReference, deleteDoc, isAddRefence, isAddCaseProcess, isAddCommit,
     isViewProfile, setCaseDocStatus, viewEmp, paymentDetailsApi, accessPayment, isCaseFormAccess, createOrUpdateCaseFormApi,
-    privateCommit
+    privateCommit,caseFormDetailApi
 }) {
 
     const [data, setData] = useState([])
@@ -119,15 +120,19 @@ export default function ViewCaseComp({ id, getCase, role,empType, attachementUpl
                                             {/* case process */}
                                             <StatusSection isAddCaseProcess={isAddCaseProcess} editCaseProcess={editCaseProcess} role={role} id={id} processSteps={data[0]?.processSteps} getCaseById={getCaseById} details={data[0]} addCaseProcess={addCaseProcess} attachementUpload={attachementUpload} />
 
-                                            {/* case gro form*/}
-                                            {((data[0]?.caseFrom?.toLowerCase() == "client" && data[0]?.currentStatus?.toLowerCase() == "gro") || data?.[0]?.caseGroDetails) &&
-                                                <GroSection id={id} role={role} empType={empType} isCaseFormAccess={isCaseFormAccess} getCaseById={getCaseById} status={data?.[0]?.currentStatus} groDetails={data?.[0]?.caseGroDetails} createOrUpdateApi={createOrUpdateCaseFormApi} attachementUpload={attachementUpload} />
+                                            {/* case  form section*/}
+                                            {(data[0]?.caseFrom?.toLowerCase() == "client" || data?.[0]?.case_forms?.length) ?
+                                                <ViewCaseForm caseFormDetailApi={caseFormDetailApi} id={id} role={role} empType={empType} isCaseFormAccess={isCaseFormAccess} getCaseById={getCaseById} status={data?.[0]?.currentStatus} formList={data?.[0]?.case_forms} createOrUpdateApi={createOrUpdateCaseFormApi} attachementUpload={attachementUpload} />:""
                                             }
+                                            {/* case gro form*/}
+                                            {/* {((data[0]?.caseFrom?.toLowerCase() == "client" && data[0]?.currentStatus?.toLowerCase() == "gro") || data?.[0]?.caseGroDetails) &&
+                                                <GroSection id={id} role={role} empType={empType} isCaseFormAccess={isCaseFormAccess} getCaseById={getCaseById} status={data?.[0]?.currentStatus} groDetails={data?.[0]?.caseGroDetails} createOrUpdateApi={createOrUpdateCaseFormApi} attachementUpload={attachementUpload} />
+                                            } */}
 
                                             {/* case ombudsman form*/}
-                                            {((data[0]?.caseFrom?.toLowerCase() == "client" && data[0]?.currentStatus?.toLowerCase()?.includes("ombudsman")) || data?.[0]?.caseOmbudsmanDetails) &&
+                                            {/* {((data[0]?.caseFrom?.toLowerCase() == "client" && data[0]?.currentStatus?.toLowerCase()?.includes("ombudsman")) || data?.[0]?.caseOmbudsmanDetails) &&
                                                 <OmbudsmanSection id={id} role={role} empType={empType}  isCaseFormAccess={isCaseFormAccess} getCaseById={getCaseById} status={data?.[0]?.currentStatus} details={data?.[0]?.caseOmbudsmanDetails} createOrUpdateApi={createOrUpdateCaseFormApi} attachementUpload={attachementUpload} />
-                                            }
+                                            } */}
 
                                             {/* payment details */}
                                             {data[0]?.caseFrom?.toLowerCase() == "client" && <PaymentSection id={id} accessPayment={accessPayment} getCaseById={getCaseById} paymentDetailsApi={paymentDetailsApi} casePayment={data[0]?.casePayment} />}

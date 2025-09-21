@@ -1,13 +1,10 @@
 import { Link, useParams } from 'react-router-dom'
 import { useNavigate } from 'react-router-dom'
 import { useState } from 'react'
-import { useContext } from 'react'
-import { AppContext } from '../../App'
 import {toast} from 'react-toastify'
-import { clientResetPassword } from '../../apis'
-import { setToken } from '../../utils/helperFunction'
 import { BsEyeSlashFill } from "react-icons/bs";
 import { BsEyeFill } from "react-icons/bs";
+import { clientResetPasswordApi } from '../../apis/auth/userAuthApi'
 
 
 export default function ClientResetPassword(){
@@ -28,15 +25,10 @@ export default function ClientResetPassword(){
     setLoading(true)
     if(param?.verifyToken){
         try {
-            const res = await clientResetPassword(data,param?.verifyToken)
+            const res = await clientResetPasswordApi(data,param?.verifyToken)
             if(res?.data?.success){
-                toast.success(res?.data?.message)
-                // const token =  res?.headers["x-auth-token"]
-                // if(token){
-                //     setToken(token)         
-                    navigate("/client/signin")
-                //     console.log("client sign up",res);
-                // }
+                toast.success(res?.data?.message)       
+                navigate("/client/signin")
                 setLoading(false)
             }
     } catch (error) {

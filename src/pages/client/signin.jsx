@@ -4,15 +4,14 @@ import { useState } from 'react'
 import { useContext } from 'react'
 import { AppContext } from '../../App'
 import { toast } from 'react-toastify'
-import { clientSignIn } from '../../apis'
 import { setToken } from '../../utils/helperFunction'
 import { BsEyeSlashFill } from "react-icons/bs";
 import { BsEyeFill } from "react-icons/bs";
 import { getJwtDecode } from '../../utils/helperFunction'
 import { useFormik } from 'formik'
-import * as yup from 'yup'
 import { Helmet } from "react-helmet";
-import { signInOrSignUpInitialValue, signInOrSignUpValidationSchema } from '../../utils/validation'
+import { signInOrSignUpInitialValue, signInOrSignUpValidationSchema } from '../../utils/validations/auth/userAuthValidation'
+import { clientSignInApi } from '../../apis/auth/userAuthApi'
 
 
 export default function ClientSignIn() {
@@ -30,7 +29,7 @@ export default function ClientSignIn() {
         onSubmit: async (values) => {
             setLoading(true)
             try {
-                const res = await clientSignIn(values)
+                const res = await clientSignInApi(values)
                 if (res?.data?.success) {
                     const token = res?.headers["x-auth-token"]
                     if (token) {

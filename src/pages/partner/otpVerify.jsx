@@ -1,15 +1,14 @@
 import OtpInput from 'react-otp-input';
 import { useState } from 'react'
-import { verifyOtp } from '../../apis';
 import { toast } from 'react-toastify'
 import { AppContext } from "../../App"
 import { useContext } from "react"
 import { setToken, getJwtDecode } from '../../utils/helperFunction';
 import { useNavigate } from 'react-router-dom';
 import { MdMailLock } from 'react-icons/md'
-import { Link } from 'react-router-dom';
 import { useEffect } from 'react';
 import { partnerResendOtp } from '../../apis';
+import { partnerVerifyOtpApi } from '../../apis/auth/partnerAuthApi';
 
 export default function OtpVerify() {
     const [otp, setOtp] = useState('');
@@ -22,7 +21,7 @@ export default function OtpVerify() {
         e.preventDefault()
         setDisable(true)
         try {
-            const res = await verifyOtp({ otp: otp })
+            const res = await partnerVerifyOtpApi({ otp: otp })
             // console.log("res", res);
             if (res?.data?.success) {
                 setOtp("")

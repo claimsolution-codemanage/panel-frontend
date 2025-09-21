@@ -1,8 +1,8 @@
 import AcceptTlsView from "../../components/Common/acceptTlsView"
-import { partnerAcceptTls } from "../../apis"
 import {toast} from 'react-toastify'
 import { useState } from "react"
 import { useNavigate } from "react-router-dom"
+import { partnerAcceptTlsApi } from "../../apis/auth/partnerAuthApi"
 export default function PartnerAcceptTls(){
     const [loading,setLoading] = useState(false)
     const navigate = useNavigate()
@@ -10,7 +10,7 @@ export default function PartnerAcceptTls(){
 
     const handleAcceptTls =async(verifyToken)=>{
         try {
-            const res = await partnerAcceptTls(verifyToken)
+            const res = await partnerAcceptTlsApi(verifyToken)
             // console.log("case", res?.data?.data);
             if (res?.data?.success) {
                 setLoading(false)

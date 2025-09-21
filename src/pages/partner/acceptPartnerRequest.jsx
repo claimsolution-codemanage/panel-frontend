@@ -2,16 +2,15 @@ import { Link, useNavigate, useParams } from "react-router-dom"
 import { useState } from "react"
 import { AppContext } from "../../App"
 import { useContext } from "react"
-import { signUp,signUpWithRequest } from "../../apis"
 import { toast } from 'react-toastify'
 import { BsEyeSlashFill } from "react-icons/bs";
 import { BsEyeFill } from "react-icons/bs";
 import { setToken } from "../../utils/helperFunction"
-import PhoneInput from 'react-phone-input-2'
 import 'react-phone-input-2/lib/style.css'
 import { useFormik } from 'formik'
 import * as yup from 'yup'
 import { getJwtDecode } from "../../utils/helperFunction"
+import { partnerSignUpWithRequestApi } from "../../apis/auth/partnerAuthApi"
 
 
 export default function AcceptPartnerRequest() {
@@ -20,8 +19,6 @@ export default function AcceptPartnerRequest() {
     const [view, setView] = useState(false)
     const navigate = useNavigate()
     const param = useParams()
-    // console.log("param",param?.tokenId);
-
 
     const UserDetailsFormik = useFormik({
         initialValues: {
@@ -34,7 +31,7 @@ export default function AcceptPartnerRequest() {
         onSubmit: async (values) => {
             setDisable(true)
             try {
-                const res = await signUpWithRequest({...values,tokenId:param?.tokenId})
+                const res = await partnerSignUpWithRequestApi({...values,tokenId:param?.tokenId})
                 if (res?.data?.success) {
                     const token = res?.headers["x-auth-token"]
                     if (token) {

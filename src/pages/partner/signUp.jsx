@@ -3,7 +3,6 @@ import { partnerType } from "../../utils/constant"
 import { useState } from "react"
 import { AppContext } from "../../App"
 import { useContext } from "react"
-import { signUp } from "../../apis"
 import { toast } from 'react-toastify'
 import { BsEyeSlashFill } from "react-icons/bs";
 import { BsEyeFill } from "react-icons/bs";
@@ -12,7 +11,8 @@ import PhoneInput from 'react-phone-input-2'
 import 'react-phone-input-2/lib/style.css'
 import { useFormik } from 'formik'
 import { Helmet } from "react-helmet";
-import { partnerSignUpInitialValue, partnerSignUpValidationSchema } from "../../utils/validation"
+import { partnerSignUpInitialValue, partnerSignUpValidationSchema } from "../../utils/validations/auth/partnerAuthValidation"
+import { partnersignUpApi } from "../../apis/auth/partnerAuthApi"
 
 
 export default function SignUp() {
@@ -27,7 +27,7 @@ export default function SignUp() {
         onSubmit: async (values) => {
             setDisable(true)
             try {
-                const res = await signUp(values)
+                const res = await partnersignUpApi(values)
                 if (res?.data?.success) {
                     const token = res?.headers["x-auth-token"]
                     if (token) {

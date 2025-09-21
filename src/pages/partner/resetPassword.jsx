@@ -1,13 +1,10 @@
 import { Link, useParams } from 'react-router-dom'
 import { useNavigate } from 'react-router-dom'
 import { useState } from 'react'
-import { useContext } from 'react'
-import { AppContext } from '../../App'
 import {toast} from 'react-toastify'
-import { partnerResetPassword } from '../../apis'
-import { setToken } from '../../utils/helperFunction'
 import { BsEyeSlashFill } from "react-icons/bs";
 import { BsEyeFill } from "react-icons/bs";
+import { partnerResetPasswordApi } from '../../apis/auth/partnerAuthApi'
 
 
 export default function PartnerResetPassword(){
@@ -28,15 +25,10 @@ export default function PartnerResetPassword(){
     setLoading(true)
     if(param?.verifyToken){
         try {
-            const res = await partnerResetPassword(data,param?.verifyToken)
+            const res = await partnerResetPasswordApi(data,param?.verifyToken)
             if(res?.data?.success){
-                toast.success(res?.data?.message)
-                // const token =  res?.headers["x-auth-token"]
-                // if(token){
-                //     setToken(token)         
+                toast.success(res?.data?.message)       
                     navigate("/partner/signin")
-                //     console.log("client sign up",res);
-                // }
                 setLoading(false)
             }
     } catch (error) {

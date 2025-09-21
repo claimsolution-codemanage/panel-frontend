@@ -4,7 +4,6 @@ import { useState } from 'react'
 import { useContext } from 'react'
 import { AppContext } from '../../App'
 import { toast } from 'react-toastify'
-import { clientSignUp } from '../../apis'
 import { setToken } from '../../utils/helperFunction'
 import { BsEyeSlashFill } from "react-icons/bs";
 import { BsEyeFill } from "react-icons/bs";
@@ -13,7 +12,8 @@ import PhoneInput from 'react-phone-input-2'
 import 'react-phone-input-2/lib/style.css'
 import { useFormik } from 'formik'
 import { Helmet } from "react-helmet";
-import { clientSignUpInitialValue, clientSignUpValidationSchema } from '../../utils/validation'
+import { clientSignUpInitialValue, clientSignUpValidationSchema } from '../../utils/validations/auth/userAuthValidation'
+import { clientSignUpApi } from '../../apis/auth/userAuthApi'
 
 
 export default function ClientSignUp() {
@@ -28,7 +28,7 @@ export default function ClientSignUp() {
         onSubmit: async (values) => {
             setLoading(true)
             try {
-                const res = await clientSignUp(values)
+                const res = await clientSignUpApi(values)
                 if (res?.data?.success) {
                     const token = res?.headers["x-auth-token"]
                     if (token) {

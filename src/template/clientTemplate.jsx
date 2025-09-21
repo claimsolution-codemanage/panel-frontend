@@ -6,9 +6,6 @@ import { getToken,getJwtDecode } from "../utils/helperFunction"
 import { useLocation } from 'react-router-dom';
 import {RxHamburgerMenu} from 'react-icons/rx'
 import {RxCrossCircled} from 'react-icons/rx'
-import { clientAuthenticate } from "../apis"
-import { deleteToken } from "../utils/helperFunction"
-import {toast} from 'react-toastify'
 import Loader from "../components/Common/loader"
 
 
@@ -20,26 +17,6 @@ export default function ClientTemplate({children}){
     const navigate= useNavigate()
     const location = useLocation()
     // console.log("my state",state);
-
-
-    // useEffect(()=>{
-    //     async function fetch(){
-    //         try {
-    //             const res = await clientAuthenticate()
-    //             setLoading(false)
-    //         } catch (error) {
-    //                 deleteToken()
-    //                 state?.setMyAppData({ isLogin: false, details: {} })
-    //                 navigate("/client/signin")
-    //             if(error && error?.response?.data?.message){
-    //                 toast.error(error?.response?.data?.message)
-    //             }else{
-    //                 toast.error("Something went wrong")
-    //             }
-    //         }
-    //     }fetch()
-    //  },[location])
-
 
     useEffect(()=>{
         const token = getToken()

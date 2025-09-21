@@ -50,51 +50,34 @@ axios.interceptors.response.use(
   }
 );
 
-export const partnerAuthenticate = () => {
-  setheader()
-  return axios.get(`${API_BASE}/api/partner/authenticate`)
-}
-
-// export const clientImageUpload = (data)=>{
+// export const partnerAuthenticate = () => {
 //   setheader()
-//   return axios.post(`${API_IMAGE_UPLOAD}/api/upload/client`,data)
-// }
-// export const partnerImageUpload = (data)=>{
-//   setheader()
-//   return axios.post(`${API_IMAGE_UPLOAD}/api/upload/partner`,data)
-// }
-// export const adminImageUpload = (data)=>{
-//   setheader()
-//   return axios.post(`${API_IMAGE_UPLOAD}/api/upload/admin`,data)
-// }
-// export const employeeImageUpload = (data)=>{
-//   setheader()
-//   return axios.post(`${API_IMAGE_UPLOAD}/api/upload/employee`,data)
+//   return axios.get(`${API_BASE}/api/partner/authenticate`)
 // }
 
-export const signUp = (data) => {
-  return axios.post(`${API_BASE}/api/partner/signUp`, data)
-}
+// export const signUp = (data) => {
+//   return axios.post(`${API_BASE}/api/partner/signUp`, data)
+// }
 
-export const signUpWithRequest = (data) => {
-  return axios.post(`${API_BASE}/api/partner/acceptRequest`, data)
-}
+// export const signUpWithRequest = (data) => {
+//   return axios.post(`${API_BASE}/api/partner/acceptRequest`, data)
+// }
 
 
-export const verifyOtp = (data) => {
-  setheader()
-  return axios.post(`${API_BASE}/api/partner/verifyEmail`, data)
-}
+// export const verifyOtp = (data) => {
+//   setheader()
+//   return axios.post(`${API_BASE}/api/partner/verifyEmail`, data)
+// }
 
-export const genrateNewPassword = (data) => {
-  setheader()
-  return axios.post(`${API_BASE}/api/partner/setNewPassword`, data)
-}
+// export const genrateNewPassword = (data) => {
+//   setheader()
+//   return axios.post(`${API_BASE}/api/partner/setNewPassword`, data)
+// }
 
-export const signin = (data) => {
-  setheader()
-  return axios.post(`${API_BASE}/api/partner/signIn`, data)
-}
+// export const signin = (data) => {
+//   setheader()
+//   return axios.post(`${API_BASE}/api/partner/signIn`, data)
+// }
 
 export const getPartnerProfile = (data) => {
   setheader()
@@ -145,40 +128,40 @@ export const partnerUpdateCaseById = (_id, data) => {
   return axios.post(`${API_BASE}/api/partner/updateCaseById?_id=${_id}`, data)
 }
 
-export const partnerSendMobileOtpCode = (data) => {
-  setheader()
-  return axios.post(`${API_BASE}/api/partner/sendMobileOtpCode`, data)
-}
+// export const partnerSendMobileOtpCode = (data) => {
+//   setheader()
+//   return axios.post(`${API_BASE}/api/partner/sendMobileOtpCode`, data)
+// }
 
-export const partnerMobileOtpCodeVerify = () => {
-  setheader()
-  return axios.post(`${API_BASE}/api/partner/mobileNoVerify`)
-}
+// export const partnerMobileOtpCodeVerify = () => {
+//   setheader()
+//   return axios.post(`${API_BASE}/api/partner/mobileNoVerify`)
+// }
 
-export const partnerResendOtp = () => {
-  setheader()
-  return axios.post(`${API_BASE}/api/partner/resendOtp`)
-}
+// export const partnerResendOtp = () => {
+//   setheader()
+//   return axios.post(`${API_BASE}/api/partner/resendOtp`)
+// }
 
-export const partnerForgetPassword = (data) => {
-  setheader()
-  return axios.put(`${API_BASE}/api/partner/forgetPassword`, data)
-}
+// export const partnerForgetPassword = (data) => {
+//   setheader()
+//   return axios.put(`${API_BASE}/api/partner/forgetPassword`, data)
+// }
 
-export const partnerResetPassword = (data, token) => {
-  setheader()
-  return axios.put(`${API_BASE}/api/partner/resetPassword?verifyId=${token}`, data)
-}
+// export const partnerResetPassword = (data, token) => {
+//   setheader()
+//   return axios.put(`${API_BASE}/api/partner/resetPassword?verifyId=${token}`, data)
+// }
 
-export const partnerAcceptTls = (token) => {
-  setheader()
-  return axios.put(`${API_BASE}/api/partner/acceptPartnerTerms_Conditions?verifyId=${token}`)
-}
+// export const partnerAcceptTls = (token) => {
+//   setheader()
+//   return axios.put(`${API_BASE}/api/partner/acceptPartnerTerms_Conditions?verifyId=${token}`)
+// }
 
-export const partnerTls = () => {
-  setheader()
-  return axios.get(`${API_BASE}/api/partner/getTls`)
-}
+// export const partnerTls = () => {
+//   setheader()
+//   return axios.get(`${API_BASE}/api/partner/getTls`)
+// }
 
 export const partnerStatement = (pageItemLimit = "", pageNo = "", partnerId = "",empId="", startDate = "", endDate = "",isPdf=false) => {
   setheader()
@@ -325,11 +308,6 @@ export const adminChangeBranch = (data) => {
 export const adminAddOrUpdatePayment = (data) => {
   setheader()
   return axios.post(`${API_BASE}/api/admin/addOrUpdatePayment`, data)
-}
-
-export const adminCreateOrUpdateCaseFormApi = (data) => {
-  setheader()
-  return axios.post(`${API_BASE}/api/admin/adminCreateOrUpdateCaseForm`, data)
 }
 
 export const adminEditCaseProcessById = (data) => {
@@ -733,40 +711,40 @@ export const viewAllJob = () => {
 
 
 // for client api
-export const clientAuthenticate = () => {
-  setheader()
-  return axios.get(`${API_BASE}/api/client/authenticate`)
-}
+// export const clientAuthenticate = () => {
+//   setheader()
+//   return axios.get(`${API_BASE}/api/client/authenticate`)
+// }
 
-export const clientSignUp = (data) => {
-  setheader()
-  return axios.post(`${API_BASE}/api/client/signup`, data)
-}
+// export const clientSignUp = (data) => {
+//   setheader()
+//   return axios.post(`${API_BASE}/api/client/signup`, data)
+// }
 
-export const clientSignIn = (data) => {
-  setheader()
-  return axios.post(`${API_BASE}/api/client/signin`, data)
-}
+// export const clientSignIn = (data) => {
+//   setheader()
+//   return axios.post(`${API_BASE}/api/client/signin`, data)
+// }
 
-export const signUpClientWithRequest = (data) => {
-  return axios.post(`${API_BASE}/api/client/acceptRequest`, data)
-}
+// export const signUpClientWithRequest = (data) => {
+//   return axios.post(`${API_BASE}/api/client/acceptRequest`, data)
+// }
 
 
-export const clientEmailVerify = (data) => {
-  setheader()
-  return axios.post(`${API_BASE}/api/client/verifyEmail`, data)
-}
+// export const clientEmailVerify = (data) => {
+//   setheader()
+//   return axios.post(`${API_BASE}/api/client/verifyEmail`, data)
+// }
 
-export const clientSendMobileOtpCode = (data) => {
-  setheader()
-  return axios.post(`${API_BASE}/api/client/sendMobileOtpCode`, data)
-}
+// export const clientSendMobileOtpCode = (data) => {
+//   setheader()
+//   return axios.post(`${API_BASE}/api/client/sendMobileOtpCode`, data)
+// }
 
-export const clientMobileOtpCodeVerify = () => {
-  setheader()
-  return axios.post(`${API_BASE}/api/client/clientMobileNoVerify`)
-}
+// export const clientMobileOtpCodeVerify = () => {
+//   setheader()
+//   return axios.post(`${API_BASE}/api/client/clientMobileNoVerify`)
+// }
 
 export const getClientProfile = (data) => {
   setheader()
@@ -804,30 +782,30 @@ export const clientViewCaseById = (_id) => {
   return axios.get(`${API_BASE}/api/client/viewClientCaseById?_id=${_id}`)
 }
 
-export const clientForgetPassword = (data) => {
-  setheader()
-  return axios.put(`${API_BASE}/api/client/clientForgetPassword`, data)
-}
+// export const clientForgetPassword = (data) => {
+//   setheader()
+//   return axios.put(`${API_BASE}/api/client/clientForgetPassword`, data)
+// }
 
-export const clientResetPassword = (data, token) => {
-  setheader()
-  return axios.put(`${API_BASE}/api/client/clientResetPassword?verifyId=${token}`, data)
-}
+// export const clientResetPassword = (data, token) => {
+//   setheader()
+//   return axios.put(`${API_BASE}/api/client/clientResetPassword?verifyId=${token}`, data)
+// }
 
 export const clientAddCaseFileById = (_id, data) => {
   setheader()
   return axios.post(`${API_BASE}/api/client/addCaseFile?_id=${_id}`, data)
 }
 
-export const clientAcceptTls = (token) => {
-  setheader()
-  return axios.put(`${API_BASE}/api/client/acceptClientTerms_Conditions?verifyId=${token}`)
-}
+// export const clientAcceptTls = (token) => {
+//   setheader()
+//   return axios.put(`${API_BASE}/api/client/acceptClientTerms_Conditions?verifyId=${token}`)
+// }
 
-export const clientTls = () => {
-  setheader()
-  return axios.get(`${API_BASE}/api/client/getTls`)
-}
+// export const clientTls = () => {
+//   setheader()
+//   return axios.get(`${API_BASE}/api/client/getTls`)
+// }
 
 export const clientViewAllInvoice = (pageItemLimit = "", pageNo = "", searchQuery = "", startDate = "", endDate = "") => {
   setheader()
@@ -905,10 +883,6 @@ export const empAllCaseDoc = (pageItemLimit = "", pageNo = "", searchQuery = "",
   return axios.get(`${API_BASE}/api/employee/allUnactiveCaseDoc?limit=${pageItemLimit}&pageNo=${pageNo}&search=${searchQuery}&startDate=${startDate}&endDate=${endDate}`)
 }
 
-export const empOpCreateOrUpdateCaseFormApi = (data) => {
-  setheader()
-  return axios.post(`${API_BASE}/api/employee/opeation/empOpCreateOrUpdateCaseForm`, data)
-}
 
 export const saleEmpPartnerReport = (pageItemLimit = "", pageNo = "", searchQuery = "", statusType = "", startDate = "", endDate = "",type=true,empId,id) => {
   setheader()
@@ -929,6 +903,7 @@ export const employeeGetCaseById = (_id) => {
   setheader()
   return axios.get(`${API_BASE}/api/employee/viewCaseById?_id=${_id}`)
 }
+
 
 export const employeeAllPartner = (pageItemLimit = "", pageNo = "", searchQuery = "",type,startDate="",endDate="",empId=false) => {
   setheader()

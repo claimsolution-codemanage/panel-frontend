@@ -1,6 +1,5 @@
 import { useState } from "react"
 import { Link, useNavigate } from "react-router-dom"
-import { signin } from "../../apis"
 import { setheader } from "../../apis"
 import { setToken, getJwtDecode } from "../../utils/helperFunction"
 import { toast } from 'react-toastify'
@@ -9,9 +8,9 @@ import { useContext } from "react"
 import { BsEyeSlashFill } from "react-icons/bs";
 import { BsEyeFill } from "react-icons/bs";
 import { useFormik } from 'formik'
-import * as yup from 'yup'
 import { Helmet } from "react-helmet";
-import { partnerSignInValidationSchema, signInOrSignUpInitialValue, } from "../../utils/validation"
+import { partnerSignInValidationSchema, signInOrSignUpInitialValue } from "../../utils/validations/auth/partnerAuthValidation"
+import { partnerSigninApi } from "../../apis/auth/partnerAuthApi"
 
 export default function SignIn() {
     const [disable, setDisable] = useState(false)
@@ -26,8 +25,7 @@ export default function SignIn() {
         onSubmit: async (values) => {
             setDisable(true)
             try {
-                const res = await signin(values)
-                // console.log("/partner/dashboard", res);
+                const res = await partnerSigninApi(values)
                 if (res?.data?.success) {
                     const token = res?.headers["x-auth-token"]
                     if (token) {
@@ -37,10 +35,8 @@ export default function SignIn() {
                         // console.log("details", details);
                         if (details?.isLogin) {
                             state?.setMyAppData({ isLogin: true, details: details })
-                            // navigate("/partner/dashboard");
                             navigate("/partner/dashboard")
-                            toast.success(res?.data?.message)
-                            // console.log("navigate", "/partner/dashboard");
+                            toast.success(res?.data?.message);
                         }
     
                     }

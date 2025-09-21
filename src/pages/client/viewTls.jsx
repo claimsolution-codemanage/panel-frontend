@@ -1,8 +1,8 @@
 import Loader from '../../components/Common/ViewDocs'
 import ViewDocs from '../../components/Common/ViewDocs'
-import { clientTls } from '../../apis'
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { clientTlsApi } from '../../apis/auth/userAuthApi'
 
 export default function ClientViewTLS(){
     const [loading,setLoading] = useState(true)
@@ -11,7 +11,7 @@ export default function ClientViewTLS(){
     useEffect(()=>{
         async function fetch(){
             try {
-                const res = await clientTls()
+                const res = await clientTlsApi()
                 if(res?.data?.success){
                     setLoading(false)
                     setDetails({status:true,details:{docURL:res?.data?.data,docType:"pdf"}})
