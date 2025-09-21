@@ -7,8 +7,7 @@ import { setToken, getJwtDecode } from '../../utils/helperFunction';
 import { useNavigate } from 'react-router-dom';
 import { MdMailLock } from 'react-icons/md'
 import { useEffect } from 'react';
-import { partnerResendOtp } from '../../apis';
-import { partnerVerifyOtpApi } from '../../apis/auth/partnerAuthApi';
+import { partnerResendOtpApi, partnerVerifyOtpApi } from '../../apis/auth/partnerAuthApi';
 
 export default function OtpVerify() {
     const [otp, setOtp] = useState('');
@@ -77,7 +76,7 @@ export default function OtpVerify() {
         // console.log("calling handleResentOtp");
         setResendOtp({ ...resendOtp, loading: true, message: "sending..." })
         try {
-            const res = await partnerResendOtp()
+            const res = await partnerResendOtpApi()
             if (res?.status == 200 && res?.data?.success) {
                 toast.success(res?.data?.message)
                 setResendOtp({ ...resendOtp, loading: false, message: "", timerStart: true })

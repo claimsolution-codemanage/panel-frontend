@@ -3,7 +3,7 @@ import { partnerType } from "../../../utils/constant"
 import { useState } from "react"
 import { AppContext } from "../../../App"
 import { useContext } from "react"
-import { signUp,salesEmployeeAddPartner } from "../../../apis"
+import { salesEmployeeAddPartner } from "../../../apis"
 import { toast } from 'react-toastify'
 import PhoneInput from 'react-phone-input-2'
 import 'react-phone-input-2/lib/style.css'

@@ -1,11 +1,11 @@
 import { useState } from "react"
-import { genrateNewPassword } from "../../apis"
 import { useNavigate } from "react-router-dom"
 import { setToken,getJwtDecode } from "../../utils/helperFunction"
 import { AppContext } from "../../App"
 import { useContext } from "react"
 import {toast} from 'react-toastify'
 import { setheader } from "../../apis"
+import { partnergenrateNewPasswordApi } from "../../apis/auth/partnerAuthApi"
 
 export default function NewPassword(){
     const state = useContext(AppContext)
@@ -22,7 +22,7 @@ export default function NewPassword(){
       e.preventDefault()
       setDisable(true)
       try {
-          const res = await genrateNewPassword(data)
+          const res = await partnergenrateNewPasswordApi(data)
         //   console.log("res",res);
           if(res?.data?.success){
             const token =  res?.headers["x-auth-token"]

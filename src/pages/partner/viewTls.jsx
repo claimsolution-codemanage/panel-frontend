@@ -1,8 +1,8 @@
 import Loader from '../../components/Common/ViewDocs'
 import ViewDocs from '../../components/Common/ViewDocs'
-import { partnerTls } from '../../apis'
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { partnerTlsApi } from '../../apis/auth/partnerAuthApi'
 
 export default function PartnerViewTLS(){
     const [loading,setLoading] = useState(true)
@@ -11,7 +11,7 @@ export default function PartnerViewTLS(){
     useEffect(()=>{
         async function fetch(){
             try {
-                const res = await partnerTls()
+                const res = await partnerTlsApi()
                 if(res?.data?.success){
                     setLoading(false)
                     setDetails({status:true,details:{docURL:res?.data?.data,docType:"pdf"}})

@@ -5,9 +5,6 @@ import { useNavigate } from "react-router-dom"
 import { getToken,getJwtDecode } from "../utils/helperFunction"
 import {RxHamburgerMenu} from 'react-icons/rx'
 import {RxCrossCircled} from 'react-icons/rx'
-import { partnerAuthenticate } from "../apis"
-import { deleteToken } from "../utils/helperFunction"
-import {toast} from 'react-toastify'
 import Loader from "../components/Common/loader"
 
 
