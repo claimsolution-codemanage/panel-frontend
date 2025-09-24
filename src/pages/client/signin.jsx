@@ -20,9 +20,6 @@ export default function ClientSignIn() {
     const [loading, setLoading] = useState(false)
     const navigate = useNavigate()
 
-    console.log("state asd",state);
-    
-
     const UserDetailsFormik = useFormik({
         initialValues:signInOrSignUpInitialValue,
         validationSchema: signInOrSignUpValidationSchema,

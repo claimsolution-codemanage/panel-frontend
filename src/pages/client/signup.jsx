@@ -37,7 +37,6 @@ export default function ClientSignUp() {
                         state?.setMyAppData({ isLogin: false, details: details })
                         toast.success(res?.data?.message)
                         navigate("/client/email otp verify")
-                        // console.log("client sign up", res);
                     }
                     setLoading(false)
                 }
