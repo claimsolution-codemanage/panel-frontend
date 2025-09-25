@@ -51,9 +51,6 @@ const CaseFormModal = ({ formType, caseId, show, close, getCaseById, formData, c
     onSubmit: handleSubmit,
   });
 
-  console.log("fromike",formik?.values);
-  
-
   return (
     config ? 
     <>

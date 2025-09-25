@@ -1,4 +1,4 @@
-import { groInitialValues, groValidationSchema, ombudsmanInitialValues, reimbursmentInitialValues, reimbursmentValidationSchema } from "../../../../utils/validations/case/form/caseFormValidation";
+import { groInitialValues, groValidationSchema, ombudsmanInitialValues, ombudsmanValidationSchema, reimbursmentInitialValues, reimbursmentValidationSchema } from "../../../../utils/validations/case/form/caseFormValidation";
 
 export const FORM_CONFIG = {
   gro: {
@@ -102,7 +102,7 @@ export const FORM_CONFIG = {
     title: "Ombudsman Form",
     btnText: "Ombudsman Details",
     initialValue: ombudsmanInitialValues,
-    validationSchema: ombudsmanInitialValues,
+    validationSchema: ombudsmanValidationSchema,
     sections: [
       {
         key: "info",

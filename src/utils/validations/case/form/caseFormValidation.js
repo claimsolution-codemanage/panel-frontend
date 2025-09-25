@@ -15,7 +15,7 @@ const approvalInitialValue = {
     approved: false,
     approvalDate: "",
     approvedAmount: "",
-    approvalLetterPrivate: "",
+    approvalLetterPrivate: false,
     approvalLetter: ""
 }
 
@@ -254,7 +254,7 @@ export const ombudsmanValidationSchema = yup.object().shape({
     // 🔹 query_reply section
     query_reply: queryReplyValidation,
     hearing_schedule: queryValidation,
-    hearing_schedule: awardValidation,
+    award_part: awardValidation,
     // 🔹 approval section
     approval: approvalValidation,
     ...paymentValidation,
