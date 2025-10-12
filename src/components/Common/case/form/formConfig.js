@@ -1,4 +1,5 @@
 import { groInitialValues, groValidationSchema, ombudsmanInitialValues, ombudsmanValidationSchema, reimbursmentInitialValues, reimbursmentValidationSchema } from "../../../../utils/validations/case/form/caseFormValidation";
+const deliveryBy = [{ label: "Mail", value: "mail" },{ label: "Post", value: "post" }, { label: "Courier", value: "courier" }]
 
 export const FORM_CONFIG = {
   gro: {
@@ -40,6 +41,7 @@ export const FORM_CONFIG = {
         fields: [
           { name: "remarks", type: "text", label: "Remarks", placeholder: "Remarks", isView: true },
           { name: "date", type: "date", label: "Date", isView: true },
+          { name: "deliveredBy", type: "select", label: "Raised method", placeholder: "select raised by", isView: true, options: deliveryBy },
           { name: "isPrivate", type: "checkbox", label: "Private", isView: false },
           { name: "attachments", type: "file", label: "Attachments", multiple: true, isView: true },
         ],
@@ -52,7 +54,7 @@ export const FORM_CONFIG = {
         fields: [
           { name: "remarks", type: "text", label: "Remarks", placeholder: "Remarks", isView: true },
           { name: "date", type: "date", label: "Date", isView: true },
-          { name: "deliveredBy", type: "select", label: "Delivered by", placeholder: "select delivered by", isView: true, options: [{ label: "Mail", value: "mail" }, { label: "Courier", value: "courier" }] },
+          { name: "deliveredBy", type: "select", label: "Delivered by", placeholder: "select delivered by", isView: true, options: deliveryBy },
           { name: "isPrivate", type: "checkbox", label: "Private", isView: false },
           { name: "attachments", type: "file", label: "Attachments", multiple: true, isView: true },
         ],
@@ -65,7 +67,7 @@ export const FORM_CONFIG = {
         fields: [
           { name: "remarks", type: "text", label: "Remarks", placeholder: "Remarks", isView: true },
           { name: "date", type: "date", label: "Date", isView: true },
-          { name: "deliveredBy", type: "select", label: "Delivered by", placeholder: "select delivered by", isView: true, options: [{ label: "Mail", value: "mail" }, { label: "Courier", value: "courier" }] },
+          { name: "deliveredBy", type: "select", label: "Delivered by", placeholder: "select delivered by", isView: true, options:deliveryBy },
           { name: "attachments", type: "file", label: "Attachments", multiple: true, isView: true },
         ],
       },
@@ -138,6 +140,7 @@ export const FORM_CONFIG = {
         fields: [
           { name: "remarks", type: "text", label: "Remarks", placeholder: "Remarks", isView: true },
           { name: "date", type: "date", label: "Date", isView: true },
+          { name: "deliveredBy", type: "select", label: "Raised method", placeholder: "select raised by", isView: true, options: deliveryBy },
           { name: "isPrivate", type: "checkbox", label: "Private", isView: false },
           { name: "attachments", type: "file", label: "Attachments", multiple: true, isView: true },
         ],
@@ -150,7 +153,7 @@ export const FORM_CONFIG = {
         fields: [
           { name: "remarks", type: "text", label: "Remarks", placeholder: "Remarks", isView: true },
           { name: "date", type: "date", label: "Date", isView: true },
-          { name: "deliveredBy", type: "select", label: "Delivered by", placeholder: "select delivered by", isView: true, options: [{ label: "Mail", value: "mail" }, { label: "Courier", value: "courier" }] },
+          { name: "deliveredBy", type: "select", label: "Delivered by", placeholder: "select delivered by", isView: true, options:deliveryBy},
           { name: "isPrivate", type: "checkbox", label: "Private", isView: false },
           { name: "attachments", type: "file", label: "Attachments", multiple: true, isView: true },
         ],
@@ -163,7 +166,7 @@ export const FORM_CONFIG = {
         fields: [
           { name: "remarks", type: "text", label: "Remarks", placeholder: "Remarks", isView: true },
           { name: "date", type: "date", label: "Date", isView: true },
-          { name: "deliveredBy", type: "select", label: "Delivered by", placeholder: "select delivered by", isView: true, options: [{ label: "Mail", value: "mail" }, { label: "Courier", value: "courier" }] },
+          { name: "deliveredBy", type: "select", label: "Delivered by", placeholder: "select delivered by", isView: true, options: deliveryBy},
           { name: "attachments", type: "file", label: "Attachments", multiple: true, isView: true },
         ],
       },
@@ -259,6 +262,7 @@ export const FORM_CONFIG = {
         fields: [
           { name: "remarks", type: "text", label: "Remarks", placeholder: "Remarks", isView: true },
           { name: "date", type: "date", label: "Date", isView: true },
+          { name: "deliveredBy", type: "select", label: "Raised method", placeholder: "select raised by", isView: true, options: deliveryBy },
           { name: "isPrivate", type: "checkbox", label: "Private", isView: false },
           { name: "attachments", type: "file", label: "Attachments", multiple: true, isView: true },
         ],
@@ -271,7 +275,7 @@ export const FORM_CONFIG = {
         fields: [
           { name: "remarks", type: "text", label: "Remarks", placeholder: "Remarks", isView: true },
           { name: "date", type: "date", label: "Date", isView: true },
-          { name: "deliveredBy", type: "select", label: "Delivered by", placeholder: "select delivered by", isView: true, options: [{ label: "Mail", value: "mail" }, { label: "Courier", value: "courier" }] },
+          { name: "deliveredBy", type: "select", label: "Delivered by", placeholder: "select delivered by", isView: true, options:deliveryBy },
           { name: "isPrivate", type: "checkbox", label: "Private", isView: false },
           { name: "attachments", type: "file", label: "Attachments", multiple: true, isView: true },
         ],
@@ -284,7 +288,7 @@ export const FORM_CONFIG = {
         fields: [
           { name: "remarks", type: "text", label: "Remarks", placeholder: "Remarks", isView: true },
           { name: "date", type: "date", label: "Date", isView: true },
-          { name: "deliveredBy", type: "select", label: "Delivered by", placeholder: "select delivered by", isView: true, options: [{ label: "Mail", value: "mail" }, { label: "Courier", value: "courier" }] },
+          { name: "deliveredBy", type: "select", label: "Delivered by", placeholder: "select delivered by", isView: true, options: deliveryBy },
           { name: "attachments", type: "file", label: "Attachments", multiple: true, isView: true },
         ],
       },
@@ -368,6 +372,7 @@ export const FORM_CONFIG = {
         fields: [
           { name: "remarks", type: "text", label: "Remarks", placeholder: "Remarks", isView: true },
           { name: "date", type: "date", label: "Date", isView: true },
+          { name: "deliveredBy", type: "select", label: "Raised method", placeholder: "select raised by", isView: true, options: deliveryBy },
           { name: "isPrivate", type: "checkbox", label: "Private", isView: false },
           { name: "attachments", type: "file", label: "Attachments", multiple: true, isView: true },
         ],
@@ -380,7 +385,7 @@ export const FORM_CONFIG = {
         fields: [
           { name: "remarks", type: "text", label: "Remarks", placeholder: "Remarks", isView: true },
           { name: "date", type: "date", label: "Date", isView: true },
-          { name: "deliveredBy", type: "select", label: "Delivered by", placeholder: "select delivered by", isView: true, options: [{ label: "Mail", value: "mail" }, { label: "Courier", value: "courier" }] },
+          { name: "deliveredBy", type: "select", label: "Delivered by", placeholder: "select delivered by", isView: true, options:deliveryBy },
           { name: "isPrivate", type: "checkbox", label: "Private", isView: false },
           { name: "attachments", type: "file", label: "Attachments", multiple: true, isView: true },
         ],
@@ -393,7 +398,7 @@ export const FORM_CONFIG = {
         fields: [
           { name: "remarks", type: "text", label: "Remarks", placeholder: "Remarks", isView: true },
           { name: "date", type: "date", label: "Date", isView: true },
-          { name: "deliveredBy", type: "select", label: "Delivered by", placeholder: "select delivered by", isView: true, options: [{ label: "Mail", value: "mail" }, { label: "Courier", value: "courier" }] },
+          { name: "deliveredBy", type: "select", label: "Delivered by", placeholder: "select delivered by", isView: true, options:deliveryBy },
           { name: "attachments", type: "file", label: "Attachments", multiple: true, isView: true },
         ],
       },
