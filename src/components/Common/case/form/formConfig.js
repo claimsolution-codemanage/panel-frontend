@@ -1,4 +1,4 @@
-import { groInitialValues, groValidationSchema, ombudsmanInitialValues, ombudsmanValidationSchema, reimbursmentInitialValues, reimbursmentValidationSchema } from "../../../../utils/validations/case/form/caseFormValidation";
+import { groInitialValues, groValidationSchema, ombudsmanInitialValues, ombudsmanValidationSchema, reimbursmentInitialValues, reimbursmentValidationSchema, rtiInitialValues, rtiValidationSchema } from "../../../../utils/validations/case/form/caseFormValidation";
 const deliveryBy = [{ label: "Mail", value: "mail" },{ label: "Post", value: "post" }, { label: "Courier", value: "courier" }]
 
 export const FORM_CONFIG = {
@@ -386,6 +386,104 @@ export const FORM_CONFIG = {
           { name: "remarks", type: "text", label: "Remarks", placeholder: "Remarks", isView: true },
           { name: "date", type: "date", label: "Date", isView: true },
           { name: "deliveredBy", type: "select", label: "Delivered by", placeholder: "select delivered by", isView: true, options:deliveryBy },
+          { name: "isPrivate", type: "checkbox", label: "Private", isView: false },
+          { name: "attachments", type: "file", label: "Attachments", multiple: true, isView: true },
+        ],
+      },
+      {
+        key: "queryReply",
+        label: "Query & Reply",
+        type: "list",
+        isView: true,
+        fields: [
+          { name: "remarks", type: "text", label: "Remarks", placeholder: "Remarks", isView: true },
+          { name: "date", type: "date", label: "Date", isView: true },
+          { name: "deliveredBy", type: "select", label: "Delivered by", placeholder: "select delivered by", isView: true, options:deliveryBy },
+          { name: "attachments", type: "file", label: "Attachments", multiple: true, isView: true },
+        ],
+      },
+      // … queryReply, approval, settlement
+      {
+        key: "approval",
+        label: "Approval",
+        type: "single", // single object, not list
+        isView: true,
+        isColumn: false,
+        fields: [
+          { name: "approved", type: "checkbox", label: "Approved", isView: false },
+          { name: "approvalDate", type: "date", label: "Approval Date", showIf: "approved", isView: true },
+          { name: "approvedAmount", type: "text", label: "Approval Amount", placeholder: "Approved Amount", showIf: "approved", isView: true },
+          { name: "approvalLetterPrivate", type: "checkbox", label: "Private", showIf: "approved", isView: false },
+          { name: "approvalLetter", type: "file", label: "Approval Letter", showIf: "approved", isView: true },
+        ],
+      },
+      {
+        key: "isSettelment",
+        label: "Settlement Details",
+        type: "single",
+        isView: false,
+        isColumn: true,
+        fields: [
+          { name: "isSettelment", type: "checkbox", label: "Settlement" },
+          { name: "paymentDetails", type: "custom", component: "PaymentDetails", showIf: "isSettelment" },
+        ],
+      },
+
+    ],
+  },
+   rti: {
+    title: "RTI Form",
+    btnText: "RTI Details",
+    initialValue: rtiInitialValues,
+    validationSchema: rtiValidationSchema,
+    sections: [
+      {
+        key: "info",
+        label: "Info",
+        type: "single",
+        isView: true,
+        fields: [
+          { name: "specialCase", type: "checkbox", label: "Special Case", isView: true },
+          { name: "partnerFee", type: "text", placeholder: "fee (%)", label: "Partner Fee (%)", isView: true },
+          { name: "consultantFee", type: "text", placeholder: "fee (%)", label: "Consultant Fee (%)", isView: true },
+          { name: "filingDate", type: "date", label: "GRO Filing Date", isView: true },
+        ],
+      },
+      {
+        key: "status",
+        label: "Status",
+        type: "list",
+        isView: true,
+        fields: [
+          { name: "status", type: "text", label: "Status", placeholder: "Status", isView: true },
+          { name: "remarks", type: "text", label: "Remarks", placeholder: "Remarks", isView: true },
+          { name: "date", type: "date", label: "Date", isView: true },
+          { name: "isPrivate", type: "checkbox", label: "Private", isView: false },
+          { name: "attachments", type: "file", label: "Attachments", multiple: true, isView: true },
+        ],
+      },
+      {
+        key: "query",
+        label: "Query",
+        type: "list",
+        isView: true,
+        fields: [
+          { name: "remarks", type: "text", label: "Remarks", placeholder: "Remarks", isView: true },
+          { name: "date", type: "date", label: "Date", isView: true },
+          { name: "deliveredBy", type: "select", label: "Raised method", placeholder: "select raised by", isView: true, options: deliveryBy },
+          { name: "isPrivate", type: "checkbox", label: "Private", isView: false },
+          { name: "attachments", type: "file", label: "Attachments", multiple: true, isView: true },
+        ],
+      },
+      {
+        key: "query_reply",
+        label: "Reply",
+        type: "list",
+        isView: true,
+        fields: [
+          { name: "remarks", type: "text", label: "Remarks", placeholder: "Remarks", isView: true },
+          { name: "date", type: "date", label: "Date", isView: true },
+          { name: "deliveredBy", type: "select", label: "Delivered by", placeholder: "select delivered by", isView: true, options: deliveryBy },
           { name: "isPrivate", type: "checkbox", label: "Private", isView: false },
           { name: "attachments", type: "file", label: "Attachments", multiple: true, isView: true },
         ],

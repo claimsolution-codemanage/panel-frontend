@@ -9,6 +9,7 @@ const FORM_TYPE = {
    ombudsman:"ombudsman",
    irdai:"irdai_stage",
    reimbursment:"reimbursment_claim_filing",
+   rti:"rti",
 }
 
 export default function CaseFormList({id,caseFormDetailApi,role, empType, isCaseFormAccess, getCaseById, status,formList,createOrUpdateApi, attachementUpload}) {

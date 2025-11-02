@@ -16,7 +16,7 @@ const chunkArray = (array, chunk_size) => {
   return tempArray;
 };
 
-export default function StatementPdf({ statementOf, data, dateRange }) {
+export default function StatementPdf({ statementOf, data, dateRange,isPreview }) {
   let pgItem = 4
   const getTotal = (arr) => {
     let total = 0;
@@ -30,8 +30,8 @@ export default function StatementPdf({ statementOf, data, dateRange }) {
   const pages = chunkArray(customData, pgItem); // Chunk data into pages of 4 rows each
 
   return (
-    <div className='d-none' >
-    <div id="statement-pdf" className='position-relative-pg'>
+    <div className={isPreview ? 'preview-container' : 'd-none'} >
+    <div id="statement-pdf" className={isPreview ? 'preview-a4' : 'position-relative-pg'}>
       {pages.map((page, pageIndex) => (
         <div key={pageIndex} className='statement-page page' style={{ pageBreakAfter: "always" }}>
           {/* Header - Make sure it appears on every page */}

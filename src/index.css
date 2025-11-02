@@ -462,3 +462,28 @@ background-color: #182f59;
   visibility: visible;
   opacity: 1;
 }
+
+
+.a4-preview {
+  width: 210mm; /* A4 width */
+  min-height: 297mm; /* A4 height */
+  margin: 10px auto;
+  padding: 20px;
+  box-shadow: 0 0 5px rgba(0,0,0,0.3);
+  background: white;
+  overflow: auto;
+}
+
+.preview-a4 {
+  width: 210mm;
+  min-height: 297mm;
+  margin: auto;
+  background: white;
+  overflow-y: scroll;
+  padding: 20px;
+}
+
+.preview-container{
+  width: auto !important;
+  overflow: scroll;
+}

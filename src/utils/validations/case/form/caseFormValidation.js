@@ -335,3 +335,38 @@ export const irdaiStageValidationSchema = yup.object().shape({
 
 });
 // irdaiStage end
+
+
+// rti case status start
+export const rtiInitialValues = {
+    info: {
+        specialCase: false,
+        partnerFee: "",
+        consultantFee: "",
+        filingDate: "",
+    },
+    approval: approvalInitialValue,
+    status: [],
+    query: [],
+    query_reply: [],
+    isSettelment: false,
+    ...paymentInitialValues
+};
+
+export const rtiValidationSchema = yup.object().shape({
+    // 🔹 info section
+    info: yup.object().shape({
+        specialCase: yup.boolean(),
+        ...commonInFoValidation
+    }),
+    // 🔹 status section
+    status: statusValidation,
+    // 🔹 query section
+    query: queryValidation,
+    // 🔹 query_reply section
+    query_reply: queryReplyValidation,
+    // 🔹 approval section
+    approval: approvalValidation,
+    ...paymentValidation
+});
+// rti case status end
