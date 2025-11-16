@@ -1,5 +1,5 @@
 import { groInitialValues, groValidationSchema, ombudsmanInitialValues, ombudsmanValidationSchema, reimbursmentInitialValues, reimbursmentValidationSchema, rtiInitialValues, rtiValidationSchema } from "../../../../utils/validations/case/form/caseFormValidation";
-const deliveryBy = [{ label: "Mail", value: "mail" },{ label: "Post", value: "post" }, { label: "Courier", value: "courier" }]
+const deliveryBy = [{ label: "Mail", value: "mail" }, { label: "Post", value: "post" }, { label: "Courier", value: "courier" }]
 
 export const FORM_CONFIG = {
   gro: {
@@ -67,7 +67,7 @@ export const FORM_CONFIG = {
         fields: [
           { name: "remarks", type: "text", label: "Remarks", placeholder: "Remarks", isView: true },
           { name: "date", type: "date", label: "Date", isView: true },
-          { name: "deliveredBy", type: "select", label: "Delivered by", placeholder: "select delivered by", isView: true, options:deliveryBy },
+          { name: "deliveredBy", type: "select", label: "Delivered by", placeholder: "select delivered by", isView: true, options: deliveryBy },
           { name: "attachments", type: "file", label: "Attachments", multiple: true, isView: true },
         ],
       },
@@ -97,7 +97,16 @@ export const FORM_CONFIG = {
           { name: "paymentDetails", type: "custom", component: "PaymentDetails", showIf: "isSettelment" },
         ],
       },
-
+      {
+        key: "isPaymentStatement",
+        label: "Partner's Payment",
+        type: "single",
+        isView: false,
+        isColumn: true,
+        fields: [
+          { name: "isPaymentStatement", type: "checkbox", label: "Payment" },
+        ],
+      },
     ],
   },
   ombudsman: {
@@ -153,7 +162,7 @@ export const FORM_CONFIG = {
         fields: [
           { name: "remarks", type: "text", label: "Remarks", placeholder: "Remarks", isView: true },
           { name: "date", type: "date", label: "Date", isView: true },
-          { name: "deliveredBy", type: "select", label: "Delivered by", placeholder: "select delivered by", isView: true, options:deliveryBy},
+          { name: "deliveredBy", type: "select", label: "Delivered by", placeholder: "select delivered by", isView: true, options: deliveryBy },
           { name: "isPrivate", type: "checkbox", label: "Private", isView: false },
           { name: "attachments", type: "file", label: "Attachments", multiple: true, isView: true },
         ],
@@ -166,7 +175,7 @@ export const FORM_CONFIG = {
         fields: [
           { name: "remarks", type: "text", label: "Remarks", placeholder: "Remarks", isView: true },
           { name: "date", type: "date", label: "Date", isView: true },
-          { name: "deliveredBy", type: "select", label: "Delivered by", placeholder: "select delivered by", isView: true, options: deliveryBy},
+          { name: "deliveredBy", type: "select", label: "Delivered by", placeholder: "select delivered by", isView: true, options: deliveryBy },
           { name: "attachments", type: "file", label: "Attachments", multiple: true, isView: true },
         ],
       },
@@ -218,6 +227,16 @@ export const FORM_CONFIG = {
         fields: [
           { name: "isSettelment", type: "checkbox", label: "Settlement" },
           { name: "paymentDetails", type: "custom", component: "PaymentDetails", showIf: "isSettelment" },
+        ],
+      },
+      {
+        key: "isPaymentStatement",
+        label: "Partner's Payment",
+        type: "single",
+        isView: false,
+        isColumn: true,
+        fields: [
+          { name: "isPaymentStatement", type: "checkbox", label: "Payment" },
         ],
       },
 
@@ -275,7 +294,7 @@ export const FORM_CONFIG = {
         fields: [
           { name: "remarks", type: "text", label: "Remarks", placeholder: "Remarks", isView: true },
           { name: "date", type: "date", label: "Date", isView: true },
-          { name: "deliveredBy", type: "select", label: "Delivered by", placeholder: "select delivered by", isView: true, options:deliveryBy },
+          { name: "deliveredBy", type: "select", label: "Delivered by", placeholder: "select delivered by", isView: true, options: deliveryBy },
           { name: "isPrivate", type: "checkbox", label: "Private", isView: false },
           { name: "attachments", type: "file", label: "Attachments", multiple: true, isView: true },
         ],
@@ -330,7 +349,16 @@ export const FORM_CONFIG = {
           { name: "paymentDetails", type: "custom", component: "PaymentDetails", showIf: "isSettelment" },
         ],
       },
-
+      {
+        key: "isPaymentStatement",
+        label: "Partner's Payment",
+        type: "single",
+        isView: false,
+        isColumn: true,
+        fields: [
+          { name: "isPaymentStatement", type: "checkbox", label: "Payment" },
+        ],
+      },
     ],
   },
   irdai_stage: {
@@ -385,7 +413,7 @@ export const FORM_CONFIG = {
         fields: [
           { name: "remarks", type: "text", label: "Remarks", placeholder: "Remarks", isView: true },
           { name: "date", type: "date", label: "Date", isView: true },
-          { name: "deliveredBy", type: "select", label: "Delivered by", placeholder: "select delivered by", isView: true, options:deliveryBy },
+          { name: "deliveredBy", type: "select", label: "Delivered by", placeholder: "select delivered by", isView: true, options: deliveryBy },
           { name: "isPrivate", type: "checkbox", label: "Private", isView: false },
           { name: "attachments", type: "file", label: "Attachments", multiple: true, isView: true },
         ],
@@ -398,7 +426,7 @@ export const FORM_CONFIG = {
         fields: [
           { name: "remarks", type: "text", label: "Remarks", placeholder: "Remarks", isView: true },
           { name: "date", type: "date", label: "Date", isView: true },
-          { name: "deliveredBy", type: "select", label: "Delivered by", placeholder: "select delivered by", isView: true, options:deliveryBy },
+          { name: "deliveredBy", type: "select", label: "Delivered by", placeholder: "select delivered by", isView: true, options: deliveryBy },
           { name: "attachments", type: "file", label: "Attachments", multiple: true, isView: true },
         ],
       },
@@ -428,10 +456,19 @@ export const FORM_CONFIG = {
           { name: "paymentDetails", type: "custom", component: "PaymentDetails", showIf: "isSettelment" },
         ],
       },
-
+      {
+        key: "isPaymentStatement",
+        label: "Partner's Payment",
+        type: "single",
+        isView: false,
+        isColumn: true,
+        fields: [
+          { name: "isPaymentStatement", type: "checkbox", label: "Payment" },
+        ],
+      },
     ],
   },
-   rti: {
+  rti: {
     title: "RTI Form",
     btnText: "RTI Details",
     initialValue: rtiInitialValues,
@@ -496,7 +533,7 @@ export const FORM_CONFIG = {
         fields: [
           { name: "remarks", type: "text", label: "Remarks", placeholder: "Remarks", isView: true },
           { name: "date", type: "date", label: "Date", isView: true },
-          { name: "deliveredBy", type: "select", label: "Delivered by", placeholder: "select delivered by", isView: true, options:deliveryBy },
+          { name: "deliveredBy", type: "select", label: "Delivered by", placeholder: "select delivered by", isView: true, options: deliveryBy },
           { name: "attachments", type: "file", label: "Attachments", multiple: true, isView: true },
         ],
       },
@@ -526,7 +563,16 @@ export const FORM_CONFIG = {
           { name: "paymentDetails", type: "custom", component: "PaymentDetails", showIf: "isSettelment" },
         ],
       },
-
+      {
+        key: "isPaymentStatement",
+        label: "Partner's Payment",
+        type: "single",
+        isView: false,
+        isColumn: true,
+        fields: [
+          { name: "isPaymentStatement", type: "checkbox", label: "Payment" },
+        ],
+      },
     ],
   },
 };

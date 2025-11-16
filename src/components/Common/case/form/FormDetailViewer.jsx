@@ -78,6 +78,11 @@ const FormDetailViewer = ({
           payload.isSettelment = { isSettelment: true };
         }
 
+        if(payload?.isPaymentStatement){
+          payload.isPaymentStatement = { isPaymentStatement: true };
+
+        }
+
         // Group sections by type
         if (Array.isArray(payload.sections)) {
           const grouped = payload.sections.reduce((acc, section) => {

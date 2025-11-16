@@ -32,7 +32,7 @@ const CaseFormModal = ({ formType, caseId, show, close, getCaseById, formData, c
       if (payload?.approval?.approvalLetter?.url || payload?.approvalLetter?.url) {
         payload.approvalLetter = payload?.approvalLetter?.url || payload?.approval?.approvalLetter?.url
       }
-      payload = { ...values, ...payload, isSettelment: values?.isSettelment?.isSettelment }
+      payload = { ...values, ...payload, isSettelment: values?.isSettelment?.isSettelment,isPaymentStatement: values?.isPaymentStatement?.isPaymentStatement }
       const res = await createOrUpdateApi({ ...payload, caseId, formType });
       toast.success(res?.data?.message);
       if (getCaseById) getCaseById();
