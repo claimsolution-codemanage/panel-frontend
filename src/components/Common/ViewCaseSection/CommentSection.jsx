@@ -34,7 +34,8 @@ export default function CommentSection({ caseCommit, role,id,getCaseById,addCase
                         {/* {console.log(data[0]?._id == commit?._id, data[0]?._id, commit?._id)} */}
                         <div className={`${commentBy(commit) && "float-end"} w-25`}>
                             <div className={`${commentBy(commit) ? "bg-info  w-auto text-dark" : "bg-primary text-white"} p-2 rounded-3`}>
-                                {commit?.message}</div>
+                                   {commit?.message && <div className='text-editor text-break' dangerouslySetInnerHTML={{__html:commit?.message}}></div>}
+                                        </div>
                             <p className="badge bg-warning text-dark m-0">{commentBy(commit) ? "you" : commit?.name} | {commit?.createdAt && getFormateDMYDate(commit?.createdAt)}</p>
                         </div>
                     </div>)}

@@ -18,9 +18,10 @@ import { AppContext } from "../../App";
 import { MdCurrencyRupee } from "react-icons/md";
 import EditInvoiceStatusModal from "../Common/EditInvoiceStatus";
 import PaginateField from "../Common/PaginateField";
-import StatementPdf from "../Common/PdfConvert/StatementPdf";
+import StatementPdf, { StatementPdfPreviewModal } from "../Common/PdfConvert/StatementPdf";
 import { LuDownload } from "react-icons/lu";
 import html2pdf from "html2pdf.js";
+import { VscPreview } from "react-icons/vsc";
 
 export default function Statement({getStatementApi,type,excelDownloadApi,fileDetailApi,paidAccess ,statementStatusUpdateApi}) {
 const state = useContext(AppContext)
@@ -40,6 +41,9 @@ const state = useContext(AppContext)
   const [downloading, setDownloading] = useState(false)
   const [changeInvoiceStatus, setChangeInvoiceStatus] = useState({ status: false, _id: null })
   const [downloadDetails,setDownloadDetails] = useState({data:[],statementOf:{},dateRange:{startDate:new Date(),endDate:new Date()},download:false})
+  const defaultStatementPreview = {data:[],statementOf:{},dateRange:{startDate:new Date(),endDate:new Date()},status:false}
+  const [statementPreview, setStatementPreview] = useState(defaultStatementPreview)
+
   const [dateRange, setDateRange] = useState(
    {
       startDate: new Date("2024/01/01"),
@@ -107,6 +111,15 @@ const state = useContext(AppContext)
     setTimeout(() => {
       downloadPdf()
     }, 1000);
+  }
+
+  const handleStatementPdf = async(item)=>{
+    setStatementPreview({
+      ...defaultStatementPreview,
+      data:[item],status:true,
+      statementOf:{[item?.partnerDetails ? "partner" :"employee"]:item?.partnerDetails || item?.empDetails},
+      dateRange:{startDate:item?.createdAt,endDate:item?.updatedAt}
+    })
   }
   useEffect(() => {
     if (getStatementApi && !showStatement.status) {
@@ -265,6 +278,7 @@ const state = useContext(AppContext)
                     {(type== "admin"||type=="operation" ) && <span  style={{ height: 30, width: 30, borderRadius: 30 }} onClick={()=>setShowStatement({...showStatement,status:!showStatement?.status,data:item})} className="cursor-pointer bg-primary text-white d-flex align-items-center justify-content-center"><CiEdit className="fs-5 text-white" /></span>}    
                     {paidAccess && <span style={{ cursor: "pointer", height: 30, width: 30, borderRadius: 30 }} className="bg-success text-white d-flex align-items-center justify-content-center" onClick={() => setChangeInvoiceStatus({ status: true, _id: item?._id })}><MdCurrencyRupee /></span>}
                     <span style={{ cursor: "pointer", height: 30, width: 30, borderRadius: 30 }} className="bg-primary text-white d-flex align-items-center justify-content-center" onClick={() => !downloadDetails?.download && handleDownloadPdf(item)}>{(downloadDetails?.data?.[0]?._id==item?._id && downloadDetails?.download) ? <span className="spinner-border spinner-border-sm" role="status" aria-hidden={true}></span> : <LuDownload/>}</span>
+                    <span style={{ cursor: "pointer", height: 30, width: 30, borderRadius: 30 }} className="bg-primary text-white d-flex align-items-center justify-content-center" onClick={() => !statementPreview?.status && handleStatementPdf(item)}><VscPreview /></span>
                       </div>
                     </th>
                     
@@ -300,6 +314,8 @@ const state = useContext(AppContext)
           <CreateOrUpdateStatmentModal show={showStatement?.status} data={showStatement?.data} hide={()=>setShowStatement({...showStatement,status:!showStatement?.status})}  type={type} all={showStatement?.create} fileDetailApi={fileDetailApi}/>
           {changeInvoiceStatus?.status && <EditInvoiceStatusModal fetchDetails={getAllStatement} changeInvoiceStatus={changeInvoiceStatus} type="statement" setChangeInvoiceStatus={setChangeInvoiceStatus} handleInvoiceStatus={statementStatusUpdateApi} />}
           <StatementPdf data={downloadDetails?.data} statementOf={downloadDetails?.statementOf} dateRange={downloadDetails?.dateRange}/>
+          <StatementPdfPreviewModal data={statementPreview?.data} statementOf={statementPreview?.statementOf} dateRange={statementPreview?.dateRange} show={statementPreview?.status} handleClose={() => setStatementPreview(defaultStatementPreview)} />
+          
       
       </div>}
   </>)

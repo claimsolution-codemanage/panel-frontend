@@ -475,8 +475,8 @@ background-color: #182f59;
 }
 
 .preview-a4 {
-  width: 210mm;
-  min-height: 297mm;
+  width: 280mm;
+  /* min-height: 297mm; */
   margin: auto;
   background: white;
   overflow-y: scroll;

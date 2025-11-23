@@ -2,7 +2,7 @@ import React, { useRef } from 'react';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 
-function TextEditor({ value, handleOnChange }) {
+function TextEditor({ value, handleOnChange,placeholder }) {
   const quillRef = useRef(null);
 
   const handleFocus = () => {
@@ -16,7 +16,9 @@ function TextEditor({ value, handleOnChange }) {
       <ReactQuill
         ref={quillRef}
         theme="snow"
+        placeholder={placeholder || "Enter message..."}
         value={value}
+        style={{height:"100px"}}
         onChange={handleOnChange}
       />
     </div>
