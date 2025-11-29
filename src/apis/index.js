@@ -157,9 +157,9 @@ export const adminCreateNewEmployee = (data) => {
   return axios.post(`${API_BASE}/api/admin/createEmployeeAccount`, data)
 }
 
-export const allAdminCase = (pageItemLimit = "", pageNo = "", searchQuery = "", statusType = "", startDate = "", endDate = "", type,empId,id,isReject="") => {
+export const allAdminCase = (pageItemLimit = "", pageNo = "", searchQuery = "", statusType = "", startDate = "", endDate = "", type,empId,id,isReject="",isWeeklyFollowUp=false) => {
   setheader()
-  return axios.get(`${API_BASE}/api/admin/viewAllCase?limit=${pageItemLimit}&pageNo=${pageNo}&search=${searchQuery}&status=${statusType}&startDate=${startDate}&endDate=${endDate}&type=${type}&isReject=${isReject}`)
+  return axios.get(`${API_BASE}/api/admin/viewAllCase?limit=${pageItemLimit}&pageNo=${pageNo}&search=${searchQuery}&status=${statusType}&startDate=${startDate}&endDate=${endDate}&type=${type}&isReject=${isReject}&isWeeklyFollowUp=${isWeeklyFollowUp}`)
 }
 
 export const adminAllCaseDownload = (searchQuery = "", statusType = "", startDate = "", endDate = "", type,empId,id,isReject) => {
@@ -739,9 +739,9 @@ export const employeResetPassword = (data) => {
   return axios.post(`${API_BASE}/api/employee/resetPassword`, data)
 }
 
-export const employeeAllCase = (pageItemLimit = "", pageNo = "", searchQuery = "", statusType = "", startDate = "", endDate = "",type=true,empId="",id="",isReject="") => {
+export const employeeAllCase = (pageItemLimit = "", pageNo = "", searchQuery = "", statusType = "", startDate = "", endDate = "",type=true,empId="",id="",isReject="",isWeeklyFollowUp=false) => {
   setheader()
-  return axios.get(`${API_BASE}/api/employee/viewAllCase?limit=${pageItemLimit}&pageNo=${pageNo}&search=${searchQuery}&status=${statusType}&startDate=${startDate}&endDate=${endDate}&type=${type}&empId=${empId}&isReject=${isReject}`)
+  return axios.get(`${API_BASE}/api/employee/viewAllCase?limit=${pageItemLimit}&pageNo=${pageNo}&search=${searchQuery}&status=${statusType}&startDate=${startDate}&endDate=${endDate}&type=${type}&empId=${empId}&isReject=${isReject}&isWeeklyFollowUp=${isWeeklyFollowUp}`)
 }
 
 export const empSetCaseIsActiveApi = (_id, status) => {

@@ -11,8 +11,6 @@ import { CiEdit } from 'react-icons/ci'
 import { IoArrowBackCircleOutline } from 'react-icons/io5'
 import ChangeStatusModal from "../Common/Modal/changeStatusModal"
 import { useLocation, useNavigate } from "react-router-dom"
-import { BiLeftArrow } from 'react-icons/bi'
-import { BiRightArrow } from 'react-icons/bi'
 import Loader from "../../components/Common/loader"
 import { IoShareSocialOutline } from "react-icons/io5";
 import { CiFilter } from "react-icons/ci";
@@ -58,10 +56,6 @@ export default function ViewAllCaseComp({ getCases, downloadCase, role, viewUrl,
       endDate: new Date(),
     }
   );
-
-
-  console.log("isrehect", isReject)
-
 
   const handleReset = () => {
     setSearchQuery("")

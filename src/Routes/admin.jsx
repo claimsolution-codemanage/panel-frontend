@@ -48,6 +48,7 @@ import AdminNotification from "../pages/admin/other/allNotification";
 import AdminEditEmployee from "../pages/admin/empoyee/EditEmployee";
 import JoiningFormComp from "../pages/admin/empoyee/JoiningForm";
 import AllStatement from "../pages/admin/statement/AllStatement";
+import AdminCaseWeeeklyFollowUp from "../pages/admin/weeklyFollowUp/CaseWeeklyFollowUp";
 
 {/* for admin */}
 export const adminRoutes = [
@@ -66,6 +67,7 @@ export const adminRoutes = [
   <Route path='/admin/client details/:_id' element={<AdminTemplate><AdminClientDetails/></AdminTemplate>}/>,
   <Route path='/admin/edit case/:_id' element={<AdminTemplate><AdminEditCase/></AdminTemplate>}/>,
   <Route path='/admin/all employee' element={<AdminTemplate><AllAdminEmployee/></AdminTemplate>}/>,
+  <Route path='/admin/case-weekly-followUp'  element={<AdminTemplate><AdminCaseWeeeklyFollowUp/></AdminTemplate>}/>,
   <Route path='/admin/all job' element={<AdminTemplate><AdminAllJobs/></AdminTemplate>}/>,
   <Route path='/admin/all complaint' element={<AdminTemplate><AdminAllComplaint/></AdminTemplate>}/>,
   <Route path='/admin/my-admins' element={<AdminTemplate><MyAdmins/></AdminTemplate>}/>,

@@ -1,6 +1,6 @@
 import { RxDashboard } from 'react-icons/rx'
 import { BsFillPersonLinesFill, BsPostcard } from 'react-icons/bs'
-import { RiAdminFill, RiBankLine, RiTeamLine } from 'react-icons/ri'
+import { RiAdminFill, RiBankLine, RiTeamLine, RiTimerFlashLine } from 'react-icons/ri'
 import { SiMicrosoftteams, SiReaddotcv } from 'react-icons/si'
 import { MdNotificationsActive, MdOutlineCancelPresentation, MdOutlineLibraryAdd, MdOutlinePostAdd } from 'react-icons/md'
 import { IoLogOutOutline,IoNewspaperOutline,IoSettingsOutline } from 'react-icons/io5'
@@ -70,6 +70,7 @@ export default function PrivateNavbar() {
                 { name: "Add Invoice", path: "/admin/add-invoice", icon: <MdOutlineLibraryAdd />, active: location.pathname.includes("/admin/add-invoice"), disable: false },
                 { name: "Notification", path: "/admin/notification", icon: <MdNotificationsActive />, active: location.pathname.includes("/admin/notification"), disable: false },
                 { name: "Statement", path: "/admin/statement", icon: <IoNewspaperOutline />, active: location.pathname.includes("/admin/statement"), disable: false },
+                { name: "Weekly Follow-Up", path: "/admin/case-weekly-followUp", icon: <RiTimerFlashLine  />, active: location.pathname.includes("/admin/case-weekly-followUp"), disable: false },
                 { name: "All Employee", path: "/admin/all employee", icon: <FaUsers />, active:(location.pathname=="/admin/all%20employee" || location.pathname.includes("/admin/employee/profile")), disable : false},
                 { name:"Add Employee" ,path:"/admin/add new employee" ,icon:<FaUserPlus/>,active : location.pathname == "/admin/add%20new%20employee" ,disable:false},
                 ...(state?.myAppData?.details?.superAdmin ? [{name:"My Admins" ,path:"/admin/my-admins" ,icon:<RiAdminFill/>,active : location.pathname == "/admin/my-admins" ,disable:false}] : []),
@@ -109,6 +110,7 @@ export default function PrivateNavbar() {
                 ...(["sathi team"]?.includes(empType) ? [{ name: "Commission", path: `/employee/statement/sathi-team/${userDetails?._id}`, icon: <IoNewspaperOutline />, active: location.pathname.includes("/statement/sathi-team/"), disable: false }]:[]),
 
                 ...(["finance","operation"]?.includes(empType) ? [{ name: "Statement", path: "/employee/statement", icon: <IoNewspaperOutline />, active: location.pathname.includes("/employee/statement"), disable: false }]:[]),
+                ...(["operation"]?.includes(empType) ? [{ name: "Weekly Follow-Up", path: "/employee/case-weekly-followUp", icon: <RiTimerFlashLine  />, active: location.pathname.includes("/employee/case-weekly-followUp"), disable: false }]:[]),
                  ...(["finance","operation"]?.includes(empType) ? [{ name: "All Invoices", path: "/employee/all-invoices", icon: <FaFileInvoice />, active: location.pathname.includes("/employee/all-invoices") || location.pathname.includes("/employee/view-invoice"), disable: false }]:[]),
                  ...(["finance"]?.includes(empType) ? [{ name: "Add Invoice", path: "/employee/add-invoice", icon: <MdOutlineLibraryAdd />, active: location.pathname.includes("/employee/add-invoice"), disable: false }]:[]),
                  ...(["operation"]?.includes(empType) ? [{ name: "Notification", path: "/employee/notification", icon: <MdNotificationsActive />, active: location.pathname.includes("/employee/notification"), disable: false }]:[]),
