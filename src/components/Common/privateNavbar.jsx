@@ -21,6 +21,7 @@ import {FaTrashAlt,FaUserFriends,FaUserTag,FaUsers} from 'react-icons/fa'
 import {GrCompliance} from 'react-icons/gr'
 import { CgNotes, CgProfile } from "react-icons/cg";
 import { TbFileInvoice, } from 'react-icons/tb'
+import { GoIssueClosed } from "react-icons/go";
 
 
 export default function PrivateNavbar() {
@@ -70,12 +71,13 @@ export default function PrivateNavbar() {
                 { name: "Add Invoice", path: "/admin/add-invoice", icon: <MdOutlineLibraryAdd />, active: location.pathname.includes("/admin/add-invoice"), disable: false },
                 { name: "Notification", path: "/admin/notification", icon: <MdNotificationsActive />, active: location.pathname.includes("/admin/notification"), disable: false },
                 { name: "Statement", path: "/admin/statement", icon: <IoNewspaperOutline />, active: location.pathname.includes("/admin/statement"), disable: false },
-                { name: "Weekly Follow-Up", path: "/admin/case-weekly-followUp", icon: <RiTimerFlashLine  />, active: location.pathname.includes("/admin/case-weekly-followUp"), disable: false },
                 { name: "All Employee", path: "/admin/all employee", icon: <FaUsers />, active:(location.pathname=="/admin/all%20employee" || location.pathname.includes("/admin/employee/profile")), disable : false},
                 { name:"Add Employee" ,path:"/admin/add new employee" ,icon:<FaUserPlus/>,active : location.pathname == "/admin/add%20new%20employee" ,disable:false},
                 ...(state?.myAppData?.details?.superAdmin ? [{name:"My Admins" ,path:"/admin/my-admins" ,icon:<RiAdminFill/>,active : location.pathname == "/admin/my-admins" ,disable:false}] : []),
                 { name: "My Jobs", path: "/admin/all job", icon: <MdOutlinePostAdd />, active: location.pathname == "/admin/all%20job", disable: false },
                 { name: "Reject Case", path: "/admin/reject-cases", icon: <MdOutlineCancelPresentation />, active: location.pathname.includes("/admin/reject-cases"), disable: false },
+                { name: "Closed Case", path: "/admin/closed-cases", icon: <GoIssueClosed />, active: location.pathname.includes("/admin/closed-cases"), disable: false },
+                { name: "Weekly Follow-Up", path: "/admin/case-weekly-followUp", icon: <RiTimerFlashLine  />, active: location.pathname.includes("/admin/case-weekly-followUp"), disable: false },
                 { name: "Setting", path: "/admin/account setting", icon: <IoSettingsOutline />, active: location.pathname == "/admin/account%20setting", disable: false },
                 { name: "Trash", path: "#", icon: <FaRegTrashCan />, active: showTrashOption, disable: false,list:[
                     { name: "Partner", path: "/admin/all trash partner", icon: <FaTrashAlt />, active: location.pathname == "/admin/all%20trash%20partner", disable: false },
@@ -107,6 +109,7 @@ export default function PrivateNavbar() {
                 ...(["branch","sales"]?.includes(empType) ? [{ name: "Add Sathi Team", path: "/employee/add-sathi-team", icon: <RiTeamLine />, active: location.pathname.includes("/employee/add-sathi-team"), disable: false }]:[]),
                 ...(["branch","sales","finance","operation"]?.includes(empType) ? [{ name: "Branch Team", path: "/employee/branch-team", icon: <SiMicrosoftteams />, active: location.pathname.includes("branch-team") || location?.pathname?.includes("view-sathi"), disable: false }]:[]),
                 { name: "Reject Cases", path: "/employee/reject-cases", icon: <MdOutlineCancelPresentation />, active: location.pathname.includes("reject-cases"), disable: false },
+                { name: "Closed Cases", path: "/employee/closed-cases", icon: <GoIssueClosed />, active: location.pathname.includes("closed-cases"), disable: false },
                 ...(["sathi team"]?.includes(empType) ? [{ name: "Commission", path: `/employee/statement/sathi-team/${userDetails?._id}`, icon: <IoNewspaperOutline />, active: location.pathname.includes("/statement/sathi-team/"), disable: false }]:[]),
 
                 ...(["finance","operation"]?.includes(empType) ? [{ name: "Statement", path: "/employee/statement", icon: <IoNewspaperOutline />, active: location.pathname.includes("/employee/statement"), disable: false }]:[]),

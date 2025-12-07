@@ -5,7 +5,7 @@ import { BsSearch } from 'react-icons/bs'
 import { caseStatus } from "../../utils/constant"
 import 'react-date-range/dist/styles.css'; // main style file
 import 'react-date-range/dist/theme/default.css'; // theme css file
-import { getFormateDMYDate, getFormateDate } from "../../utils/helperFunction"
+import { formatAmount, getFormateDMYDate, getFormateDate } from "../../utils/helperFunction"
 import ReactPaginate from 'react-paginate';
 import { CiEdit } from 'react-icons/ci'
 import { IoArrowBackCircleOutline } from 'react-icons/io5'
@@ -25,10 +25,11 @@ import { SiMicrosoftexcel } from "react-icons/si";
 import { Link } from "react-router-dom"
 import PaginateField from "../Common/PaginateField"
 
-export default function ViewAllCaseComp({ getCases, downloadCase, role, viewUrl,
+export default function ViewAllCaseComp({pageTxt, getCases, downloadCase, role, viewUrl,
   caseShare, setStatus, setCaseStatus, editUrl, createInvUrl,
   isChangeStatus, isEdit, isRemoveCase, isResolvedAmt, isDownload,
-  empId, id, isShare, getNormalEmp, isBack, isReject, attachementUpload
+  empId, id, isShare, getNormalEmp, isBack, isReject, attachementUpload,
+  isClosed,isWeeklyFollowUp
 }) {
   const [data, setData] = useState([])
   const navigate = useNavigate()
@@ -73,7 +74,7 @@ export default function ViewAllCaseComp({ getCases, downloadCase, role, viewUrl,
       const startDate = dateRange.startDate ? getFormateDate(dateRange.startDate) : ""
       const endDate = dateRange.endDate ? getFormateDate(dateRange.endDate) : ""
       // console.log("start", startDate, "end", endDate);
-      const res = await getCases(pageItemLimit, pgNo, searchQuery, statusType, startDate, endDate, type, empId, id, isReject)
+      const res = await getCases({pageItemLimit, pgNo, searchQuery, statusType, startDate, endDate, type, empId, id, isReject,isWeeklyFollowUp,isClosed})
       // console.log("allAdminCase", res?.data?.data);
       if (res?.data?.success && res?.data?.data) {
         setData([...res?.data?.data])
@@ -100,7 +101,7 @@ export default function ViewAllCaseComp({ getCases, downloadCase, role, viewUrl,
       const startDate = dateRange.startDate ? getFormateDate(dateRange.startDate) : ""
       const endDate = dateRange.endDate ? getFormateDate(dateRange.endDate) : ""
       setDownloading(true)
-      const res = await downloadCase(searchQuery, statusType, startDate, endDate, type, empId, id, isReject)
+      const res = await downloadCase({searchQuery, statusType, startDate, endDate, type, empId, id, isReject,isWeeklyFollowUp,isClosed})
       // console.log("res", res);
       if (res?.status == 200) {
         const url = window.URL.createObjectURL(new Blob([res.data]));
@@ -220,13 +221,13 @@ export default function ViewAllCaseComp({ getCases, downloadCase, role, viewUrl,
             {/* <IoArrowBackCircleOutline className="fs-3"  onClick={() => navigate("/admin/dashboard")} style={{ cursor: "pointer" }} /> */}
             <div className="d-flex flex align-items-center gap-1">
               {(isBack || location?.state?.back) && <IoArrowBackCircleOutline className="fs-3" onClick={handleBack} style={{ cursor: "pointer" }} />}
-              <span>All Case</span>
+              <span>{pageTxt ||  "All Case"}</span>
             </div>
           </div>
         </div>
 
-        <div className="mx-5 p-3">
-          {(role?.toLowerCase() == "admin" || role?.toLowerCase() == "client" || role?.toLowerCase() == "partner") && <div className={`row row-cols-1 ${isResolvedAmt ? "row-cols-md-3" : "row-cols-md-2"} `}>
+        <div className="mx-md-5 mx-2 p-md-3">
+          {["admin","client","partner","employee"].includes(role?.toLowerCase()) && <div className={`row row-cols-1 ${isResolvedAmt ? "row-cols-md-3" : "row-cols-md-2"} `}>
             <div className="border-end">
               <div className="bg-color-1 border-5 border-primary border-start card mx-1 my-4 p-2 shadow">
                 <div className='d-flex align-items-center justify-content-around'>
@@ -242,7 +243,7 @@ export default function ViewAllCaseComp({ getCases, downloadCase, role, viewUrl,
               <div className="bg-color-1 border-5 border-primary border-start card mx-1 my-4 p-2 shadow">
                 <div className='d-flex align-items-center justify-content-around'>
                   <div className="text-center ">
-                    <h3 className='fw-bold h2'>{caseAmt ? caseAmt : 0}</h3>
+                    <h3 className='fw-bold h2'>{formatAmount(caseAmt || 0)}</h3>
                     <p className='card-title fs-5 text-primary text-capitalize'>Total Case Amount</p>
                   </div>
                   <div className="bg-primary text-white d-flex align-items-center justify-content-center" style={{ width: 50, height: 50, borderRadius: 50 }}><CiAlignBottom className='fs-2' /></div>
@@ -252,7 +253,7 @@ export default function ViewAllCaseComp({ getCases, downloadCase, role, viewUrl,
               <div className="bg-color-1 border-5 border-primary border-start card mx-1 my-4 p-2 shadow">
                 <div className='d-flex align-items-center justify-content-around'>
                   <div className="text-center ">
-                    <h3 className='fw-bold h2'>{caseResolvedAmt ? caseResolvedAmt * 0.06 : 0}</h3>
+                    <h3 className='fw-bold h2'>{formatAmount(caseResolvedAmt ? caseResolvedAmt * 0.06 : 0)}</h3>
                     <p className='card-title fs-5 text-primary text-capitalize'>Total Earning</p>
                   </div>
                   <div className="bg-primary text-white d-flex align-items-center justify-content-center" style={{ width: 50, height: 50, borderRadius: 50 }}><CiAlignBottom className='fs-2' /></div>
@@ -279,12 +280,12 @@ export default function ViewAllCaseComp({ getCases, downloadCase, role, viewUrl,
 
                     {isShare && shareCase?.length > 0 && <div className="btn btn-primary fs-5" onClick={() => setCaseShareModal({ status: true, value: shareCase })}><IoShareSocialOutline /></div>}
                   </div>
-                  <div className="col-12 col-md-3 mb-2 mb-md-0">
+                  {!(isReject || isClosed) ? <div className="col-12 col-md-3 mb-2 mb-md-0">
                     <select className="form-select" name="caseStaus" value={statusType} onChange={(e) => setStatusType(e.target.value)} aria-label="Default select example">
                       <option value="">--Select Case Status</option>
                       {caseStatus?.map(typeCase => <option key={typeCase} value={typeCase}>{typeCase}</option>)}
                     </select>
-                  </div>
+                  </div> : <div className="col-12 col-md-3 mb-2 mb-md-0"></div>}
                   <div className="col-12 col-md-2 mb-2 mb-md-0">
                     <select className="form-select" name="pageItemLimit" value={pageItemLimit} onChange={(e) => { setPageItemLimit(e.target.value); setPgNo(1) }} aria-label="Default select example">
                       <option value="">Items</option>
@@ -353,7 +354,7 @@ export default function ViewAllCaseComp({ getCases, downloadCase, role, viewUrl,
                     <td className="text-nowrap">{item?.name}</td>
                     <td className="text-nowrap">{item?.mobileNo}</td>
                     <td className="text-nowrap">{item?.email}</td>
-                    <td className="text-nowrap">{item?.claimAmount}</td>
+                    <td className="text-nowrap">{formatAmount(item?.claimAmount || 0)}</td>
                     <td className="text-nowrap">{item?.policyNo}</td>
                     <td className="text-nowrap">{item?.fileNo}</td>
                     <td className="text-nowrap">{item?.policyType}</td>

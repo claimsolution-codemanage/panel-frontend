@@ -53,7 +53,7 @@ export default function CaseWeeklyFollowUpComp({ getCases,role, viewUrl,
       const type = true
       const startDate = dateRange.startDate ? getFormateDate(dateRange.startDate) : ""
       const endDate = dateRange.endDate ? getFormateDate(dateRange.endDate) : ""
-      const res = await getCases(pageItemLimit, pgNo, searchQuery, statusType, startDate, endDate, type, empId, id,false,true)
+      const res = await getCases({pageItemLimit, pgNo, searchQuery, statusType, startDate, endDate, type, empId, id,isReject:false,isWeeklyFollowUp:true})
       if (res?.data?.success && res?.data?.data) {
         setData([...res?.data?.data])
         setNoOfCase(res?.data?.noOfCase)

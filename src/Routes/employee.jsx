@@ -32,6 +32,7 @@ import EmployeeAddSathiAcc from "../pages/employee/createSathiAcc"
 import EmpViewMySathi from "../pages/employee/viewMySathi"
 import EmployeeAddInvoice from "../pages/employee/finance/pages/addInvoice"
 import EmpNotification from "../pages/employee/setting/allNotification"
+import EmployeeClosedCasePage from "../pages/employee/cases/allClosedCase"
 
 // for sale employee
 import EmployeeAddPartner from '../pages/employee/sales/addPartner'
@@ -45,7 +46,7 @@ import EmpAllClientTrash from "../pages/employee/trash/AllClientTrash"
 import EmpAllInvoiceTrash from "../pages/employee/trash/AllInvoiceTrash"
 import EmpAllDocumentTrash from "../pages/employee/trash/AllDocumentTrash"
 import EmpAllEmployeeTrash from "../pages/employee/trash/AllEmployeeTrash"
-import EmpCaseWeeklyFollowUp from "../pages/employee/weeklyFollowUp/CaseWeeklyFollowUp"
+import EmpCaseWeeklyFollowUpPage from "../pages/employee/cases/allWeeklyFollowUpCase"
 
 export const employeeRoutes = [
     <Route path='/employee/signin' element={<PanelTemplate><EmployeeSignIn/></PanelTemplate>}/>,
@@ -58,6 +59,8 @@ export const employeeRoutes = [
   <Route path='/employee/all case/:_id' element={<EmployeeTemplate><EmployeeAllCase/></EmployeeTemplate>}/>,
   <Route path='/employee/view case/:_id' element={<EmployeeTemplate><EmployeeViewCase/></EmployeeTemplate>}/>,
   <Route path='/employee/reject-cases'  element={<EmployeeTemplate><EmployeeRejectCase/></EmployeeTemplate>}/>,
+  <Route path='/employee/closed-cases'  element={<EmployeeTemplate><EmployeeClosedCasePage/></EmployeeTemplate>}/>,
+  <Route path='/employee/case-weekly-followUp'  element={<EmployeeTemplate><EmpCaseWeeklyFollowUpPage/></EmployeeTemplate>}/>,
   <Route path='/employee/all partner' element={<EmployeeTemplate><EmployeeAllPartner/></EmployeeTemplate>}/>,
   <Route path='/employee/all partner/:_id' element={<EmployeeTemplate><EmployeeAllPartner/></EmployeeTemplate>}/>,
   <Route path='/employee/partner details/:_id' element={<EmployeeTemplate><EmployeePartnerDetails/></EmployeeTemplate>}/>,
@@ -83,7 +86,6 @@ export const employeeRoutes = [
   <Route path='/employee/statement/sathi-team/:empId'  element={<EmployeeTemplate><ViewAllStatement getStatementApi={empOpAllStatment} excelDownloadApi={empAllStatementDownload} fileDetailApi={empFindCaseByFileNoApi} type={"sathi team"}/></EmployeeTemplate>}/>,
   <Route path='/employee/statement'  element={<EmployeeTemplate><AllStatement/></EmployeeTemplate>}/>,
   <Route path='/employee/notification'  element={<EmployeeTemplate><EmpNotification/></EmployeeTemplate>}/>,
-  <Route path='/employee/case-weekly-followUp'  element={<EmployeeTemplate><EmpCaseWeeklyFollowUp/></EmployeeTemplate>}/>,
 
   <Route path='/employee/all-trash-partner' element={<EmployeeTemplate><EmpAllPartnersTrash/></EmployeeTemplate>}/>,
   <Route path='/employee/all-trash-client' element={<EmployeeTemplate><EmpAllClientTrash/></EmployeeTemplate>}/>,

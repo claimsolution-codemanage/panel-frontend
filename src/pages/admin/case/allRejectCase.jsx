@@ -1,4 +1,4 @@
-import { adminChangeCaseStatus, adminShareCaseToEmployee, adminAllCaseDownload,adminGetNormalEmployee, adminSetCaseIsActive } from "../../../apis"
+import { adminChangeCaseStatus, adminShareCaseToEmployee, adminAllCaseDownload, adminGetNormalEmployee, adminSetCaseIsActive } from "../../../apis"
 import { allAdminCase } from "../../../apis"
 import { adminAttachementUpload } from "../../../apis/upload"
 import ViewAllCaseComp from "../../../components/Reuse/ViewAllCaseComp"
@@ -6,7 +6,8 @@ import ViewAllCaseComp from "../../../components/Reuse/ViewAllCaseComp"
 export default function AdminRejectCase() {
   return (<>
     <ViewAllCaseComp
-    isBack={false}
+      pageTxt={"Reject Case"}
+      isBack={false}
       getCases={allAdminCase}
       downloadCase={adminAllCaseDownload}
       role={"admin"}
@@ -24,7 +25,7 @@ export default function AdminRejectCase() {
       getNormalEmp={adminGetNormalEmployee}
       caseShare={adminShareCaseToEmployee}
       attachementUpload={adminAttachementUpload}
-      // createInvUrl={"/admin/create-invoice/"}
+    // createInvUrl={"/admin/create-invoice/"}
     />
   </>)
 }

@@ -156,3 +156,14 @@ export const getFileTypeFromExtension = (fileExtension)=>{
     }
  return fileType
 }
+
+export function formatAmount(amount, currency = "INR") {
+  if (amount === null || amount === undefined || amount === "") return "-";
+
+  return new Intl.NumberFormat("en-IN", {
+    style: "currency",
+    currency: currency,
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2
+  }).format(Number(amount));
+}

@@ -4,7 +4,7 @@ import { HiMiniEye } from 'react-icons/hi2'
 import { BsSearch } from 'react-icons/bs'
 import 'react-date-range/dist/styles.css'; // main style file
 import 'react-date-range/dist/theme/default.css'; // theme css file
-import { getFormateDate } from "../../utils/helperFunction"
+import { formatAmount, getFormateDate } from "../../utils/helperFunction"
 import ReactPaginate from 'react-paginate';
 import { useLocation, useNavigate } from "react-router-dom"
 import { BiLeftArrow } from 'react-icons/bi'
@@ -248,7 +248,7 @@ export default function AllInvoiceComp({ viewAllInvoice, payInvoice, viewInvoice
               <div className="bg-color-1 border-5 border-primary border-start card mx-1 my-4 p-2 shadow">
                 <div className='d-flex align-items-center justify-content-around'>
                   <div className="text-center ">
-                    <h3 className='fw-bold h2'>{totalInvoiceAmt ? totalInvoiceAmt : 0}</h3>
+                    <h3 className='fw-bold h2'>{formatAmount(totalInvoiceAmt || 0)}</h3>
                     <p className='card-title fs-5 text-primary text-capitalize'>Total Invoice Amount</p>
                   </div>
                   <div className="bg-primary text-white d-flex align-items-center justify-content-center" style={{ width: 50, height: 50, borderRadius: 50 }}><CiAlignBottom className='fs-2' /></div>
@@ -346,7 +346,7 @@ export default function AllInvoiceComp({ viewAllInvoice, payInvoice, viewInvoice
                     <td className="text-nowrap">{item?.receiver?.email}</td>
                     <td className="text-nowrap">{item?.receiver?.mobileNo}</td>
                     <td className="text-nowrap">{item?.receiver?.state}</td>
-                    <td className="text-nowrap">{item?.totalAmt}</td>
+                    <td className="text-nowrap">{formatAmount(item?.totalAmt || 0)}</td>
                   </tr>)}
                 </tbody>
               </table>

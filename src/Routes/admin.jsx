@@ -48,7 +48,8 @@ import AdminNotification from "../pages/admin/other/allNotification";
 import AdminEditEmployee from "../pages/admin/empoyee/EditEmployee";
 import JoiningFormComp from "../pages/admin/empoyee/JoiningForm";
 import AllStatement from "../pages/admin/statement/AllStatement";
-import AdminCaseWeeeklyFollowUp from "../pages/admin/weeklyFollowUp/CaseWeeklyFollowUp";
+import AdminClosedCasePage from "../pages/admin/case/allClosedCase";
+import AdminWeeklyFollowUpPage from "../pages/admin/case/allWeeklyFollowUpCase";
 
 {/* for admin */}
 export const adminRoutes = [
@@ -67,7 +68,7 @@ export const adminRoutes = [
   <Route path='/admin/client details/:_id' element={<AdminTemplate><AdminClientDetails/></AdminTemplate>}/>,
   <Route path='/admin/edit case/:_id' element={<AdminTemplate><AdminEditCase/></AdminTemplate>}/>,
   <Route path='/admin/all employee' element={<AdminTemplate><AllAdminEmployee/></AdminTemplate>}/>,
-  <Route path='/admin/case-weekly-followUp'  element={<AdminTemplate><AdminCaseWeeeklyFollowUp/></AdminTemplate>}/>,
+  <Route path='/admin/case-weekly-followUp'  element={<AdminTemplate><AdminWeeklyFollowUpPage/></AdminTemplate>}/>,
   <Route path='/admin/all job' element={<AdminTemplate><AdminAllJobs/></AdminTemplate>}/>,
   <Route path='/admin/all complaint' element={<AdminTemplate><AdminAllComplaint/></AdminTemplate>}/>,
   <Route path='/admin/my-admins' element={<AdminTemplate><MyAdmins/></AdminTemplate>}/>,
@@ -92,6 +93,7 @@ export const adminRoutes = [
   <Route path='/admin/all-trash-employee'  element={<AdminTemplate><AdminEmployeeTrash/></AdminTemplate>}/>,
   <Route path='/admin/view-sathi/:_id'  element={<AdminTemplate><AdminViewMySathi/></AdminTemplate>}/>,
   <Route path='/admin/reject-cases'  element={<AdminTemplate><AdminRejectCase/></AdminTemplate>}/>,
+  <Route path='/admin/closed-cases'  element={<AdminTemplate><AdminClosedCasePage/></AdminTemplate>}/>,
   <Route path='/admin/statement/partner/:partnerId'  element={<AdminTemplate><ViewAllStatement getStatementApi={adminAllStatment} excelDownloadApi={adminAllStatementDownload} fileDetailApi={adminFindCaseByFileNoApi} type={"admin"}/></AdminTemplate>}/>,
   <Route path='/admin/statement/employee/:empId'  element={<AdminTemplate><ViewAllStatement getStatementApi={adminAllStatment} excelDownloadApi={adminAllStatementDownload} fileDetailApi={adminFindCaseByFileNoApi} type={"admin"}/></AdminTemplate>}/>,
   <Route path='/admin/statement'  element={<AdminTemplate><AllStatement/></AdminTemplate>}/>,

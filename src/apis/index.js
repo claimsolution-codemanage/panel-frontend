@@ -81,9 +81,9 @@ export const addNewCasePartner = (data) => {
   return axios.post(`${API_BASE}/api/partner/addNewCase`, data)
 }
 
-export const allCasePartner = (pageItemLimit = "", pageNo = "", searchQuery = "", statusType = "", startDate = "", endDate = "") => {
+export const allCasePartner = ({pageItemLimit = "", pgNo = "", searchQuery = "", statusType = "", startDate = "", endDate = ""}) => {
   setheader()
-  return axios.get(`${API_BASE}/api/partner/viewAllPartnerCase?limit=${pageItemLimit}&pageNo=${pageNo}&search=${searchQuery}&status=${statusType}&startDate=${startDate}&endDate=${endDate}`)
+  return axios.get(`${API_BASE}/api/partner/viewAllPartnerCase?limit=${pageItemLimit}&pageNo=${pgNo}&search=${searchQuery}&status=${statusType}&startDate=${startDate}&endDate=${endDate}`)
 }
 
 export const partnerGetCaseById = (_id) => {
@@ -157,16 +157,16 @@ export const adminCreateNewEmployee = (data) => {
   return axios.post(`${API_BASE}/api/admin/createEmployeeAccount`, data)
 }
 
-export const allAdminCase = (pageItemLimit = "", pageNo = "", searchQuery = "", statusType = "", startDate = "", endDate = "", type,empId,id,isReject="",isWeeklyFollowUp=false) => {
+export const allAdminCase = ({pageItemLimit = "", pgNo = 1, searchQuery = "", statusType = "", startDate = "", endDate = "", type,empId,id,isReject="",isWeeklyFollowUp=false,isClosed=false}) => {
   setheader()
-  return axios.get(`${API_BASE}/api/admin/viewAllCase?limit=${pageItemLimit}&pageNo=${pageNo}&search=${searchQuery}&status=${statusType}&startDate=${startDate}&endDate=${endDate}&type=${type}&isReject=${isReject}&isWeeklyFollowUp=${isWeeklyFollowUp}`)
+  return axios.get(`${API_BASE}/api/admin/viewAllCase?limit=${pageItemLimit}&pageNo=${pgNo}&search=${searchQuery}&status=${statusType}&startDate=${startDate}&endDate=${endDate}&type=${type}&isReject=${isReject}&isWeeklyFollowUp=${isWeeklyFollowUp}&isClosed=${isClosed}`)
 }
 
-export const adminAllCaseDownload = (searchQuery = "", statusType = "", startDate = "", endDate = "", type,empId,id,isReject) => {
+export const adminAllCaseDownload = ({searchQuery = "", statusType = "", startDate = "", endDate = "", type,empId,id,isReject="",isWeeklyFollowUp=false,isClosed=false}) => {
   setheader()
   return axios({
     method: 'GET',
-    url: `${API_BASE}/api/admin/download/allcase?search=${searchQuery}&status=${statusType}&startDate=${startDate}&endDate=${endDate}&type=${type}&isReject=${isReject}`,
+    url: `${API_BASE}/api/admin/download/allcase?search=${searchQuery}&status=${statusType}&startDate=${startDate}&endDate=${endDate}&type=${type}&isReject=${isReject}&isWeeklyFollowUp=${isWeeklyFollowUp}&isClosed=${isClosed}`,
     responseType: 'blob',
   })
 }
@@ -668,7 +668,7 @@ export const clientUpdateCaseById = (_id, data) => {
 }
 
 
-export const clientViewAllCase = (pageItemLimit, pgNo, searchQuery, statusType, startDate, endDate) => {
+export const clientViewAllCase = ({pageItemLimit, pgNo, searchQuery, statusType, startDate, endDate}) => {
   setheader()
   return axios.get(`${API_BASE}/api/client/viewClientAllCase?limit=${pageItemLimit}&pageNo=${pgNo}&search=${searchQuery}&status=${statusType}&startDate=${startDate}&endDate=${endDate}&type=${true}`)
 }
@@ -709,7 +709,7 @@ export const partnerDashboardData = (year="") => {
 }
 
 
-export const partnerAllCaseDownload = (searchQuery = "", statusType = "", startDate = "", endDate = "", type) => {
+export const partnerAllCaseDownload = ({searchQuery = "", statusType = "", startDate = "", endDate = "", type}) => {
   setheader()
   return axios({
     method: 'GET',
@@ -738,10 +738,9 @@ export const employeResetPassword = (data) => {
   setheader()
   return axios.post(`${API_BASE}/api/employee/resetPassword`, data)
 }
-
-export const employeeAllCase = (pageItemLimit = "", pageNo = "", searchQuery = "", statusType = "", startDate = "", endDate = "",type=true,empId="",id="",isReject="",isWeeklyFollowUp=false) => {
+export const employeeAllCase = ({pageItemLimit = "", pgNo = "", searchQuery = "", statusType = "", startDate = "", endDate = "",type=true,empId="",id="",isReject="",isWeeklyFollowUp=false,isClosed=false}) => {
   setheader()
-  return axios.get(`${API_BASE}/api/employee/viewAllCase?limit=${pageItemLimit}&pageNo=${pageNo}&search=${searchQuery}&status=${statusType}&startDate=${startDate}&endDate=${endDate}&type=${type}&empId=${empId}&isReject=${isReject}&isWeeklyFollowUp=${isWeeklyFollowUp}`)
+  return axios.get(`${API_BASE}/api/employee/viewAllCase?limit=${pageItemLimit}&pageNo=${pgNo}&search=${searchQuery}&status=${statusType}&startDate=${startDate}&endDate=${endDate}&type=${type}&empId=${empId}&isReject=${isReject}&isWeeklyFollowUp=${isWeeklyFollowUp}&isClosed=${isClosed}`)
 }
 
 export const empSetCaseIsActiveApi = (_id, status) => {
@@ -964,12 +963,11 @@ export const adminRemoveComplaintById = (_id) => {
 
 
 
-
-export const salesAllCaseDownload = (searchQuery = "", statusType = "", startDate = "", endDate = "", type,empId) => {
+export const salesAllCaseDownload = ({searchQuery = "", statusType = "", startDate = "", endDate = "", type,empId,id, isReject=false,isWeeklyFollowUp=false,isClosed=false}) => {
   setheader()
   return axios({
     method: 'GET',
-    url: `${API_BASE}/api/employee/sale/downloadCaseReport?search=${searchQuery}&status=${statusType}&startDate=${startDate}&endDate=${endDate}&type=${type}&empId=${empId}`,
+    url: `${API_BASE}/api/employee/sale/downloadCaseReport?search=${searchQuery}&status=${statusType}&startDate=${startDate}&endDate=${endDate}&type=${type}&empId=${empId}&isReject=${isReject}&isWeeklyFollowUp=${isWeeklyFollowUp}&isClosed=${isClosed}`,
     responseType: 'blob',
   })
 }
