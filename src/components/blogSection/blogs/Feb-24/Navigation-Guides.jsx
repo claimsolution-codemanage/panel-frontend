@@ -1,12 +1,8 @@
 import React from 'react'
-import { Helmet } from "react-helmet";
 
 export default function NavigationGuides() {
   return (
 <div>
-<Helmet>
-        <link rel="canonical" href="http://claimsolution.in/blog/Navigating Rejected Insurance Claims A Comprehensive Guide" />
-      </Helmet>
   <h1>Navigating Rejected Insurance Claims A Comprehensive Guide</h1>
   <h2>
     <strong>Preface</strong>

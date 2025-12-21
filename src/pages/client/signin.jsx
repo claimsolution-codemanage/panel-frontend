@@ -9,7 +9,6 @@ import { BsEyeSlashFill } from "react-icons/bs";
 import { BsEyeFill } from "react-icons/bs";
 import { getJwtDecode } from '../../utils/helperFunction'
 import { useFormik } from 'formik'
-import { Helmet } from "react-helmet";
 import { signInOrSignUpInitialValue, signInOrSignUpValidationSchema } from '../../utils/validations/auth/userAuthValidation'
 import { clientSignInApi } from '../../apis/auth/userAuthApi'
 
@@ -55,9 +54,6 @@ export default function ClientSignIn() {
 
     return (
         <>
-           <Helmet>
-        <link rel="canonical" href="http://claimsolution.in/client/signin" />
-      </Helmet>
             <div className=" py-5">
                 <div className="container-px-5">
                     <div className="">

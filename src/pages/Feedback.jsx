@@ -1,11 +1,7 @@
 import { Link } from "react-router-dom"
-import { Helmet } from "react-helmet";
 export default function Feedback(){
 return (  
 <>
-<Helmet>
-        <link rel="canonical" href="http://claimsolution.in/feedback" />
-      </Helmet>
     {/* feedback para */}
     <div className="container-fluid py-5">
         <div className="container-px-5">

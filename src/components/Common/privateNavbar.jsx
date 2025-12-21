@@ -109,7 +109,7 @@ export default function PrivateNavbar() {
                 ...(["branch","sales"]?.includes(empType) ? [{ name: "Add Sathi Team", path: "/employee/add-sathi-team", icon: <RiTeamLine />, active: location.pathname.includes("/employee/add-sathi-team"), disable: false }]:[]),
                 ...(["branch","sales","finance","operation"]?.includes(empType) ? [{ name: "Branch Team", path: "/employee/branch-team", icon: <SiMicrosoftteams />, active: location.pathname.includes("branch-team") || location?.pathname?.includes("view-sathi"), disable: false }]:[]),
                 { name: "Reject Cases", path: "/employee/reject-cases", icon: <MdOutlineCancelPresentation />, active: location.pathname.includes("reject-cases"), disable: false },
-                { name: "Closed Cases", path: "/employee/closed-cases", icon: <GoIssueClosed />, active: location.pathname.includes("closed-cases"), disable: false },
+                ...(["operation"]?.includes(empType) ? [{ name: "Closed Cases", path: "/employee/closed-cases", icon: <GoIssueClosed />, active: location.pathname.includes("closed-cases"), disable: false },] :[]),
                 ...(["sathi team"]?.includes(empType) ? [{ name: "Commission", path: `/employee/statement/sathi-team/${userDetails?._id}`, icon: <IoNewspaperOutline />, active: location.pathname.includes("/statement/sathi-team/"), disable: false }]:[]),
 
                 ...(["finance","operation"]?.includes(empType) ? [{ name: "Statement", path: "/employee/statement", icon: <IoNewspaperOutline />, active: location.pathname.includes("/employee/statement"), disable: false }]:[]),

@@ -1,4 +1,3 @@
-import "react-image-upload/dist/index.css";
 import React, { useEffect, useState } from 'react';
 import { getPartnerBankingDetails } from "../../apis";
 import { toast } from 'react-toastify'

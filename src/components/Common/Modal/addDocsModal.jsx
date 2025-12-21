@@ -16,7 +16,7 @@ export default function AddDocsModal({ _id, uploadingDocs,getCaseById, setUpload
     const [docInfo,setDocInfo] = useState({isPrivate:false,docName:"",otherDocName:""})
     const [loading, setLoading] = useState({ status: false, code: 0, type: "", message: "" })
     const userDetails = appState?.myAppData?.details
-    const hasAccess = userDetails?.role?.toLowerCase()=="admin" || userDetails?.empType?.toLowerCase()=="operation"   
+    const hasAccess = userDetails?.role?.toLowerCase()=="admin" || userDetails?.role?.toLowerCase()=="employee"   
 
     const handleSumbit = async (e) => {
         e.preventDefault()

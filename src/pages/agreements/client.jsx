@@ -1,12 +1,9 @@
 import React from 'react'
-import { Helmet } from "react-helmet";
 
 export default function ClientAgreement() {
   return (
     <>
-                <Helmet>
-        <link rel="canonical" href="http://claimsolution.in/client/service agreement" />
-      </Helmet>
+               
     <div className="container-px-5 px-5">
       
 <p className='pt-5 h1 text-center fw-bold my-5'>SERVICE AGREEMENT</p>

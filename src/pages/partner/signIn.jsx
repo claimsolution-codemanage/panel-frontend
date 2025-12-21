@@ -8,7 +8,6 @@ import { useContext } from "react"
 import { BsEyeSlashFill } from "react-icons/bs";
 import { BsEyeFill } from "react-icons/bs";
 import { useFormik } from 'formik'
-import { Helmet } from "react-helmet";
 import { partnerSignInValidationSchema, signInOrSignUpInitialValue } from "../../utils/validations/auth/partnerAuthValidation"
 import { partnerSigninApi } from "../../apis/auth/partnerAuthApi"
 
@@ -57,9 +56,7 @@ export default function SignIn() {
 
 
     return (<>
-                   <Helmet>
-        <link rel="canonical" href="http://claimsolution.in/partner/signin" />
-      </Helmet>
+      
         <div className="container-fluid p-0">
             <div className="container-px-5 p-0">
                 <div className="">

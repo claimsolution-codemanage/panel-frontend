@@ -1,4 +1,3 @@
-import "react-image-upload/dist/index.css";
 import { useState, useEffect, useRef } from "react";
 import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 import { formatDateToISO } from "../../utils/helperFunction";

@@ -3,7 +3,6 @@ import { useEffect, useState } from "react";
 import {toast} from 'react-toastify'
 import Loader from "../components/Common/loader";
 import { viewAllJob } from "../apis";
-import { Helmet } from "react-helmet";
 
 export default function Career(){
     const [data,setData] = useState([])
@@ -33,9 +32,7 @@ export default function Career(){
       }, [])
 return(
         <>   
-              <Helmet>
-        <link rel="canonical" href="http://claimsolution.in/career" />
-      </Helmet> 
+            
             {/* Career */}
             <div className="container-fluid color-2  pt-3 pb-3">
                 <div className="container-px-5 my-3">

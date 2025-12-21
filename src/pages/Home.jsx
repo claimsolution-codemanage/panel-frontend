@@ -3,9 +3,6 @@ import * as yup from 'yup'
 import { useFormik } from 'formik';
 import { addComplaint } from '../apis';
 import { toast } from 'react-toastify'
-import CountUp from 'react-countup';
-import ScrollTrigger from 'react-scroll-trigger';
-import { Helmet } from "react-helmet";
 
 import { useEffect, useState } from 'react'
 export default function Home() {
@@ -67,10 +64,6 @@ export default function Home() {
 
   return (
     <>
-      <Helmet>
-        <link rel="canonical" href="http://claimsolution.in/" />
-      </Helmet>
-
       {/* <!--popup form Start--> */}
       <div id="myModal" className={`modal ${showPopUpForm && "show"} fade popup-right-side-form`} tabindex="-1" aria-labelledby="exampleModalLabel" aria-modal="true" role="dialog" style={{ display: showPopUpForm && "block" }}>
         <div className="modal-dialog modal-md float-end w-100">
@@ -280,106 +273,7 @@ export default function Home() {
 
       </div>
 
-      {/* Our Achievements */}
-      <div className="container-fluid py-md-5 py-5" id="bg-image" onLoad={() => { console.log("scroll up!") }}>
-        <div className="container-px-5 my-md-5">
-          <div className="row">
-            <div className="color-1 fw-bold h1 mb-md-5 pb-md-3 text-center">Our Achievement</div>
-            <div className="col-6 col-md-3">
-              <div className="bg-transparent border-0 box-shadow-2 card p-4 shadow">
-                {/* <img src="" alt="" />
-                <div className="color-1 fs-3 text-center">demo</div> */}
-                <div>
-                  <ScrollTrigger onEnter={() => setIsScrollCount(true)} onExit={() => setIsScrollCount(false)}>
-                    <p class="color-1 h1 fw-bold text-center js-count-up">
-                      {isScrollCount && <CountUp
-                        start={0}
-                        delay={0}
-                        end={2300}
-                        duration={3}
-                        suffix='+'
-                      // separator=" "
-                      // decimals={0}
-                      // decimal=","
-                      ></CountUp>}
-                    </p>
-                  </ScrollTrigger>
-                  <p class="text-warning fs-5 text-center">Resolved: Insurance</p>
-                </div>
-              </div>
-            </div>
-            <div className="col-6 col-md-3">
-              <div className="bg-transparent border-0 box-shadow-2 card p-4 shadow">
-                {/* <img src="" alt="" />
-                <div className="color-1 fs-3 text-center">demo</div> */}
-                <div>
-                  <ScrollTrigger onEnter={() => setIsScrollCount(true)} onExit={() => setIsScrollCount(false)}>
-                    <p class="color-1 h1 text-center js-count-up fw-bold" data-value="2500">
-                      {isScrollCount && <CountUp
-                        start={0}
-                        delay={0}
-                        end={19}
-                        duration={3}
-                        suffix=' Cr+'
-                      // separator=" "
-                      // decimals={0}
-                      // decimal=","
-                      ></CountUp>}
-                    </p>
-                  </ScrollTrigger>
-                  <p class="text-warning fs-5 text-center">Worth: Claims</p>
-                </div>
-              </div>
-            </div>
-            <div className="col-6 col-md-3">
-              <div className="bg-transparent border-0 box-shadow-2 card p-4 shadow">
-                {/* <img src="" alt="" />
-                <div className="color-1 fs-3 text-center">demo</div> */}
-                <div>
-                  <ScrollTrigger onEnter={() => setIsScrollCount(true)} onExit={() => setIsScrollCount(false)}>
-                    <p class="color-1 h1 fw-bold text-center js-count-up" data-value="2500">
-                      {isScrollCount && <CountUp
-                        start={0}
-                        delay={0}
-                        end={2065}
-                        duration={3}
-                        suffix='+'
-                      // separator=" "
-                      // decimals={0}
-                      // decimal=","
-                      ></CountUp>}
-                    </p>
-                  </ScrollTrigger>
-                  <p class="text-warning fs-5 text-center">Happy: Customers</p>
-                </div>
-              </div>
-            </div>
-            <div className="col-6 col-md-3">
-              <div className="bg-transparent border-0 box-shadow-2 card p-4 shadow">
-                {/* <img src="" alt="" />
-                <div className="color-1 fs-3 text-center">demo</div> */}
-                <div>
-                  <ScrollTrigger onEnter={() => setIsScrollCount(true)} onExit={() => setIsScrollCount(false)}>
-                    <p class="h1 fw-bold color-1 text-center js-count-up" data-value="2500">
-                      {isScrollCount && <CountUp
-                        start={0}
-                        delay={0}
-                        end={1000}
-                        duration={3}
-                        suffix='+'
-                      // separator=" "
-                      // decimals={0}
-                      // decimal=","
-                      ></CountUp>}
-                    </p>
-                  </ScrollTrigger>
-                  <p class="text-warning fs-5 text-center">Strong: Network</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+ 
 
       {/* Why Choose us */}
       <div className="container-fluid pt-5 pb-5">

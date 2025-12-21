@@ -1,10 +1,6 @@
-import { Helmet } from "react-helmet";
 export default function Policy(){
     return(
         <>
-        <Helmet>
-        <link rel="canonical" href="http://claimsolution.in/policy" />
-      </Helmet>
             <div className="container-fluid py-5">
                 <div className="container-px-5">
                     <div className="h1 text-center fw-bold py-3">Privacy Policy</div>

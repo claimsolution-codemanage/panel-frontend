@@ -1,12 +1,7 @@
-// import style from './about.module.css'
-// import { Link } from "react-router-dom"
-import { Helmet } from "react-helmet";
 export default function About() {
   return (
     <>
-      <Helmet>
-        <link rel="canonical" href="http://claimsolution.in/about-us" />
-      </Helmet>
+
 
       {/* First part */}
       <div className="container-fluid mb-3 pt-5">

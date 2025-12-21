@@ -11,7 +11,6 @@ import { getJwtDecode } from '../../utils/helperFunction'
 import PhoneInput from 'react-phone-input-2'
 import 'react-phone-input-2/lib/style.css'
 import { useFormik } from 'formik'
-import { Helmet } from "react-helmet";
 import { clientSignUpInitialValue, clientSignUpValidationSchema } from '../../utils/validations/auth/userAuthValidation'
 import { clientSignUpApi } from '../../apis/auth/userAuthApi'
 
@@ -55,9 +54,6 @@ export default function ClientSignUp() {
 
     return (
         <>
-            <Helmet>
-                <link rel="canonical" href="http://claimsolution.in/client/signup" />
-            </Helmet>
             <div className="py-5 mt-auto mt-md-0">
                 <div className="container-px-5 ">
                     <div className="">

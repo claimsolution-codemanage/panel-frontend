@@ -1,12 +1,8 @@
 import React from 'react'
-import { Helmet } from "react-helmet";
 
 export default function RejectClaim() {
   return (
     <div>
-      <Helmet>
-        <link rel="canonical" href="http://claimsolution.in/blog/How to Recover from a Rejected Insurance Claim" />
-      </Helmet>
       <h1>
         <strong>How to Recover from a Rejected Insurance Claim.</strong>
       </h1>

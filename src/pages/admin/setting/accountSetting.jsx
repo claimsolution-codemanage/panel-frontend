@@ -5,27 +5,18 @@ import { toast } from 'react-toastify'
 import { BsEyeSlashFill } from "react-icons/bs";
 import { BsEyeFill } from "react-icons/bs";
 import Loader from "../../../components/Common/loader"
-import { adminGetSettingDetails, adminUpdateSettingDetails, adminUploadCompanyClientTls, adminUploadCompanyPartnerTls } from "../../../apis"
-import { useRef } from "react"
-import { v4 as uuidv4 } from 'uuid';
+import { adminGetSettingDetails, adminUpdateSettingDetails, } from "../../../apis"
 import ViewDocs from "../../../components/Common/ViewDocs"
 import { checkPhoneNo } from "../../../utils/helperFunction"
-import { useContext } from "react"
-import { AppContext } from "../../../App"
 
 export default function AdminAccountSetting() {
     const [data, setData] = useState({ password: "", confirmPassword: "" })
     const [setting, setSetting] = useState({ fullName: "", email: "", mobileNo: "", consultantFee: "",})
     const [loading, setLoading] = useState(false)
-    const [uploadTls, setUploadTls] = useState({ status: 0, type: "", loading: false, message: "" })
     const [settingLoader, setSettingLoader] = useState(false)
     const [resetPasswordLoader, setResetPasswordLoader] = useState(false)
     const [seeDocs,setSeeDocs] = useState({status:false,details:{}})
     const [view, setView] = useState(false)
-    const clientTlsRef = useRef(null)
-    const partnerTlsRef = useRef(null)
-    const navigate = useNavigate()
-    const stateContext = useContext(AppContext)
 
     const handleOnchange = (e) => {
         const { name, value } = e.target;
@@ -114,81 +105,6 @@ export default function AdminAccountSetting() {
             }
         } fetch()
     }, [])
-
-    const handleTls = async (e, type) => {
-        setUploadTls({ status: 0,type: type, loading: true, message: "" })
-        const file = e.target.files[0];
-        if (file) {
-            // Check the file type
-            const allowedTypes = ['application/pdf'];
-            if (!allowedTypes.includes(file.type)) {
-                setUploadTls({ status: 0, type: type, loading: false, message: "file must be pdf" })
-                return;
-            }
-            // Check the file size (1MB = 1024 * 1024 bytes)
-            const maxSize = 5 * 1024 * 1024; // 100kB
-            if (file.size > maxSize) {
-                setUploadTls({ status: 0, type: type, loading: false, message: "Image size must be less than 5MB" })
-                return;
-            }
-            handleUploadFile(file, type)
-        } else {
-            setUploadPhoto({ status: 0, type: type, loading: false, message: "file not select" })
-        }
-    }
-
-    const handleUploadFile = (file, type) => {
-        setUploadTls({ status: 1, type: type, loading: true, message: "uploading..." })
-        //  console.log("loading",data);
-        const fileRef = ref(storage, `company/${uuidv4()}`)
-        uploadBytes(fileRef, file).then(snapshot => {
-            getDownloadURL(snapshot.ref).then(url => {
-                // console.log("URL",type, url);
-                if (type == "partnerTlsUrl") {
-                    updateCompanyTls(adminUploadCompanyPartnerTls, type, { [type]: url })
-                }
-                if (type == "clientTlsUrl") {
-                    updateCompanyTls(adminUploadCompanyClientTls, type, { [type]: url })
-                }
-            })
-        }).catch(error => {
-            // docRef.current = ""
-            // console.log("error", error);
-            setUploadTls({ status: 0, type: type, loading: false, message: "Failed to upload file" })
-            // setLoading({status:false,code:2,type:"uploading",message:"Failed to upload file"})
-        })
-    }
-
-    const updateCompanyTls = async (updateUploadTls, type, data) => {
-        try {
-            const res = await updateUploadTls(data)
-            // console.log("/admin/dashboard",res);
-            if (res?.data?.success) {
-                // navigate("/admin/dashboard")
-                toast.success(res?.data?.message)
-                setSetting({
-                    // ...res?.data?.data,
-                    consultantFee: res?.data?.data?.consultantFee,
-                    email: res?.data?.data?.email,
-                    fullName: res?.data?.data?.fullName,
-                    mobileNo: res?.data?.data?.mobileNo,
-                    partnerTlsUrl: res?.data?.data?.partnerTlsUrl,
-                    clientTlsUrl: res?.data?.data?.clientTlsUrl
-                })
-                setUploadTls({ status: 0, type: type, loading: false, message: "" })
-            }
-            setUploadTls({ status: 0, type: type, loading: false, message: "" })
-        } catch (error) {
-            if (error && error?.response?.data?.message) {
-                toast.error(error?.response?.data?.message)
-            } else {
-                toast.error("Something went wrong")
-            }
-            // console.log("adminResetPassword error", error);
-            setUploadTls({ status: 0, type: type, loading: false, message: "" })
-        }
-
-    }
 
     // console.log("setting", setting);
     return (<div>

@@ -1,13 +1,9 @@
 import React from 'react'
-import { Helmet } from "react-helmet";
 
 
 export default function MysteryClaim() {
   return (
     <div>
-      <Helmet>
-        <link rel="canonical" href="http://claimsolution.in/blog/Solving the Mystery Why Car Insurance Claims Get Rejected" />
-      </Helmet>
     <h1>
       <strong>Solving the Mystery Why Car Insurance Claims Get Rejected</strong>
     </h1>
