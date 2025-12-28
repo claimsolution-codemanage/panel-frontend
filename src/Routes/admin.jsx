@@ -10,15 +10,16 @@ import AdminSignUp from "../pages/admin/setting/signup";
 import AdminDashboard from '../pages/admin/other/dashboard'
 import AdminAccountSetting from '../pages/admin/setting/accountSetting'
 import AdminCreateNewEmployee from '../pages/admin/empoyee/createEmployee'
-import AllAdminCase from '../pages/admin/case/allcases'
-import AdminViewCase from '../pages/admin/case/viewcase'
+import AllAdminCase from '../features/cases/pages/viewAllPg/AdminAllcases'
+import AdminViewCase from '../features/cases/pages/viewCasePg/AdminViewcase'
+import AdminEditCase from '../features/cases/pages/editCasePg/AdminEditCase'
+
 import AllAdminPartner from '../pages/admin/partner/allPartner'
 import AllAdminClient from '../pages/admin/client/allClient'
 import AllAdminEmployee from '../pages/admin/empoyee/allEmployee'
 import AdminPartnerDetails from '../pages/admin/partner/partnerDetails'
 import AdminClientDetails from '../pages/admin/client/viewClient'
 import AdminAllJobs from '../pages/admin/other/jobs'
-import AdminEditCase from '../pages/admin/case/editCase'
 import AdminAllComplaint from '../pages/admin/other/allComplaints'
 import AdminTrashPartner from '../pages/admin/partner/PartnerTrash'
 import AdminTrashClient from '../pages/admin/client/ClientTrash'
@@ -40,7 +41,7 @@ import AdminCaseDocTrash from "../pages/admin/case/caseDocTrash";
 import AdminEmployeeTrash from "../pages/admin/empoyee/EmployeeTrash";
 import AdminViewEmployee from "../pages/admin/empoyee/ViewEmployee";
 import AdminViewMySathi from "../pages/admin/empoyee/viewMySathi";
-import AdminRejectCase from '../pages/admin/case/allRejectCase'
+import AdminRejectCase from '../features/cases/pages/rejectCasePg/AdminAllRejectCase'
 import ViewAllStatement from "../components/Reuse/ViewAllStatement";
 import AdminAddInvoice from "../pages/admin/invoice/addInvoice";
 import Statement from "../components/Reuse/Statement";
@@ -48,8 +49,8 @@ import AdminNotification from "../pages/admin/other/allNotification";
 import AdminEditEmployee from "../pages/admin/empoyee/EditEmployee";
 import JoiningFormComp from "../pages/admin/empoyee/JoiningForm";
 import AllStatement from "../pages/admin/statement/AllStatement";
-import AdminClosedCasePage from "../pages/admin/case/allClosedCase";
-import AdminWeeklyFollowUpPage from "../pages/admin/case/allWeeklyFollowUpCase";
+import AdminClosedCasePage from "../features/cases/pages/closedCasePg/AdminAllClosedCase";
+import AdminWeeklyFollowUpPage from "../features/cases/pages/FollowUpCasePg/AdminAllWeeklyFollowUpCase";
 
 {/* for admin */}
 export const adminRoutes = [

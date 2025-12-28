@@ -8,8 +8,6 @@ import { empAllStatementDownload, empFindCaseByFileNoApi, empOpAllStatment, empO
 import EmployeeDasboard from '../pages/employee/setting/dashboard'
 import EmployeeSignIn from '../pages/employee/setting/signin'
 import EmployeeForgetPassword from '../pages/employee/setting/forgetPassword'
-import EmployeeAllCase from '../pages/employee/cases/allCase'
-import EmployeeViewCase from '../pages/employee/cases/viewCase'
 import EmployeeAllClient from '../pages/employee/client/allClient'
 import EmployeeClientDetails from '../pages/employee/client/viewClient'
 import EmployeeAllPartner from '../pages/employee/allPartner'
@@ -20,10 +18,8 @@ import EmployeeAllInvoices from '../pages/employee/finance/pages/AllInvoices'
 import EmployeeViewInvoice from '../pages/employee/finance/pages/ViewInvoice'
 import EmployeeResetForgetPassword from '../pages/employee/setting/resetForgetPassword'
 import EmployeeEditInvoice from '../pages/employee/finance/pages/editInvoice'
-import EmployeeEditCase from '../pages/employee/cases/editCase'
 import EmployeeEditClient from '../pages/employee/client/editClient'
 import EmployeeEditPartner from '../pages/employee/editPartner'
-import EmpSaleNewCase from '../pages/employee/sales/addCase'
 import EmployeeInvoiceTrash from '../pages/employee/finance/pages/InvoiceTrash'
 import EmpSalePartnerReport from "../pages/employee/sales/partnerReport"
 import EmpBranchTeam from "../pages/employee/branchTeam"
@@ -32,13 +28,12 @@ import EmployeeAddSathiAcc from "../pages/employee/createSathiAcc"
 import EmpViewMySathi from "../pages/employee/viewMySathi"
 import EmployeeAddInvoice from "../pages/employee/finance/pages/addInvoice"
 import EmpNotification from "../pages/employee/setting/allNotification"
-import EmployeeClosedCasePage from "../pages/employee/cases/allClosedCase"
 
 // for sale employee
 import EmployeeAddPartner from '../pages/employee/sales/addPartner'
 import ViewAllStatement from "../components/Reuse/ViewAllStatement"
 import Statement from "../components/Reuse/Statement"
-import EmployeeRejectCase from "../pages/employee/cases/allRejectCase"
+import EmployeeRejectCase from "../features/cases/pages/rejectCasePg/EmpAllRejectCase"
 import AllStatement from "../pages/employee/statement/AllStatement"
 import EmpAllPartnersTrash from "../pages/employee/trash/AllPartnersTrash"
 import EmpAllCaseTrash from "../pages/employee/trash/AllCaseTrash"
@@ -46,7 +41,13 @@ import EmpAllClientTrash from "../pages/employee/trash/AllClientTrash"
 import EmpAllInvoiceTrash from "../pages/employee/trash/AllInvoiceTrash"
 import EmpAllDocumentTrash from "../pages/employee/trash/AllDocumentTrash"
 import EmpAllEmployeeTrash from "../pages/employee/trash/AllEmployeeTrash"
-import EmpCaseWeeklyFollowUpPage from "../pages/employee/cases/allWeeklyFollowUpCase"
+
+import EmpSaleNewCase from '../features/cases/pages/addCasePg/EmpAddCase'
+import EmployeeEditCase from '../features/cases/pages/editCasePg/EmpEditCase'
+import EmployeeClosedCasePage from "../features/cases/pages/closedCasePg/EmpAllClosedCase"
+import EmpCaseWeeklyFollowUpPage from "../features/cases/pages/FollowUpCasePg/EmpAllWeeklyFollowUpCase"
+import EmployeeAllCase from '../features/cases/pages/viewAllPg/EmpAllCase'
+import EmployeeViewCase from '../features/cases/pages/viewCasePg/EmpViewCase'
 
 export const employeeRoutes = [
     <Route path='/employee/signin' element={<PanelTemplate><EmployeeSignIn/></PanelTemplate>}/>,
@@ -55,12 +56,15 @@ export const employeeRoutes = [
   <Route path='/employee/reset password' element={<EmployeeTemplate><EmployeeResetPassword/></EmployeeTemplate>}/>,
   <Route path='/employee/profile' element={<EmployeeTemplate><EmpViewProfile/></EmployeeTemplate>}/>,
   <Route path='/employee/profile/:_id' element={<EmployeeTemplate><EmpViewProfile/></EmployeeTemplate>}/>,
+  
   <Route path='/employee/all case' element={<EmployeeTemplate><EmployeeAllCase/></EmployeeTemplate>}/>,
   <Route path='/employee/all case/:_id' element={<EmployeeTemplate><EmployeeAllCase/></EmployeeTemplate>}/>,
   <Route path='/employee/view case/:_id' element={<EmployeeTemplate><EmployeeViewCase/></EmployeeTemplate>}/>,
+  <Route path='/employee/edit-case/:_id'  element={<EmployeeTemplate><EmployeeEditCase/></EmployeeTemplate>}/>,
   <Route path='/employee/reject-cases'  element={<EmployeeTemplate><EmployeeRejectCase/></EmployeeTemplate>}/>,
   <Route path='/employee/closed-cases'  element={<EmployeeTemplate><EmployeeClosedCasePage/></EmployeeTemplate>}/>,
   <Route path='/employee/case-weekly-followUp'  element={<EmployeeTemplate><EmpCaseWeeklyFollowUpPage/></EmployeeTemplate>}/>,
+
   <Route path='/employee/all partner' element={<EmployeeTemplate><EmployeeAllPartner/></EmployeeTemplate>}/>,
   <Route path='/employee/all partner/:_id' element={<EmployeeTemplate><EmployeeAllPartner/></EmployeeTemplate>}/>,
   <Route path='/employee/partner details/:_id' element={<EmployeeTemplate><EmployeePartnerDetails/></EmployeeTemplate>}/>,
@@ -72,7 +76,6 @@ export const employeeRoutes = [
   <Route path='/employee/all-invoices' element={<EmployeeTemplate><EmployeeAllInvoices/></EmployeeTemplate>}/>,
   <Route path='/employee/resetPassword/:verifyToken' sensitive={true} strict={false} element={<PanelTemplate><EmployeeResetForgetPassword/></PanelTemplate>}/>,
   <Route path='/employee/edit-invoice/:_id'  element={<EmployeeTemplate><EmployeeEditInvoice/></EmployeeTemplate>}/>,
-  <Route path='/employee/edit-case/:_id'  element={<EmployeeTemplate><EmployeeEditCase/></EmployeeTemplate>}/>,
   <Route path='/employee/edit-client/:_id'  element={<EmployeeTemplate><EmployeeEditClient/></EmployeeTemplate>}/>,
   <Route path='/employee/edit-partner/:_id'  element={<EmployeeTemplate><EmployeeEditPartner/></EmployeeTemplate>}/>,
   <Route path='/employee/add-partner'  element={<EmployeeTemplate><EmployeeAddPartner/></EmployeeTemplate>}/>,

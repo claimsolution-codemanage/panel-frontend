@@ -114,6 +114,7 @@ export const caseStatus = ["Pending","Accept","Under Expert Review","Processing"
 "IRDAI Stage", "Reimbursment Claim Filing","RTI","Closed"
 ];
 
+export const caseMailMethod = ["None","Client","Partner","Both"];
 
 export const insuranceCompany = ["ICICI Bank","Kotak Mahindra Bank","Ujjwala Insurance","Other"]
 

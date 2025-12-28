@@ -1,34 +1,32 @@
-import { employeeAllCase,saleEmpPartnerReport } from "../../../apis"
-import { employeeChangeCaseStatus,salesAllCaseDownload,empDownloadPartnerReport } from "../../../apis"
-import { AppContext } from "../../../App"
+import { employeeChangeCaseStatus,salesAllCaseDownload,empOptGetNormalEmployee,empOptShareSaleEmployee,employeeAllCase } from "../../../../apis"
+import { AppContext } from "../../../../App"
 import { useContext} from "react"
-import ViewAllCaseComp from "../../../features/cases/components/viewAllComp/ViewAllCaseComp"
+import ViewAllCaseComp from "../../components/viewAllComp/ViewAllCaseComp"
 import { useParams } from "react-router-dom"
-import { employeeAttachementUpload } from "../../../apis/upload"
+import { employeeAttachementUpload } from "../../../../apis/upload"
  
-export default function EmpSalePartnerReport() {
-    const param = useParams()
-
+export default function EmployeeAllCase() {
   const state = useContext(AppContext)
+  const param = useParams()
   const empType  = state?.myAppData?.details?.empType
-
 
   return (<>
       <ViewAllCaseComp
-      id={param?._id}
-      empId={false}
-      getCases={saleEmpPartnerReport}
-      downloadCase={empDownloadPartnerReport}
+      isBack={param?._id ? true :false}
+      getCases={employeeAllCase}
+      downloadCase={salesAllCaseDownload}
       role={"employee"}
       setStatus={employeeChangeCaseStatus}
       setCaseStatus={()=>{}}
       viewUrl={"/employee/view case/"}
       editUrl={"/employee/edit-case/"}
-      caseShare={()=>{}}
       isEdit={empType?.toLowerCase()==="operation"}
       isChangeStatus={empType?.toLowerCase()==="operation"}
       isRemoveCase={false}
       isDownload={true}
+      isShare={empType?.toLowerCase()==="operation"}
+      getNormalEmp={empOptGetNormalEmployee}
+      caseShare={empOptShareSaleEmployee}
       createInvUrl={empType?.toLowerCase()==="finance" ?  "/employee/create-invoice/" : ""}
       attachementUpload={employeeAttachementUpload}
     /> 

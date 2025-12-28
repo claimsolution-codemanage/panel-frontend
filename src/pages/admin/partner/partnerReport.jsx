@@ -9,7 +9,7 @@ import { getFormateDMYDate, getFormateDate } from "../../../utils/helperFunction
 import ReactPaginate from 'react-paginate';
 import { CiEdit } from 'react-icons/ci'
 import { IoArrowBackCircleOutline } from 'react-icons/io5'
-import ChangeStatusModal from "../../../components/Common/Modal/changeStatusModal"
+import ChangeStatusModal from "../../../features/cases/components/common/model/changeStatusModal"
 import { useLocation, useNavigate } from "react-router-dom"
 import { BiLeftArrow } from 'react-icons/bi'
 import { BiRightArrow } from 'react-icons/bi'
@@ -17,7 +17,7 @@ import { adminChangeCaseStatus, adminShareCaseToEmployee, adminViewPartnerReport
 import Loader from "../../../components/Common/loader"
 import { IoShareSocialOutline } from "react-icons/io5";
 import { CiFilter } from "react-icons/ci";
-import ShareCaseModal from "../../../components/Common/Modal/shareCaseModal"
+import ShareCaseModal from "../../../features/cases/components/common/model/shareCaseModal"
 import loash from 'lodash'
 import { AiOutlineDelete } from "react-icons/ai";
 import { VscGitPullRequestGoToChanges } from 'react-icons/vsc'

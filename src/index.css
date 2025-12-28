@@ -487,3 +487,27 @@ background-color: #182f59;
   width: auto !important;
   overflow: scroll;
 }
+
+.text-editor u {
+  text-decoration: underline !important;
+}
+
+@media (max-width: 768px) { /* Mobile breakpoint */
+  .table-responsive {
+    overflow-x: auto; /* keep horizontal scroll if needed */
+  }
+
+  .remark-cell .text-editor {
+    max-height: 150px;
+    min-width: 300px;
+    max-width: 600px;       /* Limit height on mobile */
+    overflow-y: auto;        /* Scroll inside cell if text too long */
+    word-break: break-word;  /* Wrap long words */
+    line-height: 1.4;
+    padding-right: 0.25rem;  /* optional for scrollbar */
+  }
+}
+
+.bg-orange {
+  background-color: #fd7e14;
+}

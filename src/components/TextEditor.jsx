@@ -42,7 +42,7 @@ function TextEditor({ value, handleOnChange, placeholder }) {
   const quillRef = useRef(null);
 
   return (
-    <div>
+    <div className="text-editor"  style={{ height: "200px" }}>
       <ReactQuill
         ref={quillRef}
         theme="snow"
