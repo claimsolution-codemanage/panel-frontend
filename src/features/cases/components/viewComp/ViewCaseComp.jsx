@@ -129,7 +129,7 @@ export default function ViewCaseComp({ id, getCase, role,empType, attachementUpl
                                             {data[0]?.caseFrom?.toLowerCase() == "client" && <PaymentSection id={id} accessPayment={accessPayment} getCaseById={getCaseById} paymentDetailsApi={paymentDetailsApi} casePayment={data[0]?.casePayment} />}
 
                                             {/* client other case section */}
-                                            {Boolean(isViewOtherClientCase) && data?.[0]?.clientOtherCases?.length && <ClientOtherCaseSection data={data?.[0]?.clientOtherCases || []} role={role} viewOtherClientCasePath={viewOtherClientCasePath}/>
+                                            {Boolean(isViewOtherClientCase) && Boolean(data?.[0]?.clientOtherCases?.length) && <ClientOtherCaseSection data={data?.[0]?.clientOtherCases || []} role={role} viewOtherClientCasePath={viewOtherClientCasePath}/>
 }
                                             
                                             {/* case comment */}
