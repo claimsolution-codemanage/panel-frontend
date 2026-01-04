@@ -50,7 +50,8 @@ export default function AllCaseTrash({ allCaseApi, caseStatusApi, deleteCaseApi,
             const type = false
             const startDate = dateRange?.startDate ? getFormateDate(dateRange?.startDate) : ""
             const endDate = dateRange?.endDate ? getFormateDate(dateRange?.endDate) : ""
-            const res = await allCaseApi(pageItemLimit, pgNo, searchQuery, statusType, startDate, endDate, type)
+            const res = await allCaseApi({pageItemLimit, pgNo, searchQuery,statusType, startDate:startDate,endDate:endDate,type:false})
+            
             if (res?.data?.success && res?.data?.data) {
                 setData([...res?.data?.data])
                 setNoOfCase(res?.data?.noOfCase)

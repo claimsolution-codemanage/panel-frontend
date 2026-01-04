@@ -1,6 +1,6 @@
 import { empFindCaseByFileNoApi, financeEmployeeCreateInvoice } from '../../../../apis'
 import {  useParams } from 'react-router-dom'
-import CreateInvoiceComp from '../../../../components/Reuse/CreateInvoiceComp'
+import CreateInvoiceComp from '../../components/addInvoice/CreateInvoiceComp'
 
 // not for client --> office 
 export default function EmployeeAddInvoice() {

@@ -1,20 +1,20 @@
 import { useEffect, useState, useRef } from 'react'
-import SenderModal from '../Common/InvoiceComp/SenderModal'
-import ReceiverModal from '../Common/InvoiceComp/receiverModal'
-import AddItem from '../Common/InvoiceComp/AddItem'
+import SenderModal from '../../../../components/Common/InvoiceComp/SenderModal'
+import ReceiverModal from '../../../../components/Common/InvoiceComp/receiverModal'
+import AddItem from '../../../../components/Common/InvoiceComp/AddItem'
 import { useFormik } from 'formik'
 import { IoIosAddCircle } from "react-icons/io";
 import { LuClipboardEdit } from "react-icons/lu";
 import { TiDelete } from "react-icons/ti";
-import EditItem from '../Common/InvoiceComp/editItem'
+import EditItem from '../../../../components/Common/InvoiceComp/editItem'
 import { BiMessageSquareEdit } from "react-icons/bi";
 import { useReactToPrint } from 'react-to-print';
 import { toast } from 'react-toastify'
 import { useLocation, useNavigate, useSearchParams } from 'react-router-dom'
 import { ToWords } from 'to-words'
-import { invoiceFormatDate } from '../../utils/helperFunction'
+import { invoiceFormatDate } from '../../../../utils/helperFunction'
 import { IoArrowBackCircleOutline } from 'react-icons/io5'
-import { itemInvInitalValues, itemInvValidationSchema, receiverInvInitalValues, receiverValidationSchema, senderInvInitalValues, senderValidationSchema } from '../../utils/validation'
+import { itemInvInitalValues, itemInvValidationSchema, receiverInvInitalValues, receiverValidationSchema, senderInvInitalValues, senderValidationSchema } from '../../../../utils/validation'
 
 export default function CreateInvoiceComp({ createInvoice, clientId, caseId, viewInvoiceUrl, isOffice,fileDetailApi }) {
   const [searchParams,setSearchParams] =useSearchParams()
@@ -166,6 +166,9 @@ export default function CreateInvoiceComp({ createInvoice, clientId, caseId, vie
       navigate(-1)
     }
   };
+
+  console.log("isOffice",isOffice);
+  
 
   return (
     <div>

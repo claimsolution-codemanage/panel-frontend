@@ -195,7 +195,7 @@ export default function ViewAllClient(props) {
                         </div>
                     </div>
                 </div>
-                <div className="m-0 m-md-5 p-md-4">
+                <div className="m-0 m-md-5">
                     <div className="">
                         <div className=" border-end">
                             <div className="bg-color-1 border-0 border-primary border-start card mx-1 my-4 p-2 shadow">
@@ -210,7 +210,7 @@ export default function ViewAllClient(props) {
                     </div>
                 </div>
 
-                <div className="m-md-5 p-md-4">
+                <div className="m-md-5">
                     <div className="bg-color-1 p-3 p-md-5 rounded-2 shadow">
                         <div className="d-block d-md-flex flex gap-2">
 

@@ -7,6 +7,8 @@ import { useNavigate } from 'react-router-dom';
 import TextEditor from '../../../../../components/TextEditor';
 import { formatDateToISO } from '../../../../../utils/helperFunction';
 
+const minDate = formatDateToISO(new Date(new Date().setDate(new Date().getDate()+1)))
+
 export default function ChangeStatusModal({ changeStatus, setChangeStatus, handleCaseStatus, getCaseById, role, attachementUpload }) {
     const [data, setData] = useState({ _id: changeStatus?.details?._id, status: "", remark: "", mailMethod: "None", nextFollowUp: "", })
     const [loading, setLoading] = useState(false)
@@ -95,7 +97,7 @@ export default function ChangeStatusModal({ changeStatus, setChangeStatus, handl
                             type={"date"}
                             name={"nextFollowUp"}
                             placeholder={"Next follow-up date"}
-                            min={formatDateToISO(new Date())}
+                            min={minDate}
                             max={addOneMonthToISO(new Date())}
                             value={data?.nextFollowUp ? formatDateToISO(data?.nextFollowUp) : ''}
                             onChange={hangleOnchange}

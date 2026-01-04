@@ -167,3 +167,44 @@ export function formatAmount(amount, currency = "INR") {
     maximumFractionDigits: 2
   }).format(Number(amount));
 }
+
+
+export function formatWhatsAppDate(date) {
+  if (!date) return "";
+
+  const msgDate = new Date(date);
+  const now = new Date();
+
+  // Reset time for comparison
+  const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  const yesterday = new Date(today);
+  yesterday.setDate(today.getDate() - 1);
+
+  const msgDay = new Date(
+    msgDate.getFullYear(),
+    msgDate.getMonth(),
+    msgDate.getDate()
+  );
+
+  const time = msgDate.toLocaleTimeString("en-IN", {
+    hour: "numeric",
+    minute: "2-digit",
+    hour12: true,
+  });
+
+  if (msgDay.getTime() === today.getTime()) {
+    return `Today, ${time}`;
+  }
+
+  if (msgDay.getTime() === yesterday.getTime()) {
+    return `Yesterday, ${time}`;
+  }
+
+  const formattedDate = msgDate.toLocaleDateString("en-IN", {
+    day: "2-digit",
+    month: "short",
+    year: "numeric",
+  });
+
+  return `${formattedDate}, ${time}`;
+}

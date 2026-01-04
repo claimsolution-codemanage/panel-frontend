@@ -3,15 +3,15 @@ import { toast } from 'react-toastify'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { useParams } from "react-router-dom"
 import { IoArrowBackCircleOutline } from 'react-icons/io5'
-import Loader from "../Common/loader"
-import { AppContext } from "../../App"
+import Loader from "../../../../components/Common/loader"
+import { AppContext } from "../../../../App"
 import { useContext, useRef } from "react"
 import { useReactToPrint } from 'react-to-print';
-import { invoiceFormatDate } from "../../utils/helperFunction"
+import { invoiceFormatDate } from "../../../../utils/helperFunction"
 import { ToWords } from 'to-words'
 import { useFormik } from "formik"
-import { invNoInitalValues, invNoValidationSchema } from "../../utils/validation"
-import EditInvoiceNoModal from "../Common/Modal/invoice/EditInvoiceNoModal"
+import { invNoInitalValues, invNoValidationSchema } from "../../../../utils/validation"
+import EditInvoiceNoModal from "../../../../components/Common/Modal/invoice/EditInvoiceNoModal"
 
 
 

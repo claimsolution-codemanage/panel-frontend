@@ -1,6 +1,6 @@
 import React from 'react'
-import AllInvoiceComp from '../../../components/Reuse/AllInvoiceComp'
-import { adminViewAllInvoice,adminUnactiveInvoice,adminPaidInvoice, adminDownloadAllInvoiceApi } from '../../../apis'
+import AllInvoiceComp from '../../components/allInvoice/AllInvoiceComp'
+import { adminViewAllInvoice,adminUnactiveInvoice,adminPaidInvoice, adminDownloadAllInvoiceApi } from '../../../../apis'
 
 export default function AdminAllInvoice() {
   return (

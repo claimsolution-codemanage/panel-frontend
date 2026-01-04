@@ -1,7 +1,7 @@
 import { useContext } from "react";
 import { AppContext } from "../../../App";
 import {financeEmployeeViewAllInvoice,financeEmployeeUnactiveInvoice,empOperationPaidInvoice, empDownloadAllInvoiceApi } from "../../../apis"
-import AllInvoiceComp from "../../../components/Reuse/AllInvoiceComp";
+import AllInvoiceComp from "../../../features/invoices/components/allInvoice/AllInvoiceComp";
 
 
 export default function EmpAllInvoiceTrash() {

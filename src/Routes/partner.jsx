@@ -41,12 +41,15 @@ export const partnerRoutes = [
     <Route path='/partner/edit profile' element={<PartnerTemplate><EditProfile /></PartnerTemplate>} />,
     <Route path='/partner/edit banking details' element={<PartnerTemplate><EditBankingDetails /></PartnerTemplate>} />,
     <Route path='/partner/banking details' element={<PartnerTemplate><BankDetails /></PartnerTemplate>} />,
-    <Route path='/partner/add new case' element={<PartnerTemplate><NewCase /></PartnerTemplate>} />,
-    <Route path='/partner/all case' element={<PartnerTemplate><AllPartnerCase /></PartnerTemplate>} />,
-    <Route path='/partner/view case/:_id' element={<PartnerTemplate><PartnerViewCase /></PartnerTemplate>} />,
     <Route path='/partner/view tls' element={<PartnerTemplate><PartnerViewTLS /></PartnerTemplate>} />,
     <Route path='/partner/view service agreement' element={<PartnerTemplate><PartnerServiceAgreement /></PartnerTemplate>} />,
     <Route path='/partner/statement/:partnerId' element={<PartnerTemplate><ViewAllStatement getStatementApi={partnerStatement}/></PartnerTemplate>} />,
+    
+    // case start
+    <Route path='/partner/add new case' element={<PartnerTemplate><NewCase /></PartnerTemplate>} />,
+    <Route path='/partner/all case' element={<PartnerTemplate><AllPartnerCase /></PartnerTemplate>} />,
+    <Route path='/partner/view case/:_id' element={<PartnerTemplate><PartnerViewCase /></PartnerTemplate>} />,
+    // case end
 
 ]
 {/* <Route path='/partner/edit case/:_id' element={<PartnerTemplate><PartnerEditCase/></PartnerTemplate>}/> */ }

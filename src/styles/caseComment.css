@@ -1,0 +1,149 @@
+
+.chat-bg {
+  background: #f0f2f5;
+  padding: 18px;
+  border-radius: 14px;
+}
+
+.chat-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.chat-message {
+  display: flex;
+  width: 100%;
+}
+
+.chat-message.me {
+  justify-content: flex-end;
+}
+
+.chat-message.other {
+  justify-content: flex-start;
+}
+
+/* ===== Bubble ===== */
+.chat-bubble {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 10px 14px;
+  max-width: min(75%, 520px);
+  width: fit-content;
+  border-radius: 16px;
+  font-size: 14px;
+  line-height: 1.45;
+  word-break: break-word;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+
+/* Colors */
+.chat-bubble.me {
+  background: #dcf8c6;
+  border-bottom-right-radius: 6px;
+}
+
+.chat-bubble.other {
+  background: #ffffff;
+  border-bottom-left-radius: 6px;
+}
+
+/* Author */
+.chat-author {
+  font-size: 11px;
+  font-weight: 600;
+  color: #4a4a4a;
+}
+
+/* Rich text fix */
+.chat-bubble .ql-editor {
+  padding: 0 !important;
+}
+
+/* ===== Time ===== */
+.chat-time {
+  align-self: flex-end;
+  font-size: 10px;
+  color: #666;
+  white-space: nowrap;
+  opacity: 0.85;
+}
+
+
+/* Meta row (time + edit) */
+.chat-meta-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  align-self: flex-end;
+  margin-top: 2px;
+}
+
+/* Time */
+.chat-time {
+  font-size: 10px;
+  color: #666;
+  white-space: nowrap;
+  opacity: 0.85;
+}
+
+/* Edit icon */
+.chat-edit {
+  font-size: 12px;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+/* Show edit icon on hover (desktop) */
+.chat-bubble.me:hover .chat-edit {
+  opacity: 1;
+  transform: scale(1.05);
+}
+
+/* Mobile: always visible */
+@media (hover: none) {
+  .chat-edit {
+    opacity: 1;
+  }
+}
+
+
+.text-editor {
+  width: 100%;
+}
+
+/* Toolbar responsiveness */
+.text-editor .ql-toolbar {
+  border-radius: 8px 8px 0 0;
+}
+
+/* Editor area */
+.text-editor .ql-container {
+  border-radius: 0 0 8px 8px;
+  min-height: 120px;
+  max-height: 280px;
+}
+
+/* Content area */
+.text-editor .ql-editor {
+  min-height: 120px;
+  max-height: 280px;
+  overflow-y: auto;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+/* Mobile optimization */
+@media (max-width: 576px) {
+  .text-editor .ql-editor {
+    min-height: 90px;
+    font-size: 13px;
+  }
+
+  .text-editor .ql-toolbar {
+    flex-wrap: wrap;
+  }
+}

@@ -1,6 +1,6 @@
 import React from 'react'
-import AllInvoiceComp from '../../../../components/Reuse/AllInvoiceComp'
 import { financeEmployeeUnactiveInvoice,financeEmployeeViewAllTrashInvoice,financeEmployeeRemoveInvoice } from '../../../../apis'
+import AllInvoiceComp from '../../components/allInvoice/AllInvoiceComp'
 
 export default function EmployeeInvoiceTrash() {
   return (

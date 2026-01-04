@@ -1,11 +1,11 @@
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
-import {useState } from 'react';
+import {useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
-import TextEditor from '../../TextEditor';
+import TextEditor from '../../../../../components/TextEditor';
 
-export default function AddCaseCommit({ show,handleCaseCommit,getCaseById,close,id,privateCommit }) {
-    const [data,setData] = useState({_id:id,comment:"",isPrivate:false})
+export default function AddCaseCommit({ show,details,handleCaseCommit,getCaseById,close,id,privateCommit }) {
+    const [data,setData] = useState({_id:id,caseCommentId:details?._id || null,comment:details?.message || "",isPrivate:Boolean(details?.isPrivate)})
     const [commitLoading,setCommitLoading] = useState(false)
 
       const handleCommit =async()=>{
@@ -35,7 +35,11 @@ export default function AddCaseCommit({ show,handleCaseCommit,getCaseById,close,
 
       }
 
-
+    useEffect(()=>{
+      if(details?._id){
+        setData({...data,caseCommentId:details?._id,comment:details?.message,isPrivate:details?.isPrivate,})
+      }
+    },[details?._id])
 
     return (
         <Modal
@@ -57,7 +61,7 @@ export default function AddCaseCommit({ show,handleCaseCommit,getCaseById,close,
                         <textarea className="form-control" name="remark" value={data?.comment} onChange={(e)=>setData({...data,comment:e.target.value})} placeholder="Case Comment..." rows={5} cols={5} ></textarea>
                     </div> */}
                        <div className="mb-3 col-12">
-                     <TextEditor value={data?.comment || ""} handleOnChange={(val)=>setData({...data,comment:val})} placeholder="Case Comment..." rows={5} cols={5} />
+                     <TextEditor  value={data?.comment || ""} handleOnChange={(val)=>setData({...data,comment:val})} placeholder="Case Comment..." rows={5} cols={5} />
                     </div>
                 </div>
 

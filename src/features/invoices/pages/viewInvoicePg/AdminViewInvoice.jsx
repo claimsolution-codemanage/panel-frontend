@@ -1,6 +1,6 @@
 import React from 'react'
-import ViewInvoiceComp from '../../../components/Reuse/ViewInvoiceComp'
-import { adminEditInvoiceNoApi, adminGetInvoiceById } from '../../../apis'
+import ViewInvoiceComp from '../../components/viewInvoice/ViewInvoiceComp'
+import { adminEditInvoiceNoApi, adminGetInvoiceById } from '../../../../apis'
 import { useParams } from 'react-router-dom'
 
 export default function AdminViewInvoice() {

@@ -4,7 +4,6 @@ import { Route } from "react-router-dom"
 
 
 // for client routes
-import ClientAllInvoice from "../pages/client/AllInvoice"
 import ClientServiceAgreement from "../pages/client/ClientServiceAgreement"
 import ClientAcceptTls from "../pages/client/acceptTls"
 import ClientNewCase from "../features/cases/pages/addCasePg/ClientAddCase"
@@ -19,11 +18,12 @@ import ClientResetPassword from "../pages/client/resetPassword"
 import ClientMobileSendOtp from "../pages/client/sendMobileCode"
 import ClientSignUp from "../pages/client/signup"
 import ClientViewCase from "../features/cases/pages/viewCasePg/ClientViewCase"
-import ClientViewInvoice from "../pages/client/viewInvoice"
 import ClientViewTLS from "../pages/client/viewTls"
 import AcceptClientRequest from "../pages/client/acceptClientRequest"
 import ClientSignIn from "../pages/client/signin"
 
+import ClientAllInvoice from "../features/invoices/pages/viewAllInvoicePg/ClientAllInvoice"
+import ClientViewInvoice from "../features/invoices/pages/viewInvoicePg/ClientViewInvoice"
 
 export const clientRoutes = [
 <Route path='/client/signin' element={<PanelTemplate><ClientSignIn/></PanelTemplate>}/>,
@@ -38,13 +38,17 @@ export const clientRoutes = [
   <Route path='/client/dashboard' element={<ClientTemplate><ClientDasboard/></ClientTemplate>}/>,
   <Route path='/client/profile' element={<ClientTemplate><ClientProfile/></ClientTemplate>}/>,
   <Route path='/client/edit profile/:_id' element={<ClientTemplate><ClientEditProfile/></ClientTemplate>}/>,
+  <Route path='/client/view tls' element={<ClientTemplate><ClientViewTLS/></ClientTemplate>}/>,
+  <Route path='/client/view service agreement' element={<ClientTemplate><ClientServiceAgreement/></ClientTemplate>}/>,
+  
+  // case start
   <Route path='/client/add new case' element={<ClientTemplate><ClientNewCase/></ClientTemplate>}/>,
   <Route path='/client/all case' element={<ClientTemplate><ClientViewAllCase/></ClientTemplate>}/>,
   <Route path='/client/view case/:_id' element={<ClientTemplate><ClientViewCase/></ClientTemplate>}/>,
-  <Route path='/client/view tls' element={<ClientTemplate><ClientViewTLS/></ClientTemplate>}/>,
-  <Route path='/client/view service agreement' element={<ClientTemplate><ClientServiceAgreement/></ClientTemplate>}/>,
+  // case end
+  
+  // invoice start
   <Route path='/client/view-invoice/:_id' element={<ClientTemplate><ClientViewInvoice/></ClientTemplate>}/>,
   <Route path='/client/all-invoices' element={<ClientTemplate><ClientAllInvoice/></ClientTemplate>}/>,
+  // invoice end
 ]
-{/* <Route path='/employee/all-trash-invoice'  element={<EmployeeTemplate><EmployeeInvoiceTrash/></EmployeeTemplate>}/> */}
-{/* <Route path='/client/edit case/:_id' element={<ClientTemplate><ClientEditCase/></ClientTemplate>}/> */}

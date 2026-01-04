@@ -1,5 +1,5 @@
-import { clientViewAllInvoice, clientPayInvoiceById } from "../../apis"
-import AllInvoiceComp from "../../components/Reuse/AllInvoiceComp";
+import { clientViewAllInvoice, clientPayInvoiceById } from "../../../../apis"
+import AllInvoiceComp from "../../components/allInvoice/AllInvoiceComp";
 
 
 export default function ClientAllInvoice() {

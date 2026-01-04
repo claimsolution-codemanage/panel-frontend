@@ -1,6 +1,6 @@
 import { useParams } from "react-router-dom"
 import { financeEmpEditInvoiceNoApi, financeEmployeeGetInvoiceById } from "../../../../apis"
-import ViewInvoiceComp from "../../../../components/Reuse/ViewInvoiceComp"
+import ViewInvoiceComp from "../../components/viewInvoice/ViewInvoiceComp"
 import { AppContext } from "../../../../App"
 import { useContext } from "react"
 

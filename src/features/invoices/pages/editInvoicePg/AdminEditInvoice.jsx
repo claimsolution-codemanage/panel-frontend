@@ -1,6 +1,6 @@
 import React from 'react'
-import { adminEditInvoice,adminGetInvoiceById } from '../../../apis'
-import EditInvoiceComp from '../../../components/Reuse/EditInvoiceComp'
+import { adminEditInvoice,adminGetInvoiceById } from '../../../../apis'
+import EditInvoiceComp from '../../components/editInvoice/EditInvoiceComp'
 import { useNavigate, useParams } from 'react-router-dom'
 
 export default function AdminEditInvoice() {

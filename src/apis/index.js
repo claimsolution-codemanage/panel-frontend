@@ -440,9 +440,9 @@ export const adminAddPartnerRefToEmp = (data) => {
 }
 
 
-export const adminAddCaseCommit = (data) => {
+export const adminAddOrUpdateCaseComment = (data) => {
   setheader()
-  return axios.put(`${API_BASE}/api/admin/addCaseCommit`, data)
+  return axios.put(`${API_BASE}/api/admin/add_or_update_case_comment`, data)
 }
 
 export const adminDashboardData = (year="") => {
@@ -831,9 +831,9 @@ export const employeeAuthenticate = () => {
 }
 
 
-export const employeeAddCaseComment = (data) => {
+export const employeeAddOrUpdateCaseComment = (data) => {
   setheader()
-  return axios.put(`${API_BASE}/api/employee/addCaseComment`, data)
+  return axios.put(`${API_BASE}/api/employee/add_or_update_case_comment`, data)
 }
 
 export const employeeUpdateCaseById = (_id, data) => {

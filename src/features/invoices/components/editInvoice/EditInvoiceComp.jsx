@@ -1,21 +1,21 @@
 import React, { useEffect, useState, useRef } from 'react'
-import SenderModal from '../Common/InvoiceComp/SenderModal'
-import ReceiverModal from '../Common/InvoiceComp/receiverModal'
-import AddItem from '../Common/InvoiceComp/AddItem'
+import SenderModal from '../../../../components/Common/InvoiceComp/SenderModal'
+import ReceiverModal from '../../../../components/Common/InvoiceComp/receiverModal'
+import AddItem from '../../../../components/Common/InvoiceComp/AddItem'
 import { useFormik } from 'formik'
 import * as Yup from 'yup';
 import { IoIosAddCircle } from "react-icons/io";
 import { LuClipboardEdit } from "react-icons/lu";
 import { IoPrint } from "react-icons/io5";
 import { TiDelete } from "react-icons/ti";
-import EditItem from '../Common/InvoiceComp/editItem'
+import EditItem from '../../../../components/Common/InvoiceComp/editItem'
 import { BiMessageSquareEdit } from "react-icons/bi";
 import { useReactToPrint } from 'react-to-print';
 import { toast } from 'react-toastify'
 import { useLocation, useNavigate, useParams } from 'react-router-dom'
 import { IoArrowBackCircleOutline } from 'react-icons/io5'
-import Loader from '../Common/loader'
-import { invoiceFormatDate } from '../../utils/helperFunction'
+import Loader from '../../../../components/Common/loader'
+import { invoiceFormatDate } from '../../../../utils/helperFunction'
 import {ToWords} from 'to-words'
 
 export default function EditInvoiceComp({getInvoice,id,editInvoice,allInvoiceUrl}) {

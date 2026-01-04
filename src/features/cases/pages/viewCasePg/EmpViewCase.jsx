@@ -1,9 +1,8 @@
 import { API_BASE_IMG, employeeAttachementUpload } from "../../../../apis/upload"
 import { useParams } from "react-router-dom"
-import { employeeChangeCaseStatus,empAddCaseReference,empRemoveCaseReference, empAddOrUpdatePayment, empAddCaseFileByIdApi, employeeGetCaseById } from "../../../../apis"
+import { employeeChangeCaseStatus,empAddCaseReference,empRemoveCaseReference, empAddOrUpdatePayment, empAddCaseFileByIdApi, employeeGetCaseById, employeeAddOrUpdateCaseComment } from "../../../../apis"
 import { AppContext } from "../../../../App"
 import { useContext } from "react"
-import { employeeAddCaseComment } from "../../../../apis"
 import ViewCaseComp from "../../components/viewComp/ViewCaseComp"
 import { empCreateOrUpdateCaseFormApi, empGetCaseFormById } from "../../../../apis/case/form/caseFormApi"
 
@@ -35,7 +34,7 @@ export default function EmployeeViewCase() {
       isAddCommit={true}
       deleteReference={empRemoveCaseReference}
       deleteDoc={()=>{}}
-      addCaseCommit={employeeAddCaseComment}
+      addCaseCommit={employeeAddOrUpdateCaseComment}
       accessPayment={empType?.toLowerCase()==="operation"}
       paymentDetailsApi={empAddOrUpdatePayment}
       isCaseFormAccess={empType?.toLowerCase()==="operation"}

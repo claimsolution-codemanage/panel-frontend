@@ -1,6 +1,6 @@
-import { adminAddCaseFileByIdApi, adminAddOrUpdatePayment, adminGetCaseById } from "../../../../apis"
+import { adminAddCaseFileByIdApi, adminAddOrUpdateCaseComment, adminAddOrUpdatePayment, adminGetCaseById } from "../../../../apis"
 import { useParams } from "react-router-dom"
-import { adminDeleteCaseDocById,adminUpdateClientCaseFee,adminSetCaseDocIsActive,adminEditCaseProcessById,adminChangeCaseStatus, adminAddCaseCommit, adminRemoveCaseReference } from "../../../../apis"
+import { adminDeleteCaseDocById,adminSetCaseDocIsActive,adminEditCaseProcessById,adminChangeCaseStatus,adminRemoveCaseReference } from "../../../../apis"
 import { adminAddCaseReference } from "../../../../apis"
 import { adminAttachementUpload } from "../../../../apis/upload"
 import ViewCaseComp from "../../components/viewComp/ViewCaseComp"
@@ -30,7 +30,7 @@ export default function AdminViewCase() {
       addReference={adminAddCaseReference}
       deleteReference={adminRemoveCaseReference}
       deleteDoc={adminDeleteCaseDocById}
-      addCaseCommit={adminAddCaseCommit}
+      addCaseCommit={adminAddOrUpdateCaseComment}
       setCaseDocStatus={adminSetCaseDocIsActive}
       accessPayment={true}
       paymentDetailsApi={adminAddOrUpdatePayment}

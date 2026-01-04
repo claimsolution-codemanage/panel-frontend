@@ -4,29 +4,29 @@ import { HiMiniEye } from 'react-icons/hi2'
 import { BsSearch } from 'react-icons/bs'
 import 'react-date-range/dist/styles.css'; // main style file
 import 'react-date-range/dist/theme/default.css'; // theme css file
-import { formatAmount, getFormateDate } from "../../utils/helperFunction"
+import { formatAmount, getFormateDate } from "../../../../utils/helperFunction"
 import ReactPaginate from 'react-paginate';
 import { useLocation, useNavigate } from "react-router-dom"
 import { BiLeftArrow } from 'react-icons/bi'
 import { BiRightArrow } from 'react-icons/bi'
-import Loader from "../../components/Common/loader";
-import { AppContext } from "../../App"
+import Loader from "../../../../components/Common/loader";
+import { AppContext } from "../../../../App"
 import { useContext } from "react"
 import loash from 'lodash'
 import { CiAlignBottom } from 'react-icons/ci'
-import PaymentInfo from "../Common/Modal/paymentInfo";
-import DateSelect from "../Common/Modal/DateSelect";
+import PaymentInfo from "../../../../components/Common/Modal/paymentInfo";
+import DateSelect from "../../../../components/Common/Modal/DateSelect";
 import { CiFilter } from "react-icons/ci";
-import ConfirmationModal from "../Common/Modal/confirmationModal";
+import ConfirmationModal from "../../../../components/Common/Modal/confirmationModal";
 import { CiEdit } from 'react-icons/ci'
 import { AiOutlineDelete } from "react-icons/ai";
-import SetStatusOfProfile from "../Common/Modal/setStatusModal";
+import SetStatusOfProfile from "../../../../components/Common/Modal/setStatusModal";
 import { FaTrashRestoreAlt } from 'react-icons/fa'
-import { getFormateDMYDate } from "../../utils/helperFunction";
-import EditInvoiceStatusModal from "../Common/EditInvoiceStatus";
+import { getFormateDMYDate } from "../../../../utils/helperFunction";
+import EditInvoiceStatusModal from "../../../../components/Common/EditInvoiceStatus";
 import { MdCurrencyRupee } from "react-icons/md";
 import { SiMicrosoftexcel } from "react-icons/si";
-import PaginateField from "../Common/PaginateField";
+import PaginateField from "../../../../components/Common/PaginateField";
 
 export default function AllInvoiceComp({ viewAllInvoice, payInvoice, viewInvoiceUrl, role,
   isEdit, isDelete,isPerDelete, editInvoiceUrl, unactiveInvoice, isTrash, deleteInvoice, paidAccess, handlePaid,
@@ -231,7 +231,7 @@ export default function AllInvoiceComp({ viewAllInvoice, payInvoice, viewInvoice
           </div>
         </div>
 
-        <div className="m-0 m-md-5 p-md-4">
+        <div className="m-0 m-md-5">
           <div className="row row-cols-1 row-cols-md-2">
             <div className="border-end">
               <div className="bg-color-1 border-5 border-primary border-start card mx-1 my-4 p-2 shadow">
@@ -262,7 +262,7 @@ export default function AllInvoiceComp({ viewAllInvoice, payInvoice, viewInvoice
         </form>}
 
 
-        <div className="m-0 m-md-5 p-md-4">
+        <div className="m-0 m-md-5">
           <div className="bg-color-1 p-3 p-md-5 rounded-2 shadow">
             <div className="row p-0 mb-2">
               <div className="col-12 col-md-3">

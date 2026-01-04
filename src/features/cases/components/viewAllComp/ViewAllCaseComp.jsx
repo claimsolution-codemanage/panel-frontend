@@ -223,9 +223,9 @@ const getFollowUpClass = (nextFollowUp) => {
   const diffInMs = today - followUpDate;
   const diffInDays = Math.floor(diffInMs / (1000 * 60 * 60 * 24));
 
-  if (diffInDays >= 1 && diffInDays <= 7) return "badge bg-warning text-dark";
-  if (diffInDays >= 8 && diffInDays <= 12) return "badge bg-orange text-white"; // custom
-  if (diffInDays > 12) return "badge bg-danger text-white";
+  if(diffInDays<0) return "badge bg-success text-white"
+  if (diffInDays ===1) return "badge bg-warning text-white";
+  if (diffInDays >= 2) return "badge bg-orange text-white"; // custom
 
   return "badge bg-success"; // future follow-up
 };

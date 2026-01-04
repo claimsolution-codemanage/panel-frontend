@@ -1,5 +1,5 @@
-import { clientGetInvoiceById } from "../../apis"
-import ViewInvoiceComp from "../../components/Reuse/ViewInvoiceComp"
+import { clientGetInvoiceById } from "../../../../apis"
+import ViewInvoiceComp from "../../components/viewInvoice/ViewInvoiceComp"
 import { useParams } from "react-router-dom"
 
 
