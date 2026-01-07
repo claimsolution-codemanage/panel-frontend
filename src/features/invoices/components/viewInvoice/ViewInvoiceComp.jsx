@@ -75,7 +75,7 @@ export default function ViewInvoiceComp({ getInvoice, id, editInvNo, editInvNoAp
   }, [param])
 
   const handlePrint = useReactToPrint({
-    content: () => invoiceRef.current,
+    contentRef:invoiceRef,
   });
 
   const handleBack = () => {
@@ -108,7 +108,9 @@ export default function ViewInvoiceComp({ getInvoice, id, editInvNo, editInvNoAp
           </div>
           <div className="d-flex gap-2">
             {editInvNo && <div onClick={handleClickEditInvoiceNo} className="btn btn-primary cursor-pointer">Invoice No</div>}
-            <div onClick={handlePrint} className="btn btn-primary cursor-pointer">Print/ Download</div>
+            <div 
+            onClick={()=>{handlePrint();console.log(invoiceRef?.current)}}
+             className="btn btn-primary cursor-pointer">Print/ Download</div>
           </div>
         </div>
         <div className="container my-5 mx-0 mx-md-auto w-100">
