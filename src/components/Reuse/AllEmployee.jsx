@@ -27,7 +27,7 @@ import PaginateField from "../Common/PaginateField";
 export default function AllEmployee(props) {
   const { page, empId, getEmployee, isTrash,isDelete, isActive, deleteEmployeeId,
     updateEmployee, role, caseUrl, partnerUrl, isedit, viewSathiUrl, isDownload, getDownload,
-    isBack, statement, statementUrl, editEmpUrl } = props
+    isBack, statement, statementUrl, editEmpUrl,isDeletePermission } = props
 
   const [data, setData] = useState([])
   const navigate = useNavigate()
@@ -50,7 +50,6 @@ export default function AllEmployee(props) {
     setLoading(true)
     try {
       const res = await getEmployee(pageItemLimit, pgNo, searchQuery, !isTrash, empType, empId || "")
-      // console.log("adminGetAllEmployee", res?.data?.data);
       if (res?.data?.success && res?.data?.data) {
         setData([...res?.data?.data])
         setNoOfEmployee(res?.data?.noOfEmployee)
@@ -69,10 +68,10 @@ export default function AllEmployee(props) {
 
 
   useEffect(() => {
-    if (!deleteEmployee?.status && !employeeUpdateStatus?.show) {
+    if (!employeeUpdateStatus?.show) {
       getAllEmployees()
     }
-  }, [pageItemLimit, pgNo, changeStatus, deleteEmployee?.status, employeeUpdateStatus?.show, empType])
+  }, [pageItemLimit, pgNo, changeStatus, employeeUpdateStatus?.show, empType])
 
   useEffect(() => {
     if (isSearch) {
@@ -162,8 +161,6 @@ export default function AllEmployee(props) {
       navigate(-1)
     }
   };
-
-  // console.log("loca",location);
 
   const filter = {
     pageItemLimit,
@@ -268,7 +265,7 @@ export default function AllEmployee(props) {
                         {!isTrash && statement && item?.type?.toLowerCase() == "sathi team" && <Link to={`${statementUrl}/${item?._id}`} state={{ filter, back: location?.pathname, path: location?.pathname }} style={{ cursor: "pointer", height: 30, width: 30, borderRadius: 30 }} className="bg-primary text-white d-flex align-items-center justify-content-center"><IoNewspaperOutline /></Link>}
                         {!isTrash && viewSathiUrl && (item?.type?.toLowerCase() == "sales" || item?.type?.toLowerCase() == "branch") && <span className="bg-warning text-white" style={{ cursor: "pointer", height: 30, width: 30, borderRadius: 30 }} onClick={() => navigate(`${viewSathiUrl}${item._id}`, { state: { filter, back: location?.pathname, path: location?.pathname } })}><FaUserTag /></span>}
                         {(isTrash || isDelete) && <span className={`${!isTrash ? "bg-danger" : "bg-success"}  text-white`} style={{ cursor: "pointer", height: 30, width: 30, borderRadius: 30 }} onClick={() => setChangeStatus({ show: true, details: { _id: item._id, currentStatus: !isTrash, name: item?.fullName } })}>{isTrash ? <FaTrashRestoreAlt /> : <AiOutlineDelete />} </span>}
-                        {isTrash && role?.toLowerCase() == "admin" && <span className="bg-danger text-white" style={{ cursor: "pointer", height: 30, width: 30, borderRadius: 30 }} onClick={() => setDeleteEmployee({ status: true, id: item?._id, text: `Your want to parmanent delete ${item?.fullName} employee` })}><AiOutlineDelete /></span>}
+                        {isTrash && (isDeletePermission || role?.toLowerCase() == "admin") && <span className="bg-danger text-white" style={{ cursor: "pointer", height: 30, width: 30, borderRadius: 30 }} onClick={() => setDeleteEmployee({ status: true, id: item?._id, text: `Your want to parmanent delete ${item?.fullName} employee` })}><AiOutlineDelete /></span>}
                       </span></td>
 
                       <td className="text-nowrap">{item?.branchId}</td>
@@ -299,7 +296,7 @@ export default function AllEmployee(props) {
 
           </div>
           {changeStatus?.show && <SetStatusOfProfile changeStatus={changeStatus} hide={() => setChangeStatus({ show: false, details: "" })} isActive={false} type="Employee" handleChanges={handleChanges} />}
-          {deleteEmployee?.status && <ConfirmationModal show={deleteEmployee?.status} id={deleteEmployee?.id} hide={() => setDeleteEmployee({ status: false, id: "" })} heading="Are you sure?" text={deleteEmployee?.text ? deleteEmployee?.text : "Your want to delete this employee"} handleComfirmation={deleteEmployeeId} />}
+          {deleteEmployee?.status && <ConfirmationModal getRefreshData={getAllEmployees} show={deleteEmployee?.status} id={deleteEmployee?.id} hide={() => setDeleteEmployee({ status: false, id: "" })} heading="Are you sure?" text={deleteEmployee?.text ? deleteEmployee?.text : "Your want to delete this employee"} handleComfirmation={deleteEmployeeId} />}
           {employeeUpdateStatus.show && <EditEmployeeModal show={employeeUpdateStatus?.show} id={employeeUpdateStatus?.id} details={employeeUpdateStatus?.details} hide={() => setEmployeeUpdateStatus({ show: false, id: null, details: {} })} handleComfirmation={updateEmployee} />}
         </div>
 

@@ -63,10 +63,10 @@ export default function AllCaseTrash({ allCaseApi, caseStatusApi, deleteCaseApi,
     }
 
     useEffect(() => {
-        if (!deleteCase.status || !changeisActiveStatus.show) {
+        if (!changeisActiveStatus.show) {
             getAllCases()
         }
-    }, [pageItemLimit, pgNo, statusType, changeisActiveStatus, deleteCase])
+    }, [pageItemLimit, pgNo, statusType, changeisActiveStatus])
 
     useEffect(() => {
         if (isSearch) {
@@ -214,7 +214,7 @@ export default function AllCaseTrash({ allCaseApi, caseStatusApi, deleteCaseApi,
                         </div>
 
                     </div>
-                    {deleteCase?.status && <ConfirmationModal show={deleteCase?.status} id={deleteCase?.id} hide={() => setDeleteCase({ status: false, id: "" })} heading="Are you sure?" text="Your want to delete this case" handleComfirmation={deleteCaseApi} />}
+                    {deleteCase?.status && <ConfirmationModal getRefreshData={getAllCases} show={deleteCase?.status} id={deleteCase?.id} hide={() => setDeleteCase({ status: false, id: "" })} heading="Are you sure?" text="Your want to delete this case" handleComfirmation={deleteCaseApi} />}
                     {changeisActiveStatus?.show && <SetStatusOfProfile changeStatus={changeisActiveStatus} hide={() => setChangeIsActiveStatus({ show: false, details: {} })} type="Case" handleChanges={handleChanges} />}
 
                 </div>

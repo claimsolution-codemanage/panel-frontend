@@ -738,15 +738,8 @@ export const employeResetPassword = (data) => {
   setheader()
   return axios.post(`${API_BASE}/api/employee/resetPassword`, data)
 }
-export const employeeAllCase = ({pageItemLimit = "", pgNo = "", searchQuery = "", statusType = "", startDate = "", endDate = "",type=true,empId="",id="",isReject="",isWeeklyFollowUp=false,isClosed=false}) => {
-  setheader()
-  return axios.get(`${API_BASE}/api/employee/viewAllCase?limit=${pageItemLimit}&pageNo=${pgNo}&search=${searchQuery}&status=${statusType}&startDate=${startDate}&endDate=${endDate}&type=${type}&empId=${empId}&isReject=${isReject}&isWeeklyFollowUp=${isWeeklyFollowUp}&isClosed=${isClosed}`)
-}
 
-export const empSetCaseIsActiveApi = (_id, status) => {
-  setheader()
-  return axios.put(`${API_BASE}/api/employee/changeCaseIsActive?_id=${_id}&status=${!status}`)
-}
+
 
 export const empSetCaseDocIsActive = (_id, status) => {
   setheader()
@@ -764,21 +757,10 @@ export const saleEmpPartnerReport = (pageItemLimit = "", pageNo = "", searchQuer
   return axios.get(`${API_BASE}/api/employee/sale/partnerReport?limit=${pageItemLimit}&pageNo=${pageNo}&search=${searchQuery}&status=${statusType}&startDate=${startDate}&endDate=${endDate}&type=${type}&partnerId=${id}`)
 }
 
-export const employeeChangeCaseStatus = (data) => {
-  setheader()
-  return axios.put(`${API_BASE}/api/employee/changeCaseStatus`, data)
-}
-
 export const empOprUpdateEmployee = (id,data) => {
   setheader()
   return axios.put(`${API_BASE}/api/employee/updateEmployeeAccount?_id=${id}`, data)
 }
-
-export const employeeGetCaseById = (_id) => {
-  setheader()
-  return axios.get(`${API_BASE}/api/employee/viewCaseById?_id=${_id}`)
-}
-
 
 export const employeeAllPartner = (pageItemLimit = "", pageNo = "", searchQuery = "",type,startDate="",endDate="",empId=false) => {
   setheader()
@@ -829,23 +811,6 @@ export const employeeAuthenticate = () => {
   setheader()
   return axios.get(`${API_BASE}/api/employee/authenticate`)
 }
-
-
-export const employeeAddOrUpdateCaseComment = (data) => {
-  setheader()
-  return axios.put(`${API_BASE}/api/employee/add_or_update_case_comment`, data)
-}
-
-export const employeeUpdateCaseById = (_id, data) => {
-  setheader()
-  return axios.put(`${API_BASE}/api/employee/updateCaseById?_id=${_id}`, data)
-}
-
-export const empAddOrUpdatePayment = (data) => {
-  setheader()
-  return axios.post(`${API_BASE}/api/employee/emp/empAddOrUpdatePayment`, data)
-}
-
 
 export const employeeUpdateClient = (_id, data) => {
   setheader()
@@ -1015,17 +980,6 @@ export const empDownloadSathi = (pageItemLimit = "", pageNo = "", searchQuery = 
   })
 }
 
-export const empAddCaseReference = (query) => {
-  setheader()
-  return axios.put(`${API_BASE}/api/employee/operation/addReferenceCaseAndMarge?${query}`)
-}
-
-export const empRemoveCaseReference = (_id, type) => {
-  setheader()
-  return axios.put(`${API_BASE}/api/employee/operation/removeReferenceCase?_id=${_id}&type=${type}`)
-}
-
-
 export const empOperationChangeBranch = (data) => {
   setheader()
   return axios.put(`${API_BASE}/api/employee/operation/change-branch`,data)
@@ -1123,12 +1077,3 @@ export const empAllStatementDownload = (startDate = "", endDate = "",partnerId="
   })
 }
 
-export const empFindCaseByFileNoApi= (fileNo="") => {
-  setheader()
-  return axios.get(`${API_BASE}/api/employee/employeeFindCaseByFileNo?fileNo=${fileNo}`)
-}
-
-export const empAddCaseFileByIdApi = (_id, data) => {
-  setheader()
-  return axios.post(`${API_BASE}/api/employee/empAddCaseFile?_id=${_id}`, data)
-}

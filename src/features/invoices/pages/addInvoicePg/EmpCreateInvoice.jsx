@@ -1,6 +1,7 @@
-import { empFindCaseByFileNoApi, financeEmployeeCreateInvoice } from '../../../../apis'
+import {financeEmployeeCreateInvoice } from '../../../../apis'
 import {  useParams } from 'react-router-dom'
 import CreateInvoiceComp from '../../components/addInvoice/CreateInvoiceComp'
+import { empFindCaseByFileNoApi } from '../../../../apis/case/empCaseApi'
 
 export default function EmployeeCreateInvoice() {
   const caseParam = useParams()

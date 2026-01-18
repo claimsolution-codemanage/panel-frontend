@@ -2,6 +2,7 @@ import { useContext } from "react";
 import { AppContext } from "../../../App";
 import {financeEmployeeViewAllInvoice,financeEmployeeUnactiveInvoice,empOperationPaidInvoice, empDownloadAllInvoiceApi } from "../../../apis"
 import AllInvoiceComp from "../../../features/invoices/components/allInvoice/AllInvoiceComp";
+import { empDeleteInvoiceById } from "../../../apis/invoice/empInvoiceApi";
 
 
 export default function EmpAllInvoiceTrash() {
@@ -16,6 +17,8 @@ export default function EmpAllInvoiceTrash() {
     isEdit={true}
     isDelete={true}
     isTrash={true}
+    isPerDelete={empType?.toLowerCase()=="operation"}
+    deleteInvoice={empDeleteInvoiceById}
     editInvoiceUrl={"/employee/edit-invoice/"}
     unactiveInvoice={financeEmployeeUnactiveInvoice}
     downloadAccess={false}

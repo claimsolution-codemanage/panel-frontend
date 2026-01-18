@@ -1,9 +1,10 @@
-import { employeeChangeCaseStatus,salesAllCaseDownload,empOptGetNormalEmployee,empOptShareSaleEmployee,employeeAllCase } from "../../../../apis"
+import {salesAllCaseDownload,empOptGetNormalEmployee,empOptShareSaleEmployee } from "../../../../apis"
 import { AppContext } from "../../../../App"
 import { useContext} from "react"
 import ViewAllCaseComp from "../../components/viewAllComp/ViewAllCaseComp"
 import { useParams } from "react-router-dom"
 import { employeeAttachementUpload } from "../../../../apis/upload"
+import { empAllCaseApi, empUpdateCaseStatusApi } from "../../../../apis/case/empCaseApi"
  
 export default function EmployeeRejectCase() {
   const state = useContext(AppContext)
@@ -13,11 +14,11 @@ export default function EmployeeRejectCase() {
   return (<>
       <ViewAllCaseComp
       isBack={param?._id ? true :false}
-      getCases={employeeAllCase}
+      getCases={empAllCaseApi}
       empId={param?._id ? param?._id :false} 
       downloadCase={salesAllCaseDownload}
       role={"employee"}
-      setStatus={employeeChangeCaseStatus}
+      setStatus={empUpdateCaseStatusApi}
       setCaseStatus={()=>{}}
       viewUrl={"/employee/view case/"}
       editUrl={"/employee/edit-case/"}

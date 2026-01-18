@@ -1,7 +1,8 @@
 import EmployeeTemplate from "../template/employeeTemplate"
 import PanelTemplate from "../template/PanelTemplate"
 import { Route } from "react-router-dom"
-import { empAllStatementDownload, empFindCaseByFileNoApi, empOpAllStatment, empOpStatments } from "../apis"
+import { empAllStatementDownload,empOpAllStatment } from "../apis"
+import { empFindCaseByFileNoApi } from "../apis/case/empCaseApi"
 
 
 // for employee routes

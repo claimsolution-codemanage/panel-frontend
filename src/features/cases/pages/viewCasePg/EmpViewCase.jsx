@@ -1,10 +1,10 @@
 import { API_BASE_IMG, employeeAttachementUpload } from "../../../../apis/upload"
 import { useParams } from "react-router-dom"
-import { employeeChangeCaseStatus,empAddCaseReference,empRemoveCaseReference, empAddOrUpdatePayment, empAddCaseFileByIdApi, employeeGetCaseById, employeeAddOrUpdateCaseComment } from "../../../../apis"
 import { AppContext } from "../../../../App"
 import { useContext } from "react"
 import ViewCaseComp from "../../components/viewComp/ViewCaseComp"
 import { empCreateOrUpdateCaseFormApi, empGetCaseFormById } from "../../../../apis/case/form/caseFormApi"
+import { empAddCaseFileByIdApi, empAddCaseReferenceApi, empAddOrUpdateCaseCommentApi, empAddOrUpdateCasePaymentApi, empGetCaseById, empRemoveCaseReferenceApi, empUpdateCaseStatusApi } from "../../../../apis/case/empCaseApi"
 
 export default function EmployeeViewCase() {
     const state = useContext(AppContext)
@@ -13,7 +13,7 @@ export default function EmployeeViewCase() {
 
     return (<>
           <ViewCaseComp id={param?._id} 
-      getCase={employeeGetCaseById} 
+      getCase={empGetCaseById} 
       role={"employee"}
       empType={empType}
       viewEmp={"/employee/profile/"}  
@@ -25,18 +25,18 @@ export default function EmployeeViewCase() {
       isViewOtherClientCase={empType?.toLowerCase()==="operation" || empType?.toLowerCase()==="branch" ||  empType?.toLowerCase()==="finance"}
       
     //   editCaseProcess={adminEditCaseProcessById}
-      addCaseProcess={employeeChangeCaseStatus}
-      addReference={empAddCaseReference}
+      addCaseProcess={empUpdateCaseStatusApi}
+      addReference={empAddCaseReferenceApi}
       isAddRefence={empType?.toLowerCase()==="operation"}
       isViewProfile={empType?.toLowerCase()==="operation" || empType?.toLowerCase()==="branch" || (empType?.toLowerCase()==="sales" && designation?.toLowerCase()==="manager")}
       isAddCaseProcess={empType?.toLowerCase()==="operation"}
       // isAddCommit={empType?.toLowerCase()==="operation" || empType?.toLowerCase()==="branch" || (empType?.toLowerCase()===" " && designation?.toLowerCase()==="manager")}
       isAddCommit={true}
-      deleteReference={empRemoveCaseReference}
+      deleteReference={empRemoveCaseReferenceApi}
       deleteDoc={()=>{}}
-      addCaseCommit={employeeAddOrUpdateCaseComment}
+      addCaseCommit={empAddOrUpdateCaseCommentApi}
       accessPayment={empType?.toLowerCase()==="operation"}
-      paymentDetailsApi={empAddOrUpdatePayment}
+      paymentDetailsApi={empAddOrUpdateCasePaymentApi}
       isCaseFormAccess={empType?.toLowerCase()==="operation"}
       createOrUpdateCaseFormApi={empCreateOrUpdateCaseFormApi}
       addCaseDoc={empAddCaseFileByIdApi}

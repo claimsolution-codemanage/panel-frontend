@@ -1,10 +1,11 @@
-import { employeeAllCase,saleEmpPartnerReport } from "../../../apis"
-import { employeeChangeCaseStatus,salesAllCaseDownload,empDownloadPartnerReport } from "../../../apis"
+import { saleEmpPartnerReport } from "../../../apis"
+import {empDownloadPartnerReport } from "../../../apis"
 import { AppContext } from "../../../App"
 import { useContext} from "react"
 import ViewAllCaseComp from "../../../features/cases/components/viewAllComp/ViewAllCaseComp"
 import { useParams } from "react-router-dom"
 import { employeeAttachementUpload } from "../../../apis/upload"
+import { empUpdateCaseStatusApi } from "../../../apis/case/empCaseApi"
  
 export default function EmpSalePartnerReport() {
     const param = useParams()
@@ -20,7 +21,7 @@ export default function EmpSalePartnerReport() {
       getCases={saleEmpPartnerReport}
       downloadCase={empDownloadPartnerReport}
       role={"employee"}
-      setStatus={employeeChangeCaseStatus}
+      setStatus={empUpdateCaseStatusApi}
       setCaseStatus={()=>{}}
       viewUrl={"/employee/view case/"}
       editUrl={"/employee/edit-case/"}

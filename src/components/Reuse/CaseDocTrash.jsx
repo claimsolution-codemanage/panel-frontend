@@ -67,9 +67,7 @@ export default function CaseDocTrash({getAllDoc,isActive,deleteDoc,isTrash,isDel
     try {
       const startDate = dateRange?.startDate ? getFormateDate(dateRange?.startDate) : ""
       const endDate = dateRange?.endDate ? getFormateDate(dateRange?.endDate) : ""
-      // console.log("start", startDate, "end", endDate);
       const res = await getAllDoc(pageItemLimit, pgNo, searchQuery, startDate, endDate)
-      // console.log("allAdminCase", res?.data?.data);
       if (res?.data?.success && res?.data?.data) {
         setData([...res?.data?.data])
         setNoOfDoc(res?.data?.totalDoc)
@@ -93,10 +91,10 @@ export default function CaseDocTrash({getAllDoc,isActive,deleteDoc,isTrash,isDel
   }, [pageItemLimit, pgNo,isReset])
 
   useEffect(() => {
-    if (!deleteCaseDoc.status && !changeStatus?.show) {
+    if (!changeStatus?.show) {
       getViewUnactiveDoc()
     }
-  }, [deleteCaseDoc,changeStatus])
+  }, [changeStatus])
 
   useEffect(() => {
     if (searchQuery) {
@@ -246,7 +244,7 @@ export default function CaseDocTrash({getAllDoc,isActive,deleteDoc,isTrash,isDel
           </div>
         </div>
         {changeStatus?.show && <SetStatusOfProfile changeStatus={changeStatus} hide={() => setChangeStatus({ show: false, details: {} })} type="Doc" handleChanges={handleChanges} />}
-        {deleteCaseDoc.status && <ConfirmationModal show={deleteCaseDoc.status} hide={()=>setDeleteDoc({status:false,details:{}})} id={deleteCaseDoc.details?._id} handleComfirmation={deleteDoc} heading={"Are you sure"} text={`You want to permanent delete ${deleteCaseDoc.details?.name}`}/>}
+        {deleteCaseDoc.status && <ConfirmationModal getRefreshData={getViewUnactiveDoc} show={deleteCaseDoc.status} hide={()=>setDeleteDoc({status:false,details:{}})} id={deleteCaseDoc.details?._id} handleComfirmation={deleteDoc} heading={"Are you sure"} text={`You want to permanent delete ${deleteCaseDoc.details?.name}`}/>}
       </div >
     }
   </>)

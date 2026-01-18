@@ -169,10 +169,10 @@ export default function AllInvoiceComp({ viewAllInvoice, payInvoice, viewInvoice
   }, [pageItemLimit, pgNo,])
 
   useEffect(() => {
-    if (!isActiveInvoice.status && !changeStatus?.show) {
+    if (!changeStatus?.show) {
       getViewAllInvoice()
     }
-  }, [isActiveInvoice, changeStatus])
+  }, [changeStatus])
 
   useEffect(() => {
     if (searchQuery) {
@@ -359,7 +359,7 @@ export default function AllInvoiceComp({ viewAllInvoice, payInvoice, viewInvoice
           </div>
         </div>
         {changeStatus?.show && <SetStatusOfProfile changeStatus={changeStatus} hide={() => setChangeStatus({ show: false, details: {} })} type="Invoice" handleChanges={handleChanges} />}
-        {isActiveInvoice.status && <ConfirmationModal show={isActiveInvoice.status} hide={() => setIsActiveInvoice({ status: false, details: {} })} id={isActiveInvoice.details?._id} handleComfirmation={deleteInvoice} heading={"Are you sure"} text={`You want to permanent delete invoice ${isActiveInvoice.details?.invoiceNo}`} />}
+        {isActiveInvoice.status && <ConfirmationModal getRefreshData={getViewAllInvoice} show={isActiveInvoice.status} hide={() => setIsActiveInvoice({ status: false, details: {} })} id={isActiveInvoice.details?._id} handleComfirmation={deleteInvoice} heading={"Are you sure"} text={`You want to permanent delete invoice ${isActiveInvoice.details?.invoiceNo}`} />}
         {paymentDetails?.status && <PaymentInfo show={paymentDetails.status} hide={() => setPaymentDetails({ status: false, details: {} })} details={paymentDetails?.details} />}
         {changeInvoiceStatus?.status && <EditInvoiceStatusModal fetchDetails={getViewAllInvoice} changeInvoiceStatus={changeInvoiceStatus} type="invoice" setChangeInvoiceStatus={setChangeInvoiceStatus} handleInvoiceStatus={handlePaid} />}
 

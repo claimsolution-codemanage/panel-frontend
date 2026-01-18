@@ -1,8 +1,7 @@
 import { useParams } from "react-router-dom"
-import { employeeGetCaseById,employeeUpdateCaseById} from "../../../../apis"
-import Loader from "../../../../components/Common/loader"
 import { employeeAttachementUpload } from "../../../../apis/upload"
 import EditCaseComp from "../../../../components/Reuse/EditCaseComp"
+import { empGetCaseById, empUpdateCaseById } from "../../../../apis/case/empCaseApi"
 
 
 export default function EmployeeEditCase() {
@@ -10,8 +9,8 @@ export default function EmployeeEditCase() {
     return (<>
     <EditCaseComp
     id={params?._id} 
-    viewCase={employeeGetCaseById} 
-    updateCase={employeeUpdateCaseById} 
+    viewCase={empGetCaseById} 
+    updateCase={empUpdateCaseById} 
     attachementUpload={employeeAttachementUpload}
     successUrl={"/employee/view case/"}
     addCase={()=>{}}

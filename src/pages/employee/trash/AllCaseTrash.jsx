@@ -1,15 +1,18 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import AllCaseTrash from '../../../components/Common/trash/AllCaseTrash'
-import { employeeAllCase, empSetCaseIsActiveApi } from '../../../apis'
+import { empAllCaseApi, empChangeCaseIsActiveApi, empDeleteCaseById } from '../../../apis/case/empCaseApi'
+import { AppContext } from '../../../App'
 
 export default function EmpAllCaseTrash() {
+    const state = useContext(AppContext)
+    const empType = state?.myAppData?.details?.empType
   return (
     <div>
       <AllCaseTrash
-        allCaseApi={employeeAllCase}
-        caseStatusApi={empSetCaseIsActiveApi}
-        deleteCaseApi={() => { }}
-        removeCasePermission={false}
+        allCaseApi={empAllCaseApi}
+        caseStatusApi={empChangeCaseIsActiveApi}
+        deleteCaseApi={empDeleteCaseById}
+        removeCasePermission={empType?.toLowerCase()=="operation"}
         viewCasepath={"/employee/view case"}
       />
     </div>

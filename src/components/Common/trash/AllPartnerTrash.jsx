@@ -47,10 +47,8 @@ export default function AllPartnerTrash({allPartnerApi,partnerStatusApi,deletePa
   }
 
   useEffect(() => {
-    if (!deletePartner?.status) {
       getAllPartner()
-    }
-  }, [pageItemLimit, pgNo, changeStatus, deletePartner])
+  }, [pageItemLimit, pgNo, changeStatus])
 
   useEffect(() => {
     if (isSearch) {
@@ -174,7 +172,7 @@ export default function AllPartnerTrash({allPartnerApi,partnerStatusApi,deletePa
 
           </div>
           {changeStatus?.show && <SetStatusOfProfile changeStatus={changeStatus} hide={() => setChangeStatus({ show: false, details: {} })} type="Partner" handleChanges={handleChanges} />}
-          {deletePartner?.status && <ConfirmationModal show={deletePartner?.status} id={deletePartner?.id} hide={() => setDeletePartner({ status: false, id: "" })} heading="Are you sure?" text={deletePartner?.text ? deletePartner?.text : "Your want to delete this partner"} handleComfirmation={deletePartnerApi} />}
+          {deletePartner?.status && <ConfirmationModal getRefreshData={getAllPartner} show={deletePartner?.status} id={deletePartner?.id} hide={() => setDeletePartner({ status: false, id: "" })} heading="Are you sure?" text={deletePartner?.text ? deletePartner?.text : "Your want to delete this partner"} handleComfirmation={deletePartnerApi} />}
         </div>
 
       </div>}

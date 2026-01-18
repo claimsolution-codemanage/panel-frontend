@@ -1,7 +1,8 @@
 import React, { useContext } from 'react'
 import Statement from '../../../components/Reuse/Statement'
-import { empAllStatementDownload, empFindCaseByFileNoApi, empOperationStatementUpdateApi, empOpStatments } from '../../../apis'
+import { empAllStatementDownload, empOperationStatementUpdateApi, empOpStatments } from '../../../apis'
 import { AppContext } from '../../../App'
+import { empFindCaseByFileNoApi } from '../../../apis/case/empCaseApi'
 
 export default function AllStatement() {
     const state = useContext(AppContext)
