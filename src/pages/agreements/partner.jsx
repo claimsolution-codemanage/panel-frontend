@@ -98,7 +98,7 @@ Near Domino's Pizza, New Delhi -110080, India (referred to as the "Company," whi
 <p>The Company is not responsible for resolving cases, as Insurance resolution depends on various factors and is not final at any stage.</p>
 </li>
 <li>
-<p>The Company commits to pay 6% of the total amount transferred to customers/clients to the Partner after deducting TDS upon successful completion of services.</p>
+<p>The Company commits to pay 4% of the total amount transferred to customers/clients to the Partner after deducting TDS upon successful completion of services.</p>
 </li>
 <li>
 <p>Compensation will be paid as per mutual agreement between the Parties after successful completion of work. Payment will be through money transfer once the company receives credit from the customer.</p>
