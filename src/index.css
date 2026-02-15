@@ -511,3 +511,27 @@ background-color: #182f59;
 .bg-orange {
   background-color: #fd7e14;
 }
+
+/* Prevent overflow inside modal */
+.custom-filter-modal .modal-content {
+  overflow: hidden;
+}
+
+.date-range-wrapper {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.rdrCalendarWrapper {
+  width: 100% !important;
+}
+
+.rdrMonth {
+  width: 100% !important;
+}
+
+@media (max-width: 768px) {
+  .rdrMonth {
+    min-width: 100% !important;
+  }
+}

@@ -51,6 +51,8 @@ import EmployeeAllCase from '../features/cases/pages/viewAllPg/EmpAllCase'
 import EmployeeViewCase from '../features/cases/pages/viewCasePg/EmpViewCase'
 import EmpAllCaseTrash from "../pages/employee/trash/AllCaseTrash"
 
+import EmployeeAllLeads from "../features/lead/pages/viewAll/EmpAllLeads"
+
 export const employeeRoutes = [
     <Route path='/employee/signin' element={<PanelTemplate><EmployeeSignIn/></PanelTemplate>}/>,
   <Route path='/employee/forget password' element={<PanelTemplate><EmployeeForgetPassword/></PanelTemplate>}/>,
@@ -104,5 +106,7 @@ export const employeeRoutes = [
   <Route path='/employee/all-trash-doc'  element={<EmployeeTemplate><EmpAllDocumentTrash/></EmployeeTemplate>}/>,
   <Route path='/employee/all-trash-employee'  element={<EmployeeTemplate><EmpAllEmployeeTrash/></EmployeeTemplate>}/>,
 
+
+  <Route path='/employee/all-leads'  element={<EmployeeTemplate><EmployeeAllLeads/></EmployeeTemplate>}/>,
 ]
 {/* <Route path='/employee/all-trash-invoice'  element={<EmployeeTemplate><EmployeeInvoiceTrash/></EmployeeTemplate>}/> */}

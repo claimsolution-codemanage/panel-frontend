@@ -2,7 +2,7 @@ import { RxDashboard } from 'react-icons/rx'
 import { BsFillPersonLinesFill, BsPostcard } from 'react-icons/bs'
 import { RiAdminFill, RiBankLine, RiTeamLine, RiTimerFlashLine } from 'react-icons/ri'
 import { SiMicrosoftteams, SiReaddotcv } from 'react-icons/si'
-import { MdNotificationsActive, MdOutlineCancelPresentation, MdOutlineLibraryAdd, MdOutlinePostAdd } from 'react-icons/md'
+import { MdNotificationsActive, MdOutlineCancelPresentation, MdOutlineLeaderboard, MdOutlineLibraryAdd, MdOutlinePostAdd } from 'react-icons/md'
 import { IoLogOutOutline,IoNewspaperOutline,IoSettingsOutline } from 'react-icons/io5'
 import { Link } from 'react-router-dom'
 import { AppContext } from '../../App'
@@ -65,6 +65,7 @@ export default function PrivateNavbar() {
                 { name: "Dashboard", path: "/admin/dashboard", icon: <RxDashboard />, active: location.pathname.includes("dashboard"), disable: false },
                 { name: "All Case", path: "/admin/all case", icon: <SiReaddotcv />, active: location.pathname.includes("case") && !location.pathname.includes("reject-cases") && !location.pathname.includes("trash"), disable: false },
                 { name: "All Complaint", path: "/admin/all complaint", icon: <CgNotes />, active: location.pathname.includes("complaint"), disable: false },
+                { name: "All Leads", path: "/admin/all-leads", icon: <MdOutlineLeaderboard />, active: location.pathname.includes("all-leads"), disable: false },
                 { name: "All Partner", path: "/admin/all partner", icon: <FaUserFriends />, active: location.pathname.includes("partner") && !location.pathname.includes("statement") && !location.pathname.includes("trash"), disable: false },
                 { name: "All Client", path: "/admin/all client", icon: <FaUserTag />, active: location.pathname.includes("client") && !location.pathname.includes("trash"), disable: false },
                 { name: "All Invoice", path: "/admin/all-invoices", icon: <FaFileInvoice />, active: location.pathname.includes("invoice") && !location.pathname.includes("add-invoice"), disable: false },
@@ -105,6 +106,7 @@ export default function PrivateNavbar() {
                 ...(["finance","operation","branch","sathi team","sales"]?.includes(empType) ? [{ name: "All Partner", path: "/employee/all partner", icon: <FaUserFriends />, active: location.pathname.includes("all%20partner") || location.pathname.includes("partner%20details"), disable: false }]:[]),
                 ...(["branch","sathi team","sales"]?.includes(empType) ? [{ name: "Add Partner", path: "/employee/add-partner", icon: <FaUserPlus />, active: location.pathname.includes("add-partner"), disable: false }]:[]),
                 { name: "All Case", path: "/employee/all case", icon: <SiReaddotcv />, active: location.pathname.includes("all%20case") || location.pathname.includes("view%20case") || location.pathname.includes("edit%20case"), disable: false },
+                { name: "All Leads", path: "/employee/all-leads", icon: <MdOutlineLeaderboard />, active: location.pathname.includes("all-leads"), disable: false },
                 ...(["branch","sales"]?.includes(empType) ? [{ name: "Add Case", path: "/employee/add-case", icon: <MdOutlineLibraryAdd />, active: location.pathname.includes("add-case"), disable: false }]:[]),
                 ...(["branch","sales"]?.includes(empType) ? [{ name: "Add Sathi Team", path: "/employee/add-sathi-team", icon: <RiTeamLine />, active: location.pathname.includes("/employee/add-sathi-team"), disable: false }]:[]),
                 ...(["branch","sales","finance","operation"]?.includes(empType) ? [{ name: "Branch Team", path: "/employee/branch-team", icon: <SiMicrosoftteams />, active: location.pathname.includes("branch-team") || location?.pathname?.includes("view-sathi"), disable: false }]:[]),

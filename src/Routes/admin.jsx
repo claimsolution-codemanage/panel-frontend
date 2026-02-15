@@ -53,6 +53,7 @@ import AdminEditCase from '../features/cases/pages/editCasePg/AdminEditCase'
 import AdminRejectCase from '../features/cases/pages/rejectCasePg/AdminAllRejectCase'
 import AdminClosedCasePage from "../features/cases/pages/closedCasePg/AdminAllClosedCase";
 import AdminWeeklyFollowUpPage from "../features/cases/pages/FollowUpCasePg/AdminAllWeeklyFollowUpCase";
+import AdminAllLeads from "../features/lead/pages/viewAll/AdminAllLeads";
 
 {/* for admin */ }
 export const adminRoutes = [
@@ -108,4 +109,9 @@ export const adminRoutes = [
   <Route path='/admin/edit-invoice/:_id' element={<AdminTemplate><AdminEditInvoice /></AdminTemplate>} />,
   <Route path='/admin/all-trash-invoice' element={<AdminTemplate><AdminInvoiceTrash /></AdminTemplate>} />,
   // invoice end
+
+
+  // lead start
+  <Route path='/admin/all-leads' element={<AdminTemplate><AdminAllLeads /></AdminTemplate>} />,
+
 ]
