@@ -1,18 +1,23 @@
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import { caseMailMethod, caseStatus } from '../../../../../utils/constant';
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 import TextEditor from '../../../../../components/TextEditor';
 import { formatDateToISO } from '../../../../../utils/helperFunction';
+import { AppContext } from '../../../../../App';
 
 const minDate = formatDateToISO(new Date(new Date().setDate(new Date().getDate()+1)))
 
 export default function ChangeStatusModal({ changeStatus, setChangeStatus, handleCaseStatus, getCaseById, role, attachementUpload }) {
     const [data, setData] = useState({ _id: changeStatus?.details?._id, status: "", remark: "", mailMethod: "None", nextFollowUp: "", })
     const [loading, setLoading] = useState(false)
-    const navigate = useNavigate()
+    const state = useContext(AppContext)
+    const empType  = state?.myAppData?.details?.empType
+
+    const isSalesEmp = empType?.toLowerCase()==="sales"
+    const statusList = isSalesEmp ? caseStatus?.filter(item=>["Accept","Under Expert Review","Processing","Query"].includes(item)) : caseStatus
 
     const hangleOnchange = (e) => {
         const { name, value } = e.target;
@@ -81,7 +86,7 @@ export default function ChangeStatusModal({ changeStatus, setChangeStatus, handl
                         <label htmlFor={"status"} className='col-form-label'>Case Status</label>
                         <select className="form-select color-4" name="status" value={data?.status} onChange={hangleOnchange} aria-label="Default select example">
                             <option>--Select Case Status</option>
-                            {caseStatus?.map(item => <option className='' key={item} value={item}>{item}</option>)}
+                            {statusList?.map(item => <option className='' key={item} value={item}>{item}</option>)}
                         </select>
                     </div>
                     <div className="mb-1">

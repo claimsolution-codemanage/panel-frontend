@@ -22,7 +22,7 @@ export default function EmployeeAllCase() {
       viewUrl={"/employee/view case/"}
       editUrl={"/employee/edit-case/"}
       isEdit={empType?.toLowerCase()==="operation"}
-      isChangeStatus={empType?.toLowerCase()==="operation"}
+      isChangeStatus={["operation","sales"].includes(empType?.toLowerCase())}
       isRemoveCase={false}
       isDownload={true}
       isShare={empType?.toLowerCase()==="operation"}
