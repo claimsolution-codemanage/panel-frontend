@@ -175,7 +175,7 @@ export default function StatementPdf({ statementOf, data, dateRange, isPreview }
                 <div className='border border-2 border-top-0 border-bottom-0 border-start-0 m-0 p-0 pdf-logo1'>
                   <div className='text-logo1 d-flex gap-2  align-items-center'>
                     <FaPhoneAlt className='text-logo1' />
-                    +91 9205530811
+                    +91 9220906999
                   </div>
                 </div>
                 <div className='border border-2 border-top-0 border-bottom-0 border-start-0 m-0 p-0 pdf-logo1'>

@@ -1,7 +1,11 @@
-import { deleteRequest, getRequest, putRequest } from "../axiosConfig"
+import { deleteRequest, getRequest, postRequest, putRequest } from "../axiosConfig"
 
 export const adminGetLeadColumnApi = ({ }) => {
   return getRequest(`/admin/lead/all-lead-column`)
+}
+
+export const adminAddLeadColumnApi = (data) => {
+  return postRequest(`/admin/lead/add-column`, data)
 }
 
 export const adminAddOrUpdateLeadApi = (data) => {

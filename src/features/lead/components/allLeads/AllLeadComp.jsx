@@ -6,7 +6,7 @@ import Loader from "../../../../components/Common/loader";
 import LeadTable from "./LeadTable";
 import { exportToCSV, exportToExcel } from "../../../../utils/exportUtils";
 const PAGE_SIZE = 10;
-export default function AllLeadComp({ getAllColumnApi, addOrUpdateLeadApi, empGetLeadRowsApi, getSaleEmp, deleteLeadApi,hasDeleteAccess }) {
+export default function AllLeadComp({ getAllColumnApi, addOrUpdateLeadApi, empGetLeadRowsApi, getSaleEmp, deleteLeadApi,hasDeleteAccess,addLeadColumnApi,hasAddColumnAccess }) {
   const [loading, setLoading] = useState(false)
   const [columns, setColumns] = useState([])
   const [filters, setFilters] = useState({});
@@ -213,6 +213,9 @@ const handleExport = async(type="excel")=>{
             sortConfig={sortConfig}
             hasDeleteAccess={hasDeleteAccess}
             handleExport={handleExport}
+            addLeadColumnApi={addLeadColumnApi}
+            refetchColumnData={getViewAllColumn}
+            hasAddColumnAccess={hasAddColumnAccess}
           />
         </div>
 

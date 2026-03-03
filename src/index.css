@@ -512,6 +512,10 @@ background-color: #182f59;
   background-color: #fd7e14;
 }
 
+.bg-yellow {
+  background-color: #c9d00a;
+}
+
 /* Prevent overflow inside modal */
 .custom-filter-modal .modal-content {
   overflow: hidden;

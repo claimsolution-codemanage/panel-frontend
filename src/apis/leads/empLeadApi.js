@@ -1,9 +1,13 @@
-import { deleteRequest, getRequest, putRequest } from "../axiosConfig"
+import { deleteRequest, getRequest, postRequest, putRequest } from "../axiosConfig"
 
 
 
 export const empGetLeadColumnApi = ({ }) => {
   return getRequest(`/employee/lead/all-lead-column`)
+}
+
+export const empAddLeadColumnApi = (data) => {
+  return postRequest(`/employee/lead/add-column`, data)
 }
 
 export const empAddOrUpdateLeadApi = (data) => {
