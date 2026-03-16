@@ -6,7 +6,8 @@ import Loader from "../../../../components/Common/loader";
 import LeadTable from "./LeadTable";
 import { exportToCSV, exportToExcel } from "../../../../utils/exportUtils";
 const PAGE_SIZE = 10;
-export default function AllLeadComp({ getAllColumnApi, addOrUpdateLeadApi, empGetLeadRowsApi, getSaleEmp, deleteLeadApi,hasDeleteAccess,addLeadColumnApi,hasAddColumnAccess }) {
+export default function AllLeadComp({ getAllColumnApi, addOrUpdateLeadApi, empGetLeadRowsApi, getSaleEmp, deleteLeadApi,updateColumnApi,
+  hasDeleteAccess,addLeadColumnApi,hasAddColumnAccess,hasUpdateColumnAccess }) {
   const [loading, setLoading] = useState(false)
   const [columns, setColumns] = useState([])
   const [filters, setFilters] = useState({});
@@ -24,7 +25,6 @@ export default function AllLeadComp({ getAllColumnApi, addOrUpdateLeadApi, empGe
     if (loading || !hasMore) return;
     setLoading(true)
     try {
-
       const res = await empGetLeadRowsApi({ limit: PAGE_SIZE, page, filters, sortConfig })
       if (res?.data?.success && res?.data?.data) {
         const newData = res?.data?.data || [];
@@ -216,6 +216,9 @@ const handleExport = async(type="excel")=>{
             addLeadColumnApi={addLeadColumnApi}
             refetchColumnData={getViewAllColumn}
             hasAddColumnAccess={hasAddColumnAccess}
+            hasUpdateColumnAccess={hasUpdateColumnAccess}
+            updateColumnApi={updateColumnApi}
+            refetchColumn={getViewAllColumn}
           />
         </div>
 

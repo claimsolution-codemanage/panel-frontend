@@ -10,6 +10,10 @@ export const empAddLeadColumnApi = (data) => {
   return postRequest(`/employee/lead/add-column`, data)
 }
 
+export const empUpdateLeadColumnApi = (data) => {
+  return putRequest(`/employee/lead/update-column`, data)
+}
+
 export const empAddOrUpdateLeadApi = (data) => {
   return putRequest(`/employee/lead/add-or-update-lead`, data)
 }
@@ -28,7 +32,7 @@ export const empGetLeadRowsApi = ({ page = 1, limit = 10,isExport=false, filters
       if (f.from) params.append(`${key}_From`, f.from.toISOString());
       if (f.to) params.append(`${key}_To`, f.to.toISOString());
     } else {
-      if (f.value) params.append(key, f?.value?.value ?? f.value);
+      if (f.value) params.append(key, Array.isArray(f?.value) ? f?.value?.map(item=>item?.value) : (f?.value?.value ?? f.value));
     }
   });
   sortConfig && Object.keys(sortConfig)?.forEach((key)=>{

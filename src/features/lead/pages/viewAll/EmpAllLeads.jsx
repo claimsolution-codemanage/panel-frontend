@@ -1,7 +1,7 @@
 import { useContext } from "react";
 import { AppContext } from "../../../../App";
 import AllLeadComp from "../../components/allLeads/AllLeadComp";
-import { empAddLeadColumnApi, empAddOrUpdateLeadApi, empDeleteLeadRowsApi, empGetLeadColumnApi, empGetLeadRowsApi } from "../../../../apis/leads/empLeadApi";
+import { empAddLeadColumnApi, empAddOrUpdateLeadApi, empDeleteLeadRowsApi, empGetLeadColumnApi, empGetLeadRowsApi, empUpdateLeadColumnApi } from "../../../../apis/leads/empLeadApi";
 import { empOpGetSaleEmp } from "../../../../apis";
 
 
@@ -11,12 +11,14 @@ export default function EmployeeAllLeads() {
   return (<>
     <AllLeadComp
       addLeadColumnApi={empAddLeadColumnApi}
+      updateColumnApi={empUpdateLeadColumnApi}
       getAllColumnApi={empGetLeadColumnApi}
       addOrUpdateLeadApi={empAddOrUpdateLeadApi}
       empGetLeadRowsApi={empGetLeadRowsApi}
       getSaleEmp={empOpGetSaleEmp}
       deleteLeadApi={empDeleteLeadRowsApi}
       hasDeleteAccess={empType?.toLowerCase()==="operation"}
+      hasUpdateColumnAccess={empType?.toLowerCase()==="operation"}
       hasAddColumnAccess={empType?.toLowerCase()==="operation"}
 
     />

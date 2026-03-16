@@ -8,6 +8,10 @@ export const adminAddLeadColumnApi = (data) => {
   return postRequest(`/admin/lead/add-column`, data)
 }
 
+export const adminUpdateLeadColumnApi = (data) => {
+  return putRequest(`/admin/lead/update-column`, data)
+}
+
 export const adminAddOrUpdateLeadApi = (data) => {
   return putRequest(`/admin/lead/add-or-update-lead`, data)
 }
@@ -26,7 +30,7 @@ export const adminGetLeadRowsApi = ({ page = 1, limit = 10,isExport=false, filte
       if (f.from) params.append(`${key}_From`, f.from.toISOString());
       if (f.to) params.append(`${key}_To`, f.to.toISOString());
     } else {
-      if (f.value) params.append(key, f?.value?.value ?? f.value);
+      if (f.value) params.append(key, Array.isArray(f?.value) ? f?.value?.map(item=>item?.value) : (f?.value?.value ?? f.value));
     }
   });
   sortConfig && Object.keys(sortConfig)?.forEach((key)=>{

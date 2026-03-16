@@ -5,16 +5,20 @@ import axios from "axios";
 import { formatDateToISO, getFormateDMYDate } from "../../../../utils/helperFunction";
 import AsyncSelect from 'react-select/async';
 import debounce from 'debounce';
-import { MdDelete } from "react-icons/md";
+import { MdDelete, MdOutlineWidthNormal, MdWidthNormal } from "react-icons/md";
 import { IoCloudDoneOutline } from "react-icons/io5";
 import LeadColumnFilter from "./LeadColumnFilter";
 import { CiFilter } from "react-icons/ci";
 import { toast } from "react-toastify";
+import { BiMessageSquareEdit } from "react-icons/bi";
 import AddLeadColumn from "./AddLeadColumn";
+import EditColumnModal from "./EditColumnModal";
 const STORAGE_KEY = "leadEngine_columnWidths_v1";
 
-export default function LeadExcelTable({ columns, rows, addOrUpdateLeadApi, getSaleEmp, deleteLeadApi, getFilterData, filters, sortConfig, 
-  setFilters, setSortConfig, containerRef, loading, handleExport, hasDeleteAccess,addLeadColumnApi,refetchColumnData,hasAddColumnAccess }) {
+export default function LeadExcelTable({ columns, rows, addOrUpdateLeadApi, getSaleEmp, deleteLeadApi, getFilterData, filters, sortConfig,
+  setFilters, setSortConfig, containerRef, loading, handleExport, hasDeleteAccess, addLeadColumnApi, refetchColumnData, hasAddColumnAccess,
+hasUpdateColumnAccess,updateColumnApi,refetchColumn
+}) {
   const inputRef = useRef();
   const [grid, setGrid] = useState([]);
   const [resizingColumn, setResizingColumn] = useState(null);
@@ -25,6 +29,7 @@ export default function LeadExcelTable({ columns, rows, addOrUpdateLeadApi, getS
   const [activeColumn, setActiveColumn] = useState(null);
   const [rowHeights, setRowHeights] = useState({});
   const [showAddColumnModal, setShowAddColumnModal] = useState(false);
+  const [showEditColumnModal, setShowEditColumnModal] = useState(false);
   const [frozenColumns, setFrozenColumns] = useState(() => {
     const saved = localStorage.getItem("leadEngine_frozenColumns");
     return saved ? JSON.parse(saved) : [];
@@ -735,7 +740,7 @@ export default function LeadExcelTable({ columns, rows, addOrUpdateLeadApi, getS
               </button>
             )}
 
-           {Boolean(hasAddColumnAccess) && <button
+            {Boolean(hasAddColumnAccess) && <button
               onClick={() => setShowAddColumnModal(true)}
               className="btn btn-primary"
               style={{
@@ -779,8 +784,7 @@ export default function LeadExcelTable({ columns, rows, addOrUpdateLeadApi, getS
         ref={containerRef}
         style={{
           height: "450px",
-          overflowY: "auto",
-          overflowX: "auto",
+          overflow: "auto", // Changed to auto for both scrollbars
           position: "relative",
         }}
       >
@@ -790,25 +794,28 @@ export default function LeadExcelTable({ columns, rows, addOrUpdateLeadApi, getS
             borderCollapse: "separate",
             borderSpacing: 0,
             fontSize: "14px",
-            tableLayout: "fixed", // Keep this but we'll handle it better
+            tableLayout: "fixed",
+            minWidth: "100%", // Ensure table takes full width
           }}
         >
           <thead>
             <tr>
-              {/* Row Number Header */}
+              {/* Row Number Header - Sticky both left and top */}
               <th
                 style={{
                   position: "sticky",
                   left: 0,
                   top: 0,
                   background: "#fafafa",
-                  zIndex: 30,
+                  zIndex: 40, // Higher z-index to stay above frozen columns
                   padding: "12px 14px",
                   fontWeight: 500,
                   color: "#64748b",
                   borderBottom: "1px solid #e2e8f0",
+                  borderRight: "1px solid #e2e8f0",
                   width: 70,
                   minWidth: 70,
+                  maxWidth: 70,
                 }}
               >
                 <div style={{ display: "flex", alignItems: "center", gap: "5px" }}>
@@ -830,9 +837,9 @@ export default function LeadExcelTable({ columns, rows, addOrUpdateLeadApi, getS
                       setShowModal(true);
                     }}
                     style={{
-                      position: isFrozen ? "sticky" : "relative",
-                      left: isFrozen ? 70 : "auto",
-                      top: 0,
+                      position: "sticky", // Always sticky for header
+                      top: 0, // Sticky top for all headers
+                      left: isFrozen ? 70 : "auto", // Left position only for frozen columns
                       background: "#ffffff",
                       padding: "12px 14px",
                       textAlign: "left",
@@ -840,12 +847,13 @@ export default function LeadExcelTable({ columns, rows, addOrUpdateLeadApi, getS
                       color: "#475569",
                       borderBottom: "1px solid #e2e8f0",
                       cursor: "pointer",
-                      zIndex: isFrozen ? 20 : 10,
-                      width: columnWidths[col.key] || 180, // Use stored width or default
-                      minWidth: columnWidths[col.key] || 180, // Ensure minimum width
-                      maxWidth: columnWidths[col.key] || 180, // Ensure maximum width
+                      zIndex: isFrozen ? 35 : 30, // Frozen columns higher z-index
+                      width: columnWidths[col.key] || 180,
+                      minWidth: columnWidths[col.key] || 180,
+                      maxWidth: columnWidths[col.key] || 180,
                       backgroundColor: isFrozen ? "#f8fafc" : "#ffffff",
                       borderRight: isFrozen ? "2px solid #cbd5e1" : "none",
+                      boxShadow: isFrozen ? "2px 0 5px -2px rgba(0,0,0,0.1)" : "none",
                     }}
                   >
                     <div
@@ -859,6 +867,22 @@ export default function LeadExcelTable({ columns, rows, addOrUpdateLeadApi, getS
                       <span>{col.label}</span>
 
                       <div className="d-flex gap-1 align-items-center">
+                        {Boolean(hasUpdateColumnAccess) && <span
+                            className="freeze-icon"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setActiveColumn(col);
+                              setShowEditColumnModal(true);
+                            }}
+                            style={{
+                              cursor: "pointer",
+                              color: "#94a3b8",
+                              fontSize: "14px",
+                            }}
+                          >
+                            <BiMessageSquareEdit className="fs-5" />
+                          </span>
+                        }
                         <span
                           className="freeze-icon"
                           onClick={(e) => {
@@ -872,7 +896,7 @@ export default function LeadExcelTable({ columns, rows, addOrUpdateLeadApi, getS
                           }}
                           title={isFrozen ? "Unfreeze column" : "Freeze column"}
                         >
-                          {isFrozen ? "❄️" : "⛄"}
+                          {isFrozen ? <MdWidthNormal className="fs-5" /> : <MdOutlineWidthNormal className="fs-5" />}
                         </span>
 
                         <span style={{ fontSize: "20px", color: "#3b82f6" }}>
@@ -886,7 +910,6 @@ export default function LeadExcelTable({ columns, rows, addOrUpdateLeadApi, getS
                     </div>
 
                     {/* Resize handle with icon */}
-                    {/* Improved Resize handle with better icon */}
                     <div
                       className={`column-resizer ${isResizingThis ? 'resizing' : ''}`}
                       onMouseDown={(e) => startColumnResize(e, col.key)}
@@ -897,11 +920,11 @@ export default function LeadExcelTable({ columns, rows, addOrUpdateLeadApi, getS
                         width: "20px",
                         height: "100%",
                         cursor: "col-resize",
-                        zIndex: 1000, // Increased z-index
+                        zIndex: 1000,
                         display: "flex",
                         alignItems: "center",
                         justifyContent: "center",
-                        opacity: 0.5, // Always slightly visible
+                        opacity: 0.5,
                         transition: "opacity 0.2s ease",
                         background: isResizingThis ? "rgba(59, 130, 246, 0.1)" : "transparent",
                       }}
@@ -979,21 +1002,24 @@ export default function LeadExcelTable({ columns, rows, addOrUpdateLeadApi, getS
                   (e.currentTarget.style.background = "transparent")
                 }
               >
-                {/* Row Number */}
+                {/* Row Number - Sticky left only */}
                 <td
                   className="row-header-cell"
                   style={{
                     position: "sticky",
                     left: 0,
-                    width: "70px",
-                    minWidth: "70px",
                     background: "#fafafa",
                     zIndex: 25,
                     padding: "10px 14px",
                     borderBottom: "1px solid #f1f5f9",
+                    borderRight: "1px solid #e2e8f0",
                     color: "#64748b",
                     fontWeight: 500,
                     textAlign: "center",
+                    width: "70px",
+                    minWidth: "70px",
+                    maxWidth: "70px",
+                    boxShadow: "2px 0 5px -2px rgba(0,0,0,0.1)",
                   }}
                 >
                   <span>{rowIndex + 1}</span>
@@ -1037,7 +1063,7 @@ export default function LeadExcelTable({ columns, rows, addOrUpdateLeadApi, getS
                       }
                       style={{
                         padding: "10px 14px",
-                        width: columnWidths[col.key] || 180, // Match header width
+                        width: columnWidths[col.key] || 180,
                         minWidth: columnWidths[col.key] || 180,
                         maxWidth: columnWidths[col.key] || 180,
                         borderBottom: "1px solid #f1f5f9",
@@ -1045,14 +1071,17 @@ export default function LeadExcelTable({ columns, rows, addOrUpdateLeadApi, getS
                         left: isFrozen ? 70 : "auto",
                         background: active ? "#f0f9ff" : "transparent",
                         cursor: "pointer",
-                        zIndex: isFrozen ? 15 : 1,
-                        backgroundColor: isFrozen ? (active ? "#f0f9ff" : "#f8fafc") : (active ? "#f0f9ff" : "transparent"),
-                        borderRight: isFrozen ? "1px solid #cbd5e1" : "none",
+                        zIndex: isFrozen ? 20 : 1,
+                        backgroundColor: isFrozen
+                          ? (active ? "#f0f9ff" : "#f8fafc")
+                          : (active ? "#f0f9ff" : "transparent"),
+                        borderRight: isFrozen ? "2px solid #cbd5e1" : "none",
                         whiteSpace: textWrap ? "normal" : "nowrap",
                         wordWrap: textWrap ? "break-word" : "normal",
                         overflow: textWrap ? "visible" : "hidden",
                         textOverflow: textWrap ? "clip" : "ellipsis",
                         verticalAlign: "top",
+                        boxShadow: isFrozen ? "2px 0 5px -2px rgba(0,0,0,0.1)" : "none",
                       }}
                     >
                       {active && (
@@ -1103,7 +1132,9 @@ export default function LeadExcelTable({ columns, rows, addOrUpdateLeadApi, getS
         handleApply={getFilterData}
       />
 
-      <AddLeadColumn show={showAddColumnModal} onClose={()=>setShowAddColumnModal(false)} addColumnApi={addLeadColumnApi} refetchColumnData={refetchColumnData}/>
+      <EditColumnModal showModal={showEditColumnModal} setShowModal={setShowEditColumnModal} column={activeColumn} refetchColumn={refetchColumn} updateColumnApi={updateColumnApi}/>
+
+      <AddLeadColumn show={showAddColumnModal} onClose={() => setShowAddColumnModal(false)} addColumnApi={addLeadColumnApi} refetchColumnData={refetchColumnData} />
 
       <style>
         {`
@@ -1147,9 +1178,52 @@ export default function LeadExcelTable({ columns, rows, addOrUpdateLeadApi, getS
   height: 100%;
 }
 
-th {
-  position: relative;
-}
+  th, td {
+    position: relative;
+  }
+  
+  thead tr {
+    position: relative;
+  }
+  
+  .row-header-cell,
+  th[style*="position: sticky"],
+  td[style*="position: sticky"] {
+    box-shadow: 2px 0 5px -2px rgba(0,0,0,0.1);
+  }
+  
+  th, td {
+    background-clip: padding-box;
+  }
+  
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  
+  ::-webkit-scrollbar-track {
+    background: #f1f5f9;
+    border-radius: 5px;
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    background: #94a3b8;
+    border-radius: 5px;
+    border: 2px solid #f1f5f9;
+  }
+  
+  ::-webkit-scrollbar-thumb:hover {
+    background: #64748b;
+  }
+  
+  th:first-child {
+    z-index: 45 !important;
+  }
+  
+  td[style*="position: sticky"]:last-child,
+  th[style*="position: sticky"]:last-child {
+    border-right: 2px solid #cbd5e1;
+  }
 
 /* Resize handle */
 .column-resizer {
