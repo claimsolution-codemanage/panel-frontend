@@ -1,3 +1,4 @@
+// ClientSignUp.jsx - Modern Redesign
 import { Link } from 'react-router-dom'
 import { useNavigate } from 'react-router-dom'
 import { useState } from 'react'
@@ -5,14 +6,24 @@ import { useContext } from 'react'
 import { AppContext } from '../../App'
 import { toast } from 'react-toastify'
 import { setToken } from '../../utils/helperFunction'
-import { BsEyeSlashFill } from "react-icons/bs";
-import { BsEyeFill } from "react-icons/bs";
+import { 
+    BsEyeSlashFill, 
+    BsEyeFill, 
+    BsArrowRight, 
+    BsPerson, 
+    BsEnvelope, 
+    BsTelephone, 
+    BsLock,
+    BsShieldCheck,
+    BsFileText
+} from "react-icons/bs"
 import { getJwtDecode } from '../../utils/helperFunction'
 import PhoneInput from 'react-phone-input-2'
 import 'react-phone-input-2/lib/style.css'
 import { useFormik } from 'formik'
 import { clientSignUpInitialValue, clientSignUpValidationSchema } from '../../utils/validations/auth/userAuthValidation'
 import { clientSignUpApi } from '../../apis/auth/userAuthApi'
+import '../../styles/client/ClientSignUp.css' // Import the modern CSS
 
 
 export default function ClientSignUp() {
@@ -45,88 +56,203 @@ export default function ClientSignUp() {
                 } else {
                     toast.error("Something went wrong")
                 }
-                // console.log("signup error", error);
                 setLoading(false)
             }
         }
     })
 
-
     return (
-        <>
-            <div className="py-5 mt-auto mt-md-0">
-                <div className="container-px-5 ">
-                    <div className="">
-                        <div className="row m-0 p-0">
-                            <div className="col-sm-12 col-md-6 px-0">
-                                <img src="/Images/home/sign-in.png" alt="card image" className='img-fluid h-100' />
+        <div className="enhanced-split-layout signup-layout">
+                    {/* Right Side - Image Section */}
+            <div className="image-section signup-image">
+                <div className="image-overlay-enhanced">
+                    <div className="image-content">
+                        <h2>Start your journey with us</h2>
+                        <p>Create an account to submit, track, and resolve your insurance cases quickly and efficiently</p>
+                        <div className="image-features">
+                            <div className="image-feature">
+                                <BsShieldCheck />
+                                <span>Secure platform</span>
                             </div>
-                            <form onSubmit={UserDetailsFormik.handleSubmit} className="col-sm-12 col-md-6 px-0 bg-color-7 color-4">
-                                <div className="py-5 px-2 px-md-0">
-                                    <div className="h2 fw-bold text-center">SignUp</div>
-                                    {/* <div className="text text-center text-primary">Required 2-steps verification*</div> */}
-
-                                    <div className='aligin-items-center d-flex justify-content-center'>
-                                        <div className="w-75">
-                                            <div className="mb-3 mt-3">
-                                                <input type="text" className={`form-control ${UserDetailsFormik?.touched?.fullName && UserDetailsFormik?.errors?.fullName && "border-danger"}`} name='fullName' value={UserDetailsFormik?.values?.fullName} onChange={UserDetailsFormik?.handleChange} id="fullName" placeholder="Your Full Name" />
-                                                {UserDetailsFormik?.touched?.fullName && UserDetailsFormik?.errors?.fullName ? (
-                                                    <span className="text-danger">{UserDetailsFormik?.errors?.fullName}</span>
-                                                ) : null}
-                                            </div>
-                                            <div className="mb-3 mt-3">
-                                                <input type="email" className={`form-control ${UserDetailsFormik?.touched?.email && UserDetailsFormik?.errors?.email && "border-danger"}`} name='email' value={UserDetailsFormik?.values?.email} onChange={UserDetailsFormik?.handleChange} id="email" placeholder="Email" />
-                                                {UserDetailsFormik?.touched?.email && UserDetailsFormik?.errors?.email ? (
-                                                    <span className="text-danger">{UserDetailsFormik?.errors?.email}</span>
-                                                ) : null}
-                                            </div>
-
-                                            <div className="mb-3 mt-3">
-                                                <PhoneInput
-                                                    country={'in'}
-                                                    containerClass="w-100"
-                                                    inputClass={`w-100  ${UserDetailsFormik?.touched?.mobileNo && UserDetailsFormik?.errors?.mobileNo && "border-danger"}`}
-                                                    // autoFormat={true}
-                                                    placeholder="+91 12345-67890"
-                                                    onlyCountries={['in']}
-                                                    value={UserDetailsFormik?.values?.mobileNo} onChange={phone => phone.startsWith(+91) ? UserDetailsFormik.setFieldValue("mobileNo", phone) : UserDetailsFormik.setFieldValue("mobileNo", +91 + phone)} />
-                                                {UserDetailsFormik?.touched?.mobileNo && UserDetailsFormik?.errors?.mobileNo ? (
-                                                    <span className="text-danger">{UserDetailsFormik?.errors?.mobileNo}</span>
-                                                ) : null}
-                                            </div>
-                                            <div className=" mt-3">
-                                                <div className="mb-3 mt-3">
-                                                    <div className={`d-flex flex aligin-items-center form-control ${UserDetailsFormik?.touched?.password && UserDetailsFormik?.errors?.password && "border-danger"}  justify-content-center`}>
-                                                        <input type={view ? "text" : "password"} className="w-100 border-0" name='password' style={{ outline: 'none' }} value={UserDetailsFormik?.values?.password} onChange={UserDetailsFormik?.handleChange} id="password" placeholder="Password" />
-                                                        <span className='fs-6' style={{ cursor: 'pointer' }} onClick={() => setView(!view)}>
-                                                            {view ? <BsEyeFill /> : <BsEyeSlashFill />}
-                                                        </span>
-                                                    </div>
-                                                    {UserDetailsFormik?.touched?.password && UserDetailsFormik?.errors?.password ? (
-                                                        <span className="text-danger">{UserDetailsFormik?.errors?.password}</span>
-                                                    ) : null}
-                                                </div>
-                                            </div>
-                                            <div class="form-check">
-                                                <input class="form-check-input" type="checkbox" value={UserDetailsFormik?.values?.agreement} onChange={(e) => UserDetailsFormik.setFieldValue("agreement", !UserDetailsFormik?.values?.agreement)} id="defaultCheck1" />
-                                                <label class="form-check-label" for="defaultCheck1">
-                                                    <Link to={"/client/service agreement"} target="_blank">Agree with service agreement</Link>
-                                                </label>
-                                            </div>
-                                            <div className="d-flex align-items-center justify-content-center mt-4">
-                                                <Link to="/client/signin">Already have an account? Signin</Link>
-                                            </div>
-                                            <div className="mt-5">
-                                                <button aria-disabled={loading} disabled={loading || !UserDetailsFormik?.values?.agreement} type="submit" className={`btn btn-primary color-1 w-100 ${(loading || !UserDetailsFormik?.values?.agreement) && "disabled"}`}>  {loading ? <span className="spinner-border spinner-border-sm" role="status" aria-hidden={true}></span> : <span>SignUp </span>} </button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </form>
+                            <div className="image-feature">
+                                <BsFileText />
+                                <span>Easy case submission</span>
+                            </div>
+                            <div className="image-feature">
+                                <BsTelephone />
+                                <span>24/7 support</span>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </>
+
+            {/* Left Side - Form Section */}
+            <div className="form-section">
+                <div className="form-content-wrapper">
+                    {/* Logo/Brand - Centered */}
+                    <div className="brand-wrapper-centered">
+                        <div className="brand-logo-centered">
+                            <img 
+                                src="/Images/icons/company-logo.png" 
+                                height={60} 
+                                alt="Claim Solution" 
+                                loading="lazy"
+                            />
+                        </div>
+                    </div>
+
+                    {/* Welcome Text */}
+                    <div className="welcome-text-centered">
+                        <h1>Create an account</h1>
+                        <p>Join us to start managing your insurance cases efficiently</p>
+                    </div>
+
+                    {/* Sign Up Form */}
+                    <form onSubmit={UserDetailsFormik.handleSubmit} className="signup-form-enhanced">
+                        {/* Full Name Field */}
+                        <div className="input-field-group">
+                            <label htmlFor="fullName">
+                                <BsPerson className="input-icon" />
+                                Full Name
+                            </label>
+                            <input
+                                type="text"
+                                id="fullName"
+                                name="fullName"
+                                value={UserDetailsFormik?.values?.fullName}
+                                onChange={UserDetailsFormik?.handleChange}
+                                onBlur={UserDetailsFormik?.handleBlur}
+                                placeholder="John Doe"
+                                className={UserDetailsFormik?.touched?.fullName && UserDetailsFormik?.errors?.fullName ? 'error-input' : ''}
+                            />
+                            {UserDetailsFormik?.touched?.fullName && UserDetailsFormik?.errors?.fullName && (
+                                <span className="error-message">{UserDetailsFormik?.errors?.fullName}</span>
+                            )}
+                        </div>
+
+                        {/* Email Field */}
+                        <div className="input-field-group">
+                            <label htmlFor="email">
+                                <BsEnvelope className="input-icon" />
+                                Email Address
+                            </label>
+                            <input
+                                type="email"
+                                id="email"
+                                name="email"
+                                value={UserDetailsFormik?.values?.email}
+                                onChange={UserDetailsFormik?.handleChange}
+                                onBlur={UserDetailsFormik?.handleBlur}
+                                placeholder="name@company.com"
+                                className={UserDetailsFormik?.touched?.email && UserDetailsFormik?.errors?.email ? 'error-input' : ''}
+                            />
+                            {UserDetailsFormik?.touched?.email && UserDetailsFormik?.errors?.email && (
+                                <span className="error-message">{UserDetailsFormik?.errors?.email}</span>
+                            )}
+                        </div>
+
+                        {/* Mobile Number Field with PhoneInput */}
+                        <div className="input-field-group">
+                            <label htmlFor="mobileNo">
+                                <BsTelephone className="input-icon" />
+                                Mobile Number
+                            </label>
+                            <PhoneInput
+                                country={'in'}
+                                containerClass="phone-input-container"
+                                inputClass={`phone-input-field ${UserDetailsFormik?.touched?.mobileNo && UserDetailsFormik?.errors?.mobileNo ? 'error-input' : ''}`}
+                                buttonClass="phone-dropdown-button"
+                                placeholder="+91 12345 67890"
+                                onlyCountries={['in', 'us', 'gb', 'au', 'ca']}
+                                value={UserDetailsFormik?.values?.mobileNo}
+                                onChange={phone => {
+                                    if (phone.startsWith('91')) {
+                                        UserDetailsFormik.setFieldValue("mobileNo", phone)
+                                    } else {
+                                        UserDetailsFormik.setFieldValue("mobileNo", '91' + phone)
+                                    }
+                                }}
+                                onBlur={() => UserDetailsFormik.setFieldTouched("mobileNo", true)}
+                            />
+                            {UserDetailsFormik?.touched?.mobileNo && UserDetailsFormik?.errors?.mobileNo && (
+                                <span className="error-message">{UserDetailsFormik?.errors?.mobileNo}</span>
+                            )}
+                        </div>
+
+                        {/* Password Field */}
+                        <div className="input-field-group">
+                            <label htmlFor="password">
+                                <BsLock className="input-icon" />
+                                Password
+                            </label>
+                            <div className="password-input-wrapper">
+                                <input
+                                    type={view ? "text" : "password"}
+                                    id="password"
+                                    name="password"
+                                    value={UserDetailsFormik?.values?.password}
+                                    onChange={UserDetailsFormik?.handleChange}
+                                    onBlur={UserDetailsFormik?.handleBlur}
+                                    placeholder="Create a strong password"
+                                    className={UserDetailsFormik?.touched?.password && UserDetailsFormik?.errors?.password ? 'error-input' : ''}
+                                />
+                                <button 
+                                    type="button" 
+                                    className="password-toggle-btn"
+                                    onClick={() => setView(!view)}
+                                >
+                                    {view ? <BsEyeFill /> : <BsEyeSlashFill />}
+                                </button>
+                            </div>
+                            {UserDetailsFormik?.touched?.password && UserDetailsFormik?.errors?.password && (
+                                <span className="error-message">{UserDetailsFormik?.errors?.password}</span>
+                            )}
+                        </div>
+
+                        {/* Agreement Checkbox */}
+                        <div className="agreement-checkbox">
+                            <label className="checkbox-label">
+                                <input 
+                                    type="checkbox" 
+                                    checked={UserDetailsFormik?.values?.agreement}
+                                    onChange={(e) => UserDetailsFormik.setFieldValue("agreement", e.target.checked)}
+                                />
+                                <span>
+                                    I agree to the 
+                                    <Link to="/client/service agreement" target="_blank" className="agreement-link">
+                                        <BsFileText className="inline-icon" />
+                                        Service Agreement
+                                    </Link>
+                                </span>
+                            </label>
+                        </div>
+
+                        {/* Sign Up Button */}
+                        <button 
+                            type="submit" 
+                            className="signup-button-enhanced"
+                            disabled={loading || !UserDetailsFormik?.values?.agreement}
+                        >
+                            {loading ? (
+                                <span className="spinner"></span>
+                            ) : (
+                                <>
+                                    Create Account
+                                    <BsArrowRight className="button-icon" />
+                                </>
+                            )}
+                        </button>
+
+                        {/* Sign In Link */}
+                        <div className="signin-prompt-enhanced">
+                            Already have an account? <Link to="/client/signin">Sign in</Link>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+    
+        </div>
     )
 }

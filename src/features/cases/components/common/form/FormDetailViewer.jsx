@@ -56,7 +56,8 @@ const FormDetailViewer = ({
           payload[key] = payload[key] || {};
 
           Object.keys(defaults).forEach((fieldKey) => {
-            if (payload[fieldKey] !== undefined) {
+            // payload[fieldKey] !== undefined
+            if (payload[fieldKey]) {
               payload[key][fieldKey] = payload[fieldKey];
               delete payload[fieldKey];
             }

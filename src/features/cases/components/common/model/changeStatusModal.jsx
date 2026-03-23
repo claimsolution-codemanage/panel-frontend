@@ -58,7 +58,7 @@ export default function ChangeStatusModal({ changeStatus, setChangeStatus, handl
 
     const addOneMonthToISO = (date = new Date()) => {
         const d = new Date(date);
-        d.setMonth(d.getMonth() + 1);
+        d.setMonth(d.getMonth() + 12);
         return d.toISOString().split("T")[0];
     };
 

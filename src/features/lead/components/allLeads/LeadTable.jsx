@@ -868,6 +868,8 @@ hasUpdateColumnAccess,updateColumnApi,refetchColumn
 
                       <div className="d-flex gap-1 align-items-center">
                         {Boolean(hasUpdateColumnAccess) && <span
+                            data-tooltip="Edit"
+                             data-tooltip-position="bottom"
                             className="freeze-icon"
                             onClick={(e) => {
                               e.stopPropagation();
@@ -885,6 +887,8 @@ hasUpdateColumnAccess,updateColumnApi,refetchColumn
                         }
                         <span
                           className="freeze-icon"
+                           data-tooltip={isFrozen ? "Unfreeze column" : "Freeze column"}
+                          data-tooltip-position="bottom"
                           onClick={(e) => {
                             e.stopPropagation();
                             toggleFreezeColumn(col.key);
@@ -894,7 +898,7 @@ hasUpdateColumnAccess,updateColumnApi,refetchColumn
                             color: isFrozen ? "#3b82f6" : "#94a3b8",
                             fontSize: "14px",
                           }}
-                          title={isFrozen ? "Unfreeze column" : "Freeze column"}
+                          // title={isFrozen ? "Unfreeze column" : "Freeze column"}
                         >
                           {isFrozen ? <MdWidthNormal className="fs-5" /> : <MdOutlineWidthNormal className="fs-5" />}
                         </span>
@@ -913,6 +917,8 @@ hasUpdateColumnAccess,updateColumnApi,refetchColumn
                     <div
                       className={`column-resizer ${isResizingThis ? 'resizing' : ''}`}
                       onMouseDown={(e) => startColumnResize(e, col.key)}
+                      data-tooltip="Resize"
+                      data-tooltip-position="bottom"
                       style={{
                         position: "absolute",
                         top: 0,

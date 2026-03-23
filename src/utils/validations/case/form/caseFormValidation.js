@@ -180,7 +180,7 @@ const commonInFoValidation = {
         .min(0, "Must be minimum 0")
         .test("partnerFee", "Partner fee is required", function (value) {
             const { isSettelment, specialCase } = this.parent;
-            return (isSettelment || specialCase) ? value && !isNaN(value) : true;
+            return (isSettelment ) ? value && !isNaN(value) : true;
         }),
     consultantFee: yup
         .number()
@@ -188,7 +188,7 @@ const commonInFoValidation = {
         .min(0, "Must be minimum 0")
         .test("consultantFee", "Consultant fee is required", function (value) {
             const { approved, specialCase } = this.parent;
-            return (approved || specialCase) ? value && !isNaN(value) : true;
+            return (approved) ? value && !isNaN(value) : true;
         }),
     filingDate: yup.string().required("Filing Date is required"),
 }

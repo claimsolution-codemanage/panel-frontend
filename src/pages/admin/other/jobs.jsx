@@ -98,7 +98,7 @@ export default function AdminAllJobs() {
                                     <div className=" bg-color-7 rounded-2 shadow p-3 mb-4 h-100">
                                         <div className="d-flex align-items-center justify-content-center gap-2">
                                     <h6 className="fs-4 my-3 text-capitalize text-center text-decoration-underline text-primary">{job?.title}</h6>
-                                        <span onClick={()=>setJobRemoveModal({status:true,loading:false,id:job?._id})} className="d-flex justify-content-center align-items-center bg-danger text-white " style={{width:'2rem',cursor:'pointer', height:'2rem', borderRadius:'2rem'}}><MdOutlineDelete/></span>
+                                        <span data-tooltip="Permanent Delete" onClick={()=>setJobRemoveModal({status:true,loading:false,id:job?._id})} className="d-flex justify-content-center align-items-center bg-danger text-white " style={{width:'2rem',cursor:'pointer', height:'2rem', borderRadius:'2rem'}}><MdOutlineDelete/></span>
                                         </div>
                                     <div>
                                         <h6 className="fs-6 fw-semibold text-capitalize mb-0">experience</h6>

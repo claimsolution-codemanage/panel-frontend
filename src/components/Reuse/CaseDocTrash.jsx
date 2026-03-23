@@ -202,9 +202,9 @@ export default function CaseDocTrash({getAllDoc,isActive,deleteDoc,isTrash,isDel
                   {data.map((item, ind) => <tr key={ind} className="border-2 text-nowrap border-bottom border-light text-center">
                     <th scope="row">{ind + 1}</th>
                     <td><span className="d-flex gap-2">
-                      <Link to={getCheckStorage(item?.url)} target="_black" state={{filter,back:location?.pathname,path:location?.pathname}} style={{ cursor: "pointer", height: 30, width: 30, borderRadius: 30 }} className="bg-warning text-white d-flex align-items-center justify-content-center"><HiMiniEye /></Link>
-                    {isTrash && <span style={{ cursor: "pointer", height: 30, width: 30, borderRadius: 30 }} className={`${isTrash ? "bg-success" :"bg-danger"}  text-white d-flex align-items-center justify-content-center`} onClick={() =>setChangeStatus({ show: true, details: { _id: item._id, currentStatus: item?.isActive, name: item?.name, recovery:true } })}>{isTrash ? <FaTrashRestoreAlt/> : <AiOutlineDelete />} </span>}
-                    {isDelete && <span style={{ cursor: "pointer", height: 30, width: 30, borderRadius: 30 }} className={`bg-danger  text-white d-flex align-items-center justify-content-center`} onClick={() =>setDeleteDoc({ status: true, details: { _id: item._id,name:item?.name} })}><AiOutlineDelete /> </span>}
+                      <Link data-tooltip="View" to={getCheckStorage(item?.url)} target="_black" state={{filter,back:location?.pathname,path:location?.pathname}} style={{ cursor: "pointer", height: 30, width: 30, borderRadius: 30 }} className="bg-warning text-white d-flex align-items-center justify-content-center"><HiMiniEye /></Link>
+                    {isTrash && <span data-tooltip="Restore" style={{ cursor: "pointer", height: 30, width: 30, borderRadius: 30 }} className={`${isTrash ? "bg-success" :"bg-danger"}  text-white d-flex align-items-center justify-content-center`} onClick={() =>setChangeStatus({ show: true, details: { _id: item._id, currentStatus: item?.isActive, name: item?.name, recovery:true } })}>{isTrash ? <FaTrashRestoreAlt/> : <AiOutlineDelete />} </span>}
+                    {isDelete && <span data-tooltip="Permanent Delete" style={{ cursor: "pointer", height: 30, width: 30, borderRadius: 30 }} className={`bg-danger  text-white d-flex align-items-center justify-content-center`} onClick={() =>setDeleteDoc({ status: true, details: { _id: item._id,name:item?.name} })}><AiOutlineDelete /> </span>}
 
                     </span>
                     </td>

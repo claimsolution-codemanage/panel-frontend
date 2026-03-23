@@ -1,3 +1,6 @@
+
+
+// ClientSignIn.jsx - Enhanced Split Screen Design
 import { Link } from 'react-router-dom'
 import { useNavigate } from 'react-router-dom'
 import { useState } from 'react'
@@ -5,13 +8,12 @@ import { useContext } from 'react'
 import { AppContext } from '../../App'
 import { toast } from 'react-toastify'
 import { setToken } from '../../utils/helperFunction'
-import { BsEyeSlashFill } from "react-icons/bs";
-import { BsEyeFill } from "react-icons/bs";
+import { BsEyeSlashFill, BsEyeFill, BsArrowRight, BsShieldCheck, BsBuilding } from "react-icons/bs"
 import { getJwtDecode } from '../../utils/helperFunction'
 import { useFormik } from 'formik'
 import { signInOrSignUpInitialValue, signInOrSignUpValidationSchema } from '../../utils/validations/auth/userAuthValidation'
 import { clientSignInApi } from '../../apis/auth/userAuthApi'
-
+import '../../styles/client/ClientSignIn.css' // Import the modern CSS
 
 export default function ClientSignIn() {
     const state = useContext(AppContext)
@@ -20,7 +22,7 @@ export default function ClientSignIn() {
     const navigate = useNavigate()
 
     const UserDetailsFormik = useFormik({
-        initialValues:signInOrSignUpInitialValue,
+        initialValues: signInOrSignUpInitialValue,
         validationSchema: signInOrSignUpValidationSchema,
         onSubmit: async (values) => {
             setLoading(true)
@@ -34,7 +36,6 @@ export default function ClientSignIn() {
                         state?.setMyAppData({ isLogin: true, details: details })
                         toast.success(res?.data?.message)
                         navigate("/client/dashboard")
-                        // console.log("client sign up", res);
                     }
                     setLoading(false)
                 }
@@ -44,66 +45,126 @@ export default function ClientSignIn() {
                 } else {
                     toast.error("Something went wrong")
                 }
-                console.log("signup error", error);
+                console.log("signup error", error)
                 setLoading(false)
             }
         }
     })
 
-
-
     return (
-        <>
-            <div className=" py-5">
-                <div className="container-px-5">
-                    <div className="">
-                        <div className="row p-0">
-                            <div className="col-sm-12 col-md-6 p-0">
-                                <img src="/Images/home/sign-in.png" alt="card image" className='img-fluid h-100' />
-                            </div>
-                            <div className="col-md-6 col-sm-12 p-0  bg-color-7 color-4">
-                                <div className="px-3 py-3 px-md-5 py-md-5">
-                                    <div className="h2 fw-bold text-center mb-5">Sign In</div>
-                                    <div className="text"></div>
-                                    <form onSubmit={UserDetailsFormik.handleSubmit} className='aligin-items-center d-flex justify-content-center'>
-                                        <div className="w-75">
-                                            <div className="mb-3 mt-3">
-                                                <input type="email" className={`form-control ${UserDetailsFormik?.touched?.email && UserDetailsFormik?.errors?.email && "border-danger"}`} name='email' value={UserDetailsFormik.values?.email} onChange={UserDetailsFormik.handleChange} id="email" placeholder="Your Email" />
-                                                {UserDetailsFormik?.touched?.email && UserDetailsFormik?.errors?.email ? (
-                                                    <span className="text-danger">{UserDetailsFormik?.errors?.email}</span>
-                                                ) : null}
-                                            </div>
+        <div className="enhanced-split-layout">
 
-                                            <div className="mb-3 mt-3">
-                                                <div className={`d-flex flex aligin-items-center form-control ${UserDetailsFormik?.touched?.password && UserDetailsFormik?.errors?.password && "border-danger"} justify-content-center`}>
-                                                    <input type={view ? "text" : "password"} className="w-100 border-0" name='password' style={{ outline: 'none' }} value={UserDetailsFormik.values?.password} onChange={UserDetailsFormik.handleChange} id="password" placeholder="Your Password" />
-                                                    <span className='fs-6' style={{ cursor: 'pointer' }} onClick={() => setView(!view)}>
-                                                        {view ? <BsEyeFill /> : <BsEyeSlashFill />}
-                                                    </span>
-                                                </div>
-                                                {UserDetailsFormik?.touched?.password && UserDetailsFormik?.errors?.password ? (
-                                                    <span className="text-danger">{UserDetailsFormik?.errors?.password}</span>
-                                                ) : null}
-                                            </div>
-                                            <div className="form-check">
-                                                <label className="float-end" >
-                                                    <Link to='/client/forget password' className="text-decoration-underline">Forgot Password?</Link>
-                                                </label>
-                                            </div>
-                                            <div className="d-flex align-items-center justify-content-center mt-2">
-                                                <Link to="/client/signup" className=''>Don't have an account? signup</Link>
-                                            </div>
-                                            <div className="mt-5">
-                                                <button aria-disabled={loading} type="submit" className={`btn btn-primary color-1 w-100 ${loading && "disabled"}`} >  {loading ? <span className="spinner-border spinner-border-sm" role="status" aria-hidden={true}></span> : <span>SignIn </span>} </button>
-                                            </div>
-                                        </div>
-                                    </form>
-                                </div>
+        {/* Right Side - Image Section */}
+            <div className="image-section">
+                <div className="image-overlay-enhanced">
+                    <div className="image-content">
+                        <h2>Claim Solution</h2>
+                        <p>Submit, track, and resolve your insurance cases faster than ever before</p>
+                        <div className="image-features">
+                            <div className="image-feature">
+                                <BsShieldCheck />
+                                <span>Fast claim processing</span>
+                            </div>
+                            <div className="image-feature">
+                                <BsBuilding />
+                                <span>24/7 case tracking</span>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </>
+
+            {/* Left Side - Form Section */}
+            <div className="form-section">
+                <div className="form-content-wrapper">
+                    {/* Logo/Brand */}
+                    <div className="brand-wrapper">
+                        <div className="brand-logo">
+                            <img src="/Images/icons/company-logo.png" height={60} alt="Claim solution" loading="lazy" />
+                        </div>
+                    </div>
+
+                    {/* Welcome Text */}
+                    <div className="welcome-text">
+                        <h1>Welcome back</h1>
+                        <p>Sign in to access your insurance dashboard and manage your cases</p>
+                    </div>
+
+                    {/* Sign In Form */}
+                    <form onSubmit={UserDetailsFormik.handleSubmit} className="signin-form-enhanced">
+                        <div className="input-field-group">
+                            <label htmlFor="email">Email address</label>
+                            <input
+                                type="email"
+                                id="email"
+                                name="email"
+                                value={UserDetailsFormik.values?.email}
+                                onChange={UserDetailsFormik.handleChange}
+                                onBlur={UserDetailsFormik.handleBlur}
+                                placeholder="name@example.com"
+                                className={UserDetailsFormik?.touched?.email && UserDetailsFormik?.errors?.email ? 'error-input' : ''}
+                            />
+                            {UserDetailsFormik?.touched?.email && UserDetailsFormik?.errors?.email && (
+                                <span className="error-message">{UserDetailsFormik?.errors?.email}</span>
+                            )}
+                        </div>
+
+                        <div className="input-field-group">
+                            <label htmlFor="password">Password</label>
+                            <div className="password-input-wrapper">
+                                <input
+                                    type={view ? "text" : "password"}
+                                    id="password"
+                                    name="password"
+                                    value={UserDetailsFormik.values?.password}
+                                    onChange={UserDetailsFormik.handleChange}
+                                    onBlur={UserDetailsFormik.handleBlur}
+                                    placeholder="Enter your password"
+                                    className={UserDetailsFormik?.touched?.password && UserDetailsFormik?.errors?.password ? 'error-input' : ''}
+                                />
+                                <button 
+                                    type="button" 
+                                    className="password-toggle-btn"
+                                    onClick={() => setView(!view)}
+                                >
+                                    {view ? <BsEyeFill /> : <BsEyeSlashFill />}
+                                </button>
+                            </div>
+                            {UserDetailsFormik?.touched?.password && UserDetailsFormik?.errors?.password && (
+                                <span className="error-message">{UserDetailsFormik?.errors?.password}</span>
+                            )}
+                        </div>
+
+                        <div className="form-options-enhanced">
+                            <div></div>
+                            <Link to="/client/forget password" className="forgot-password-link">
+                                Forgot password?
+                            </Link>
+                        </div>
+
+                        <button 
+                            type="submit" 
+                            className="signin-button-enhanced"
+                            disabled={loading}
+                        >
+                            {loading ? (
+                                <span className="spinner"></span>
+                            ) : (
+                                <>
+                                    Sign in
+                                    <BsArrowRight className="button-icon" />
+                                </>
+                            )}
+                        </button>
+
+                        <div className="signup-prompt-enhanced">
+                            Don't have an account? <Link to="/client/signup">Create an account</Link>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            
+        </div>
     )
 }

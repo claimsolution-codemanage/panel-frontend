@@ -1,0 +1,334 @@
+/* ClientSignUp.css - Modern Signup Page Styles */
+
+/* Inherit base styles from ClientSignIn.css and add signup-specific styles */
+@import url('./ClientSignIn.css');
+
+/* Signup Layout Overrides */
+.signup-layout {
+    background: #ffffff;
+}
+
+/* Centered Brand Logo */
+.brand-wrapper-centered {
+    text-align: center;
+    margin-bottom: 1rem;
+}
+
+.brand-logo-centered {
+    display: inline-block;
+}
+
+.brand-logo-centered img {
+    object-fit: contain;
+    transition: transform 0.3s ease;
+}
+
+.brand-logo-centered img:hover {
+    transform: scale(1.05);
+}
+
+/* Centered Welcome Text */
+.welcome-text-centered {
+    text-align: center;
+    margin-bottom: 2.5rem;
+}
+
+.welcome-text-centered h1 {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #0f172a;
+    margin-bottom: 0.75rem;
+    letter-spacing: -0.02em;
+}
+
+.welcome-text-centered p {
+    font-size: 0.9375rem;
+    color: #64748b;
+    line-height: 1.5;
+}
+
+/* Signup Form Enhanced */
+.signup-form-enhanced {
+    margin-bottom: 1.5rem;
+}
+
+/* Input Field with Icons */
+.input-field-group label {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: #334155;
+    margin-bottom: 0.5rem;
+}
+
+.input-icon {
+    font-size: 0.875rem;
+    color: #3b82f6;
+}
+
+/* Phone Input Styling */
+.phone-input-container {
+    width: 100% !important;
+}
+
+.phone-input-field {
+    width: 100% !important;
+    padding: 0.875rem 1rem 0.875rem 3.5rem !important;
+    border: 1.5px solid #e2e8f0 !important;
+    border-radius: 0.75rem !important;
+    font-size: 0.9375rem !important;
+    transition: all 0.2s ease !important;
+    background: #ffffff !important;
+}
+
+.phone-input-field:focus {
+    border-color: #3b82f6 !important;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1) !important;
+    outline: none !important;
+}
+
+.phone-input-field.error-input {
+    border-color: #ef4444 !important;
+}
+
+.phone-dropdown-button {
+    border: 1.5px solid #e2e8f0 !important;
+    border-radius: 0.75rem 0 0 0.75rem !important;
+    background: #f8fafc !important;
+}
+
+.phone-dropdown-button:hover {
+    background: #f1f5f9 !important;
+}
+
+/* Agreement Checkbox */
+.agreement-checkbox {
+    margin-bottom: 1.75rem;
+}
+
+.checkbox-label {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    cursor: pointer;
+    font-size: 0.875rem;
+    color: #475569;
+}
+
+.checkbox-label input {
+    width: 1rem;
+    height: 1rem;
+    cursor: pointer;
+    accent-color: #3b82f6;
+}
+
+.agreement-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    color: #3b82f6;
+    text-decoration: none;
+    font-weight: 500;
+    margin-left: 0.25rem;
+    transition: color 0.2s ease;
+}
+
+.agreement-link:hover {
+    color: #2563eb;
+    text-decoration: underline;
+}
+
+.inline-icon {
+    font-size: 0.75rem;
+    vertical-align: middle;
+}
+
+/* Signup Button */
+.signup-button-enhanced {
+    width: 100%;
+    padding: 0.875rem;
+    background: linear-gradient(135deg, #3b82f6, #2563eb);
+    color: white;
+    border: none;
+    border-radius: 0.75rem;
+    font-size: 0.9375rem;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+    margin-bottom: 1rem;
+}
+
+.signup-button-enhanced::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+    transition: left 0.5s ease;
+}
+
+.signup-button-enhanced:hover::before {
+    left: 100%;
+}
+
+.signup-button-enhanced:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 20px -10px rgba(59, 130, 246, 0.5);
+    background: linear-gradient(135deg, #2563eb, #1d4ed8);
+}
+
+.signup-button-enhanced:active:not(:disabled) {
+    transform: translateY(0);
+}
+
+.signup-button-enhanced:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.button-icon {
+    font-size: 1rem;
+    transition: transform 0.2s ease;
+}
+
+.signup-button-enhanced:hover:not(:disabled) .button-icon {
+    transform: translateX(4px);
+}
+
+/* Sign In Prompt */
+.signin-prompt-enhanced {
+    text-align: center;
+    font-size: 0.875rem;
+    color: #64748b;
+}
+
+.signin-prompt-enhanced a {
+    color: #3b82f6;
+    text-decoration: none;
+    font-weight: 600;
+    margin-left: 0.25rem;
+    transition: color 0.2s ease;
+}
+
+.signin-prompt-enhanced a:hover {
+    color: #2563eb;
+    text-decoration: underline;
+}
+
+/* Security Note */
+.security-note {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-top: 2rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid #eef2ff;
+}
+
+.security-icon {
+    font-size: 0.875rem;
+    color: #10b981;
+}
+
+.security-note span {
+    font-size: 0.75rem;
+    color: #94a3b8;
+}
+
+/* Signup Image Section Override */
+.signup-image::before {
+    background-image: url('/Images/client/client_signin.avif');
+}
+
+/* Responsive Adjustments */
+@media (max-width: 968px) {
+    .brand-wrapper-centered {
+        margin-bottom: 1.5rem;
+    }
+    
+    .brand-logo-centered img {
+        height: 60px;
+    }
+    
+    .welcome-text-centered h1 {
+        font-size: 1.75rem;
+    }
+    
+    .welcome-text-centered p {
+        font-size: 0.875rem;
+    }
+    
+    .signup-form-enhanced {
+        margin-bottom: 1rem;
+    }
+}
+
+@media (max-width: 640px) {
+    .brand-logo-centered img {
+        height: 50px;
+    }
+    
+    .welcome-text-centered h1 {
+        font-size: 1.5rem;
+    }
+    
+    .checkbox-label {
+        font-size: 0.8125rem;
+    }
+    
+    .security-note span {
+        font-size: 0.6875rem;
+    }
+}
+
+/* Animation for form fields */
+.input-field-group input,
+.phone-input-field {
+    animation: fadeInUp 0.5s ease-out backwards;
+}
+
+.input-field-group:nth-child(1) { animation-delay: 0.05s; }
+.input-field-group:nth-child(2) { animation-delay: 0.1s; }
+.input-field-group:nth-child(3) { animation-delay: 0.15s; }
+.input-field-group:nth-child(4) { animation-delay: 0.2s; }
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Custom scrollbar for the form section */
+.form-section::-webkit-scrollbar {
+    width: 6px;
+}
+
+.form-section::-webkit-scrollbar-track {
+    background: #f1f5f9;
+}
+
+.form-section::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 3px;
+}
+
+.form-section::-webkit-scrollbar-thumb:hover {
+    background: #94a3b8;
+}

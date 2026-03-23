@@ -10,15 +10,16 @@ import ConfirmationModal from '../../../../../components/Common/Modal/confirmati
 import SetStatusOfProfile from '../../../../../components/Common/Modal/setStatusModal'
 import { toast } from 'react-toastify'
 import { CiLock } from 'react-icons/ci'
+import { Button } from 'react-bootstrap'
+import { Eye, EyeOff } from 'lucide-react'
 
-export default function DocumentSection({ role, data, getCaseById, attachementUpload, addCaseDoc,deleteDoc,setCaseDocStatus }) {
+export default function DocumentSection({ role, data, getCaseById, attachementUpload, addCaseDoc, deleteDoc, setCaseDocStatus }) {
     const [uploadingDocs, setUploadingDocs] = useState(false)
     const [folderInfo, setFolderInfo] = useState({})
     const [fileInfo, setFileInfo] = useState({ type: null, list: [] })
     const [changeisActiveStatus, setChangeIsActiveStatus] = useState({ show: false, details: {} })
     const [deleteCaseDoc, setDeleteCaseDoc] = useState({ status: false, id: null })
-    
-
+    const [showDocList, setShowDocList] = useState(false)
 
     useEffect(() => {
         let caseDocs = data?.[0]?.caseDocs
@@ -43,7 +44,7 @@ export default function DocumentSection({ role, data, getCaseById, attachementUp
             if (res?.data?.success) {
                 setChangeIsActiveStatus({ show: false, details: {} })
                 toast.success(res?.data?.message)
-                if(getCaseById){
+                if (getCaseById) {
                     getCaseById()
                 }
 
@@ -57,8 +58,6 @@ export default function DocumentSection({ role, data, getCaseById, attachementUp
             // console.log("allAdminCase isActive error", error);
         }
     }
-
-
 
     const handleShareDocument = (type, data) => {
         const docUrl = getCheckStorage(data?.url)
@@ -79,14 +78,27 @@ export default function DocumentSection({ role, data, getCaseById, attachementUp
         <div>
             <div className="bg-color-1 my-5 p-3 p-md-5 rounded-2 shadow">
                 <div className="border-3 border-primary border-bottom py-2 mb-5">
-                    <div className="d-flex gap-3 justify-content-center text-primary text-center fs-4">
-                        {fileInfo?.type && <IoArrowBackCircleOutline className="fs-3" onClick={() => setFileInfo({ type: null, list: [] })} style={{ cursor: "pointer" }} />}
-                        <span className="text-capitalize">{fileInfo?.type || "Document List"}</span>
-                        <div>
-                            <span onClick={() => setUploadingDocs(true)} className="bg-primary d-flex justify-content-center align-items-center text-white" style={{ cursor: 'pointer', height: '2rem', width: '2rem', borderRadius: '2rem' }}><IoMdAdd /></span>
+                    <div className="d-flex gap-3 justify-content-between text-primary text-center fs-4">
+                        <div className='d-flex gap-2'>
+                            {fileInfo?.type && <IoArrowBackCircleOutline className="fs-3" onClick={() => setFileInfo({ type: null, list: [] })} style={{ cursor: "pointer" }} />}
+                            <span className="text-capitalize">{fileInfo?.type || "Document List"}</span>
+                            <div>
+                                <span onClick={() => setUploadingDocs(true)} className="bg-primary d-flex justify-content-center align-items-center text-white" style={{ cursor: 'pointer', height: '2rem', width: '2rem', borderRadius: '2rem' }}><IoMdAdd /></span>
+                            </div>
                         </div>
-                    </div></div>
-                <div className="row row-cols-1 row-cols-md-4 align-items-center">
+                        <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() => setShowDocList(!showDocList)}>
+                            {showDocList ? (
+                                <> <EyeOff className="w-4 h-4 mr-1" /> Hide </>
+                            ) : (
+                                <><Eye className="w-4 h-4 mr-1" /> View </>
+                            )}
+                        </Button>
+                    </div>
+                </div>
+                {showDocList && <div className="row row-cols-1 row-cols-md-4 align-items-center">
 
                     {fileInfo?.list?.length == 0 && Object.keys(folderInfo)?.map(ele => <div key={ele} className="p-2">
                         <div className="align-items-center bg-color-7 d-flex flex-column justify-content-center rounded-3 cursor-pointer" onClick={() => Array.isArray(folderInfo[ele]) && setFileInfo({ type: ele, list: folderInfo[ele] })}>
@@ -128,7 +140,7 @@ export default function DocumentSection({ role, data, getCaseById, attachementUp
                             </div>
                         </div>
                     )}
-                </div>
+                </div>}
 
 
                 <div className="d-flex row  gap-0  align-items-center"></div>

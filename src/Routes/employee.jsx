@@ -55,7 +55,7 @@ import EmployeeAllLeads from "../features/lead/pages/viewAll/EmpAllLeads"
 
 export const employeeRoutes = [
     <Route path='/employee/signin' element={<PanelTemplate><EmployeeSignIn/></PanelTemplate>}/>,
-  <Route path='/employee/forget password' element={<PanelTemplate><EmployeeForgetPassword/></PanelTemplate>}/>,
+  <Route path='/employee/forget-password' element={<PanelTemplate><EmployeeForgetPassword/></PanelTemplate>}/>,
   <Route path='/employee/dashboard' element={<EmployeeTemplate><EmployeeDasboard/></EmployeeTemplate>}/>,
   <Route path='/employee/reset password' element={<EmployeeTemplate><EmployeeResetPassword/></EmployeeTemplate>}/>,
   <Route path='/employee/profile' element={<EmployeeTemplate><EmpViewProfile/></EmployeeTemplate>}/>,

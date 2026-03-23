@@ -151,9 +151,9 @@ export default function AdminAllComplaint() {
                       {/* <td className="text-nowrap"> <span className={`badge ${item?.isActive ? "bg-primary" : "bg-danger"}`}>{item?.isActive ? "Active" : "Unactive"}</span> </td> */}
 
                       <td className="text-nowrap">
-                        <span className="d-flex gap-2"><span style={{ cursor: "pointer", height: 30, width: 30, borderRadius: 30 }} className="bg-primary text-white d-flex align-items-center justify-content-center" onClick={() => setViewComplaintModal({ status: true, details: item })}><HiMiniEye /></span>
+                        <span className="d-flex gap-2"><span data-tooltip="View" style={{ cursor: "pointer", height: 30, width: 30, borderRadius: 30 }} className="bg-primary text-white d-flex align-items-center justify-content-center" onClick={() => setViewComplaintModal({ status: true, details: item })}><HiMiniEye /></span>
                           {/* <span style={{ cursor: "pointer",height:30,width:30,borderRadius:30 }} className="bg-warning text-dark d-flex align-items-center justify-content-center" onClick={() => setChangeStatus({ show: true, details: {_id:item._id,currentStatus:item?.isActive} })}><CiEdit /></span> */}
-                          <span style={{ cursor: "pointer", height: 30, width: 30, borderRadius: 30 }} className="bg-danger text-white d-flex align-items-center justify-content-center" onClick={() => setRemoveComplaint({ status: true, details: { _id: item?._id, name: item?.name } })}><AiOutlineDelete /></span>
+                          <span data-tooltip="Delete" style={{ cursor: "pointer", height: 30, width: 30, borderRadius: 30 }} className="bg-danger text-white d-flex align-items-center justify-content-center" onClick={() => setRemoveComplaint({ status: true, details: { _id: item?._id, name: item?.name } })}><AiOutlineDelete /></span>
                         </span></td>
 
                       <td className="text-nowrap">{item?.name}</td>

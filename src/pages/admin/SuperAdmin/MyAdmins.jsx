@@ -185,8 +185,8 @@ export default function MyAdmins() {
                 <td className="text-nowrap"> <span className={`badge ${item?.isActive ? "bg-primary" : "bg-danger"}`}>{item?.isActive ? "Active" : "Unactive"}</span> </td>
                 <td className="text-nowrap"><span className="d-flex justify-content-center align-items-center gap-2">
                   {/* <span style={{ cursor: "pointer" }} onClick={() => navigate(`/admin/partner details/${item._id}`)}><HiMiniEye /></span> */}
-                  <span style={{ cursor: "pointer",height:30,width:30,borderRadius:30 }} className="bg-primary text-white d-flex align-items-center justify-content-center" onClick={() => setChangeStatus({ show: true, details: {_id:item._id,currentStatus:item?.isActive,name:item?.fullName} })}><CiEdit /></span>
-                  <span style={{ cursor: "pointer",height:30,width:30,borderRadius:30 }} className="bg-danger text-white d-flex align-items-center justify-content-center" onClick={() => setParmanentDeleteAdmin({ show: true, details: {_id:item._id,currentStatus:item?.isActive,name:item?.fullName} })}><AiOutlineDelete /></span>
+                  <span data-tooltip="Change Status"  style={{ cursor: "pointer",height:30,width:30,borderRadius:30 }} className="bg-primary text-white d-flex align-items-center justify-content-center" onClick={() => setChangeStatus({ show: true, details: {_id:item._id,currentStatus:item?.isActive,name:item?.fullName} })}><CiEdit /></span>
+                  <span data-tooltip="Permanent Delete" style={{ cursor: "pointer",height:30,width:30,borderRadius:30 }} className="bg-danger text-white d-flex align-items-center justify-content-center" onClick={() => setParmanentDeleteAdmin({ show: true, details: {_id:item._id,currentStatus:item?.isActive,name:item?.fullName} })}><AiOutlineDelete /></span>
                   
                   </span>
                   
