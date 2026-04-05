@@ -12,10 +12,10 @@ import {
   Filler
 } from 'chart.js';
 import { Line, Doughnut } from 'react-chartjs-2';
-import { 
-  FiBriefcase, 
-  FiDollarSign, 
-  FiUsers, 
+import {
+  FiBriefcase,
+  FiDollarSign,
+  FiUsers,
   FiActivity,
   FiCalendar,
   FiTrendingUp,
@@ -32,8 +32,8 @@ import { toast } from 'react-toastify';
 import { AppContext } from '../../../App';
 
 ChartJS.register(
-  ArcElement, 
-  Tooltip, 
+  ArcElement,
+  Tooltip,
   Legend,
   CategoryScale,
   LinearScale,
@@ -146,10 +146,10 @@ export default function EmployeeDashboard() {
           boxWidth: 8,
           boxHeight: 8,
           padding: 20,
-          font: { 
-            size: 12, 
+          font: {
+            size: 12,
             weight: '500',
-            family: "'Inter', sans-serif" 
+            family: "'Inter', sans-serif"
           },
           color: '#334155',
         },
@@ -238,7 +238,7 @@ export default function EmployeeDashboard() {
             <Icon size={20} />
           </div>
         </div>
-        
+
         <div className="stat-card-body">
           <h6 className="stat-title">{title}</h6>
           <h3 className="stat-value">{value}</h3>
@@ -314,9 +314,11 @@ export default function EmployeeDashboard() {
     );
   };
 
-  const CategoryCard = ({ category, value, total, icon: Icon }) => {
+  const CategoryCard = ({ category, value, total, amount, totalAmount, icon: Icon }) => {
     const percentage = total ? Math.round((value / total) * 100) : 0;
+    const amountPercentage = totalAmount ? Math.round((amount / totalAmount) * 100) : 0;
     const growthColor = '#10b981';
+    const amountGrowthColor = amountPercentage > 50 ? '#10b981' : '#ef4444';
 
     return (
       <div className="category-card">
@@ -332,16 +334,24 @@ export default function EmployeeDashboard() {
                 {/* <span className="category-percentage">{percentage}%</span> */}
               </div>
             </div>
+
           </div>
           <div className="growth-indicator" style={{ color: growthColor }}>
             {/* <GrowthIcon size={16} /> */}
             <span>{percentage}%</span>
           </div>
         </div>
-        
+
+        <div className='d-flex justify-content-between align-items-center'>
+          <p>{formatCurrency(amount)}</p>
+          <div className="growth-indicator" style={{ color: amountGrowthColor }}>
+            <span>{amountPercentage}%</span>
+          </div>
+        </div>
         <div className="progress-container">
           <div className="progress-bar" style={{ width: `${percentage}%` }} />
         </div>
+
 
         <style jsx>{`
           .category-card {
@@ -439,11 +449,11 @@ export default function EmployeeDashboard() {
         <div className="header-content">
           <div className="header-left">
             <div className="logo-wrapper">
-              <img 
-                src="/Images/icons/company-logo.png" 
-                height={40} 
-                alt="Company logo" 
-                loading="lazy" 
+              <img
+                src="/Images/icons/company-logo.png"
+                height={40}
+                alt="Company logo"
+                loading="lazy"
               />
             </div>
             <div className="header-title">
@@ -451,12 +461,12 @@ export default function EmployeeDashboard() {
               <p>Welcome back, {employee?.fullName || 'User'}</p>
             </div>
           </div>
-          
+
           <div className="header-right">
             <div className="year-selector">
               <FiCalendar size={18} className="text-primary" />
-              <select 
-                value={selectedYear} 
+              <select
+                value={selectedYear}
                 onChange={(e) => setSelectedYear(Number(e.target.value))}
               >
                 {getYearOptions().map(option => (
@@ -509,17 +519,17 @@ export default function EmployeeDashboard() {
 
       {/* Main Stats Cards */}
       <div className="stats-grid">
-        <StatCard 
+        <StatCard
           title="Total Cases"
           value={totalCases.toLocaleString()}
           icon={FiBriefcase}
         />
-        <StatCard 
+        <StatCard
           title="Total Revenue"
           value={formatCurrency(totalRevenue)}
           icon={FiDollarSign}
         />
-        <StatCard 
+        <StatCard
           title="Partners"
           value={noOfPartner.toLocaleString()}
           icon={FiUsers}
@@ -540,10 +550,12 @@ export default function EmployeeDashboard() {
           </div>
           <div className="category-grid">
             {chartData[0]?.allCase?.map((data) => (
-              <CategoryCard 
+              <CategoryCard
                 key={data?._id}
                 category={data?._id}
                 value={data?.totalCases}
+                amount={data?.totalCaseAmount}
+                totalAmount={totalRevenue}
                 total={totalCases}
                 icon={FiTrendingUp}
               />
@@ -563,7 +575,7 @@ export default function EmployeeDashboard() {
             <Line data={lineData} options={lineChartOptions} />
           </div>
         </div>
-        
+
         <div className="chart-card">
           <div className="chart-header">
             <h3>Case Distribution</h3>

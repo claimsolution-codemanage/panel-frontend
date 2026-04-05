@@ -2,14 +2,14 @@ import { useEffect, useState } from "react"
 import { toast } from 'react-toastify'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { useParams } from "react-router-dom"
-import { IoArrowBackCircleOutline,} from 'react-icons/io5'
+import { IoArrowBackCircleOutline, } from 'react-icons/io5'
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import { adminUpdateClientCaseFee, } from "../../../../apis"
 import Loader from "../../../../components/Common/loader"
 import { useContext } from "react"
 import { AppContext } from "../../../../App"
-import 'react-quill/dist/quill.snow.css';
+// import 'react-quill/dist/quill.snow.css';
 import PaymentSection from "./section/PaymentSection"
 import CommentSection from "./section/CommentSection"
 import StatusSection from "./section/StatusSection"
@@ -19,11 +19,11 @@ import ViewCaseForm from "../common/form/CaseFormList"
 import ClientOtherCaseSection from "./section/ClientOtherCaseSection"
 
 
-export default function ViewCaseComp({ id, getCase, role,empType, attachementUpload, addCaseDoc,
+export default function ViewCaseComp({ id, getCase, role, empType, attachementUpload, addCaseDoc,
     editUrl, addCaseCommit, viewPartner, viewClient, editCaseProcess, addCaseProcess, addReference,
     deleteReference, deleteDoc, isAddRefence, isAddCaseProcess, isAddCommit,
     isViewProfile, setCaseDocStatus, viewEmp, paymentDetailsApi, accessPayment, isCaseFormAccess, createOrUpdateCaseFormApi,
-    privateCommit,caseFormDetailApi,viewOtherClientCasePath,isViewOtherClientCase
+    privateCommit, caseFormDetailApi, viewOtherClientCasePath, isViewOtherClientCase
 }) {
 
     const [data, setData] = useState([])
@@ -122,16 +122,16 @@ export default function ViewCaseComp({ id, getCase, role,empType, attachementUpl
 
                                             {/* case  form section*/}
                                             {(data[0]?.caseFrom?.toLowerCase() == "client" || data?.[0]?.case_forms?.length) ?
-                                                <ViewCaseForm caseFormDetailApi={caseFormDetailApi} id={id} role={role} empType={empType} isCaseFormAccess={isCaseFormAccess} getCaseById={getCaseById} status={data?.[0]?.currentStatus} formList={data?.[0]?.case_forms} createOrUpdateApi={createOrUpdateCaseFormApi} attachementUpload={attachementUpload} />:""
+                                                <ViewCaseForm caseFormDetailApi={caseFormDetailApi} id={id} role={role} empType={empType} isCaseFormAccess={isCaseFormAccess} getCaseById={getCaseById} status={data?.[0]?.currentStatus} formList={data?.[0]?.case_forms} createOrUpdateApi={createOrUpdateCaseFormApi} attachementUpload={attachementUpload} /> : ""
                                             }
 
                                             {/* payment details */}
                                             {data[0]?.caseFrom?.toLowerCase() == "client" && <PaymentSection id={id} accessPayment={accessPayment} getCaseById={getCaseById} paymentDetailsApi={paymentDetailsApi} casePayment={data[0]?.casePayment} />}
 
                                             {/* client other case section */}
-                                            {Boolean(isViewOtherClientCase) && Boolean(data?.[0]?.clientOtherCases?.length) && <ClientOtherCaseSection data={data?.[0]?.clientOtherCases || []} role={role} viewOtherClientCasePath={viewOtherClientCasePath}/>
-}
-                                            
+                                            {Boolean(isViewOtherClientCase) && Boolean(data?.[0]?.clientOtherCases?.length) && <ClientOtherCaseSection data={data?.[0]?.clientOtherCases || []} role={role} viewOtherClientCasePath={viewOtherClientCasePath} />
+                                            }
+
                                             {/* case comment */}
                                             {isAddCommit && <CommentSection id={id} privateCommit={privateCommit} addCaseCommit={addCaseCommit} role={role} getCaseById={getCaseById} caseCommit={data[0]?.caseCommit} />}
                                         </div>

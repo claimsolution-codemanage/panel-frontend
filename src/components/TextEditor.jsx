@@ -1,57 +1,62 @@
-import React, { useRef } from "react";
-import ReactQuill from "react-quill";
-import "react-quill/dist/quill.snow.css";
-
-const modules = {
-  toolbar: [
-    [{ font: [] }, { size: [] }], // font & size
-
-    ["bold", "italic", "underline"], // text styles
-
-    [{ color: [] }, { background: [] }], // font color & highlight
-
-    [{ header: 1 }, { header: 2 }],
-
-    [{ list: "ordered" }, { list: "bullet" }], // lists
-
-    [{ indent: "-1" }, { indent: "+1" }], // indent
-
-    [{ align: [] }], // alignment
-
-    ["link",], // media
-  ]
-};
-
-const formats = [
-  "font",
-  "size",
-  "bold",
-  "italic",
-  "underline",
-  "color",
-  "background",
-  "header",
-  "list",
-  "bullet",
-  "indent",
-  "align",
-  "link",
-];
+import React, { useRef, useMemo } from "react";
+import JoditEditor from "jodit-react";
 
 function TextEditor({ value, handleOnChange, placeholder }) {
-  const quillRef = useRef(null);
+  const editor = useRef(null);
+
+  // useMemo helps to avoid unnecessary re-renders of the editor configuration
+  const config = useMemo(
+    () => ({
+      readonly: false,
+      placeholder: placeholder || "Enter message...",
+      enableDragAndDropFileToEditor: true,
+      toolbarAdaptive: false,
+      // Clean up status bar
+      showCharsCounter: false,
+      showWordsCounter: false,
+      showXPathInStatusbar: false,
+      height: 300,
+      buttons: [
+        "font",
+        "fontsize",
+        "|",
+        "bold",
+        "italic",
+        "underline",
+        "|",
+        "brush", // font color & background
+        "copyformat", // copy formatting tool (paint roller)
+        "|",
+        "paragraph", // headers
+        "|",
+        "ul",
+        "ol",
+        "|",
+        "outdent",
+        "indent",
+        "|",
+        "align",
+        "|",
+        "link",
+        "table", // New table option
+        "|",
+        "copy", // standard copy tool
+        "cut",
+        "selectall"
+      ]
+    }),
+    [placeholder]
+  );
 
   return (
     <div className="text-editor">
-      <ReactQuill
-        ref={quillRef}
-        theme="snow"
-        value={value}
-        onChange={handleOnChange}
-        placeholder={placeholder || "Enter message..."}
-        modules={modules}
-        formats={formats}
-        // style={{ height: "150px" }}
+      <JoditEditor
+        ref={editor}
+        value={value || ""}
+        config={config}
+        tabIndex={1} // tabIndex of textarea
+        onBlur={(newContent) => handleOnChange(newContent)} // preferred to use only this option to update the content for performance reasons
+        onChange={(newContent) => handleOnChange(newContent)}
       />
     </div>
   );

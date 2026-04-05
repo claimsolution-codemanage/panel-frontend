@@ -10,21 +10,21 @@
   --bg-color-2: #000000;
   --bg-color-3: #fa9b23;
   /* --bg-color-3:#f2f6fc; */
- /* --color-4: #0d6efd; */
- --bg-color-4: #2f5db1;
- --bg-color-5: #ff2525;
- --bg-color-6:#37bf4a;
- --bg-color-7:#f2f6fc;
- --bg-color-8: blue;
- --bg-color-9:#96adff;
- --box-shadow: 0 5px 10px 0px rgb(0 0 0 / 50%);
- --box-shadow-2: blur(10px);
- --card-h-100: 100vh;
- --card-h-90: 90vh;
- 
+  /* --color-4: #0d6efd; */
+  --bg-color-4: #2f5db1;
+  --bg-color-5: #ff2525;
+  --bg-color-6: #37bf4a;
+  --bg-color-7: #f2f6fc;
+  --bg-color-8: blue;
+  --bg-color-9: #96adff;
+  --box-shadow: 0 5px 10px 0px rgb(0 0 0 / 50%);
+  --box-shadow-2: blur(10px);
+  --card-h-100: 100vh;
+  --card-h-90: 90vh;
 
 
-  
+
+
   /* Text color */
   --color-1: #ffffff;
   --color-2: #000000;
@@ -34,7 +34,7 @@
   --color-5: #ff2525;
   --color-6: #37bf4a;
   /* --color-6: #f2f6fc; */
- --color-7: blue;
+  --color-7: blue;
 
 
 
@@ -45,41 +45,93 @@
 /*====== class define for values ======*/
 
 /* text background color class */
-.bg-color-1{background-color: var(--bg-color-1) ;}
-.bg-color-2{background-color: var(--bg-color-2) !important ;}
-.bg-color-3{background-color: var(--bg-color-3)!important ;}
-.bg-color-4{background-color: var(--bg-color-4) !important ;}
-.bg-color-5{background-color: var(--bg-color-5) !important ;}
-.bg-color-6{background-color: var(--bg-color-6) !important ;}
-.bg-color-7{background-color: var(--bg-color-7) !important ;}
-.bg-color-7{background-color: var(--bg-color-7) !important ;}
-.bg-color-8{background-color: var(--bg-color-8) !important ;}
-.bg-color-9{background-color: var(--bg-color-9) !important ;}
+.bg-color-1 {
+  background-color: var(--bg-color-1);
+}
+
+.bg-color-2 {
+  background-color: var(--bg-color-2) !important;
+}
+
+.bg-color-3 {
+  background-color: var(--bg-color-3) !important;
+}
+
+.bg-color-4 {
+  background-color: var(--bg-color-4) !important;
+}
+
+.bg-color-5 {
+  background-color: var(--bg-color-5) !important;
+}
+
+.bg-color-6 {
+  background-color: var(--bg-color-6) !important;
+}
+
+.bg-color-7 {
+  background-color: var(--bg-color-7) !important;
+}
+
+.bg-color-7 {
+  background-color: var(--bg-color-7) !important;
+}
+
+.bg-color-8 {
+  background-color: var(--bg-color-8) !important;
+}
+
+.bg-color-9 {
+  background-color: var(--bg-color-9) !important;
+}
 
 
-.card-shadow{
-  box-shadow:var(--box-shadow);
+.card-shadow {
+  box-shadow: var(--box-shadow);
 }
-.box-shadow-2{
-  backdrop-filter:var(--box-shadow-2);
+
+.box-shadow-2 {
+  backdrop-filter: var(--box-shadow-2);
 }
-.card-h-100{
-  height:var(--card-h-100);
+
+.card-h-100 {
+  height: var(--card-h-100);
 }
-.card-h-90{
-  height:var(--card-h-90);
+
+.card-h-90 {
+  height: var(--card-h-90);
 }
 
 
 
 /* text color class */
-.color-1{color: var(--color-1) !important;}
-.color-2{color: var(--color-2) !important;}
-.color-3{color: var(--color-3) !important;}
-.color-4{color: var(--color-4)!important ;}
-.color-5{color: var(--color-5) !important;}
-.color-6{color: var(--color-6) !important;}
-.color-7{color: var(--color-7) !important;}
+.color-1 {
+  color: var(--color-1) !important;
+}
+
+.color-2 {
+  color: var(--color-2) !important;
+}
+
+.color-3 {
+  color: var(--color-3) !important;
+}
+
+.color-4 {
+  color: var(--color-4) !important;
+}
+
+.color-5 {
+  color: var(--color-5) !important;
+}
+
+.color-6 {
+  color: var(--color-6) !important;
+}
+
+.color-7 {
+  color: var(--color-7) !important;
+}
 
 
 
@@ -106,16 +158,41 @@ a {
   text-decoration: none;
 }
 
+/* Jodit rich text viewer overrides to fix Bootstrap conflicts */
+.text-editor ul {
+  list-style-type: disc;
+  padding-left: 2rem;
+}
+
+.text-editor ol {
+  list-style-type: decimal;
+  padding-left: 2rem;
+}
+
+.text-editor table {
+  border-collapse: collapse;
+  width: 100%;
+  margin-bottom: 1rem;
+}
+
+.text-editor table,
+.text-editor th,
+.text-editor td {
+  border: 1px solid #dee2e6;
+  padding: 0.5rem;
+}
+
 .text-editor p {
-  line-height: 20px;
-  padding: 0px!important;
-  margin: 0px !important;
+  line-height: 1.5;
+  padding: 0px !important;
+  margin-bottom: 1rem !important;
+  /* Allow paragraphs to have spacing */
 }
 
 /* For Container class */
-@media screen and (width > 576px){
-  .container-px-5{
-    padding:0rem 3rem!important;
+@media screen and (width > 576px) {
+  .container-px-5 {
+    padding: 0rem 3rem !important;
   }
 }
 
@@ -144,7 +221,8 @@ img.btn-icon {
   color: var(--color-1);
   background-color: var(--bg-color-3) !important;
 }
-.nav-pills .nav-link{
+
+.nav-pills .nav-link {
   color: var(--color-3);
   background-color: var(--bg-color-1) !important;
 }
@@ -174,7 +252,7 @@ img.btn-icon {
 }
 
 
-.cursor-pointer{
+.cursor-pointer {
   cursor: pointer;
 }
 
@@ -183,7 +261,7 @@ img.btn-icon {
 } */
 
 /* deepak */
-.otp-input{
+.otp-input {
   border-radius: 0.5rem;
   border-color: rgb(4, 4, 255);
   outline: none;
@@ -191,16 +269,18 @@ img.btn-icon {
   min-height: 3rem;
   min-width: 2rem;
 }
-.otp-input:focus{
+
+.otp-input:focus {
   border-color: var(--color-6);
 }
 
-.active_item{
+.active_item {
   background-color: white;
   border-radius: 5px;
-   color: blue !important
+  color: blue !important
 }
-.paginate-li{
+
+.paginate-li {
 
   display: flex;
   align-items: center;
@@ -211,17 +291,17 @@ img.btn-icon {
 }
 
 
-.btn:hover{
-    background-color:var(--bg-color-3);
-    color: var(--color-1);
+.btn:hover {
+  background-color: var(--bg-color-3);
+  color: var(--color-1);
 }
 
-.heading{
+.heading {
   color: var(--color-4);
 }
 
-.card-image{
-  max-height:15rem;
+.card-image {
+  max-height: 15rem;
 }
 
 /* .card-body:hover{
@@ -229,7 +309,7 @@ img.btn-icon {
   color: #ffffff;
 } */
 
-.cardView:hover{
+.cardView:hover {
   background-color: var(--bg-color-2);
   color: #ffffff;
 }
@@ -238,7 +318,7 @@ img.btn-icon {
   background: var(--bg-color-1) !important;
   color: var(--color-2) !important;
   animation: zoom-in-zoom-out 1s ease infinite;
-   transform: scale(1.05, 1.05);
+  transform: scale(1.05, 1.05);
 }
 
 /* @keyframes zoom-in-zoom-out {
@@ -264,6 +344,7 @@ img.btn-icon {
   /* width: 0px; */
   /* height: 10px; */
 }
+
 /* .overflow-auto::-webkit-scrollbar {
 } */
 
@@ -278,7 +359,7 @@ img.btn-icon {
   ;
 } */
 
-.social-link{
+.social-link {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -287,39 +368,42 @@ img.btn-icon {
   border-radius: 2.5rem;
   /* background-color: #2d1b1b; */
 }
-.social-link:hover{
+
+.social-link:hover {
   border: 2px solid orange;
 }
 
-.popup-right-side-form{
+.popup-right-side-form {
   margin-top: 100px;
 }
 
-.cursor-pointer{
+.cursor-pointer {
   cursor: pointer;
 }
 
-.recent-post:hover{
+.recent-post:hover {
   color: #ff2525;
   text-decoration: underline !important;
 }
 
-.react-datepicker-wrapper{
+.react-datepicker-wrapper {
   width: 100%;
 }
 
-.w-55{
+.w-55 {
   width: 55%;
 }
 
-.w-adj{
+.w-adj {
   width: fit-content;
 }
 
 #statement-pdf table {
   width: 100%;
-  table-layout: fixed;  /* Ensure consistent column width */
-  word-wrap: break-word;  /* Prevent long text from overflowing */
+  table-layout: fixed;
+  /* Ensure consistent column width */
+  word-wrap: break-word;
+  /* Prevent long text from overflowing */
 }
 
 #statement-pdf {
@@ -345,24 +429,27 @@ img.btn-icon {
   }
 }
 
-.pdf-font-table{
+.pdf-font-table {
   font-size: 0.07in;
 }
 
-.pdf-font{
+.pdf-font {
   font-size: 0.12in;
 }
 
-.bg-gray-light{
+.bg-gray-light {
   background-color: #d4d1d1;
 }
 
 /* Define the page height to fit a specific PDF page size */
 .page {
-  width: 100%; /* Adjust based on your content width */
-  height: 750px;  /* A4 landscape height in pixels */
+  width: 100%;
+  /* Adjust based on your content width */
+  height: 750px;
+  /* A4 landscape height in pixels */
   position: relative;
-  page-break-after: always; /* Ensure page breaks after each content block */
+  page-break-after: always;
+  /* Ensure page breaks after each content block */
 }
 
 /* .position-relative-pg{
@@ -371,27 +458,27 @@ img.btn-icon {
 
 
 
-.bg-logo1{
-background-color: #182f59;
+.bg-logo1 {
+  background-color: #182f59;
 }
 
-.bg-logo2{
+.bg-logo2 {
   background-color: #b2badf;
 }
 
-.bg-logo3{
+.bg-logo3 {
   background-color: #f99b23;
 }
 
-.pdf-logo1{
+.pdf-logo1 {
   border-color: #182f59 !important;
 }
 
-.pdf-logo3{
+.pdf-logo3 {
   border-color: #f99b23 !important;
 }
 
-.text-logo1{
+.text-logo1 {
   color: #182f59 !important;
 }
 
@@ -400,35 +487,42 @@ background-color: #182f59;
   position: absolute;
   top: 0;
   width: 100%;
-  height: 70px; /* Adjust height for your header */
-  background-color: #fff; /* Optional background color */
+  height: 70px;
+  /* Adjust height for your header */
+  background-color: #fff;
+  /* Optional background color */
   /* text-align: center; */
-  z-index: 1000; /* Make sure it stays above other content */
+  z-index: 1000;
+  /* Make sure it stays above other content */
 }
 
 .footer {
   position: absolute;
   bottom: 0;
   width: 100%;
-  height: auto; /* Adjust height for your footer */
-  background-color: #fff; /* Footer background */
+  height: auto;
+  /* Adjust height for your footer */
+  background-color: #fff;
+  /* Footer background */
   text-align: center;
-  z-index: 1000; /* Ensure it stays on top */
+  z-index: 1000;
+  /* Ensure it stays on top */
   /* padding-top: 10px;  */
 }
 
 .content {
   position: absolute;
-  margin-top: 80px; 
-  margin-bottom: 80px; 
-  padding: 0 0px; 
+  margin-top: 80px;
+  margin-bottom: 80px;
+  padding: 0 0px;
 }
 
 /* Ensure page breaks after each page */
 .page {
   position: relative !important;
   page-break-after: always;
-  min-height: 755px; /* Ensure the content fits within one landscape A4 page */
+  min-height: 755px;
+  /* Ensure the content fits within one landscape A4 page */
 }
 
 .custom-tooltip-wrapper {
@@ -449,7 +543,8 @@ background-color: #182f59;
   border-radius: 4px;
   position: absolute;
   z-index: 999;
-  bottom: 120%; /* position above */
+  bottom: 120%;
+  /* position above */
   left: 50%;
   transform: translateX(-50%);
   white-space: normal;
@@ -465,11 +560,13 @@ background-color: #182f59;
 
 
 .a4-preview {
-  width: 210mm; /* A4 width */
-  min-height: 297mm; /* A4 height */
+  width: 210mm;
+  /* A4 width */
+  min-height: 297mm;
+  /* A4 height */
   margin: 10px auto;
   padding: 20px;
-  box-shadow: 0 0 5px rgba(0,0,0,0.3);
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
   background: white;
   overflow: auto;
 }
@@ -483,7 +580,7 @@ background-color: #182f59;
   padding: 20px;
 }
 
-.preview-container{
+.preview-container {
   width: auto !important;
   overflow: scroll;
 }
@@ -492,19 +589,26 @@ background-color: #182f59;
   text-decoration: underline !important;
 }
 
-@media (max-width: 768px) { /* Mobile breakpoint */
+@media (max-width: 768px) {
+
+  /* Mobile breakpoint */
   .table-responsive {
-    overflow-x: auto; /* keep horizontal scroll if needed */
+    overflow-x: auto;
+    /* keep horizontal scroll if needed */
   }
 
   .remark-cell .text-editor {
     max-height: 150px;
     min-width: 300px;
-    max-width: 600px;       /* Limit height on mobile */
-    overflow-y: auto;        /* Scroll inside cell if text too long */
-    word-break: break-word;  /* Wrap long words */
+    max-width: 600px;
+    /* Limit height on mobile */
+    overflow-y: auto;
+    /* Scroll inside cell if text too long */
+    word-break: break-word;
+    /* Wrap long words */
     line-height: 1.4;
-    padding-right: 0.25rem;  /* optional for scrollbar */
+    padding-right: 0.25rem;
+    /* optional for scrollbar */
   }
 }
 

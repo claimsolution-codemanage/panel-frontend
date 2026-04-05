@@ -1,17 +1,24 @@
 import React, { useContext, useState } from 'react'
 import { AppContext } from '../../../../../App'
 import { CiEdit } from 'react-icons/ci'
+import { FaEye } from 'react-icons/fa'
 import { getFormateDMYDate } from '../../../../../utils/helperFunction'
 import ChangeStatusModal from '../../common/model/changeStatusModal'
 import EditCaseStatusModal from '../../common/model/EditCaseStatus'
-
+import { Modal, Button } from 'react-bootstrap'
 
 export default function StatusSection({ isAddCaseProcess, id, role, details, getCaseById, processSteps, addCaseProcess, attachementUpload, editCaseProcess }) {
     const state = useContext(AppContext)
     const [changeStatus, setChangeStatus] = useState({ status: false, details: "" })
     const [showEditCaseModal, setShowEditCaseModal] = useState({ status: false, details: {} })
-    
+    const [viewRemarkModal, setViewRemarkModal] = useState({ status: false, remark: "" })
 
+    const getTruncatedText = (htmlText) => {
+        if (!htmlText) return "";
+        const doc = new DOMParser().parseFromString(htmlText, 'text/html');
+        let text = doc.body.textContent || "";
+        return text.length > 50 ? text.substring(0, 50) + "..." : text;
+    }
 
     return (
         <>
@@ -47,7 +54,20 @@ export default function StatusSection({ isAddCaseProcess, id, role, details, get
                                     <td className="text-nowrap text-center"> {item?.createdAt && <p className="mb-1">{getFormateDMYDate(item?.createdAt)}</p>}</td>
                                     <td className="text-nowrap text-center">{item?.status && <p className={`mb-1 badge ${(item?.status?.toLowerCase() == "reject" ? "bg-danger" : (item?.status?.toLowerCase() == "pending" ? "bg-warning" : (item?.status?.toLowerCase() == "resolve" ? "bg-success" : "bg-primary")))}`}>{item?.status}</p>}</td>
                                     {role?.toLowerCase() == "admin" && <td className="text-nowrap text-center"> <p className="mb-1 text-capitalize">{item?.consultant ? item?.consultant : "System"} </p></td>}
-                                    <td className="text-break col-4 align-middle remark-cell">{item?.remark && <div className='text-editor ql-editor' dangerouslySetInnerHTML={{__html:item?.remark}}></div>}</td>
+                                    <td className="text-break col-4 align-middle remark-cell">
+                                        {item?.remark && (
+                                            <div className="d-flex align-items-center justify-content-between gap-3">
+                                                <span>{getTruncatedText(item?.remark)}</span>
+                                                <span
+                                                    className="text-primary cursor-pointer fs-5"
+                                                    title="View full remark"
+                                                    onClick={() => setViewRemarkModal({ status: true, remark: item?.remark })}
+                                                >
+                                                    <FaEye />
+                                                </span>
+                                            </div>
+                                        )}
+                                    </td>
                                 </tr>)}
                             </tbody>
                         </table>
@@ -58,7 +78,20 @@ export default function StatusSection({ isAddCaseProcess, id, role, details, get
             {changeStatus?.status && <ChangeStatusModal changeStatus={changeStatus} setChangeStatus={setChangeStatus} getCaseById={getCaseById} handleCaseStatus={addCaseProcess} role="admin" attachementUpload={attachementUpload} />}
             {showEditCaseModal?.status && <EditCaseStatusModal changeStatus={showEditCaseModal} getCaseById={getCaseById} setChangeStatus={setShowEditCaseModal} handleCaseStatus={editCaseProcess} role="admin" />}
 
-
+            {/* View Remark Modal */}
+            <Modal show={viewRemarkModal.status} onHide={() => setViewRemarkModal({ status: false, remark: "" })} size="lg" centered>
+                <Modal.Header closeButton>
+                    <Modal.Title>Details</Modal.Title>
+                </Modal.Header>
+                <Modal.Body className="bg-color-7">
+                    <div className='text-editor bg-color-1 p-3 rounded shadow-sm' dangerouslySetInnerHTML={{ __html: viewRemarkModal.remark }}></div>
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button variant="primary" onClick={() => setViewRemarkModal({ status: false, remark: "" })}>
+                        Close
+                    </Button>
+                </Modal.Footer>
+            </Modal>
         </>
     )
 }
