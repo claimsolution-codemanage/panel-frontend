@@ -17,7 +17,7 @@ const STORAGE_KEY = "leadEngine_columnWidths_v1";
 
 export default function LeadExcelTable({ columns, rows, addOrUpdateLeadApi, getSaleEmp, deleteLeadApi, getFilterData, filters, sortConfig,
   setFilters, setSortConfig, containerRef, loading, handleExport, hasDeleteAccess, addLeadColumnApi, refetchColumnData, hasAddColumnAccess,
-hasUpdateColumnAccess,updateColumnApi,refetchColumn
+  hasUpdateColumnAccess, updateColumnApi, refetchColumn
 }) {
   const inputRef = useRef();
   const [grid, setGrid] = useState([]);
@@ -58,6 +58,19 @@ hasUpdateColumnAccess,updateColumnApi,refetchColumn
       return acc;
     }, {});
   });
+
+  const [templateDropdown, setTemplateDropdown] = useState(null)
+
+  const toggleTemplateDropdown = (row, key) => {
+    const id = `${row}-${key}`
+    setTemplateDropdown(prev => (prev === id ? null : id))
+  }
+
+  const isTemplateOpen = (row, key) => {
+    return templateDropdown === `${row}-${key}`
+  }
+
+  const closeTemplateDropdown = () => setTemplateDropdown(null)
 
   const today = new Date().toISOString().split("T")[0];
 
@@ -347,6 +360,87 @@ hasUpdateColumnAccess,updateColumnApi,refetchColumn
             />
           </div>
         );
+
+      case "textTemplate":
+        return (
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "6px",
+              position: "relative"
+            }}
+            className="m-0 p-0"
+            onClick={(e) => e.stopPropagation()}
+            onKeyDown={(e) => e.stopPropagation()}
+          >
+            {/* ✅ Always text input */}
+            <input type="text" {...commonProps} />
+
+            {/* ✅ Template dropdown trigger */}
+            <div style={{ position: "relative" }}>
+              <span
+                style={{
+                  cursor: "pointer",
+                  padding: "4px 6px",
+                  borderRadius: "100%",
+                  background: "#f1f5f9",
+                  border: "1px solid #e2e8f0",
+                  fontSize: "12px"
+                }}
+                onClick={(e) => {
+                  e.stopPropagation()
+                  toggleTemplateDropdown(rowIndex, col.key)
+                }}
+              >
+                ⚡
+              </span>
+
+              {/* ✅ Dropdown */}
+              {isTemplateOpen(rowIndex, col.key) && (
+                <div
+                  style={{
+                    position: "absolute",
+                    top: 0,
+                    right: 0,
+                    // background: "#fff",
+                    backgroundColor: 'white',
+                    border: "1px solid #e2e8f0",
+                    borderRadius: "8px",
+                    boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
+                    zIndex: 9999,
+                    minWidth: "200px",
+                    maxHeight: "200px",
+                    overflowY: "auto"
+                  }}
+                >
+                  {col.options?.map((tpl, i) => (
+                    <div
+                      key={i}
+                      onClick={() => {
+                        updateCell(rowIndex, col.key, tpl)
+                        closeTemplateDropdown()
+                      }}
+                      style={{
+                        padding: "8px 10px",
+                        cursor: "pointer",
+                        fontSize: "13px"
+                      }}
+                      onMouseEnter={(e) =>
+                        (e.currentTarget.style.background = "#f8fafc")
+                      }
+                      onMouseLeave={(e) =>
+                        (e.currentTarget.style.background = "transparent")
+                      }
+                    >
+                      {tpl}
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          </div>
+        )
 
       default:
         return <input type="text" {...commonProps} />;
@@ -868,26 +962,26 @@ hasUpdateColumnAccess,updateColumnApi,refetchColumn
 
                       <div className="d-flex gap-1 align-items-center">
                         {Boolean(hasUpdateColumnAccess) && <span
-                            data-tooltip="Edit"
-                             data-tooltip-position="bottom"
-                            className="freeze-icon"
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              setActiveColumn(col);
-                              setShowEditColumnModal(true);
-                            }}
-                            style={{
-                              cursor: "pointer",
-                              color: "#94a3b8",
-                              fontSize: "14px",
-                            }}
-                          >
-                            <BiMessageSquareEdit className="fs-5" />
-                          </span>
+                          data-tooltip="Edit"
+                          data-tooltip-position="bottom"
+                          className="freeze-icon"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setActiveColumn(col);
+                            setShowEditColumnModal(true);
+                          }}
+                          style={{
+                            cursor: "pointer",
+                            color: "#94a3b8",
+                            fontSize: "14px",
+                          }}
+                        >
+                          <BiMessageSquareEdit className="fs-5" />
+                        </span>
                         }
                         <span
                           className="freeze-icon"
-                           data-tooltip={isFrozen ? "Unfreeze column" : "Freeze column"}
+                          data-tooltip={isFrozen ? "Unfreeze column" : "Freeze column"}
                           data-tooltip-position="bottom"
                           onClick={(e) => {
                             e.stopPropagation();
@@ -898,7 +992,7 @@ hasUpdateColumnAccess,updateColumnApi,refetchColumn
                             color: isFrozen ? "#3b82f6" : "#94a3b8",
                             fontSize: "14px",
                           }}
-                          // title={isFrozen ? "Unfreeze column" : "Freeze column"}
+                        // title={isFrozen ? "Unfreeze column" : "Freeze column"}
                         >
                           {isFrozen ? <MdWidthNormal className="fs-5" /> : <MdOutlineWidthNormal className="fs-5" />}
                         </span>
@@ -1077,14 +1171,16 @@ hasUpdateColumnAccess,updateColumnApi,refetchColumn
                         left: isFrozen ? 70 : "auto",
                         background: active ? "#f0f9ff" : "transparent",
                         cursor: "pointer",
-                        zIndex: isFrozen ? 20 : 1,
+                        // zIndex: isFrozen ? 20 : 1,
+                        zIndex: active ? 999 : (isFrozen ? 20 : 1),
                         backgroundColor: isFrozen
                           ? (active ? "#f0f9ff" : "#f8fafc")
                           : (active ? "#f0f9ff" : "transparent"),
                         borderRight: isFrozen ? "2px solid #cbd5e1" : "none",
                         whiteSpace: textWrap ? "normal" : "nowrap",
                         wordWrap: textWrap ? "break-word" : "normal",
-                        overflow: textWrap ? "visible" : "hidden",
+                        // overflow: textWrap ? "visible" : "hidden",
+                        overflow: active ? "visible" : (textWrap ? "visible" : "hidden"),
                         textOverflow: textWrap ? "clip" : "ellipsis",
                         verticalAlign: "top",
                         boxShadow: isFrozen ? "2px 0 5px -2px rgba(0,0,0,0.1)" : "none",
@@ -1108,10 +1204,11 @@ hasUpdateColumnAccess,updateColumnApi,refetchColumn
                         <div
                           style={{
                             whiteSpace: textWrap ? "normal" : "nowrap",
-                            overflow: textWrap ? "visible" : "hidden",
+                            // overflow: textWrap ? "visible" : "hidden",
                             textOverflow: textWrap ? "clip" : "ellipsis",
                             color: "#1e293b",
                             wordWrap: textWrap ? "break-word" : "normal",
+                            zIndex: 999
                           }}
                         >
                           {renderInputValue(row, col)}
@@ -1138,7 +1235,7 @@ hasUpdateColumnAccess,updateColumnApi,refetchColumn
         handleApply={getFilterData}
       />
 
-      <EditColumnModal showModal={showEditColumnModal} setShowModal={setShowEditColumnModal} column={activeColumn} refetchColumn={refetchColumn} updateColumnApi={updateColumnApi}/>
+      <EditColumnModal showModal={showEditColumnModal} setShowModal={setShowEditColumnModal} column={activeColumn} refetchColumn={refetchColumn} updateColumnApi={updateColumnApi} />
 
       <AddLeadColumn show={showAddColumnModal} onClose={() => setShowAddColumnModal(false)} addColumnApi={addLeadColumnApi} refetchColumnData={refetchColumnData} />
 

@@ -23,8 +23,8 @@ import { LuDownload } from "react-icons/lu";
 import html2pdf from "html2pdf.js";
 import { VscPreview } from "react-icons/vsc";
 
-export default function Statement({getStatementApi,type,excelDownloadApi,fileDetailApi,paidAccess ,statementStatusUpdateApi}) {
-const state = useContext(AppContext)
+export default function Statement({ getStatementApi, type, excelDownloadApi, fileDetailApi, paidAccess, statementStatusUpdateApi }) {
+  const state = useContext(AppContext)
   const searchRef = useRef()
   const [data, setData] = useState([])
   const navigate = useNavigate()
@@ -33,19 +33,19 @@ const state = useContext(AppContext)
   const [pageItemLimit, setPageItemLimit] = useState(10)
   const [showCalender, setShowCalender] = useState(false)
   const [noOfData, setNoOfData] = useState(0)
-  const [searchQuery, setSearchQuery] = useState(location?.pathname==location?.state?.path && location?.state?.filter?.searchQuery ? location?.state?.filter?.searchQuery :"")
+  const [searchQuery, setSearchQuery] = useState(location?.pathname == location?.state?.path && location?.state?.filter?.searchQuery ? location?.state?.filter?.searchQuery : "")
   const [isSearch, setIsSearch] = useState(false)
-  const [showStatement,setShowStatement] = useState({status:false,data:null,create:false})
+  const [showStatement, setShowStatement] = useState({ status: false, data: null, create: false })
   const [pgNo, setPgNo] = useState(1)
-  const [statementOf,setStatementOf] = useState({})
+  const [statementOf, setStatementOf] = useState({})
   const [downloading, setDownloading] = useState(false)
   const [changeInvoiceStatus, setChangeInvoiceStatus] = useState({ status: false, _id: null })
-  const [downloadDetails,setDownloadDetails] = useState({data:[],statementOf:{},dateRange:{startDate:new Date(),endDate:new Date()},download:false})
-  const defaultStatementPreview = {data:[],statementOf:{},dateRange:{startDate:new Date(),endDate:new Date()},status:false}
+  const [downloadDetails, setDownloadDetails] = useState({ data: [], statementOf: {}, dateRange: { startDate: new Date(), endDate: new Date() }, download: false })
+  const defaultStatementPreview = { data: [], statementOf: {}, dateRange: { startDate: new Date(), endDate: new Date() }, status: false }
   const [statementPreview, setStatementPreview] = useState(defaultStatementPreview)
 
   const [dateRange, setDateRange] = useState(
-   {
+    {
       startDate: new Date("2024/01/01"),
       endDate: new Date(),
     }
@@ -61,11 +61,11 @@ const state = useContext(AppContext)
     try {
       const startDate = dateRange.startDate ? getFormateDate(dateRange.startDate) : ""
       const endDate = dateRange.endDate ? getFormateDate(dateRange.endDate) : ""
-      const res = await getStatementApi(pageItemLimit,pgNo,startDate,endDate,searchQuery)
+      const res = await getStatementApi(pageItemLimit, pgNo, startDate, endDate, searchQuery)
       if (res?.data?.success && res?.data?.data?.data) {
         setData(res?.data?.data?.data)
         setNoOfData(res?.data?.data?.totalData)
-        setStatementOf(res?.data?.data?.statementOf)        
+        setStatementOf(res?.data?.data?.statementOf)
         setLoading(false)
       }
     } catch (error) {
@@ -77,55 +77,55 @@ const state = useContext(AppContext)
     }
   }
 
-  const downloadPdf = async()=>{
+  const downloadPdf = async () => {
     try {
       const element = document.getElementById("statement-pdf");
-       const options = {
-         margin:       0.2,
-         filename:     'statement.pdf',
-         image:        { type: 'jpeg', quality: 1 },
-         html2canvas: { scale: 3, windowWidth: 1200 },
-         jsPDF:        { unit: 'in', format: 'a4', orientation: 'landscape' }
-       };
-       if(element){
-         setTimeout(() => {
-           html2pdf().from(element).set(options).save();
-           setDownloadDetails({...downloadDetails,download:false})
-           toast.success("Successfully statement downloaded")
-         }, 2000);
-       }
+      const options = {
+        margin: 0.2,
+        filename: 'statement.pdf',
+        image: { type: 'jpeg', quality: 1 },
+        html2canvas: { scale: 3, windowWidth: 1200 },
+        jsPDF: { unit: 'in', format: 'a4', orientation: 'landscape' }
+      };
+      if (element) {
+        setTimeout(() => {
+          html2pdf().from(element).set(options).save();
+          setDownloadDetails({ ...downloadDetails, download: false })
+          toast.success("Successfully statement downloaded")
+        }, 2000);
+      }
     } catch (error) {
       console.log(error);
-      setDownloadDetails({...downloadDetails,download:false})
-     toast.error("Failed to downloaded")
+      setDownloadDetails({ ...downloadDetails, download: false })
+      toast.error("Failed to downloaded")
     }
   }
 
-  const handleDownloadPdf = async(item)=>{
+  const handleDownloadPdf = async (item) => {
     setDownloadDetails({
       ...downloadDetails,
-      data:[item],download:true,
-      statementOf:{[item?.partnerDetails ? "partner" :"employee"]:item?.partnerDetails || item?.empDetails},
-      dateRange:{startDate:item?.createdAt,endDate:item?.updatedAt}
+      data: [item], download: true,
+      statementOf: { [item?.partnerDetails ? "partner" : "employee"]: item?.partnerDetails || item?.empDetails },
+      dateRange: { startDate: item?.createdAt, endDate: item?.updatedAt }
     })
     setTimeout(() => {
       downloadPdf()
     }, 1000);
   }
 
-  const handleStatementPdf = async(item)=>{
+  const handleStatementPdf = async (item) => {
     setStatementPreview({
       ...defaultStatementPreview,
-      data:[item],status:true,
-      statementOf:{[item?.partnerDetails ? "partner" :"employee"]:item?.partnerDetails || item?.empDetails},
-      dateRange:{startDate:item?.createdAt,endDate:item?.updatedAt}
+      data: [item], status: true,
+      statementOf: { [item?.partnerDetails ? "partner" : "employee"]: item?.partnerDetails || item?.empDetails },
+      dateRange: { startDate: item?.createdAt, endDate: item?.updatedAt }
     })
   }
   useEffect(() => {
     if (getStatementApi && !showStatement.status) {
       getAllStatement()
     }
-  }, [showStatement,pgNo])
+  }, [pgNo])
 
 
   const handlePageClick = (event) => {
@@ -133,10 +133,10 @@ const state = useContext(AppContext)
   };
 
   const handleBack = () => {
-    if(location?.state?.filter && location?.state?.back){
-        navigate(location?.state?.back,{state:{...location?.state,back:location?.pathname}});
-    }else{
-        navigate(-1)
+    if (location?.state?.filter && location?.state?.back) {
+      navigate(location?.state?.back, { state: { ...location?.state, back: location?.pathname } });
+    } else {
+      navigate(-1)
     }
   };
 
@@ -145,44 +145,44 @@ const state = useContext(AppContext)
     setSearchQuery(value)
   }
 
-    const handleDownload = async () => {
-      try {
-        const type = true
-        const startDate = dateRange.startDate ? getFormateDate(dateRange.startDate) : ""
-        const endDate = dateRange.endDate ? getFormateDate(dateRange.endDate) : ""
-        setDownloading(true)
-        const res = await excelDownloadApi(startDate, endDate)
-        if (res?.status == 200) {
-          const url = window.URL.createObjectURL(new Blob([res.data]));
-          const a = document.createElement('a');
-          a.href = url;
-          a.download = 'Statement.xlsx'; // Specify the filename here
-          document.body.appendChild(a);
-          a.click();
-          window.URL.revokeObjectURL(url);
-          toast.success("Download the excel")
-          setDownloading(false)
-        } else {
-          setDownloading(false)
-  
-        }
-      } catch (error) {
-        console.log("error", error);
-        if (error && error?.response?.data?.message) {
-          toast.error(error?.response?.data?.message)
-        } else {
-          toast.error("Failed to download")
-        }
+  const handleDownload = async () => {
+    try {
+      const type = true
+      const startDate = dateRange.startDate ? getFormateDate(dateRange.startDate) : ""
+      const endDate = dateRange.endDate ? getFormateDate(dateRange.endDate) : ""
+      setDownloading(true)
+      const res = await excelDownloadApi(startDate, endDate)
+      if (res?.status == 200) {
+        const url = window.URL.createObjectURL(new Blob([res.data]));
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'Statement.xlsx'; // Specify the filename here
+        document.body.appendChild(a);
+        a.click();
+        window.URL.revokeObjectURL(url);
+        toast.success("Download the excel")
         setDownloading(false)
-      }
-    }
+      } else {
+        setDownloading(false)
 
-  useEffect(()=>{
-    const type = ["admin","finance","operation"]
-    if(!((type?.includes(state?.myAppData?.details?.role?.toLowerCase())) || (type?.includes(state?.myAppData?.details?.empType?.toLowerCase())))){
-        navigate(-1)
+      }
+    } catch (error) {
+      console.log("error", error);
+      if (error && error?.response?.data?.message) {
+        toast.error(error?.response?.data?.message)
+      } else {
+        toast.error("Failed to download")
+      }
+      setDownloading(false)
     }
-  },[state?.myAppData])
+  }
+
+  useEffect(() => {
+    const type = ["admin", "finance", "operation"]
+    if (!((type?.includes(state?.myAppData?.details?.role?.toLowerCase())) || (type?.includes(state?.myAppData?.details?.empType?.toLowerCase())))) {
+      navigate(-1)
+    }
+  }, [state?.myAppData])
 
 
   useEffect(() => {
@@ -213,13 +213,13 @@ const state = useContext(AppContext)
             </div>
           </div>
           {
-            (type=="admin" || type=="operation") && <div className="btn btn-primary" onClick={()=>setShowStatement({status:!showStatement?.status,data:null,create:true})}>
-            Create
-          </div>
+            (type == "admin" || type == "operation") && <div className="btn btn-primary" onClick={() => setShowStatement({ status: !showStatement?.status, data: null, create: true })}>
+              Create
+            </div>
           }
-   
+
         </div>
-       
+
 
         <div className="mx-md-5 m-sm-0 p-3">
           <div className="bg-color-1 p-3 p-md-5 rounded-2 shadow">
@@ -227,10 +227,10 @@ const state = useContext(AppContext)
               <div className="col-12">
                 <div className="">
                   <div className="d-flex flex gap-2">
-                  <div className="form-control px-2 d-flex gap-2 w-100">
-                <span className=""><BsSearch className="text-black" /></span>
-                <input className="w-100" value={searchQuery} onChange={(e) => handleSearchQuery(e.target.value)}  placeholder="Search.." style={{ outline: "none", border: 0 }} />
-              </div>
+                    <div className="form-control px-2 d-flex gap-2 w-100">
+                      <span className=""><BsSearch className="text-black" /></span>
+                      <input className="w-100" value={searchQuery} onChange={(e) => handleSearchQuery(e.target.value)} placeholder="Search.." style={{ outline: "none", border: 0 }} />
+                    </div>
                     <div className="btn btn-primary fs-5" onClick={() => setShowCalender(!showCalender)}><CiFilter /></div>
                     <div className="btn btn-primary fs-5" onClick={() => handleReset()}>Reset</div>
                     <select className="form-select w-auto" name="pageItemLimit" value={pageItemLimit} onChange={(e) => { setPageItemLimit(e.target.value); setPgNo(1) }} aria-label="Default select example">
@@ -251,8 +251,8 @@ const state = useContext(AppContext)
                 <thead>
                   <tr className="bg-primary text-white text-center">
                     <th scope="col" className="text-nowrap" >SL No</th>
-                    {(type== "admin"||type=="operation" ) && 
-                    <th scope="col" className="text-nowrap" >Action</th>}
+                    {(type == "admin" || type == "operation") &&
+                      <th scope="col" className="text-nowrap" >Action</th>}
                     <th scope="col" className="text-nowrap">Status</th>
                     <th scope="col" className="text-nowrap">Partner Name</th>
                     <th scope="col" className="text-nowrap">Employee Name</th>
@@ -272,20 +272,20 @@ const state = useContext(AppContext)
                 </thead>
                 <tbody>
                   {data.map((item, ind) => <tr key={item._id} className="border-2 border-bottom border-light text-center">
-                    <th scope="row">{ind + 1}</th> 
+                    <th scope="row">{ind + 1}</th>
                     <th>
                       <div className="d-flex gap-2">
-                    {(type== "admin"||type=="operation" ) && <span data-tooltip="Edit"  style={{ height: 30, width: 30, borderRadius: 30 }} onClick={()=>setShowStatement({...showStatement,status:!showStatement?.status,data:item})} className="cursor-pointer bg-primary text-white d-flex align-items-center justify-content-center"><CiEdit className="fs-5 text-white" /></span>}    
-                    {paidAccess && <span data-tooltip="Change status" style={{ cursor: "pointer", height: 30, width: 30, borderRadius: 30 }} className="bg-success text-white d-flex align-items-center justify-content-center" onClick={() => setChangeInvoiceStatus({ status: true, _id: item?._id })}><MdCurrencyRupee /></span>}
-                    <span data-tooltip="Download" style={{ cursor: "pointer", height: 30, width: 30, borderRadius: 30 }} className="bg-primary text-white d-flex align-items-center justify-content-center" onClick={() => !downloadDetails?.download && handleDownloadPdf(item)}>{(downloadDetails?.data?.[0]?._id==item?._id && downloadDetails?.download) ? <span className="spinner-border spinner-border-sm" role="status" aria-hidden={true}></span> : <LuDownload/>}</span>
-                    <span data-tooltip="Preview" style={{ cursor: "pointer", height: 30, width: 30, borderRadius: 30 }} className="bg-primary text-white d-flex align-items-center justify-content-center" onClick={() => !statementPreview?.status && handleStatementPdf(item)}><VscPreview /></span>
+                        {(type == "admin" || type == "operation") && <span data-tooltip="Edit" style={{ height: 30, width: 30, borderRadius: 30 }} onClick={() => setShowStatement({ ...showStatement, status: !showStatement?.status, data: item })} className="cursor-pointer bg-primary text-white d-flex align-items-center justify-content-center"><CiEdit className="fs-5 text-white" /></span>}
+                        {paidAccess && <span data-tooltip="Change status" style={{ cursor: "pointer", height: 30, width: 30, borderRadius: 30 }} className="bg-success text-white d-flex align-items-center justify-content-center" onClick={() => setChangeInvoiceStatus({ status: true, _id: item?._id })}><MdCurrencyRupee /></span>}
+                        <span data-tooltip="Download" style={{ cursor: "pointer", height: 30, width: 30, borderRadius: 30 }} className="bg-primary text-white d-flex align-items-center justify-content-center" onClick={() => !downloadDetails?.download && handleDownloadPdf(item)}>{(downloadDetails?.data?.[0]?._id == item?._id && downloadDetails?.download) ? <span className="spinner-border spinner-border-sm" role="status" aria-hidden={true}></span> : <LuDownload />}</span>
+                        <span data-tooltip="Preview" style={{ cursor: "pointer", height: 30, width: 30, borderRadius: 30 }} className="bg-primary text-white d-flex align-items-center justify-content-center" onClick={() => !statementPreview?.status && handleStatementPdf(item)}><VscPreview /></span>
                       </div>
                     </th>
-                    
-                    <td><span className={`badge ${item?.isPaid ? "bg-success":"bg-primary"}`}>{item?.isPaid ? "Paid" : "Unpaid"}</span></td>
-                   <td className="text-nowrap">{item?.partnerDetails?.profile?.consultantName || "-"}</td>
-                   <td className="text-nowrap">{item?.empDetails?.fullName || "-"}</td>
-                   <td className="text-nowrap">{item?.caseLogin && getFormateDMYDate(item?.caseLogin)}</td>
+
+                    <td><span className={`badge ${item?.isPaid ? "bg-success" : "bg-primary"}`}>{item?.isPaid ? "Paid" : "Unpaid"}</span></td>
+                    <td className="text-nowrap">{item?.partnerDetails?.profile?.consultantName || "-"}</td>
+                    <td className="text-nowrap">{item?.empDetails?.fullName || "-"}</td>
+                    <td className="text-nowrap">{item?.caseLogin && getFormateDMYDate(item?.caseLogin)}</td>
                     <td className="text-nowrap">{item?.policyHolder}</td>
                     <td className="text-nowrap">{item?.fileNo}</td>
                     <td className="text-nowrap">{item?.policyNo}</td>
@@ -311,12 +311,12 @@ const state = useContext(AppContext)
 
           </div>
         </div>
-          <CreateOrUpdateStatmentModal show={showStatement?.status} data={showStatement?.data} hide={()=>setShowStatement({...showStatement,status:!showStatement?.status})}  type={type} all={showStatement?.create} fileDetailApi={fileDetailApi}/>
-          {changeInvoiceStatus?.status && <EditInvoiceStatusModal fetchDetails={getAllStatement} changeInvoiceStatus={changeInvoiceStatus} type="statement" setChangeInvoiceStatus={setChangeInvoiceStatus} handleInvoiceStatus={statementStatusUpdateApi} />}
-          <StatementPdf data={downloadDetails?.data} statementOf={downloadDetails?.statementOf} dateRange={downloadDetails?.dateRange}/>
-          <StatementPdfPreviewModal data={statementPreview?.data} statementOf={statementPreview?.statementOf} dateRange={statementPreview?.dateRange} show={statementPreview?.status} handleClose={() => setStatementPreview(defaultStatementPreview)} />
-          
-      
+        <CreateOrUpdateStatmentModal show={showStatement?.status} data={showStatement?.data} refetch={getAllStatement} hide={() => setShowStatement({ ...showStatement, status: !showStatement?.status })} type={type} all={showStatement?.create} fileDetailApi={fileDetailApi} />
+        {changeInvoiceStatus?.status && <EditInvoiceStatusModal fetchDetails={getAllStatement} changeInvoiceStatus={changeInvoiceStatus} type="statement" setChangeInvoiceStatus={setChangeInvoiceStatus} handleInvoiceStatus={statementStatusUpdateApi} />}
+        <StatementPdf data={downloadDetails?.data} statementOf={downloadDetails?.statementOf} dateRange={downloadDetails?.dateRange} />
+        <StatementPdfPreviewModal data={statementPreview?.data} statementOf={statementPreview?.statementOf} dateRange={statementPreview?.dateRange} show={statementPreview?.status} handleClose={() => setStatementPreview(defaultStatementPreview)} />
+
+
       </div>}
   </>)
 }
