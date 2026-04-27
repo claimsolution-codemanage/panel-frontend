@@ -1,10 +1,9 @@
 
 
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef, useCallback } from "react";
 import axios from "axios";
 import { formatDateToISO, getFormateDMYDate } from "../../../../utils/helperFunction";
 import AsyncSelect from 'react-select/async';
-import debounce from 'debounce';
 import { MdDelete, MdOutlineWidthNormal, MdWidthNormal } from "react-icons/md";
 import { IoCloudDoneOutline } from "react-icons/io5";
 import LeadColumnFilter from "./LeadColumnFilter";
@@ -13,11 +12,15 @@ import { toast } from "react-toastify";
 import { BiMessageSquareEdit } from "react-icons/bi";
 import AddLeadColumn from "./AddLeadColumn";
 import EditColumnModal from "./EditColumnModal";
+import LeadFollowUpModal from "./LeadFollowUpModal";
+import { BsChatDots } from "react-icons/bs";
+import { Badge } from "react-bootstrap";
 const STORAGE_KEY = "leadEngine_columnWidths_v1";
+import { debounce } from 'lodash';
 
-export default function LeadExcelTable({ columns, rows, addOrUpdateLeadApi, getSaleEmp, deleteLeadApi, getFilterData, filters, sortConfig,
+export default function LeadExcelTable({ columns, setRows, rows, addOrUpdateLeadApi, getSaleEmp, deleteLeadApi, getFilterData, filters, sortConfig,
   setFilters, setSortConfig, containerRef, loading, handleExport, hasDeleteAccess, addLeadColumnApi, refetchColumnData, hasAddColumnAccess,
-  hasUpdateColumnAccess, updateColumnApi, refetchColumn
+  hasUpdateColumnAccess, updateColumnApi, refetchColumn, addOrUpdateLeadFollowUpApi, getLeadFollowUpsApi
 }) {
   const inputRef = useRef();
   const [grid, setGrid] = useState([]);
@@ -43,6 +46,9 @@ export default function LeadExcelTable({ columns, rows, addOrUpdateLeadApi, getS
     return saved ? JSON.parse(saved) : true;
   });
 
+  const [showFollowUpModal, setShowFollowUpModal] = useState(false);
+  const [selectedLead, setSelectedLead] = useState(null);
+
   const isResizing = useRef(false);
   const [isDirty, setIsDirty] = useState(false);
   const [dirtyRows, setDirtyRows] = useState(new Set());
@@ -60,6 +66,9 @@ export default function LeadExcelTable({ columns, rows, addOrUpdateLeadApi, getS
   });
 
   const [templateDropdown, setTemplateDropdown] = useState(null)
+  // Track if auto-save is in progress
+  const autoSaveTimeoutRef = useRef(null);
+  const isAutoSavingRef = useRef(false);
 
   const toggleTemplateDropdown = (row, key) => {
     const id = `${row}-${key}`
@@ -73,6 +82,31 @@ export default function LeadExcelTable({ columns, rows, addOrUpdateLeadApi, getS
   const closeTemplateDropdown = () => setTemplateDropdown(null)
 
   const today = new Date().toISOString().split("T")[0];
+
+  const debouncedAutoSave = useCallback(
+    debounce(async () => {
+      if (dirtyRows.size === 0 || isAutoSavingRef.current) {
+        return;
+      }
+
+      console.log('Auto-saving...', dirtyRows.size, 'rows');
+      await saveAll(true); // true indicates auto-save
+    }, 3000), // 3 seconds delay
+    [dirtyRows]
+  );
+
+  // Trigger auto-save when dirtyRows changes
+  useEffect(() => {
+    if (dirtyRows.size > 0) {
+      debouncedAutoSave();
+    }
+
+    // Cleanup on unmount
+    return () => {
+      debouncedAutoSave.cancel();
+    };
+  }, [dirtyRows, debouncedAutoSave, isDirty]);
+
 
   // Save column widths to localStorage
   useEffect(() => {
@@ -182,11 +216,20 @@ export default function LeadExcelTable({ columns, rows, addOrUpdateLeadApi, getS
     }
   };
 
-  const saveAll = async () => {
+  async function saveAll(isAutoSave = false) {
     if (dirtyRows.size === 0) return;
 
-    try {
+    if (isAutoSave) {
+      if (isAutoSavingRef.current) {
+        console.log('Auto-save already in progress');
+        return;
+      }
+      isAutoSavingRef.current = true;
+      console.log('Starting auto-save...');
+    } else {
       setSaving(true);
+    }
+    try {
 
       const bulkPayload = [];
 
@@ -237,6 +280,7 @@ export default function LeadExcelTable({ columns, rows, addOrUpdateLeadApi, getS
       console.error(err);
     } finally {
       setSaving(false);
+      isAutoSavingRef.current = false;
     }
   };
 
@@ -765,482 +809,563 @@ export default function LeadExcelTable({ columns, rows, addOrUpdateLeadApi, getS
   //   return columns;
   // }, [columns]);
 
+
+  // Handle follow-up added - Update grid state without refreshing all rows
+  const handleFollowUpAdded = (updatedLead, rowIndex) => {
+    if (!updatedLead || rowIndex === undefined) return;
+
+    // Update grid state directly (without waiting for rows useEffect)
+    setGrid(prev => {
+      const updatedGrid = [...prev];
+      if (updatedGrid[rowIndex]) {
+        if (updatedLead._id && !updatedGrid[rowIndex]._id) {
+          updatedGrid[rowIndex]._id = updatedLead._id;
+        }
+
+        if (updatedLead.next_follow_up_date) {
+          updatedGrid[rowIndex].next_follow_up_date = updatedLead.next_follow_up_date;
+        }
+
+        if (updatedLead.data) {
+          Object.keys(updatedLead.data).forEach(key => {
+            if (updatedGrid[rowIndex].hasOwnProperty(key)) {
+              updatedGrid[rowIndex][key] = updatedLead.data[key];
+            }
+          });
+        }
+      }
+      return updatedGrid;
+    });
+
+    if (dirtyRows.has(rowIndex)) {
+      setDirtyRows(prev => {
+        const updatedDirtyRows = new Set(prev);
+        updatedDirtyRows.delete(rowIndex);
+        return updatedDirtyRows;
+      });
+      if (dirtyRows.size === 0) {
+        setIsDirty(false);
+      }
+    }
+  };
+
+  // Add function to open modal
+  const openFollowUpModal = (lead, rowIndex) => {
+    setSelectedLead({ ...lead, rowIndex });
+    setShowFollowUpModal(true);
+  };
+
+  const renderFollowUpCell = (row, col, rowIndex) => {
+    return (
+      <button
+        onClick={() => openFollowUpModal(row, rowIndex)}
+        className="follow-up-btn"
+        style={{
+          background: "#0d6efd",
+          color: "white",
+          border: "none",
+          borderRadius: "20px",
+          padding: "4px 12px",
+          fontSize: "12px",
+          cursor: "pointer",
+          display: "inline-flex",
+          alignItems: "center",
+          gap: "6px"
+        }}
+      >
+        <BsChatDots size={14} />
+        {row[col.key] && <span className={getFollowUpClass(row[col.key])}>
+          {getFormateDMYDate(row[col.key])}
+        </span>}
+      </button>
+    );
+  };
+
+  // In your cell rendering logic, add condition for followUps column:
+  // if (col.key === 'followUps') {
+  //   return renderFollowUpCell(row);
+  // }
+
   const reorderedColumns = columns
 
   return (
-    <div
-      style={{
-        background: "#ffffff",
-        borderRadius: "16px",
-        boxShadow: "0 8px 28px rgba(0,0,0,0.05)",
-        overflow: "hidden",
-        fontFamily: "Inter, sans-serif",
-      }}
-    >
-      <div className="lead-header">
-        <div className="lead-header-left">
-          <div className="record-info">
-            <span className="record-count">{grid?.length} Records</span>
-            {loading && <span className="loading-text">Loading...</span>}
-          </div>
-
-          <div className="save-status">
-            <IoCloudDoneOutline size={16} />
-            <span>
-              {saving
-                ? "Saving..."
-                : isDirty
-                  ? "Unsaved changes"
-                  : "All changes saved"}
-            </span>
-          </div>
-        </div>
-
-        <div className="lead-header-actions">
-          <div style={{ marginBottom: "12px", display: "flex", gap: "10px", flexWrap: "wrap" }}>
-            {/* View Options */}
-            <div className="btn-group" style={{ display: "flex", gap: "5px" }}>
-              <button
-                className={`btn ${textWrap ? "btn-primary" : "btn-secondary"}`}
-                onClick={toggleTextWrap}
-                title="Toggle text wrapping"
-              >
-                {textWrap ? "🔤 Wrap On" : "📄 Wrap Off"}
-              </button>
-
-              <button
-                className={`btn ${autoHeight ? "btn-primary" : "btn-secondary"}`}
-                onClick={toggleAutoHeight}
-                title="Toggle auto height"
-              >
-                {autoHeight ? "📏 Auto Height On" : "📐 Auto Height Off"}
-              </button>
-            </div>
-
-            <button className="btn btn-secondary" onClick={() => handleExport("excel")}>
-              Export Excel
-            </button>
-
-            <button className="btn btn-secondary" onClick={() => handleExport("csv")}>
-              Export CSV
-            </button>
-
-            {Object.keys(filters || {}).length > 0 && (
-              <button
-                onClick={handleResetFilter}
-                className="btn btn-secondary"
-              >
-                Reset Filters
-              </button>
-            )}
-
-            {Boolean(hasAddColumnAccess) && <button
-              onClick={() => setShowAddColumnModal(true)}
-              className="btn btn-primary"
-              style={{
-                background: "#3b82f6",
-                color: "white",
-                border: "none",
-                padding: "8px 14px",
-                borderRadius: "8px",
-                fontSize: "13px",
-                cursor: "pointer",
-                transition: "0.2s ease",
-                display: "flex",
-                alignItems: "center",
-                gap: "5px"
-              }}
-            >
-              <span style={{ fontSize: "16px" }}>+</span> Add Column
-            </button>}
-            <button
-              onClick={addRow}
-              className="btn btn-secondary"
-            >
-              + Add Row
-            </button>
-
-            <button
-              onClick={saveAll}
-              disabled={!isDirty || saving}
-              className={`btn btn-save ${isDirty ? "active" : ""}`}
-            >
-              {isDirty && <span className="unsaved-dot" />} {saving ? "Saving..." : "Save"}
-            </button>
-          </div>
-        </div>
-      </div>
-
-      {/* Grid */}
+    <div>
       <div
-        tabIndex={0}
-        onKeyDown={handleKeyNavigation}
-        ref={containerRef}
         style={{
-          height: "450px",
-          overflow: "auto", // Changed to auto for both scrollbars
-          position: "relative",
+          background: "#ffffff",
+          borderRadius: "16px",
+          boxShadow: "0 8px 28px rgba(0,0,0,0.05)",
+          overflow: "hidden",
+          fontFamily: "Inter, sans-serif",
         }}
       >
-        <table
+        <div className="lead-header">
+          <div className="lead-header-left">
+            <div className="record-info">
+              <span className="record-count">{grid?.length} Records</span>
+              {loading && <span className="loading-text">Loading...</span>}
+            </div>
+
+            <div className="save-status">
+              <IoCloudDoneOutline size={16} />
+              <span>
+                {saving
+                  ? "Saving..."
+                  : isDirty
+                    ? "Unsaved changes"
+                    : "All changes saved"}
+              </span>
+            </div>
+          </div>
+
+          <div className="lead-header-actions">
+            <div style={{ marginBottom: "12px", display: "flex", gap: "10px", flexWrap: "wrap" }}>
+              {/* View Options */}
+              <div className="btn-group" style={{ display: "flex", gap: "5px" }}>
+                <button
+                  className={`btn ${textWrap ? "btn-primary" : "btn-secondary"}`}
+                  onClick={toggleTextWrap}
+                  title="Toggle text wrapping"
+                >
+                  {textWrap ? "🔤 Wrap On" : "📄 Wrap Off"}
+                </button>
+
+                <button
+                  className={`btn ${autoHeight ? "btn-primary" : "btn-secondary"}`}
+                  onClick={toggleAutoHeight}
+                  title="Toggle auto height"
+                >
+                  {autoHeight ? "📏 Auto Height On" : "📐 Auto Height Off"}
+                </button>
+              </div>
+
+              <button className="btn btn-secondary" onClick={() => handleExport("excel")}>
+                Export Excel
+              </button>
+
+              <button className="btn btn-secondary" onClick={() => handleExport("csv")}>
+                Export CSV
+              </button>
+
+              {Object.keys(filters || {}).length > 0 && (
+                <button
+                  onClick={handleResetFilter}
+                  className="btn btn-secondary"
+                >
+                  Reset Filters
+                </button>
+              )}
+
+              {Boolean(hasAddColumnAccess) && <button
+                onClick={() => setShowAddColumnModal(true)}
+                className="btn btn-primary"
+                style={{
+                  background: "#3b82f6",
+                  color: "white",
+                  border: "none",
+                  padding: "8px 14px",
+                  borderRadius: "8px",
+                  fontSize: "13px",
+                  cursor: "pointer",
+                  transition: "0.2s ease",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "5px"
+                }}
+              >
+                <span style={{ fontSize: "16px" }}>+</span> Add Column
+              </button>}
+              <button
+                onClick={addRow}
+                className="btn btn-secondary"
+              >
+                + Add Row
+              </button>
+
+              <button
+                onClick={saveAll}
+                disabled={!isDirty || saving}
+                className={`btn btn-save ${isDirty ? "active" : ""}`}
+              >
+                {isDirty && <span className="unsaved-dot" />} {saving ? "Saving..." : "Save"}
+              </button>
+            </div>
+          </div>
+        </div>
+
+        {/* Grid */}
+        <div
+          tabIndex={0}
+          onKeyDown={handleKeyNavigation}
+          ref={containerRef}
           style={{
-            width: "100%",
-            borderCollapse: "separate",
-            borderSpacing: 0,
-            fontSize: "14px",
-            tableLayout: "fixed",
-            minWidth: "100%", // Ensure table takes full width
+            height: "450px",
+            overflow: "auto", // Changed to auto for both scrollbars
+            position: "relative",
           }}
         >
-          <thead>
-            <tr>
-              {/* Row Number Header - Sticky both left and top */}
-              <th
-                style={{
-                  position: "sticky",
-                  left: 0,
-                  top: 0,
-                  background: "#fafafa",
-                  zIndex: 40, // Higher z-index to stay above frozen columns
-                  padding: "12px 14px",
-                  fontWeight: 500,
-                  color: "#64748b",
-                  borderBottom: "1px solid #e2e8f0",
-                  borderRight: "1px solid #e2e8f0",
-                  width: 70,
-                  minWidth: 70,
-                  maxWidth: 70,
-                }}
-              >
-                <div style={{ display: "flex", alignItems: "center", gap: "5px" }}>
-                  #
-                </div>
-              </th>
-
-              {reorderedColumns.map((col) => {
-                const isFrozen = frozenColumns.includes(col.key);
-                const isResizingThis = resizingColumn === col.key;
-
-                return (
-                  <th
-                    key={col.key}
-                    onClick={() => {
-                      if (isResizing.current) return;
-                      setEditing(null);
-                      setActiveColumn(col);
-                      setShowModal(true);
-                    }}
-                    style={{
-                      position: "sticky", // Always sticky for header
-                      top: 0, // Sticky top for all headers
-                      left: isFrozen ? 70 : "auto", // Left position only for frozen columns
-                      background: "#ffffff",
-                      padding: "12px 14px",
-                      textAlign: "left",
-                      fontWeight: 500,
-                      color: "#475569",
-                      borderBottom: "1px solid #e2e8f0",
-                      cursor: "pointer",
-                      zIndex: isFrozen ? 35 : 30, // Frozen columns higher z-index
-                      width: columnWidths[col.key] || 180,
-                      minWidth: columnWidths[col.key] || 180,
-                      maxWidth: columnWidths[col.key] || 180,
-                      backgroundColor: isFrozen ? "#f8fafc" : "#ffffff",
-                      borderRight: isFrozen ? "2px solid #cbd5e1" : "none",
-                      boxShadow: isFrozen ? "2px 0 5px -2px rgba(0,0,0,0.1)" : "none",
-                    }}
-                  >
-                    <div
-                      style={{
-                        display: "flex",
-                        justifyContent: "space-between",
-                        alignItems: "center",
-                        gap: "5px",
-                      }}
-                    >
-                      <span>{col.label}</span>
-
-                      <div className="d-flex gap-1 align-items-center">
-                        {Boolean(hasUpdateColumnAccess) && <span
-                          data-tooltip="Edit"
-                          data-tooltip-position="bottom"
-                          className="freeze-icon"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            setActiveColumn(col);
-                            setShowEditColumnModal(true);
-                          }}
-                          style={{
-                            cursor: "pointer",
-                            color: "#94a3b8",
-                            fontSize: "14px",
-                          }}
-                        >
-                          <BiMessageSquareEdit className="fs-5" />
-                        </span>
-                        }
-                        <span
-                          className="freeze-icon"
-                          data-tooltip={isFrozen ? "Unfreeze column" : "Freeze column"}
-                          data-tooltip-position="bottom"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            toggleFreezeColumn(col.key);
-                          }}
-                          style={{
-                            cursor: "pointer",
-                            color: isFrozen ? "#3b82f6" : "#94a3b8",
-                            fontSize: "14px",
-                          }}
-                        // title={isFrozen ? "Unfreeze column" : "Freeze column"}
-                        >
-                          {isFrozen ? <MdWidthNormal className="fs-5" /> : <MdOutlineWidthNormal className="fs-5" />}
-                        </span>
-
-                        <span style={{ fontSize: "20px", color: "#3b82f6" }}>
-                          {Boolean(filters[col.key]) && <CiFilter />}
-                        </span>
-                        <span style={{ fontSize: "12px", color: "#3b82f6" }}>
-                          {sortConfig?.key === col.key &&
-                            (sortConfig.direction === "asc" ? "↑" : "↓")}
-                        </span>
-                      </div>
-                    </div>
-
-                    {/* Resize handle with icon */}
-                    <div
-                      className={`column-resizer ${isResizingThis ? 'resizing' : ''}`}
-                      onMouseDown={(e) => startColumnResize(e, col.key)}
-                      data-tooltip="Resize"
-                      data-tooltip-position="bottom"
-                      style={{
-                        position: "absolute",
-                        top: 0,
-                        right: 0,
-                        width: "20px",
-                        height: "100%",
-                        cursor: "col-resize",
-                        zIndex: 1000,
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        opacity: 0.5,
-                        transition: "opacity 0.2s ease",
-                        background: isResizingThis ? "rgba(59, 130, 246, 0.1)" : "transparent",
-                      }}
-                      title="Drag to resize column"
-                    >
-                      {/* Vertical dots/grip indicator */}
-                      <div
-                        style={{
-                          display: "flex",
-                          flexDirection: "column",
-                          gap: "3px",
-                          height: "40px",
-                          justifyContent: "center",
-                        }}
-                      >
-                        <div
-                          style={{
-                            width: "4px",
-                            height: "4px",
-                            borderRadius: "50%",
-                            background: isResizingThis ? "#3b82f6" : "#94a3b8",
-                            transition: "all 0.2s ease",
-                          }}
-                        />
-                        <div
-                          style={{
-                            width: "4px",
-                            height: "4px",
-                            borderRadius: "50%",
-                            background: isResizingThis ? "#3b82f6" : "#94a3b8",
-                            transition: "all 0.2s ease",
-                          }}
-                        />
-                        <div
-                          style={{
-                            width: "4px",
-                            height: "4px",
-                            borderRadius: "50%",
-                            background: isResizingThis ? "#3b82f6" : "#94a3b8",
-                            transition: "all 0.2s ease",
-                          }}
-                        />
-                      </div>
-
-                      {/* Vertical line indicator */}
-                      <div
-                        style={{
-                          width: "2px",
-                          height: "60%",
-                          background: isResizingThis ? "#3b82f6" : "#cbd5e1",
-                          borderRadius: "2px",
-                          marginLeft: "2px",
-                          transition: "all 0.2s ease",
-                        }}
-                      />
-                    </div>
-                  </th>
-                );
-              })}
-            </tr>
-          </thead>
-
-          <tbody>
-            {grid.map((row, rowIndex) => (
-              <tr
-                key={rowIndex}
-                style={{
-                  transition: "background 0.15s ease",
-                  height: rowHeights[rowIndex] || 44,
-                }}
-                onMouseEnter={(e) =>
-                  (e.currentTarget.style.background = "#f9fafb")
-                }
-                onMouseLeave={(e) =>
-                  (e.currentTarget.style.background = "transparent")
-                }
-              >
-                {/* Row Number - Sticky left only */}
-                <td
-                  className="row-header-cell"
+          <table
+            style={{
+              width: "100%",
+              borderCollapse: "separate",
+              borderSpacing: 0,
+              fontSize: "14px",
+              tableLayout: "fixed",
+              minWidth: "100%", // Ensure table takes full width
+            }}
+          >
+            <thead>
+              <tr>
+                {/* Row Number Header - Sticky both left and top */}
+                <th
                   style={{
                     position: "sticky",
                     left: 0,
+                    top: 0,
                     background: "#fafafa",
-                    zIndex: 25,
-                    padding: "10px 14px",
-                    borderBottom: "1px solid #f1f5f9",
-                    borderRight: "1px solid #e2e8f0",
-                    color: "#64748b",
+                    zIndex: 40, // Higher z-index to stay above frozen columns
+                    padding: "12px 14px",
                     fontWeight: 500,
-                    textAlign: "center",
-                    width: "70px",
-                    minWidth: "70px",
-                    maxWidth: "70px",
-                    boxShadow: "2px 0 5px -2px rgba(0,0,0,0.1)",
+                    color: "#64748b",
+                    borderBottom: "1px solid #e2e8f0",
+                    borderRight: "1px solid #e2e8f0",
+                    width: 70,
+                    minWidth: 70,
+                    maxWidth: 70,
                   }}
                 >
-                  <span>{rowIndex + 1}</span>
+                  <div style={{ display: "flex", alignItems: "center", gap: "5px" }}>
+                    #
+                  </div>
+                </th>
 
-                  {hasDeleteAccess && (
-                    <MdDelete
-                      className="delete-icon"
-                      onClick={() => deleteRow(row._id, rowIndex)}
-                    />
-                  )}
-
-                  <div
-                    onMouseDown={(e) => startRowResize(e, rowIndex)}
-                    style={{
-                      position: "absolute",
-                      bottom: 0,
-                      left: 0,
-                      width: "100%",
-                      height: "6px",
-                      cursor: "row-resize",
-                    }}
-                  />
-                </td>
-
-                {reorderedColumns.map((col, colIndex) => {
-                  const isEditing =
-                    editing?.row === rowIndex && editing?.key === col.key;
-
-                  const active =
-                    activeCell?.row === rowIndex &&
-                    activeCell?.col === colIndex;
-
+                {reorderedColumns.map((col) => {
                   const isFrozen = frozenColumns.includes(col.key);
+                  const isResizingThis = resizingColumn === col.key;
 
                   return (
-                    <td
+                    <th
                       key={col.key}
-                      onClick={() => selectCell(rowIndex, colIndex)}
-                      onDoubleClick={() =>
-                        setEditing({ row: rowIndex, key: col.key })
-                      }
+                      onClick={() => {
+                        if (isResizing.current) return;
+                        setEditing(null);
+                        setActiveColumn(col);
+                        setShowModal(true);
+                      }}
                       style={{
-                        padding: "10px 14px",
+                        position: "sticky", // Always sticky for header
+                        top: 0, // Sticky top for all headers
+                        left: isFrozen ? 70 : "auto", // Left position only for frozen columns
+                        background: "#ffffff",
+                        padding: "12px 14px",
+                        textAlign: "left",
+                        fontWeight: 500,
+                        color: "#475569",
+                        borderBottom: "1px solid #e2e8f0",
+                        cursor: "pointer",
+                        zIndex: isFrozen ? 35 : 30, // Frozen columns higher z-index
                         width: columnWidths[col.key] || 180,
                         minWidth: columnWidths[col.key] || 180,
                         maxWidth: columnWidths[col.key] || 180,
-                        borderBottom: "1px solid #f1f5f9",
-                        position: isFrozen ? "sticky" : "relative",
-                        left: isFrozen ? 70 : "auto",
-                        background: active ? "#f0f9ff" : "transparent",
-                        cursor: "pointer",
-                        // zIndex: isFrozen ? 20 : 1,
-                        zIndex: active ? 999 : (isFrozen ? 20 : 1),
-                        backgroundColor: isFrozen
-                          ? (active ? "#f0f9ff" : "#f8fafc")
-                          : (active ? "#f0f9ff" : "transparent"),
+                        backgroundColor: isFrozen ? "#f8fafc" : "#ffffff",
                         borderRight: isFrozen ? "2px solid #cbd5e1" : "none",
-                        whiteSpace: textWrap ? "normal" : "nowrap",
-                        wordWrap: textWrap ? "break-word" : "normal",
-                        // overflow: textWrap ? "visible" : "hidden",
-                        overflow: active ? "visible" : (textWrap ? "visible" : "hidden"),
-                        textOverflow: textWrap ? "clip" : "ellipsis",
-                        verticalAlign: "top",
                         boxShadow: isFrozen ? "2px 0 5px -2px rgba(0,0,0,0.1)" : "none",
                       }}
                     >
-                      {active && (
-                        <div
-                          style={{
-                            position: "absolute",
-                            inset: "2px",
-                            border: "2px solid #3b82f6",
-                            borderRadius: "6px",
-                            pointerEvents: "none",
-                          }}
-                        />
-                      )}
+                      <div
+                        style={{
+                          display: "flex",
+                          justifyContent: "space-between",
+                          alignItems: "center",
+                          gap: "5px",
+                        }}
+                      >
+                        <span>{col.label}</span>
 
-                      {isEditing ? (
-                        renderInputByType(col, row[col.key], rowIndex)
-                      ) : (
+                        <div className="d-flex gap-1 align-items-center">
+                          {Boolean(hasUpdateColumnAccess) && <span
+                            data-tooltip="Edit"
+                            data-tooltip-position="bottom"
+                            className="freeze-icon"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setActiveColumn(col);
+                              setShowEditColumnModal(true);
+                            }}
+                            style={{
+                              cursor: "pointer",
+                              color: "#94a3b8",
+                              fontSize: "14px",
+                            }}
+                          >
+                            <BiMessageSquareEdit className="fs-5" />
+                          </span>
+                          }
+                          <span
+                            className="freeze-icon"
+                            data-tooltip={isFrozen ? "Unfreeze column" : "Freeze column"}
+                            data-tooltip-position="bottom"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              toggleFreezeColumn(col.key);
+                            }}
+                            style={{
+                              cursor: "pointer",
+                              color: isFrozen ? "#3b82f6" : "#94a3b8",
+                              fontSize: "14px",
+                            }}
+                          // title={isFrozen ? "Unfreeze column" : "Freeze column"}
+                          >
+                            {isFrozen ? <MdWidthNormal className="fs-5" /> : <MdOutlineWidthNormal className="fs-5" />}
+                          </span>
+
+                          <span style={{ fontSize: "20px", color: "#3b82f6" }}>
+                            {Boolean(filters[col.key]) && <CiFilter />}
+                          </span>
+                          <span style={{ fontSize: "12px", color: "#3b82f6" }}>
+                            {sortConfig?.key === col.key &&
+                              (sortConfig.direction === "asc" ? "↑" : "↓")}
+                          </span>
+                        </div>
+                      </div>
+
+                      {/* Resize handle with icon */}
+                      <div
+                        className={`column-resizer ${isResizingThis ? 'resizing' : ''}`}
+                        onMouseDown={(e) => startColumnResize(e, col.key)}
+                        data-tooltip="Resize"
+                        data-tooltip-position="bottom"
+                        style={{
+                          position: "absolute",
+                          top: 0,
+                          right: 0,
+                          width: "20px",
+                          height: "100%",
+                          cursor: "col-resize",
+                          zIndex: 1000,
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          opacity: 0.5,
+                          transition: "opacity 0.2s ease",
+                          background: isResizingThis ? "rgba(59, 130, 246, 0.1)" : "transparent",
+                        }}
+                        title="Drag to resize column"
+                      >
+                        {/* Vertical dots/grip indicator */}
                         <div
                           style={{
-                            whiteSpace: textWrap ? "normal" : "nowrap",
-                            // overflow: textWrap ? "visible" : "hidden",
-                            textOverflow: textWrap ? "clip" : "ellipsis",
-                            color: "#1e293b",
-                            wordWrap: textWrap ? "break-word" : "normal",
-                            zIndex: 999
+                            display: "flex",
+                            flexDirection: "column",
+                            gap: "3px",
+                            height: "40px",
+                            justifyContent: "center",
                           }}
                         >
-                          {renderInputValue(row, col)}
+                          <div
+                            style={{
+                              width: "4px",
+                              height: "4px",
+                              borderRadius: "50%",
+                              background: isResizingThis ? "#3b82f6" : "#94a3b8",
+                              transition: "all 0.2s ease",
+                            }}
+                          />
+                          <div
+                            style={{
+                              width: "4px",
+                              height: "4px",
+                              borderRadius: "50%",
+                              background: isResizingThis ? "#3b82f6" : "#94a3b8",
+                              transition: "all 0.2s ease",
+                            }}
+                          />
+                          <div
+                            style={{
+                              width: "4px",
+                              height: "4px",
+                              borderRadius: "50%",
+                              background: isResizingThis ? "#3b82f6" : "#94a3b8",
+                              transition: "all 0.2s ease",
+                            }}
+                          />
                         </div>
-                      )}
-                    </td>
+
+                        {/* Vertical line indicator */}
+                        <div
+                          style={{
+                            width: "2px",
+                            height: "60%",
+                            background: isResizingThis ? "#3b82f6" : "#cbd5e1",
+                            borderRadius: "2px",
+                            marginLeft: "2px",
+                            transition: "all 0.2s ease",
+                          }}
+                        />
+                      </div>
+                    </th>
                   );
                 })}
               </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+            </thead>
 
-      <LeadColumnFilter
-        showModal={showModal}
-        filters={filters}
-        setShowModal={setShowModal}
-        activeColumn={activeColumn}
-        setSortConfig={setSortConfig}
-        sortConfig={sortConfig}
-        setFilters={setFilters}
-        getSaleEmp={getSaleEmp}
-        handleApply={getFilterData}
-      />
+            <tbody>
+              {grid.map((row, rowIndex) => (
+                <tr
+                  key={rowIndex}
+                  style={{
+                    transition: "background 0.15s ease",
+                    height: rowHeights[rowIndex] || 44,
+                  }}
+                  onMouseEnter={(e) =>
+                    (e.currentTarget.style.background = "#f9fafb")
+                  }
+                  onMouseLeave={(e) =>
+                    (e.currentTarget.style.background = "transparent")
+                  }
+                >
+                  {/* Row Number - Sticky left only */}
+                  <td
+                    className="row-header-cell"
+                    style={{
+                      position: "sticky",
+                      left: 0,
+                      background: "#fafafa",
+                      zIndex: 25,
+                      padding: "10px 14px",
+                      borderBottom: "1px solid #f1f5f9",
+                      borderRight: "1px solid #e2e8f0",
+                      color: "#64748b",
+                      fontWeight: 500,
+                      textAlign: "center",
+                      width: "70px",
+                      minWidth: "70px",
+                      maxWidth: "70px",
+                      boxShadow: "2px 0 5px -2px rgba(0,0,0,0.1)",
+                    }}
+                  >
+                    <span>{rowIndex + 1}</span>
 
-      <EditColumnModal showModal={showEditColumnModal} setShowModal={setShowEditColumnModal} column={activeColumn} refetchColumn={refetchColumn} updateColumnApi={updateColumnApi} />
+                    {hasDeleteAccess && (
+                      <MdDelete
+                        className="delete-icon"
+                        onClick={() => deleteRow(row._id, rowIndex)}
+                      />
+                    )}
 
-      <AddLeadColumn show={showAddColumnModal} onClose={() => setShowAddColumnModal(false)} addColumnApi={addLeadColumnApi} refetchColumnData={refetchColumnData} />
+                    <div
+                      onMouseDown={(e) => startRowResize(e, rowIndex)}
+                      style={{
+                        position: "absolute",
+                        bottom: 0,
+                        left: 0,
+                        width: "100%",
+                        height: "6px",
+                        cursor: "row-resize",
+                      }}
+                    />
+                  </td>
 
-      <style>
-        {`
+                  {reorderedColumns.map((col, colIndex) => {
+                    const isEditing =
+                      editing?.row === rowIndex && editing?.key === col.key;
+
+                    const active =
+                      activeCell?.row === rowIndex &&
+                      activeCell?.col === colIndex;
+
+                    const isFrozen = frozenColumns.includes(col.key);
+
+                    return (
+                      <td
+                        key={col.key}
+                        onClick={() => selectCell(rowIndex, colIndex)}
+                        onDoubleClick={() =>
+                          setEditing({ row: rowIndex, key: col.key })
+                        }
+                        style={{
+                          padding: "10px 14px",
+                          width: columnWidths[col.key] || 180,
+                          minWidth: columnWidths[col.key] || 180,
+                          maxWidth: columnWidths[col.key] || 180,
+                          borderBottom: "1px solid #f1f5f9",
+                          position: isFrozen ? "sticky" : "relative",
+                          left: isFrozen ? 70 : "auto",
+                          background: active ? "#f0f9ff" : "transparent",
+                          cursor: "pointer",
+                          // zIndex: isFrozen ? 20 : 1,
+                          zIndex: active ? 999 : (isFrozen ? 20 : 1),
+                          backgroundColor: isFrozen
+                            ? (active ? "#f0f9ff" : "#f8fafc")
+                            : (active ? "#f0f9ff" : "transparent"),
+                          borderRight: isFrozen ? "2px solid #cbd5e1" : "none",
+                          whiteSpace: textWrap ? "normal" : "nowrap",
+                          wordWrap: textWrap ? "break-word" : "normal",
+                          // overflow: textWrap ? "visible" : "hidden",
+                          overflow: active ? "visible" : (textWrap ? "visible" : "hidden"),
+                          textOverflow: textWrap ? "clip" : "ellipsis",
+                          verticalAlign: "top",
+                          boxShadow: isFrozen ? "2px 0 5px -2px rgba(0,0,0,0.1)" : "none",
+                        }}
+                      >
+                        {active && (
+                          <div
+                            style={{
+                              position: "absolute",
+                              inset: "2px",
+                              border: "2px solid #3b82f6",
+                              borderRadius: "6px",
+                              pointerEvents: "none",
+                            }}
+                          />
+                        )}
+
+                        {isEditing ? (
+                          renderInputByType(col, row[col.key], rowIndex)
+                        ) : (
+                          <div
+                            style={{
+                              whiteSpace: textWrap ? "normal" : "nowrap",
+                              // overflow: textWrap ? "visible" : "hidden",
+                              textOverflow: textWrap ? "clip" : "ellipsis",
+                              color: "#1e293b",
+                              wordWrap: textWrap ? "break-word" : "normal",
+                              zIndex: 999
+                            }}
+                          >
+                            {col.key === 'next_follow_up_date'
+                              ? renderFollowUpCell(row, col, rowIndex)
+                              : renderInputValue(row, col)
+                            }
+                          </div>
+                        )}
+                      </td>
+                    );
+                  })}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+
+        <LeadColumnFilter
+          showModal={showModal}
+          filters={filters}
+          setShowModal={setShowModal}
+          activeColumn={activeColumn}
+          setSortConfig={setSortConfig}
+          sortConfig={sortConfig}
+          setFilters={setFilters}
+          getSaleEmp={getSaleEmp}
+          handleApply={getFilterData}
+        />
+
+        <EditColumnModal showModal={showEditColumnModal} setShowModal={setShowEditColumnModal} column={activeColumn} refetchColumn={refetchColumn} updateColumnApi={updateColumnApi} />
+
+        <AddLeadColumn show={showAddColumnModal} onClose={() => setShowAddColumnModal(false)} addColumnApi={addLeadColumnApi} refetchColumnData={refetchColumnData} />
+
+        <style>
+          {`
 .modern-input {
   position: absolute;
   inset: 2px;
@@ -1596,8 +1721,50 @@ th[style*="position: sticky"]::after {
   resize: vertical;
   min-height: 36px;
 }
+
+/* Follow-up modal styles */
+.followup-list {
+  max-height: 500px;
+  overflow-y: auto;
+}
+
+.followup-list .card {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.followup-list .card:hover {
+  transform: translateX(4px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+/* Follow-up button in lead row */
+.follow-up-btn {
+  transition: all 0.2s ease;
+}
+
+.follow-up-btn:hover {
+  transform: scale(1.05);
+  opacity: 0.9;
+}
+
+.follow-up-btn .badge-count {
+  background: rgba(255,255,255,0.3);
+  border-radius: 10px;
+  padding: 2px 6px;
+  margin-left: 4px;
+}
 `}
-      </style>
+        </style>
+      </div>
+      <LeadFollowUpModal
+        show={showFollowUpModal}
+        onHide={() => setShowFollowUpModal(false)}
+        lead={selectedLead}
+        onFollowUpAdded={handleFollowUpAdded}
+        addOrUpdateLeadFollowUpApi={addOrUpdateLeadFollowUpApi}
+        getLeadFollowUpsApi={getLeadFollowUpsApi}
+        columns={columns}
+      />
     </div>
   );
 }

@@ -1,7 +1,7 @@
 import { useContext } from "react";
 import { AppContext } from "../../../../App";
 import AllLeadComp from "../../components/allLeads/AllLeadComp";
-import { empAddLeadColumnApi, empAddOrUpdateLeadApi, empDeleteLeadRowsApi, empGetLeadColumnApi, empGetLeadRowsApi, empUpdateLeadColumnApi } from "../../../../apis/leads/empLeadApi";
+import { empAddLeadColumnApi, empAddOrUpdateLeadApi, empAddOrUpdateLeadFollowUpApi, empDeleteLeadRowsApi, empGetLeadColumnApi, empGetLeadFollowUpsApi, empGetLeadRowsApi, empUpdateLeadColumnApi } from "../../../../apis/leads/empLeadApi";
 import { empOpGetSaleEmp } from "../../../../apis";
 
 
@@ -17,9 +17,11 @@ export default function EmployeeAllLeads() {
       empGetLeadRowsApi={empGetLeadRowsApi}
       getSaleEmp={empOpGetSaleEmp}
       deleteLeadApi={empDeleteLeadRowsApi}
-      hasDeleteAccess={empType?.toLowerCase()==="operation"}
-      hasUpdateColumnAccess={empType?.toLowerCase()==="operation"}
-      hasAddColumnAccess={empType?.toLowerCase()==="operation"}
+      hasDeleteAccess={empType?.toLowerCase() === "operation"}
+      hasUpdateColumnAccess={empType?.toLowerCase() === "operation"}
+      hasAddColumnAccess={empType?.toLowerCase() === "operation"}
+      addOrUpdateLeadFollowUpApi={empAddOrUpdateLeadFollowUpApi}
+      getLeadFollowUpsApi={empGetLeadFollowUpsApi}
 
     />
   </>)
