@@ -1,6 +1,6 @@
 import AllLeadComp from "../../components/allLeads/AllLeadComp";
 import { adminGetSaleEmployee, } from "../../../../apis";
-import { adminAddLeadColumnApi, adminAddOrUpdateLeadApi, adminDeleteLeadRowsApi, adminGetLeadColumnApi, adminGetLeadRowsApi, adminUpdateLeadColumnApi } from "../../../../apis/leads/adminLeadApi";
+import { adminAddLeadColumnApi, adminAddOrUpdateLeadApi, adminAddOrUpdateLeadFollowUpApi, adminDeleteLeadRowsApi, adminGetLeadColumnApi, adminGetLeadFollowUpsApi, adminGetLeadRowsApi, adminUpdateLeadColumnApi } from "../../../../apis/leads/adminLeadApi";
 
 
 export default function AdminAllLeads() {
@@ -16,6 +16,8 @@ export default function AdminAllLeads() {
       hasDeleteAccess={true}
       hasAddColumnAccess={true}
       hasUpdateColumnAccess={true}
+      addOrUpdateLeadFollowUpApi={adminAddOrUpdateLeadFollowUpApi}
+      getLeadFollowUpsApi={adminGetLeadFollowUpsApi}
 
     />
   </>)

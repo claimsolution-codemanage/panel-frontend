@@ -136,14 +136,12 @@ const LeadFollowUpModal = ({ show, onHide, lead, onFollowUpAdded, addOrUpdateLea
 
             const res = await addOrUpdateLeadFollowUpApi(payload)
 
-            // Refresh the list
-            await fetchFollowUps();
             onFollowUpAdded?.(res?.data?.data?.lead, lead?.rowIndex);
             setFollowUps(prev => {
                 if (editingFollowUp?._id) {
-                    return prev.map(f => f._id === editingFollowUp._id ? res?.data?.data?.followup : f);
+                    return prev.map(f => f._id === editingFollowUp._id ? res?.data?.data?.followUp : f);
                 } else {
-                    return [...prev, res?.data?.data?.followUp];
+                    return [res?.data?.data?.followUp, ...prev,];
                 }
             })
             handleBackToHistory();
