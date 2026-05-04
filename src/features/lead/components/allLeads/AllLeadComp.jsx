@@ -11,7 +11,7 @@ export default function AllLeadComp({ getAllColumnApi, addOrUpdateLeadApi, empGe
   const [loading, setLoading] = useState(false)
   const [columns, setColumns] = useState([])
   const [filters, setFilters] = useState({});
-  const [sortConfig, setSortConfig] = useState(null);
+  const [sortConfig, setSortConfig] = useState({ key: "next_follow_up_date", direction: "asc" });
   const [data, setData] = useState([]);
   const [totalData, setTotalData] = useState(0);
   const [page, setPage] = useState(1);

@@ -5,7 +5,7 @@ export const empGetCaseById = (_id) => {
   return getRequest(`/employee/case/viewCaseById?_id=${_id}`)
 }
 
-export const empAllCaseApi = ({pageItemLimit = "", pgNo = "", searchQuery = "", statusType = "", startDate = "", endDate = "",type=true,empId="",id="",isReject="",isWeeklyFollowUp=false,isClosed=false}) => {
+export const empAllCaseApi = ({ pageItemLimit = "", pgNo = "", searchQuery = "", statusType = "", startDate = "", endDate = "", type = true, empId = "", id = "", isReject = "", isWeeklyFollowUp = false, isClosed = false }) => {
   return getRequest(`/employee/case/viewAllCase?limit=${pageItemLimit}&pageNo=${pgNo}&search=${searchQuery}&status=${statusType}&startDate=${startDate}&endDate=${endDate}&type=${type}&empId=${empId}&isReject=${isReject}&isWeeklyFollowUp=${isWeeklyFollowUp}&isClosed=${isClosed}`)
 }
 
@@ -22,7 +22,7 @@ export const empAddCaseFileByIdApi = (_id, data) => {
   return postRequest(`/employee/case/addCaseFile?_id=${_id}`, data)
 }
 
-export const empFindCaseByFileNoApi= (fileNo="") => {
+export const empFindCaseByFileNoApi = (fileNo = "") => {
   return getRequest(`/employee/case/findCaseByFileNo?fileNo=${fileNo}`)
 }
 
@@ -54,4 +54,8 @@ export const empDeleteCaseById = (id) => {
 
 export const empDeleteCaseDocById = (id) => {
   return deleteRequest(`/employee/case/deleteCaseDocById?_id=${id}`)
+}
+
+export const empRenameCaseDocFolderApi = (data) => {
+  return putRequest(`/employee/case/renameCaseDocFolder`, data)
 }

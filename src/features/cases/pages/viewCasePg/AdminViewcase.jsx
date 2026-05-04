@@ -1,26 +1,27 @@
 import { adminAddCaseFileByIdApi, adminAddOrUpdateCaseComment, adminAddOrUpdatePayment, adminGetCaseById } from "../../../../apis"
 import { useParams } from "react-router-dom"
-import { adminDeleteCaseDocById,adminSetCaseDocIsActive,adminEditCaseProcessById,adminChangeCaseStatus,adminRemoveCaseReference } from "../../../../apis"
+import { adminDeleteCaseDocById, adminSetCaseDocIsActive, adminEditCaseProcessById, adminChangeCaseStatus, adminRemoveCaseReference } from "../../../../apis"
 import { adminAddCaseReference } from "../../../../apis"
 import { adminAttachementUpload } from "../../../../apis/upload"
 import ViewCaseComp from "../../components/viewComp/ViewCaseComp"
 import { adminCreateOrUpdateCaseFormApi, adminGetCaseFormById } from "../../../../apis/case/form/caseFormApi"
+import { adminRenameCaseDocFolderApi } from "../../../../apis/case/adminCaseApi"
 
 export default function AdminViewCase() {
-    const param = useParams()
+  const param = useParams()
 
-    return (<>
-      <ViewCaseComp id={param?._id} 
-      getCase={adminGetCaseById} 
-      role={"admin"}  
+  return (<>
+    <ViewCaseComp id={param?._id}
+      getCase={adminGetCaseById}
+      role={"admin"}
       attachementUpload={adminAttachementUpload}
-      editUrl={"/admin/edit%20case/"} 
-      viewEmp={"/admin/employee/profile/"}  
+      editUrl={"/admin/edit%20case/"}
+      viewEmp={"/admin/employee/profile/"}
       viewPartner={"/admin/partner%20details/"}
       viewClient={"/admin/client%20details/"}
       viewOtherClientCasePath={"/admin/view case/"}
       isViewOtherClientCase={true}
-      
+
       isViewProfile={true}
       isAddRefence={true}
       isAddCaseProcess={true}
@@ -39,6 +40,11 @@ export default function AdminViewCase() {
       caseFormDetailApi={adminGetCaseFormById}
       addCaseDoc={adminAddCaseFileByIdApi}
       privateCommit={true}
-      />
-    </>)
+      isCaseFromAccess={true}
+      isCaseProcess={true}
+      isPaymentAccess={true}
+      renameDocFolder={adminRenameCaseDocFolderApi}
+      isRenameDocFolder={true}
+    />
+  </>)
 }

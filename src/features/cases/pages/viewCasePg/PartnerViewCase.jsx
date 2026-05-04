@@ -8,14 +8,17 @@ export default function PartnerViewCase() {
     const param = useParams()
 
     return (<>
-     <ViewCaseComp id={param?._id} 
-     getCase={partnerGetCaseById} 
-     role={"partner"} 
-     addCaseDoc={partnerAddCaseFileById} 
-     attachementUpload={partnerAttachementUpload}
-     accessPayment={false}
-     paymentDetailsApi={()=>{}}
-     caseFormDetailApi={partnerGetCaseFormByIdApi}
-     />
+        <ViewCaseComp id={param?._id}
+            getCase={partnerGetCaseById}
+            role={"partner"}
+            addCaseDoc={partnerAddCaseFileById}
+            attachementUpload={partnerAttachementUpload}
+            accessPayment={false}
+            paymentDetailsApi={() => { }}
+            caseFormDetailApi={partnerGetCaseFormByIdApi}
+            isCaseFromAccess={false}
+            isCaseProcess={true}
+            isPaymentAccess={false}
+        />
     </>)
 }

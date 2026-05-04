@@ -23,7 +23,8 @@ export default function ViewCaseComp({ id, getCase, role, empType, attachementUp
     editUrl, addCaseCommit, viewPartner, viewClient, editCaseProcess, addCaseProcess, addReference,
     deleteReference, deleteDoc, isAddRefence, isAddCaseProcess, isAddCommit,
     isViewProfile, setCaseDocStatus, viewEmp, paymentDetailsApi, accessPayment, isCaseFormAccess, createOrUpdateCaseFormApi,
-    privateCommit, caseFormDetailApi, viewOtherClientCasePath, isViewOtherClientCase
+    privateCommit, caseFormDetailApi, viewOtherClientCasePath, isViewOtherClientCase, isCaseProcess, isPaymentAccess, isCaseFromAccess,
+    renameDocFolder, isRenameDocFolder
 }) {
 
     const [data, setData] = useState([])
@@ -34,6 +35,7 @@ export default function ViewCaseComp({ id, getCase, role, empType, attachementUp
 
     const navigate = useNavigate()
     const param = useParams()
+
 
     const getCaseById = async () => {
         setLoading(true)
@@ -112,28 +114,28 @@ export default function ViewCaseComp({ id, getCase, role, empType, attachementUp
                                     <div className="">
                                         <div className="">
                                             {/* case details section */}
-                                            <CaseDetails data={data} role={role} viewPartner={viewPartner} deleteReference={deleteReference} isViewProfile={isViewProfile} getCaseById={getCaseById} editUrl={editUrl} viewClient={viewClient} isAddRefence={isAddRefence} viewEmp={viewEmp} addReference={addReference} />
+                                            <CaseDetails data={data} role={role} isCaseFromAccess={isCaseFromAccess} viewPartner={viewPartner} deleteReference={deleteReference} isViewProfile={isViewProfile} getCaseById={getCaseById} editUrl={editUrl} viewClient={viewClient} isAddRefence={isAddRefence} viewEmp={viewEmp} addReference={addReference} />
 
                                             {/* documents section */}
-                                            <DocumentSection data={data} role={role} getCaseById={getCaseById} deleteDoc={deleteDoc} setCaseDocStatus={setCaseDocStatus} attachementUpload={attachementUpload} addCaseDoc={addCaseDoc} />
+                                            <DocumentSection data={data} role={role} isRenameDocFolder={isRenameDocFolder} getCaseById={getCaseById} deleteDoc={deleteDoc} setCaseDocStatus={setCaseDocStatus} attachementUpload={attachementUpload} addCaseDoc={addCaseDoc} renameDocFolder={renameDocFolder} />
 
                                             {/* case process */}
-                                            <StatusSection isAddCaseProcess={isAddCaseProcess} editCaseProcess={editCaseProcess} role={role} id={id} processSteps={data[0]?.processSteps} getCaseById={getCaseById} details={data[0]} addCaseProcess={addCaseProcess} attachementUpload={attachementUpload} />
+                                            {isCaseProcess && <StatusSection isAddCaseProcess={isAddCaseProcess} editCaseProcess={editCaseProcess} role={role} id={id} processSteps={data[0]?.processSteps} getCaseById={getCaseById} details={data[0]} addCaseProcess={addCaseProcess} attachementUpload={attachementUpload} />}
 
                                             {/* case  form section*/}
-                                            {(data[0]?.caseFrom?.toLowerCase() == "client" || data?.[0]?.case_forms?.length) ?
+                                            {(data[0]?.caseFrom?.toLowerCase() == "client" || data?.[0]?.case_forms?.length) && isCaseFormAccess ?
                                                 <ViewCaseForm caseFormDetailApi={caseFormDetailApi} id={id} role={role} empType={empType} isCaseFormAccess={isCaseFormAccess} getCaseById={getCaseById} status={data?.[0]?.currentStatus} formList={data?.[0]?.case_forms} createOrUpdateApi={createOrUpdateCaseFormApi} attachementUpload={attachementUpload} /> : ""
                                             }
 
                                             {/* payment details */}
-                                            {data[0]?.caseFrom?.toLowerCase() == "client" && <PaymentSection id={id} accessPayment={accessPayment} getCaseById={getCaseById} paymentDetailsApi={paymentDetailsApi} casePayment={data[0]?.casePayment} />}
+                                            {data[0]?.caseFrom?.toLowerCase() == "client" && isPaymentAccess && <PaymentSection id={id} accessPayment={accessPayment} getCaseById={getCaseById} paymentDetailsApi={paymentDetailsApi} casePayment={data[0]?.casePayment} />}
 
                                             {/* client other case section */}
                                             {Boolean(isViewOtherClientCase) && Boolean(data?.[0]?.clientOtherCases?.length) && <ClientOtherCaseSection data={data?.[0]?.clientOtherCases || []} role={role} viewOtherClientCasePath={viewOtherClientCasePath} />
                                             }
 
                                             {/* case comment */}
-                                            {isAddCommit && <CommentSection id={id} privateCommit={privateCommit} addCaseCommit={addCaseCommit} role={role} getCaseById={getCaseById} caseCommit={data[0]?.caseCommit} />}
+                                            {isAddCommit && <CommentSection id={id} privateCommit={privateCommit} addCaseCommit={addCaseCommit} role={role} getCaseById={getCaseById} caseCommit={data[0]?.caseCommit} attachementUpload={attachementUpload} />}
                                         </div>
                                     </div>
 

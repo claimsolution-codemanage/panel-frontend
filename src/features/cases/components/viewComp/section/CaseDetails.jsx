@@ -5,11 +5,19 @@ import { toast } from 'react-toastify'
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import AddReferenceModal from '../../../../../components/Common/Modal/addReferenceModal';
+import {
+    FaUser, FaEnvelope, FaPhone, FaCalendarAlt,
+    FaBuilding, FaFileAlt, FaDollarSign, FaMapMarkerAlt,
+    FaCity, FaFlag, FaCode, FaLink, FaTrash, FaPlus,
+    FaEdit, FaEye, FaUserTie, FaIdCard, FaShieldAlt,
+    FaFileInvoice, FaTags, FaExclamationTriangle, FaTimes,
+    FaUserAlt
+} from 'react-icons/fa';
+import { MdPolicy } from 'react-icons/md';
 
-export default function CaseDetails({ data, role, isViewProfile, editUrl, viewClient, isAddRefence, viewEmp, getCaseById, addReference,deleteReference,viewPartner }) {
+export default function CaseDetails({ data, role, isCaseFromAccess, isViewProfile, editUrl, viewClient, isAddRefence, viewEmp, getCaseById, addReference, deleteReference, viewPartner }) {
     const [removeCaseReference, setRemoveCaseReference] = useState({ status: false, type: null, loading: false })
     const [addCaseReference, setAddCaseReference] = useState({ show: false, _id: "" })
-
 
     const handleRemoveCaseReference = async () => {
         if (removeCaseReference?.type) {
@@ -31,205 +39,530 @@ export default function CaseDetails({ data, role, isViewProfile, editUrl, viewCl
                 }
                 setRemoveCaseReference({ status: false, type: null, loading: false })
             }
+        } else {
+            toast.warning("Please select reference type to remove")
         }
     }
 
-    return (
-        <div>
-            {(role?.toLowerCase() !== "client" && role?.toLowerCase() !== "partner") &&
-                <div className="bg-color-1 my-3 p-2 p-5 rounded-2 shadow">
-                    <div className="border-3 border-primary border-bottom mb-5">
-                        <div className="d-flex align-items-center justify-content-between">
-                            <h6 className="text-primary text-capitalize text-center fs-3">{data[0]?.caseFrom}</h6>
-                            {isViewProfile && <Link state={{ filter: location?.state?.filter, back: location?.pathname }} to={data[0]?.caseFrom == "partner" ? `${viewPartner}${data[0]?.partnerObjId}` : (data[0]?.caseFrom == "client" ? `${viewClient}${data[0]?.clientObjId}` : `${viewEmp}${data[0]?.empObjId}`)} className="btn btn-primary">View</Link>}
-                        </div>
-                    </div>
-                    <div className="row">
-                        <div className="mb-2 d-flex align-items-center gap-3 col-12 col-md-4">
-                            <h6 className="fw-bold">Case From</h6>
-                            <p className=" h6 text-capitalize">{data[0]?.caseFrom}</p>
-                        </div>
-                        {data[0]?.caseFrom == "partner" &&
-                            <div className="mb-2 d-flex align-items-center gap-3 col-12 col-md-4">
-                                <h6 className="fw-bold">Partner Name</h6>
-                                <p className=" h6 text-capitalize">{data[0]?.partnerDetails?.profile?.consultantName}</p>
-                            </div>
-                        }
-                        {["partner","client"]?.includes(data[0]?.caseFrom?.toLowerCase()) && <div className="mb-2 d-flex align-items-center gap-3 col-12 col-md-4">
-                            <h6 className="fw-bold">{data[0]?.caseFrom?.toLowerCase() == "client" ? "Customer Code" : "Consultant Code"} </h6>
-                            <p className=" h6 text-capitalize">{data[0]?.caseFrom?.toLowerCase() == "client" ? data[0]?.clientDetails?.profile?.consultantCode :data[0]?.partnerDetails?.profile?.consultantCode}</p>
-                        </div>}
-
-                        {data[0]?.partnerObjId && <div className="mb-2 d-flex align-items-center gap-3 col-12 col-md-4">
-                            <h6 className="fw-bold">Reference of partner </h6>
-                            <Link to={`${viewPartner}${data[0]?.partnerObjId}`} state={{ filter: location?.state?.filter, back: location?.pathname }} className="h6 text-decoration-underline text-capitalize">View</Link>
-                        </div>}
-                        {data[0]?.empObjId && <div className="mb-2 d-flex align-items-center gap-3 col-12 col-md-4">
-                            <h6 className="fw-bold">Reference of employee</h6>
-                            <Link to={`${viewEmp}${data[0]?.empObjId}`} state={{ filter: location?.state?.filter, back: location?.pathname }} className="h6 text-decoration-underline text-capitalize">View</Link>
-                        </div>}
-
-                        {data[0]?.caseFrom != "client" &&
-                            <div className="mb-2 d-flex align-items-center gap-3 col-12 col-md-12">
-                                <h6 className="fw-bold">Mapping Id</h6>
-                                <p className=" h6 text-break">{data[0]?.caseFrom == "partner" ? `partnerId=${data[0]?.partnerObjId}` : `empSaleId=${data[0]?.empObjId}`}&{data[0]?.caseFrom == "partner" ? "partnerCaseId" : "empSaleCaseId"}={data[0]?._id}</p>
-                            </div>
-                        }
-
-
-                    </div>
-                </div>}
-            <div className="bg-color-1 my-5 p-3 p-md-5 rounded-2 shadow">
-                <div className="border-3 border-primary border-bottom mb-5">
-                    <div className="d-md-flex gap-2 align-items-center justify-content-between">
-                        <h6 className="text-primary text-center fs-3">Case Details</h6>
-                        {editUrl && <div className="d-md-flex d-block gap-2 float-md-end">
-                            <div>
-                            <Link to={`${editUrl}${data[0]?._id}`} state={{ filter: location?.state?.filter, back: location?.pathname }} className="btn btn-primary">Edit/ Update</Link>
-                            </div>
-
-                            {isAddRefence && <>
-                                {data[0]?.caseFrom == "client" && (data[0]?.partnerObjId || data[0]?.empObjId) && <button className="btn btn-warning text-white" onClick={() => setRemoveCaseReference({ ...removeCaseReference, status: true })}>Remove Reference</button>}
-                                {data[0]?.caseFrom == "client" && <button className="btn btn-success text-white" onClick={() => setAddCaseReference({ show: true, _id: data[0]?._id })}>Add Reference</button>}
-                            </>}
-                        </div>}
-                    </div>
-
+    const InfoCard = ({ icon, label, value, link, linkText }) => (
+        <div className="info-card mb-3">
+            <div className="d-flex align-items-start gap-3">
+                <div className="info-icon">
+                    {icon}
                 </div>
-                <div className="row">
-                    <div className="mb-2 d-flex align-items-center gap-3 col-12 col-md-4">
-                        <h6 className="fw-bold">Case Date</h6>
-                        <p className=" h6 text-capitalize">{data[0]?.createdAt && getFormateDMYDate(data[0]?.createdAt)}</p>
-                    </div>
-                    <div className="mb-2 d-flex align-items-center gap-3 col-12 col-md-4">
-
-                        <h6 className="fw-bold">File No.</h6>
-                        <p className=" h6 text-capitalize">{data[0]?.fileNo}</p>
-                    </div>
-                    <div className="mb-2 d-flex align-items-center gap-3 col-12 col-md-4">
-
-                        <h6 className="fw-bold">Current Status</h6>
-                        <p className=" h6 text-capitalize">{data[0]?.currentStatus}</p>
-                    </div>
-                </div>
-
-                <div className="row">
-                    <div className="mb-1 d-flex align-items-center gap-3 col-12 col-md-4">
-                        <h6 className="fw-bold">Name</h6>
-                        <p className="h6 text-capitalize">{data[0]?.name}</p>
-                    </div>
-                    <div className="mb-1 d-flex align-items-center gap-3 col-12 col-md-4">
-
-                        <h6 className="fw-bold">Father's Name</h6>
-                        <p className=" h6 text-capitalize">{data[0]?.fatherName}</p>
-                    </div>
-                    <div className="mb-1 d-flex align-items-center gap-3 col-12 col-md-4">
-
-                        <h6 className="fw-bold">Email</h6>
-                        <p className=" h6 ">{data[0]?.email}</p>
-                    </div>
-                </div>
-                <div className="row">
-                    <div className="mb-1 d-flex align-items-center gap-3 col-12 col-md-4">
-                        <h6 className="fw-bold">Mobile No</h6>
-                        <p className=" h6 text-capitalize">{data[0]?.mobileNo}</p>
-                    </div>
-                    <div className="mb-2 d-flex align-items-center gap-3 col-12 col-md-4">
-                        <h6 className="fw-bold">DOB</h6>
-                        <p className=" h6 text-capitalize">{data[0]?.DOB && getFormateDMYDate(data[0]?.DOB)}</p>
-                    </div>
-                    <div className="mb-2 d-flex align-items-center gap-3 col-12 col-md-4">
-                        <h6 className="fw-bold">Insurance Company</h6>
-                        <p className=" h6 text-capitalize">{data[0]?.insuranceCompanyName}</p>
-                    </div>
-                </div>
-                <div className="row">
-                    <div className="mb-2 d-flex align-items-center gap-3 col-12 col-md-4">
-
-                        <h6 className="fw-bold">Policy No.</h6>
-                        <p className=" h6 text-capitalize">{data[0]?.policyNo}</p>
-                    </div>
-                    <div className="mb-1 d-flex align-items-center gap-3 col-12 col-md-4">
-                        <h6 className="fw-bold">Policy Type</h6>
-                        <p className=" h6 text-capitalize">{data[0]?.policyType}</p>
-                    </div>
-                    <div className="mb-1 d-flex align-items-center gap-3 col-12 col-md-4">
-                        <h6 className="fw-bold">Complaint Type</h6>
-                        <p className=" h6 ">{data[0]?.complaintType}</p>
-                    </div>
-                </div>
-                <div className="row">
-                    <div className="mb-2 d-flex align-items-center gap-3 col-12 col-md-4">
-                        <h6 className="fw-bold">Claim Amount</h6>
-                        <p className=" h6 text-capitalize">{data[0]?.claimAmount}</p>
-                    </div>
-
-                    <div className="mb-2 d-flex align-items-center gap-3 col-12 col-md-4">
-
-                        <h6 className="fw-bold">Address</h6>
-                        <p className=" h6 text-capitalize">{data[0]?.address}</p>
-                    </div>
-                    <div className="mb-2 d-flex align-items-center gap-3 col-12 col-md-4">
-
-                        <h6 className="fw-bold">City</h6>
-                        <p className=" h6 text-capitalize">{data[0]?.city}</p>
-                    </div>
-                </div>
-                <div className="row">
-                    <div className="mb-2 d-flex align-items-center gap-3 col-12 col-md-4">
-                        <h6 className="fw-bold">State</h6>
-                        <p className=" h6 text-capitalize">{data[0]?.state}</p>
-                    </div>
-                    <div className="mb-2 d-flex align-items-center gap-3 col-12 col-md-4">
-
-                        <h6 className="fw-bold">Pincode</h6>
-                        <p className=" h6 text-capitalize">{data[0]?.pinCode}</p>
-                    </div>
-                </div>
-                <div className="row">
-                    <div className="col-12">
-                        <h6 className="fw-bold">Problem Statement</h6>
-                        <div className='text-editor' dangerouslySetInnerHTML={{__html:data[0]?.problemStatement}}></div>
-                        {/* <p className=" h6">{ data[0]?.problemStatement}</p> */}
-                    </div>
+                <div className="info-content flex-grow-1">
+                    <small className="text-muted d-block mb-1">{label}</small>
+                    {link ? (
+                        <Link to={link} className="info-link text-decoration-none">
+                            {value || linkText || 'View Details'}
+                        </Link>
+                    ) : (
+                        <p className="mb-0 fw-medium text-dark">{value || 'N/A'}</p>
+                    )}
                 </div>
             </div>
-            {addCaseReference?.show && <AddReferenceModal showAddCaseReference={addCaseReference} getCaseById={getCaseById} hide={() => setAddCaseReference({ show: false, _id: "" })} addReferenceCase={addReference} />}
+        </div>
+    )
 
-            {/* for case unmerge */}
+    const SectionHeader = ({ title, actions }) => (
+        <div className="section-header d-flex flex-wrap gap-3 justify-content-between align-items-center mb-4 pb-3 border-bottom">
+            <div className="d-flex align-items-center gap-2">
+                <div className="header-indicator"></div>
+                <h5 className="section-title mb-0">{title}</h5>
+            </div>
+            {actions && <div className="section-actions d-flex gap-2">{actions}</div>}
+        </div>
+    )
+
+    return (
+        <div className="case-details-container">
+            {/* Case From Section */}
+            {(role?.toLowerCase() !== "client" && role?.toLowerCase() !== "partner" && isCaseFromAccess) && (
+                <div className="case-from-section mb-4">
+                    <div className="case-from-card">
+                        <div className="case-from-header d-flex flex-wrap gap-3 justify-content-between align-items-center">
+                            <div className="d-flex align-items-center gap-3">
+                                <div className="case-from-badge">
+                                    <FaUserTie size={24} />
+                                </div>
+                                <div>
+                                    <h4 className="text-primary mb-0 text-capitalize">{data[0]?.caseFrom}</h4>
+                                    <small className="text-muted">Case Source Information</small>
+                                </div>
+                            </div>
+                            {isViewProfile && (
+                                <Link
+                                    to={data[0]?.caseFrom == "partner" ? `${viewPartner}${data[0]?.partnerObjId}` : (data[0]?.caseFrom == "client" ? `${viewClient}${data[0]?.clientObjId}` : `${viewEmp}${data[0]?.empObjId}`)}
+                                    className="btn btn-outline-primary btn-sm d-flex align-items-center gap-2"
+                                >
+                                    <FaEye size={14} />
+                                    View Profile
+                                </Link>
+                            )}
+                        </div>
+                        <div className="case-from-body mt-3">
+                            <div className="row g-3">
+                                <div className="col-12 col-md-4">
+                                    <InfoCard
+                                        icon={<FaUser size={16} />}
+                                        label="Case From"
+                                        value={data[0]?.caseFrom}
+                                    />
+                                </div>
+                                {data[0]?.caseFrom == "partner" && (
+                                    <div className="col-12 col-md-4">
+                                        <InfoCard
+                                            icon={<FaUserTie size={16} />}
+                                            label="Partner Name"
+                                            value={data[0]?.partnerDetails?.profile?.consultantName}
+                                        />
+                                    </div>
+                                )}
+                                {["partner", "client"]?.includes(data[0]?.caseFrom?.toLowerCase()) && (
+                                    <div className="col-12 col-md-4">
+                                        <InfoCard
+                                            icon={<FaIdCard size={16} />}
+                                            label={data[0]?.caseFrom?.toLowerCase() == "client" ? "Customer Code" : "Consultant Code"}
+                                            value={data[0]?.caseFrom?.toLowerCase() == "client" ? data[0]?.clientDetails?.profile?.consultantCode : data[0]?.partnerDetails?.profile?.consultantCode}
+                                        />
+                                    </div>
+                                )}
+                                {data[0]?.partnerObjId && (
+                                    <div className="col-12 col-md-4">
+                                        <InfoCard
+                                            icon={<FaLink size={16} />}
+                                            label="Partner Reference"
+                                            link={`${viewPartner}${data[0]?.partnerObjId}`}
+                                            linkText="View Partner"
+                                        />
+                                    </div>
+                                )}
+                                {data[0]?.empObjId && (
+                                    <div className="col-12 col-md-4">
+                                        <InfoCard
+                                            icon={<FaUser size={16} />}
+                                            label="Employee Reference"
+                                            link={`${viewEmp}${data[0]?.empObjId}`}
+                                            linkText="View Employee"
+                                        />
+                                    </div>
+                                )}
+                                {data[0]?.caseFrom != "client" && (
+                                    <div className="col-12">
+                                        <InfoCard
+                                            icon={<FaCode size={16} />}
+                                            label="Mapping ID"
+                                            value={data[0]?.caseFrom == "partner" ? `partnerId=${data[0]?.partnerObjId} & partnerCaseId=${data[0]?._id}` : `empSaleId=${data[0]?.empObjId} & empSaleCaseId=${data[0]?._id}`}
+                                        />
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {/* Case Details Section */}
+            <div className="case-details-card mb-5">
+                <SectionHeader
+                    title="Case Details"
+                    actions={
+                        <>
+                            {editUrl && (
+                                <Link
+                                    to={`${editUrl}${data[0]?._id}`}
+                                    className="btn btn-primary btn-sm d-flex align-items-center gap-2"
+                                >
+                                    <FaEdit size={14} />
+                                    Edit / Update
+                                </Link>
+                            )}
+                            {isAddRefence && (
+                                <>
+                                    {data[0]?.caseFrom == "client" && (data[0]?.partnerObjId || data[0]?.empObjId) && (
+                                        <button
+                                            className="btn btn-outline-danger btn-sm d-flex align-items-center gap-2"
+                                            onClick={() => setRemoveCaseReference({ ...removeCaseReference, status: true })}
+                                        >
+                                            <FaTrash size={14} />
+                                            Remove Reference
+                                        </button>
+                                    )}
+                                    {data[0]?.caseFrom == "client" && (
+                                        <button
+                                            className="btn btn-success btn-sm d-flex align-items-center gap-2"
+                                            onClick={() => setAddCaseReference({ show: true, _id: data[0]?._id })}
+                                        >
+                                            <FaPlus size={14} />
+                                            Add Reference
+                                        </button>
+                                    )}
+                                </>
+                            )}
+                        </>
+                    }
+                />
+
+                <div className="case-details-grid">
+                    {/* Personal Information */}
+                    <div className="details-group">
+                        <h6 className="group-title">
+                            <FaUser className="me-2" /> Personal Information
+                        </h6>
+                        <div className="row g-3">
+                            <div className="col-12 col-md-4">
+                                <InfoCard icon={<FaUser size={14} />} label="Name" value={data[0]?.name} />
+                            </div>
+                            <div className="col-12 col-md-4">
+                                <InfoCard icon={<FaUserAlt size={14} />} label="Father's Name" value={data[0]?.fatherName} />
+                            </div>
+                            <div className="col-12 col-md-4">
+                                <InfoCard icon={<FaEnvelope size={14} />} label="Email" value={data[0]?.email} />
+                            </div>
+                            <div className="col-12 col-md-4">
+                                <InfoCard icon={<FaPhone size={14} />} label="Mobile No" value={data[0]?.mobileNo} />
+                            </div>
+                            <div className="col-12 col-md-4">
+                                <InfoCard icon={<FaCalendarAlt size={14} />} label="Date of Birth" value={data[0]?.DOB && getFormateDMYDate(data[0]?.DOB)} />
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Case Information */}
+                    <div className="details-group mt-4">
+                        <h6 className="group-title">
+                            <FaFileAlt className="me-2" /> Case Information
+                        </h6>
+                        <div className="row g-3">
+                            <div className="col-12 col-md-4">
+                                <InfoCard icon={<FaCalendarAlt size={14} />} label="Case Date" value={data[0]?.createdAt && getFormateDMYDate(data[0]?.createdAt)} />
+                            </div>
+                            <div className="col-12 col-md-4">
+                                <InfoCard icon={<FaFileInvoice size={14} />} label="File No." value={data[0]?.fileNo} />
+                            </div>
+                            <div className="col-12 col-md-4">
+                                <InfoCard icon={<FaShieldAlt size={14} />} label="Current Status" value={data[0]?.currentStatus} />
+                            </div>
+                            <div className="col-12 col-md-4">
+                                <InfoCard icon={<FaBuilding size={14} />} label="Insurance Company" value={data[0]?.insuranceCompanyName} />
+                            </div>
+                            <div className="col-12 col-md-4">
+                                <InfoCard icon={<MdPolicy size={14} />} label="Policy No." value={data[0]?.policyNo} />
+                            </div>
+                            <div className="col-12 col-md-4">
+                                <InfoCard icon={<FaTags size={14} />} label="Policy Type" value={data[0]?.policyType} />
+                            </div>
+                            <div className="col-12 col-md-4">
+                                <InfoCard icon={<FaExclamationTriangle size={14} />} label="Complaint Type" value={data[0]?.complaintType} />
+                            </div>
+                            <div className="col-12 col-md-4">
+                                <InfoCard icon={<FaDollarSign size={14} />} label="Claim Amount" value={data[0]?.claimAmount} />
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Address Information */}
+                    <div className="details-group mt-4">
+                        <h6 className="group-title">
+                            <FaMapMarkerAlt className="me-2" /> Address Information
+                        </h6>
+                        <div className="row g-3">
+                            <div className="col-12">
+                                <InfoCard icon={<FaMapMarkerAlt size={14} />} label="Address" value={data[0]?.address} />
+                            </div>
+                            <div className="col-12 col-md-4">
+                                <InfoCard icon={<FaCity size={14} />} label="City" value={data[0]?.city} />
+                            </div>
+                            <div className="col-12 col-md-4">
+                                <InfoCard icon={<FaFlag size={14} />} label="State" value={data[0]?.state} />
+                            </div>
+                            <div className="col-12 col-md-4">
+                                <InfoCard icon={<FaCode size={14} />} label="Pincode" value={data[0]?.pinCode} />
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Problem Statement */}
+                    {data[0]?.problemStatement && (
+                        <div className="details-group mt-4">
+                            <h6 className="group-title">
+                                <FaExclamationTriangle className="me-2" /> Problem Statement
+                            </h6>
+                            <div className="problem-statement-card p-3 bg-light rounded">
+                                <div
+                                    className="text-editor problem-content"
+                                    dangerouslySetInnerHTML={{ __html: data[0]?.problemStatement }}
+                                ></div>
+                            </div>
+                        </div>
+                    )}
+                </div>
+            </div>
+
+            {/* Add Reference Modal */}
+            {addCaseReference?.show && (
+                <AddReferenceModal
+                    showAddCaseReference={addCaseReference}
+                    getCaseById={getCaseById}
+                    hide={() => setAddCaseReference({ show: false, _id: "" })}
+                    addReferenceCase={addReference}
+                />
+            )}
+
+            {/* Remove Reference Confirmation Modal */}
             <Modal
                 show={removeCaseReference.status}
                 size="md"
                 aria-labelledby="contained-modal-title-vcenter"
                 centered
-                className="p-5"
+                className="remove-reference-modal"
             >
-                <Modal.Body className='color-4'>
-                    <h4 className='text-danger text-center py-3 fs-3'>Are You Sure ?</h4>
-                    <p className='text-primary text-center fs-5'>
-                        Want to remove the Reference in this case.
-                    </p>
-                    <div className="mb-3 col-12">
-                        <select className="form-select w-100" name="Type" value={removeCaseReference.type} onChange={(e) => setRemoveCaseReference({ ...removeCaseReference, type: e?.target?.value })} >
-                            <option value="">--select remove reference type</option>
-                            {data[0]?.partnerObjId && <option value="partner">Partner</option>}
-                            {data[0]?.empObjId && <option value="sale-emp">Sale</option>}
-                        </select>
-                    </div>
-
-                    <div className="d-flex gap-1 flex-reverse">
-                        <div className="d-flex  justify-content-center">
-                            <div aria-disabled={removeCaseReference.loading} className={`d-flex align-items-center justify-content-center gap-3 btn btn-primary ${removeCaseReference.loading
-                                && "disabled"}`} onClick={handleRemoveCaseReference}>
-                                {removeCaseReference.loading ? <span className="spinner-border spinner-border-sm" role="status" aria-hidden={true}></span> : <span>Remove</span>}
-                            </div>
+                <Modal.Body className="p-4">
+                    <div className="text-center">
+                        <div className="warning-icon mb-3">
+                            <FaTimes size={48} className="text-danger" />
                         </div>
-                        <Button onClick={() => setRemoveCaseReference({ status: false, type: null, loading: false })}>Close</Button>
+                        <h4 className="text-danger mb-3">Are You Sure?</h4>
+                        <p className="text-muted mb-4">
+                            Want to remove the reference from this case. This action cannot be undone.
+                        </p>
 
+                        <div className="mb-4">
+                            <label className="form-label fw-medium">Select Reference Type to Remove</label>
+                            <select
+                                className="form-select"
+                                value={removeCaseReference.type}
+                                onChange={(e) => setRemoveCaseReference({ ...removeCaseReference, type: e?.target?.value })}
+                            >
+                                <option value="">-- Select Reference Type --</option>
+                                {data[0]?.partnerObjId && <option value="partner">Partner Reference</option>}
+                                {data[0]?.empObjId && <option value="sale-emp">Sale Employee Reference</option>}
+                            </select>
+                        </div>
+
+                        <div className="d-flex gap-3 justify-content-center">
+                            <Button
+                                variant="danger"
+                                onClick={handleRemoveCaseReference}
+                                disabled={removeCaseReference.loading || !removeCaseReference.type}
+                                className="d-flex align-items-center gap-2 px-4"
+                            >
+                                {removeCaseReference.loading ? (
+                                    <>
+                                        <span className="spinner-border spinner-border-sm" role="status" aria-hidden={true}></span>
+                                        <span>Removing...</span>
+                                    </>
+                                ) : (
+                                    <>
+                                        <FaTrash size={14} />
+                                        <span>Remove Reference</span>
+                                    </>
+                                )}
+                            </Button>
+                            <Button
+                                variant="secondary"
+                                onClick={() => setRemoveCaseReference({ status: false, type: null, loading: false })}
+                                className="px-4"
+                            >
+                                Cancel
+                            </Button>
+                        </div>
                     </div>
-
                 </Modal.Body>
             </Modal>
+
+            <style jsx="true">{`
+                .case-details-container {
+                    width: 100%;
+                    overflow-x: hidden;
+                }
+                
+                /* Case From Card */
+                .case-from-card {
+                    background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+                    border-radius: 16px;
+                    padding: 24px;
+                    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+                    border: 1px solid rgba(0,0,0,0.05);
+                }
+                
+                .case-from-badge {
+                    width: 48px;
+                    height: 48px;
+                    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                    border-radius: 12px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    color: white;
+                }
+                
+                /* Case Details Card */
+                .case-details-card {
+                    background: white;
+                    border-radius: 16px;
+                    padding: 24px;
+                    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+                }
+                
+                /* Section Header */
+                .section-header {
+                    background: #f8f9fa;
+                    margin: -24px -24px 24px -24px;
+                    padding: 16px 24px;
+                    border-radius: 16px 16px 0 0;
+                }
+                
+                .header-indicator {
+                    width: 4px;
+                    height: 24px;
+                    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                    border-radius: 2px;
+                }
+                
+                .section-title {
+                    font-size: 18px;
+                    font-weight: 600;
+                    color: #333;
+                }
+                
+                /* Info Card */
+                .info-card {
+                    padding: 12px;
+                    background: #f8f9fa;
+                    border-radius: 12px;
+                    transition: all 0.2s ease;
+                }
+                
+                .info-card:hover {
+                    background: #f0f2f5;
+                    transform: translateX(4px);
+                }
+                
+                .info-icon {
+                    width: 32px;
+                    height: 32px;
+                    background: white;
+                    border-radius: 8px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    color: #667eea;
+                    flex-shrink: 0;
+                }
+                
+                .info-link {
+                    color: #667eea;
+                    font-weight: 500;
+                    transition: color 0.2s ease;
+                }
+                
+                .info-link:hover {
+                    color: #764ba2;
+                    text-decoration: underline !important;
+                }
+                
+                /* Details Group */
+                .details-group {
+                    border-top: 1px solid #e9ecef;
+                    padding-top: 20px;
+                }
+                
+                .details-group:first-of-type {
+                    border-top: none;
+                    padding-top: 0;
+                }
+                
+                .group-title {
+                    font-size: 14px;
+                    font-weight: 600;
+                    color: #667eea;
+                    text-transform: uppercase;
+                    letter-spacing: 0.5px;
+                    margin-bottom: 16px;
+                    display: flex;
+                    align-items: center;
+                }
+                
+                /* Problem Statement */
+                .problem-statement-card {
+                    border-left: 3px solid #667eea;
+                }
+                
+                .problem-content {
+                    font-size: 14px;
+                    line-height: 1.6;
+                    color: #555;
+                }
+                
+                /* Remove Reference Modal */
+                .remove-reference-modal .modal-content {
+                    border-radius: 16px;
+                    border: none;
+                }
+                
+                .warning-icon {
+                    width: 80px;
+                    height: 80px;
+                    background: rgba(220, 53, 69, 0.1);
+                    border-radius: 50%;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    margin: 0 auto;
+                }
+                
+                /* Responsive Design */
+                @media (max-width: 768px) {
+                    .case-from-card,
+                    .case-details-card {
+                        padding: 16px;
+                    }
+                    
+                    .section-header {
+                        margin: -16px -16px 16px -16px;
+                        padding: 12px 16px;
+                    }
+                    
+                    .section-title {
+                        font-size: 16px;
+                    }
+                    
+                    .info-card {
+                        padding: 8px;
+                    }
+                    
+                    .info-icon {
+                        width: 28px;
+                        height: 28px;
+                    }
+                    
+                    .group-title {
+                        font-size: 12px;
+                    }
+                }
+                
+                /* Animations */
+                @keyframes fadeInUp {
+                    from {
+                        opacity: 0;
+                        transform: translateY(20px);
+                    }
+                    to {
+                        opacity: 1;
+                        transform: translateY(0);
+                    }
+                }
+                
+                .case-from-card,
+                .case-details-card {
+                    animation: fadeInUp 0.4s ease-out;
+                }
+                
+                .info-card {
+                    animation: fadeInUp 0.3s ease-out;
+                }
+            `}</style>
         </div>
     )
 }
