@@ -33,7 +33,7 @@ export default function EmployeeViewCase() {
       isAddCaseProcess={["operation", "sales"].includes(empType?.toLowerCase())}
 
       // isAddCommit={empType?.toLowerCase()==="operation" || empType?.toLowerCase()==="branch" || (empType?.toLowerCase()===" " && designation?.toLowerCase()==="manager")}
-      isAddCommit={true}
+      isAddCommit={!["doctor", "advocate", "surveyor"].includes(empType?.toLowerCase())}
       deleteReference={empRemoveCaseReferenceApi}
       deleteDoc={() => { }}
       addCaseCommit={empAddOrUpdateCaseCommentApi}

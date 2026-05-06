@@ -44,7 +44,6 @@ export default function PrivateNavbar() {
 
     const empType = state?.myAppData?.details?.empType?.toLowerCase()
     const userDetails = state?.myAppData?.details
-    console.log("state", userDetails);
 
 
 
@@ -108,13 +107,13 @@ export default function PrivateNavbar() {
                 ...(["finance", "operation", "branch", "sathi team", "sales"]?.includes(empType) ? [{ name: "All Partner", path: "/employee/all partner", icon: <FaUserFriends />, active: location.pathname.includes("all%20partner") || location.pathname.includes("partner%20details"), disable: false }] : []),
                 ...(["branch", "sathi team", "sales"]?.includes(empType) ? [{ name: "Add Partner", path: "/employee/add-partner", icon: <FaUserPlus />, active: location.pathname.includes("add-partner"), disable: false }] : []),
                 { name: "All Case", path: "/employee/all case", icon: <SiReaddotcv />, active: location.pathname.includes("all%20case") || location.pathname.includes("view%20case") || location.pathname.includes("edit%20case"), disable: false },
-                ...(!["advocate", "surveyor",]?.includes(empType) ? [{ name: "All Leads", path: "/employee/all-leads", icon: <MdOutlineLeaderboard />, active: location.pathname.includes("all-leads"), disable: false }] : []),
+                ...(!["advocate", "surveyor", "doctor"]?.includes(empType) ? [{ name: "All Leads", path: "/employee/all-leads", icon: <MdOutlineLeaderboard />, active: location.pathname.includes("all-leads"), disable: false }] : []),
                 ...(["branch", "sales"]?.includes(empType) ? [{ name: "Add Case", path: "/employee/add-case", icon: <MdOutlineLibraryAdd />, active: location.pathname.includes("add-case"), disable: false }] : []),
                 ...(["branch", "sales"]?.includes(empType) ? [{ name: "Add Sathi Team", path: "/employee/add-sathi-team", icon: <RiTeamLine />, active: location.pathname.includes("/employee/add-sathi-team"), disable: false }] : []),
                 ...(["branch", "sales", "finance", "operation"]?.includes(empType) ? [{ name: "Branch Team", path: "/employee/branch-team", icon: <SiMicrosoftteams />, active: location.pathname.includes("branch-team") || location?.pathname?.includes("view-sathi"), disable: false }] : []),
-                ...(!["advocate", "surveyor",]?.includes(empType) ? [{ name: "Reject Cases", path: "/employee/reject-cases", icon: <MdOutlineCancelPresentation />, active: location.pathname.includes("reject-cases"), disable: false }] : []),
+                ...(!["advocate", "surveyor", "doctor"]?.includes(empType) ? [{ name: "Reject Cases", path: "/employee/reject-cases", icon: <MdOutlineCancelPresentation />, active: location.pathname.includes("reject-cases"), disable: false }] : []),
                 ...(["operation"]?.includes(empType) ? [{ name: "Closed Cases", path: "/employee/closed-cases", icon: <GoIssueClosed />, active: location.pathname.includes("closed-cases"), disable: false },] : []),
-                ...(["sathi team", "advocate", "surveyor"]?.includes(empType) ? [{ name: "Commission", path: `/employee/statement/team/${userDetails?._id}`, icon: <IoNewspaperOutline />, active: location.pathname.includes(`/employee/statement/team/`), disable: false }] : []),
+                ...(["sathi team", "advocate", "surveyor", "doctor"]?.includes(empType) ? [{ name: "Statement", path: `/employee/statement/team/${userDetails?._id}`, icon: <IoNewspaperOutline />, active: location.pathname.includes(`/employee/statement/team/`), disable: false }] : []),
 
                 ...(["finance", "operation"]?.includes(empType) ? [{ name: "Statement", path: "/employee/statement", icon: <IoNewspaperOutline />, active: location.pathname.includes("/employee/statement"), disable: false }] : []),
                 ...(["operation"]?.includes(empType) ? [{ name: "Weekly Follow-Up", path: "/employee/case-weekly-followUp", icon: <RiTimerFlashLine />, active: location.pathname.includes("/employee/case-weekly-followUp"), disable: false }] : []),

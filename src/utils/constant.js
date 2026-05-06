@@ -118,7 +118,8 @@ export const caseMailMethod = ["None", "Client", "Partner", "Both"];
 
 export const insuranceCompany = ["ICICI Bank", "Kotak Mahindra Bank", "Ujjwala Insurance", "Other"]
 
-export const employeeType = ["Operation", "Branch", "Sales", "Legal", "Finance", "HR", "Medical Executive(Doctor)", "Civil(Surveyor)", "Sathi Team"]
+export const employeeType = ["Operation", "Branch", "Sales", "Legal", "Finance", "HR", "Advocate", "Doctor", "Surveyor", "Sathi Team"]
+
 export const employeeDesignation = ["Executive", "Manager", "Head"]
 
 
@@ -170,8 +171,7 @@ export const empDepartmentOptions = [
     { label: "HR", value: "HR" },
     { label: "Advocate", value: "Advocate" },
     { label: "Surveyor ", value: "Surveyor" },
-    { label: "Medical Executive(Doctor)", value: "Medical Executive(Doctor)" },
-    { label: "Civil(Surveyor)", value: "Civil(Surveyor)" },
+    { label: "Doctor", value: "Doctor" },
     { label: "Sathi Team", value: "Sathi Team" },
 ]
 export const empDesignationOptions = [

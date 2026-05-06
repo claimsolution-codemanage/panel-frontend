@@ -14,10 +14,12 @@ import {
     FaUserAlt
 } from 'react-icons/fa';
 import { MdPolicy } from 'react-icons/md';
+import { Eye, EyeOff } from 'lucide-react';
 
 export default function CaseDetails({ data, role, isCaseFromAccess, isViewProfile, editUrl, viewClient, isAddRefence, viewEmp, getCaseById, addReference, deleteReference, viewPartner }) {
     const [removeCaseReference, setRemoveCaseReference] = useState({ status: false, type: null, loading: false })
     const [addCaseReference, setAddCaseReference] = useState({ show: false, _id: "" })
+    const [showProblemStatement, setShowProblemStatement] = useState(false)
 
     const handleRemoveCaseReference = async () => {
         if (removeCaseReference?.type) {
@@ -73,6 +75,13 @@ export default function CaseDetails({ data, role, isCaseFromAccess, isViewProfil
             {actions && <div className="section-actions d-flex gap-2">{actions}</div>}
         </div>
     )
+
+    const getTruncatedText = (htmlText) => {
+        if (!htmlText) return "";
+        const doc = new DOMParser().parseFromString(htmlText, 'text/html');
+        let text = doc.body.textContent || "";
+        return text.length > 80 ? text.substring(0, 80) + "..." : text;
+    }
 
     return (
         <div className="case-details-container">
@@ -285,14 +294,34 @@ export default function CaseDetails({ data, role, isCaseFromAccess, isViewProfil
                     {/* Problem Statement */}
                     {data[0]?.problemStatement && (
                         <div className="details-group mt-4">
-                            <h6 className="group-title">
-                                <FaExclamationTriangle className="me-2" /> Problem Statement
-                            </h6>
+                            <div className="d-flex justify-content-between align-items-center">
+                                <h6 className="group-title">
+                                    <FaExclamationTriangle className="me-2" /> Problem Statement
+                                </h6>
+                                <div className='align-items-center'>
+                                    <Button
+                                        variant="outline-secondary"
+                                        size="sm"
+                                        onClick={() => setShowProblemStatement(!showProblemStatement)}
+                                        className="d-flex align-items-center gap-2"
+                                    >
+                                        {showProblemStatement ? (
+                                            <><EyeOff size={16} /> Hide</>
+                                        ) : (
+                                            <><Eye size={16} /> View</>
+                                        )}
+                                    </Button>
+                                </div>
+                            </div>
                             <div className="problem-statement-card p-3 bg-light rounded">
-                                <div
-                                    className="text-editor problem-content"
-                                    dangerouslySetInnerHTML={{ __html: data[0]?.problemStatement }}
-                                ></div>
+                                {showProblemStatement ? (
+                                    <div
+                                        className="text-editor problem-content"
+                                        dangerouslySetInnerHTML={{ __html: data[0]?.problemStatement }}
+                                    ></div>
+                                ) : (
+                                    <span className="remark-text">{getTruncatedText(data[0]?.problemStatement)}</span>
+                                )}
                             </div>
                         </div>
                     )}

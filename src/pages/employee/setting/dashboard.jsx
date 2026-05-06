@@ -502,7 +502,7 @@ export default function EmployeeDashboard() {
             </div>
             <div>
               <span className="profile-label">Department</span>
-              <span className="profile-value">{employee?.type || '—'}</span>
+              <span className="profile-value text-capitalize">{employee?.type || '—'}</span>
             </div>
           </div>
           <div className="profile-item">
