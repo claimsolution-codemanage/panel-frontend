@@ -323,7 +323,7 @@ export default function CreateOrUpdateStatmentModal({ show, hide, type, partnerI
                     {/* Sathi Team Email (Conditional) */}
                     {all && (
                       <div className="col-md-6 col-lg-4">
-                        <label className="form-label fw-semibold">Sathi Team Email</label>
+                        <label className="form-label fw-semibold">Employee Email</label>
                         <input
                           type="email"
                           name={`statements.${index}.empEmail`}
@@ -331,7 +331,7 @@ export default function CreateOrUpdateStatmentModal({ show, hide, type, partnerI
                           onChange={formik.handleChange}
                           onBlur={formik.handleBlur}
                           className={`form-control ${getFieldError(index, 'empEmail') ? 'is-invalid' : ''}`}
-                          placeholder="sathi@example.com"
+                          placeholder="employee@example.com"
                         />
                         {getFieldError(index, 'empEmail') && (
                           <div className="invalid-feedback d-block">{getFieldError(index, 'empEmail')}</div>
