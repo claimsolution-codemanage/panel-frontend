@@ -161,7 +161,7 @@ export default function CaseDetails({ data, role, isCaseFromAccess, isViewProfil
                                         <InfoCard
                                             icon={<FaCode size={16} />}
                                             label="Mapping ID"
-                                            value={data[0]?.caseFrom == "partner" ? `partnerId=${data[0]?.partnerObjId} & partnerCaseId=${data[0]?._id}` : `empSaleId=${data[0]?.empObjId} & empSaleCaseId=${data[0]?._id}`}
+                                            value={data[0]?.caseFrom == "partner" ? `partnerId=${data[0]?.partnerObjId}&partnerCaseId=${data[0]?._id}` : `empSaleId=${data[0]?.empObjId}&empSaleCaseId=${data[0]?._id}`}
                                         />
                                     </div>
                                 )}
