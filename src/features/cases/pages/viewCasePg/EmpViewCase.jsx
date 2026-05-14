@@ -44,9 +44,9 @@ export default function EmployeeViewCase() {
       addCaseDoc={empAddCaseFileByIdApi}
       privateCommit={empType?.toLowerCase() === "operation"}
       caseFormDetailApi={empGetCaseFormById}
-      isCaseProcess={!["advocate", "surveyor"].includes(empType?.toLowerCase())}
+      isCaseProcess={!["advocate", "surveyor", "doctor"].includes(empType?.toLowerCase())}
       isPaymentAccess={["operation", "branch", "finance"].includes(empType?.toLowerCase())}
-      isCaseFromAccess={!["advocate", "surveyor"].includes(empType?.toLowerCase())}
+      isCaseFromAccess={!["advocate", "surveyor", "doctor"].includes(empType?.toLowerCase())}
       renameDocFolder={empRenameCaseDocFolderApi}
       isRenameDocFolder={empType?.toLowerCase() === "operation"}
     />
