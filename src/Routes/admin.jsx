@@ -58,7 +58,7 @@ import AdminAllLeads from "../features/lead/pages/viewAll/AdminAllLeads";
 
 // case payment module
 import AdminCasePaymentDetail from "../features/casePaymentDetails/pages/allCasePayment/admin/AdminCasePaymentDetail";
-import AdminAllCasePaymentDetail from "../features/casePaymentDetails/pages/allCasePayment/admin/adminAllCasePayment";
+import AdminAllCasePaymentDetail from "../features/casePaymentDetails/pages/allCasePayment/admin/AdminAllCasePayment";
 
 {/* for admin */ }
 export const adminRoutes = [
