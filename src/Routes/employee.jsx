@@ -53,6 +53,13 @@ import EmpAllCaseTrash from "../pages/employee/trash/AllCaseTrash"
 
 import EmployeeAllLeads from "../features/lead/pages/viewAll/EmpAllLeads"
 
+
+// case payment details module
+import EmpAllCasePayment from '../features/casePaymentDetails/pages/allCasePayment/emp/EmpAllCasePayment'
+import EmpCasePaymentDetail from '../features/casePaymentDetails/pages/allCasePayment/emp/EmpCasePaymentDetail'
+// case payment details module
+
+
 export const employeeRoutes = [
   <Route path='/employee/signin' element={<PanelTemplate><EmployeeSignIn /></PanelTemplate>} />,
   <Route path='/employee/forget-password' element={<PanelTemplate><EmployeeForgetPassword /></PanelTemplate>} />,
@@ -108,5 +115,12 @@ export const employeeRoutes = [
 
 
   <Route path='/employee/all-leads' element={<EmployeeTemplate><EmployeeAllLeads /></EmployeeTemplate>} />,
+
+  // case payment details module
+  <Route path='/employee/case-payment' element={<EmployeeTemplate><EmpAllCasePayment /></EmployeeTemplate>} />,
+  <Route path='/employee/case-payment/view/:_id' element={<EmployeeTemplate><EmpCasePaymentDetail /></EmployeeTemplate>} />,
+  <Route path='/employee/case-payment/add' element={<EmployeeTemplate><EmpCasePaymentDetail /></EmployeeTemplate>} />,
+
+  // case payment details module
 ]
 {/* <Route path='/employee/all-trash-invoice'  element={<EmployeeTemplate><EmployeeInvoiceTrash/></EmployeeTemplate>}/> */ }

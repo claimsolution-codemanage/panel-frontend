@@ -69,6 +69,7 @@ export default function PrivateNavbar() {
                 { name: "All Client", path: "/admin/all client", icon: <FaUserTag />, active: location.pathname.includes("client") && !location.pathname.includes("trash"), disable: false },
                 { name: "All Invoice", path: "/admin/all-invoices", icon: <FaFileInvoice />, active: location.pathname.includes("invoice") && !location.pathname.includes("add-invoice"), disable: false },
                 { name: "Add Invoice", path: "/admin/add-invoice", icon: <MdOutlineLibraryAdd />, active: location.pathname.includes("/admin/add-invoice"), disable: false },
+                { name: "Case Payment", path: "/admin/case-payment", icon: <FaFileInvoice />, active: location.pathname.includes("/admin/case-payment"), disable: false },
                 { name: "Notification", path: "/admin/notification", icon: <MdNotificationsActive />, active: location.pathname.includes("/admin/notification"), disable: false },
                 { name: "Statement", path: "/admin/statement", icon: <IoNewspaperOutline />, active: location.pathname.includes("/admin/statement"), disable: false },
                 { name: "All Employee", path: "/admin/all employee", icon: <FaUsers />, active: (location.pathname == "/admin/all%20employee" || location.pathname.includes("/admin/employee/profile")), disable: false },
@@ -97,6 +98,7 @@ export default function PrivateNavbar() {
                 { name: "Add Case", path: "/client/add new case", icon: <MdOutlineLibraryAdd />, active: location.pathname == "/client/add%20new%20case", disable: false },
                 { name: "All Case", path: "/client/all case", icon: <SiReaddotcv />, active: location.pathname == "/client/all%20case" || location.pathname.includes("view%20case") || location.pathname.includes("edit%20case"), disable: false },
                 { name: "My Invoice", path: "/client/all-invoices", icon: <FaFileInvoice />, active: location.pathname.includes("invoice"), disable: false },
+                { name: "Case Payment", path: "/client/case-payment", icon: <FaFileInvoice />, active: location.pathname.includes("case-payment"), disable: false },
                 { name: "Service Agreement", path: "/client/view service agreement", icon: <LuPcCase />, active: location.pathname == "/client/view service agreement", disable: false }
             ]
         } else if (myRole === "employee") {
@@ -118,6 +120,7 @@ export default function PrivateNavbar() {
                 ...(["finance", "operation"]?.includes(empType) ? [{ name: "Statement", path: "/employee/statement", icon: <IoNewspaperOutline />, active: location.pathname.includes("/employee/statement"), disable: false }] : []),
                 ...(["operation"]?.includes(empType) ? [{ name: "Weekly Follow-Up", path: "/employee/case-weekly-followUp", icon: <RiTimerFlashLine />, active: location.pathname.includes("/employee/case-weekly-followUp"), disable: false }] : []),
                 ...(["finance", "operation"]?.includes(empType) ? [{ name: "All Invoices", path: "/employee/all-invoices", icon: <FaFileInvoice />, active: location.pathname.includes("/employee/all-invoices") || location.pathname.includes("/employee/view-invoice"), disable: false }] : []),
+                ...(["finance", "operation"]?.includes(empType) ? [{ name: "Case Payment", path: "/employee/case-payment", icon: <FaFileInvoice />, active: location.pathname.includes("/employee/case-payment"), disable: false }] : []),
                 ...(["finance"]?.includes(empType) ? [{ name: "Add Invoice", path: "/employee/add-invoice", icon: <MdOutlineLibraryAdd />, active: location.pathname.includes("/employee/add-invoice"), disable: false }] : []),
                 ...(["operation"]?.includes(empType) ? [{ name: "Notification", path: "/employee/notification", icon: <MdNotificationsActive />, active: location.pathname.includes("/employee/notification"), disable: false }] : []),
                 { name: "Setting", path: "/employee/reset password", icon: <IoSettingsOutline />, active: location.pathname == "/employee/reset%20password", disable: false },

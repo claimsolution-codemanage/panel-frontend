@@ -55,6 +55,11 @@ import AdminClosedCasePage from "../features/cases/pages/closedCasePg/AdminAllCl
 import AdminWeeklyFollowUpPage from "../features/cases/pages/FollowUpCasePg/AdminAllWeeklyFollowUpCase";
 import AdminAllLeads from "../features/lead/pages/viewAll/AdminAllLeads";
 
+
+// case payment module
+import AdminCasePaymentDetail from "../features/casePaymentDetails/pages/allCasePayment/admin/AdminCasePaymentDetail";
+import AdminAllCasePaymentDetail from "../features/casePaymentDetails/pages/allCasePayment/admin/adminAllCasePayment";
+
 {/* for admin */ }
 export const adminRoutes = [
   <Route path='/admin/signin' element={<PanelTemplate><AdminSignIn /></PanelTemplate>} />,
@@ -113,5 +118,11 @@ export const adminRoutes = [
 
   // lead start
   <Route path='/admin/all-leads' element={<AdminTemplate><AdminAllLeads /></AdminTemplate>} />,
+
+  // case payment details module
+  <Route path='/admin/case-payment' element={<AdminTemplate><AdminAllCasePaymentDetail /></AdminTemplate>} />,
+  <Route path='/admin/case-payment/view/:_id' element={<AdminTemplate><AdminCasePaymentDetail /></AdminTemplate>} />,
+  <Route path='/admin/case-payment/add' element={<AdminTemplate><AdminCasePaymentDetail /></AdminTemplate>} />,
+  // case payment details module
 
 ]

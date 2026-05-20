@@ -242,7 +242,7 @@ export default function CreateOrUpdateStatmentModal({ show, hide, type, partnerI
           <div className="d-md-flex justify-content-between align-items-center mb-4 pb-2 border-bottom">
             <div>
               <h6 className="text-muted mb-1">Statement Management</h6>
-              <small className="text-secondary">Manage statement details for partners/sathi team</small>
+              <small className="text-secondary">Manage statement details for partners/Team</small>
             </div>
             {!data?._id && <Button
               variant="primary"
