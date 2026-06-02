@@ -7,14 +7,13 @@ import { setToken } from '../../utils/helperFunction';
 import { AppContext } from "../../App"
 import { useContext } from "react"
 import { getJwtDecode } from '../../utils/helperFunction';
-import { MdMailLock, MdAccessTime, MdRefresh, MdVerified } from 'react-icons/md'
+import { MdMailLock, MdAccessTime, MdRefresh, MdVerified, MdPhone } from 'react-icons/md'
 import { BsShieldCheck, BsArrowRight, BsEnvelope } from 'react-icons/bs'
 import { Link } from 'react-router-dom';
 import { useEffect } from 'react';
 import { clientResendOtp } from '../../apis';
-import { clientEmailVerifyApi } from '../../apis/auth/userAuthApi';
+import { clientEmailVerifyApi, clientMobileOtpCodeVerifyApi } from '../../apis/auth/userAuthApi';
 import '../../styles/client/ClientOtpVerify.css' // Import the modern CSS
-
 
 export default function ClientOtpVerify() {
     const state = useContext(AppContext)
@@ -34,7 +33,7 @@ export default function ClientOtpVerify() {
         if (otp.length === 6) {
             setDisable(true)
             try {
-                const res = await clientEmailVerifyApi({ otp: otp })
+                const res = await clientMobileOtpCodeVerifyApi({ otp: otp })
                 if (res?.data?.success) {
                     setOtp("")
                     const token = res?.headers["x-auth-token"]
@@ -112,11 +111,11 @@ export default function ClientOtpVerify() {
                 <div className="image-overlay-enhanced">
                     <div className="image-content">
                         <h2>Account verification</h2>
-                        <p>For your security, we require email verification to verify your email</p>
+                        <p>For your security, we require mobile number verification to verify your mobile number</p>
                         <div className="image-features">
                             <div className="image-feature">
-                                <MdMailLock />
-                                <span>Email verification required</span>
+                                <MdPhone />
+                                <span>Mobile number verification required</span>
                             </div>
                             <div className="image-feature">
                                 <BsShieldCheck />
@@ -146,10 +145,10 @@ export default function ClientOtpVerify() {
                     {/* Welcome Text */}
                     <div className="welcome-text-centered">
                         <div className="otp-icon-wrapper">
-                            <MdMailLock className="otp-icon" />
+                            <MdPhone className="otp-icon" />
                         </div>
-                        <h1>Verify your email</h1>
-                        <p>We've sent a 6-digit verification code to your registered email address</p>
+                        <h1>Verify your mobile number</h1>
+                        <p>We've sent a 6-digit verification code to your registered mobile number</p>
                     </div>
 
                     {/* OTP Form */}

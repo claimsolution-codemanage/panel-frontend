@@ -46,7 +46,7 @@ export default function ClientSignUp() {
                         const details = getJwtDecode(token)
                         state?.setMyAppData({ isLogin: false, details: details })
                         toast.success(res?.data?.message)
-                        navigate("/client/email otp verify")
+                        navigate("/client/verify-otp")
                     }
                     setLoading(false)
                 }
@@ -220,7 +220,7 @@ export default function ClientSignUp() {
                                 />
                                 <span>
                                     I agree to the 
-                                    <Link to="/client/service agreement" target="_blank" className="agreement-link">
+                                    <Link to="/client/service-agreement" target="_blank" className="agreement-link">
                                         <BsFileText className="inline-icon" />
                                         Service Agreement
                                     </Link>

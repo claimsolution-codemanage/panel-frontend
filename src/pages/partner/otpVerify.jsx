@@ -5,9 +5,9 @@ import { AppContext } from "../../App"
 import { useContext } from "react"
 import { setToken, getJwtDecode } from '../../utils/helperFunction';
 import { useNavigate } from 'react-router-dom';
-import { MdMailLock } from 'react-icons/md'
+import { MdMailLock, MdPhone } from 'react-icons/md'
 import { useEffect } from 'react';
-import { partnerResendOtpApi, partnerVerifyOtpApi } from '../../apis/auth/partnerAuthApi';
+import { partnerMobileOtpCodeVerifyApi, partnerResendOtpApi, partnerVerifyOtpApi } from '../../apis/auth/partnerAuthApi';
 
 export default function OtpVerify() {
     const [otp, setOtp] = useState('');
@@ -20,7 +20,7 @@ export default function OtpVerify() {
         e.preventDefault()
         setDisable(true)
         try {
-            const res = await partnerVerifyOtpApi({ otp: otp })
+            const res = await partnerMobileOtpCodeVerifyApi({ otp: otp })
             // console.log("res", res);
             if (res?.data?.success) {
                 setOtp("")
@@ -103,11 +103,11 @@ export default function OtpVerify() {
                             <div className='mx-auto p-0 p-md-5'>
                                 <div className='aligin-items-center d-flex justify-content-center'>
                                     <div className="w-100 w-md-75">
-                                        <h2 className='text-center '>Email OTP Verification</h2>
+                                        <h2 className='text-center '>Mobile OTP Verification</h2>
                                         <div className="form w-100 my-4 pb-5">
                                             <div className='d-flex align-items-center justify-content-center mb-5 mt-3'>
                                                 <div className='bg-primary text-white d-flex align-items-center justify-content-center' style={{ height: "2.5rem", width: '2.5rem', borderRadius: '2.5rem' }}>
-                                                    <MdMailLock className='fs-5' />
+                                                    <MdPhone className='fs-5' />
                                                 </div>
                                             </div>
                                             <div className="mb-3 mt-3">
@@ -128,7 +128,7 @@ export default function OtpVerify() {
                                                 <div onClick={resendOtp.loading && resendOtp.timerStart ? () => { } : handleResentOtp} className={`${resendOtp.loading ? "text-info" : "text-primary cursor-pointer"} text-capitalize `}>{resendOtp?.timerStart ? `${resendOtp?.minutes}:${resendOtp.second}s` : resendOtp.message}</div>
                                             </div>
                                             <div className="d-flex justify-content-center mt-5">
-                                                <button type="submit" aria-disabled={disable} onClick={handleVerify} className={disable ? "btn btn-primary disabled w-100" : "btn btn-primary w-100"}> {disable ? <span className="spinner-border spinner-border-sm" role="status" aria-hidden={true}></span> : <span>Verify Email </span>} </button>
+                                                <button type="submit" aria-disabled={disable} onClick={handleVerify} className={disable ? "btn btn-primary disabled w-100" : "btn btn-primary w-100"}> {disable ? <span className="spinner-border spinner-border-sm" role="status" aria-hidden={true}></span> : <span>Verify Account</span>} </button>
                                             </div>
 
                                         </div>

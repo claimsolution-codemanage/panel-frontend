@@ -72,8 +72,8 @@ export default function App(){
   <Routes>
     <Route path='/' element={<PanelTemplate><ClientSignIn/></PanelTemplate>}/>
     <Route path='/terms-and-condition' element={<TermsAndCondition/>}/>
-    <Route path='/partner/service agreement' element={<><PartnerAgreement/></>}/>
-    <Route path='/client/service agreement' element={<><ClientAgreement/></>}/>
+    <Route path='/partner/service-agreement' element={<><PartnerAgreement/></>}/>
+    <Route path='/client/service-agreement' element={<><ClientAgreement/></>}/>
     <Route path='*' element={<Error/>}/>
   {...employeeRoutes}
   {...partnerRoutes}

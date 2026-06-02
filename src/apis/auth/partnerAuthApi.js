@@ -16,6 +16,10 @@ export const partnerVerifyOtpApi = (data) => {
   return postRequest(`/partner/verifyEmail`, data)
 }
 
+export const partnerSendEmailVerifyOtpApi = (data) => {
+  return postRequest(`/partner/send-email-otp`, data)
+}
+
 export const partnergenrateNewPasswordApi = (data) => {
   return postRequest(`/partner/setNewPassword`, data)
 }
@@ -24,12 +28,9 @@ export const partnerSigninApi = (data) => {
   return postRequest(`/partner/signIn`, data)
 }
 
-export const partnerSendMobileOtpCodeApi = (data) => {
-  return postRequest(`/partner/sendMobileOtpCode`, data)
-}
 
-export const partnerMobileOtpCodeVerifyApi = () => {
-  return postRequest(`/partner/mobileNoVerify`)
+export const partnerMobileOtpCodeVerifyApi = (data) => {
+  return postRequest(`/partner/mobileNoVerify`,data)
 }
 
 export const partnerResendOtpApi = () => {

@@ -32,7 +32,7 @@ export default function SignUp() {
                     if (token) {
                         setToken(token)
                         toast.success(res?.data?.message)
-                        navigate("/partner/email otp verify")
+                        navigate("/partner/verify-otp")
                     }
                     setDisable(false)
                 }
@@ -123,7 +123,7 @@ export default function SignUp() {
                                                 <div class="form-check">
                                                 <input class="form-check-input" type="checkbox" value={UserDetailsFormik?.values?.agreement} onChange={(e)=>UserDetailsFormik?.setFieldValue("agreement",!UserDetailsFormik?.values?.agreement)} id="defaultCheck1" />
                                                 <label class="form-check-label" for="defaultCheck1">
-                                                    <Link to={"/partner/service agreement"} target="_blank">Agree with service agreement</Link> 
+                                                    <Link to={"/partner/service-agreement"} target="_blank">Agree with service agreement</Link> 
                                                 </label>
                                             </div>
                                             </div>

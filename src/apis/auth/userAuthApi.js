@@ -17,8 +17,13 @@ export const signUpClientWithRequestApi = (data) => {
   return postRequest(`/client/acceptRequest`,data)
 }
 
+
 export const clientEmailVerifyApi = (data) => {
   return postRequest(`/client/verifyEmail`,data)
+}
+
+export const clientSendEmailVerifyOtpApi = (data) => {
+  return postRequest(`/client//send-email-otp`,data)
 }
 
 export const clientSendMobileOtpCodeApi = (data) => {

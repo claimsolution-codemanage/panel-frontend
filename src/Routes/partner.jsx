@@ -29,9 +29,8 @@ import { partnerStatement } from '../apis'
 export const partnerRoutes = [
     <Route path='/partner/signin' element={<PanelTemplate><SignIn /></PanelTemplate>} />,
     <Route path='/partner/signup' element={<PanelTemplate><SignUp /></PanelTemplate>} />,
-    <Route path='/partner/email otp verify' element={<PanelTemplate><OtpVerify /></PanelTemplate>} />,
+    <Route path='/partner/verify-otp' element={<PanelTemplate><OtpVerify /></PanelTemplate>} />,
     <Route path='/partner/accept-request/:tokenId' element={<PanelTemplate><AcceptPartnerRequest /></PanelTemplate>} />,
-    <Route path='/partner/send mobile otp' element={<PanelTemplate><PartnerMobileSendOtp /></PanelTemplate>} />,
     <Route path='/partner/forget password' element={<PanelTemplate><PartnerForgetPassword /></PanelTemplate>} />,
     <Route path='/partner/verification completed' element={<PanelTemplate><PartnerAfterVerification /></PanelTemplate>} />,
     <Route path='/partner/acceptTermsAndConditions/:verifyToken' element={<PanelTemplate><PartnerAcceptTls /></PanelTemplate>} />,

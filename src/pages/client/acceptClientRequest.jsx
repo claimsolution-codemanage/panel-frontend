@@ -86,7 +86,7 @@ export default function AcceptClientRequest() {
                                                 <div className="form-check">
                                                 <input className="form-check-input" type="checkbox" value={UserDetailsFormik?.values?.agreement} onChange={(e)=>UserDetailsFormik?.setFieldValue("agreement",!UserDetailsFormik?.values?.agreement)} id="defaultCheck1" />
                                                 <label className="form-check-label" htmlFor="defaultCheck1">
-                                                    <Link to={"/client/service agreement"} target="_blank">Agree with service agreement</Link> 
+                                                    <Link to={"/client/service-agreement"} target="_blank">Agree with service agreement</Link> 
                                                 </label>
                                             </div>
                                             </div>

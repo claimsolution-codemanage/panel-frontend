@@ -32,7 +32,7 @@ import ClientViewCasePayment from "../features/casePaymentDetails/pages/allCaseP
 export const clientRoutes = [
   <Route path='/client/signin' element={<PanelTemplate><ClientSignIn /></PanelTemplate>} />,
   <Route path='/client/signup' element={<PanelTemplate><ClientSignUp /></PanelTemplate>} />,
-  <Route path='/client/email otp verify' element={<PanelTemplate><ClientOtpVerify /></PanelTemplate>} />,
+  <Route path='/client/verify-otp' element={<PanelTemplate><ClientOtpVerify /></PanelTemplate>} />,
   <Route path='/client/accept-request/:tokenId' element={<PanelTemplate><AcceptClientRequest /></PanelTemplate>} />,
   <Route path='/client/send mobile otp' element={<PanelTemplate><ClientMobileSendOtp /></PanelTemplate>} />,
   <Route path='/client/forget password' element={<PanelTemplate><ClientForgetPassword /></PanelTemplate>} />,

@@ -11,14 +11,16 @@ import { MdOutlineCancel } from "react-icons/md";
 import AddNewCaseDocsModal from "../../../../components/Common/Modal/addNewCaseDoc"
 import DocumentPreview from "../../../../components/DocumentPreview"
 import TextEditor from "../../../../components/TextEditor"
+import ShowEmailVerificationModal from "../../../../components/Common/EmailVerification/EmailVerificationModel"
 
 
-export default function AddCaseComp({ addCase, uploadAttachment, successUrl,role }) {
+export default function AddCaseComp({ addCase, uploadAttachment, successUrl,role, viewServiceAgreementUrl,sendEmailVerifyOtpApi, verifyEmailApi  }) {
     const [uploadedFiles, setUploadedFiles] = useState([])
     const [others, setOthers] = useState({ policy: "", complaint: "" })
     const [uploadingDocs, setUploadingDocs] = useState(false)
     const [error, setError] = useState(false)
     const [loading, setLoading] = useState(false)
+    const [ShowEmailVerification,setShowEmailVerification] = useState({status:false,email:null})
     const navigate = useNavigate()
     
 
@@ -91,19 +93,20 @@ export default function AddCaseComp({ addCase, uploadAttachment, successUrl,role
                 const res = await addCase(payLoad)
                 if (res?.data?.success && res?.data?.data) {
                     toast.success(res?.data?.message)
-                    setLoading(false)
                     if (res?.data?.data?._id) {
                         navigate(`${successUrl}${res?.data?.data?._id}`)
                     }
                 }
             } catch (error) {
-                if (error && error?.response?.data?.message) {
+                if(error?.response?.status==403 && error?.response?.data?.code==="EMAIL_NOT_VERIFIED"){
+                    setShowEmailVerification({status:true,email:error?.response?.data?.email})
+                }else if (error && error?.response?.data?.message) {
                     toast.error(error?.response?.data?.message)
-                    setLoading(false)
                 } else {
                     toast.error("Something went wrong")
-                    setLoading(false)
                 }
+            }finally{
+                setLoading(false)
             }
         }
 
@@ -390,6 +393,17 @@ export default function AddCaseComp({ addCase, uploadAttachment, successUrl,role
                 </form>
             </div>
             <AddNewCaseDocsModal uploadingDocs={uploadingDocs} setUploadingDocs={setUploadingDocs} handleCaseDocsUploading={handleCaseDocsUploading} attachementUpload={uploadAttachment} />
+            
+            <ShowEmailVerificationModal 
+            show={ShowEmailVerification?.status} 
+            onClose={()=>setShowEmailVerification({status:false,email:null})} 
+            userEmail={ShowEmailVerification?.email} 
+            onVerifySuccess={caseDetailsFormik?.handleSubmit}
+            viewServiceAgreementUrl={viewServiceAgreementUrl}
+            sendEmailVerifyOtpApi={sendEmailVerifyOtpApi} 
+            verifyEmailApi={verifyEmailApi}
+            
+            />
         </div>
     </>)
 }
