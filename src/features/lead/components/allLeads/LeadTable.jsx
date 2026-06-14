@@ -148,6 +148,7 @@ export default function LeadExcelTable({ columns, setRows, rows, addOrUpdateLead
     const formatted = rows.map((r) => ({
       _id: r._id,
       followUpDate: r?.followUpDate ? formatDateToISO(r?.followUpDate) : null,
+      createdAt: r?.createdAt ? formatDateToISO(r?.createdAt) : new Date(),
       assignedTo: r?.assignedTo?._id ? { label: `${r?.assignedTo?.fullName || ""} | ${r?.assignedTo?.type || ""}`, value: r?.assignedTo?._id } : null,
       ...r.data,
     }));
@@ -345,7 +346,7 @@ export default function LeadExcelTable({ columns, setRows, rows, addOrUpdateLead
             {...commonProps}
             min={today}
             value={
-              commonProps?.value
+              commonProps?.value?.trim()
                 ? formatDateToISO(commonProps.value)
                 : ""
             }
@@ -494,6 +495,7 @@ export default function LeadExcelTable({ columns, setRows, rows, addOrUpdateLead
   const addRow = () => {
     const empty = {};
     columns.forEach((c) => (empty[c.key] = ""));
+    empty.createdAt = new Date().toISOString()
     setGrid((prev) => [empty, ...prev]);
 
     if (autoHeight) {
@@ -785,15 +787,15 @@ export default function LeadExcelTable({ columns, setRows, rows, addOrUpdateLead
     // Conditional formatting for follow-up date (first column)
     if (col.type === "date" && row[col.key]) {
       return (
-        <span className={getFollowUpClass(row[col.key])}>
+        <span className={col.systemField ? "" : getFollowUpClass(row[col.key])}>
           {getFormateDMYDate(row[col.key])}
         </span>
       );
     }
 
-    if (col.type === "date" && row[col.key]) {
-      return getFormateDMYDate(row[col.key]);
-    }
+    // if (col.type === "date" && row[col.key]) {
+    //   return getFormateDMYDate(row[col.key]);
+    // }
 
     return row[col?.key]?.label ?? row[col.key];
   };
@@ -1280,9 +1282,10 @@ export default function LeadExcelTable({ columns, setRows, rows, addOrUpdateLead
                       <td
                         key={col.key}
                         onClick={() => selectCell(rowIndex, colIndex)}
-                        onDoubleClick={() =>
+                        onDoubleClick={() => {
+                          if (col?.systemField) return;
                           setEditing({ row: rowIndex, key: col.key })
-                        }
+                        }}
                         style={{
                           padding: "10px 14px",
                           width: columnWidths[col.key] || 180,

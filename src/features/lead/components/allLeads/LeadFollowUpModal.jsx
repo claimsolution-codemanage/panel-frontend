@@ -22,6 +22,7 @@ const LeadFollowUpModal = ({ show, onHide, lead, onFollowUpAdded, addOrUpdateLea
     const [saving, setSaving] = useState(false);
     const [error, setError] = useState(null);
     const [editingFollowUp, setEditingFollowUp] = useState(null);
+    const [showTemplate, setShowTemplate] = useState(false)
 
     // Form state
     const [formData, setFormData] = useState({
@@ -96,10 +97,6 @@ const LeadFollowUpModal = ({ show, onHide, lead, onFollowUpAdded, addOrUpdateLea
     };
 
     const validateForm = () => {
-        if (!formData.nextFollowUpDate) {
-            setError('Next Follow-up Date is required');
-            return false;
-        }
         if (!formData.summary.trim()) {
             setError('Summary is required');
             return false;
@@ -181,6 +178,20 @@ const LeadFollowUpModal = ({ show, onHide, lead, onFollowUpAdded, addOrUpdateLea
         if (!dateStr) return false;
         return new Date(dateStr) < new Date();
     };
+
+    const templateOptions = [
+        "Client busy, call later",
+        "Not interested",
+        "Send details on WhatsApp",
+        "Send details on Email",
+        "Documents pending",
+        "Documents received",
+        "Interested",
+        "Will discuss with family",
+        "Thinking about service",
+        "Payment pending",
+        "Follow-up next week"
+    ]
 
     return (
         <Modal show={show} onHide={onHide} size="lg" centered>
@@ -326,8 +337,25 @@ const LeadFollowUpModal = ({ show, onHide, lead, onFollowUpAdded, addOrUpdateLea
                             </Form.Select>
                         </Form.Group>
 
-                        <Form.Group className="mb-3">
-                            <Form.Label>Summary of Discussion *</Form.Label>
+                        <Form.Group className="mb-3 position-relative">
+                            <Form.Label>Summary of Discussion
+                                <span
+                                    style={{
+                                        cursor: "pointer",
+                                        padding: "4px 6px",
+                                        borderRadius: "100%",
+                                        background: "#f1f5f9",
+                                        border: "1px solid #e2e8f0",
+                                        fontSize: "12px"
+                                    }}
+                                    onClick={(e) => {
+                                        e.stopPropagation()
+                                        setShowTemplate(prev => !prev)
+                                    }}
+                                >
+                                    ⚡
+                                </span>
+                                *</Form.Label>
                             <Form.Control
                                 as="textarea"
                                 rows={4}
@@ -336,11 +364,53 @@ const LeadFollowUpModal = ({ show, onHide, lead, onFollowUpAdded, addOrUpdateLea
                                 onChange={handleFormChange}
                                 placeholder="Enter detailed summary of the conversation..."
                             />
+                            {showTemplate && <div
+                                style={{
+                                    position: "absolute",
+                                    top: 30,
+                                    left: 0,
+                                    // background: "#fff",
+                                    backgroundColor: 'white',
+                                    border: "1px solid #e2e8f0",
+                                    borderRadius: "8px",
+                                    boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
+                                    zIndex: 9999,
+                                    minWidth: "200px",
+                                    maxHeight: "200px",
+                                    overflowY: "auto"
+                                }}
+                            >
+                                {templateOptions?.map((tpl, i) => (
+                                    <div
+                                        key={i}
+                                        onClick={() => {
+                                            setFormData({
+                                                ...formData,
+                                                summary: tpl
+                                            })
+                                            setShowTemplate(false)
+                                        }}
+                                        style={{
+                                            padding: "8px 10px",
+                                            cursor: "pointer",
+                                            fontSize: "13px"
+                                        }}
+                                        onMouseEnter={(e) =>
+                                            (e.currentTarget.style.background = "#f8fafc")
+                                        }
+                                        onMouseLeave={(e) =>
+                                            (e.currentTarget.style.background = "transparent")
+                                        }
+                                    >
+                                        {tpl}
+                                    </div>
+                                ))}
+                            </div>}
                         </Form.Group>
 
                         <Form.Group className="mb-3">
                             <Form.Label>
-                                Next Follow-up Date <span className="text-danger">*</span>
+                                Next Follow-up Date
                             </Form.Label>
                             <Form.Control
                                 type="date"

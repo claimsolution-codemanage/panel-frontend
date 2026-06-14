@@ -11,7 +11,7 @@ export default function AllLeadComp({ getAllColumnApi, addOrUpdateLeadApi, empGe
   const [loading, setLoading] = useState(false)
   const [columns, setColumns] = useState([])
   const [filters, setFilters] = useState({});
-  const [sortConfig, setSortConfig] = useState({ key: "next_follow_up_date", direction: "asc" });
+  const [sortConfig, setSortConfig] = useState({ key: "", direction: "" });
   const [data, setData] = useState([]);
   const [totalData, setTotalData] = useState(0);
   const [page, setPage] = useState(1);
@@ -59,7 +59,16 @@ export default function AllLeadComp({ getAllColumnApi, addOrUpdateLeadApi, empGe
     try {
       const res = await getAllColumnApi({})
       if (res?.data?.success && res?.data?.data) {
-        setColumns([...res?.data?.data])
+        setColumns([{
+          "key": "createdAt",
+          "label": "Created Date",
+          "type": "date",
+          "options": [],
+          "isDefault": false,
+          "isActive": true,
+          "order": 1,
+          "systemField": true
+        }, ...res?.data?.data])
       }
     } catch (error) {
       console.log(error)
@@ -142,7 +151,7 @@ export default function AllLeadComp({ getAllColumnApi, addOrUpdateLeadApi, empGe
             value = row?.assignedTo?.fullName || "";
           }
           else if (col.key === "followUpDate") {
-            value = row?.followUpDate
+            value = row?.followUpDate?.trim()
               ? new Date(row.followUpDate).toISOString().split("T")[0]
               : "";
           }
@@ -156,7 +165,7 @@ export default function AllLeadComp({ getAllColumnApi, addOrUpdateLeadApi, empGe
             value = value ? "Yes" : "No";
           }
 
-          if (col.type === "date" && value) {
+          if (col.type === "date" && value?.trim()) {
             value = new Date(value).toISOString().split("T")[0];
           }
 
