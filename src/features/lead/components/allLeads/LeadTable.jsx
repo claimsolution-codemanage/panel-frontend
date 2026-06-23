@@ -16,7 +16,7 @@ import { BsChatDots } from "react-icons/bs";
 const STORAGE_KEY = "leadEngine_columnWidths_v1";
 import { debounce } from 'lodash';
 import LeadTableHeader from "./LeadTableHeader";
-import "../../../../styles/lead/LeadTable.css"
+import "../../../../styles/lead/leadTable.css"
 import LeadDetailOffcanvas from "./LeadDetailOffcanvas";
 
 export default function LeadExcelTable({ columns, setRows, rows, addOrUpdateLeadApi, getSaleEmp, deleteLeadApi, getFilterData, filters, sortConfig,
