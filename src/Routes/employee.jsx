@@ -60,6 +60,11 @@ import EmpCasePaymentDetail from '../features/casePaymentDetails/pages/allCasePa
 // case payment details module
 
 
+// mail module
+import EmpSendMail from '../pages/employee/mail/EmpSendMail'
+// mail module
+
+
 export const employeeRoutes = [
   <Route path='/employee/signin' element={<PanelTemplate><EmployeeSignIn /></PanelTemplate>} />,
   <Route path='/employee/forget-password' element={<PanelTemplate><EmployeeForgetPassword /></PanelTemplate>} />,
@@ -122,5 +127,9 @@ export const employeeRoutes = [
   <Route path='/employee/case-payment/add' element={<EmployeeTemplate><EmpCasePaymentDetail /></EmployeeTemplate>} />,
 
   // case payment details module
+
+  // mail module
+  <Route path='/employee/mail' element={<EmployeeTemplate><EmpSendMail /></EmployeeTemplate>} />,
+  // mail module
 ]
 {/* <Route path='/employee/all-trash-invoice'  element={<EmployeeTemplate><EmployeeInvoiceTrash/></EmployeeTemplate>}/> */ }

@@ -5,7 +5,6 @@ import axios from "axios";
 import { formatDateToISO, getFormateDMYDate } from "../../../../utils/helperFunction";
 import AsyncSelect from 'react-select/async';
 import { MdDelete, MdOutlineWidthNormal, MdWidthNormal } from "react-icons/md";
-import { IoCloudDoneOutline } from "react-icons/io5";
 import LeadColumnFilter from "./LeadColumnFilter";
 import { CiFilter } from "react-icons/ci";
 import { toast } from "react-toastify";
@@ -14,9 +13,11 @@ import AddLeadColumn from "./AddLeadColumn";
 import EditColumnModal from "./EditColumnModal";
 import LeadFollowUpModal from "./LeadFollowUpModal";
 import { BsChatDots } from "react-icons/bs";
-import { Badge } from "react-bootstrap";
 const STORAGE_KEY = "leadEngine_columnWidths_v1";
 import { debounce } from 'lodash';
+import LeadTableHeader from "./LeadTableHeader";
+import "../../../../styles/lead/LeadTable.css"
+import LeadDetailOffcanvas from "./LeadDetailOffcanvas";
 
 export default function LeadExcelTable({ columns, setRows, rows, addOrUpdateLeadApi, getSaleEmp, deleteLeadApi, getFilterData, filters, sortConfig,
   setFilters, setSortConfig, containerRef, loading, handleExport, hasDeleteAccess, addLeadColumnApi, refetchColumnData, hasAddColumnAccess,
@@ -64,8 +65,12 @@ export default function LeadExcelTable({ columns, setRows, rows, addOrUpdateLead
       return acc;
     }, {});
   });
-
   const [templateDropdown, setTemplateDropdown] = useState(null)
+  const [showDetailOffcanvas, setShowDetailOffcanvas] = useState(false);
+  const [selectedLeadIndex, setSelectedLeadIndex] = useState(-1);
+  const [selectedLeadData, setSelectedLeadData] = useState({});
+
+
   // Track if auto-save is in progress
   const autoSaveTimeoutRef = useRef(null);
   const isAutoSavingRef = useRef(false);
@@ -149,6 +154,7 @@ export default function LeadExcelTable({ columns, setRows, rows, addOrUpdateLead
       _id: r._id,
       followUpDate: r?.followUpDate ? formatDateToISO(r?.followUpDate) : null,
       createdAt: r?.createdAt ? formatDateToISO(r?.createdAt) : new Date(),
+      updatedAt: r?.updatedAt ? formatDateToISO(r?.updatedAt) : new Date(),
       assignedTo: r?.assignedTo?._id ? { label: `${r?.assignedTo?.fullName || ""} | ${r?.assignedTo?.type || ""}`, value: r?.assignedTo?._id } : null,
       ...r.data,
     }));
@@ -800,17 +806,6 @@ export default function LeadExcelTable({ columns, setRows, rows, addOrUpdateLead
     return row[col?.key]?.label ?? row[col.key];
   };
 
-  // Reorder columns to make followUpDate the first column
-  // const reorderedColumns = React.useMemo(() => {
-  //   const followUpDateCol = columns.find(col => col.key === "followUpDate");
-  //   const otherColumns = columns.filter(col => col.key !== "followUpDate");
-
-  //   if (followUpDateCol) {
-  //     return [followUpDateCol, ...otherColumns];
-  //   }
-  //   return columns;
-  // }, [columns]);
-
 
   // Handle follow-up added - Update grid state without refreshing all rows
   const handleFollowUpAdded = (updatedLead, rowIndex) => {
@@ -883,10 +878,15 @@ export default function LeadExcelTable({ columns, setRows, rows, addOrUpdateLead
     );
   };
 
-  // In your cell rendering logic, add condition for followUps column:
-  // if (col.key === 'followUps') {
-  //   return renderFollowUpCell(row);
-  // }
+  // offcanvas
+  const handleRowClick = (rowIndex) => {
+    const rowData = grid[rowIndex];
+    if (rowData) {
+      setSelectedLeadIndex(rowIndex);
+      setSelectedLeadData(rowData);
+      setShowDetailOffcanvas(true);
+    }
+  };
 
   const reorderedColumns = columns
 
@@ -901,99 +901,8 @@ export default function LeadExcelTable({ columns, setRows, rows, addOrUpdateLead
           fontFamily: "Inter, sans-serif",
         }}
       >
-        <div className="lead-header">
-          <div className="lead-header-left">
-            <div className="record-info">
-              <span className="record-count">{grid?.length} Records</span>
-              {loading && <span className="loading-text">Loading...</span>}
-            </div>
 
-            <div className="save-status">
-              <IoCloudDoneOutline size={16} />
-              <span>
-                {saving
-                  ? "Saving..."
-                  : isDirty
-                    ? "Unsaved changes"
-                    : "All changes saved"}
-              </span>
-            </div>
-          </div>
-
-          <div className="lead-header-actions">
-            <div style={{ marginBottom: "12px", display: "flex", gap: "10px", flexWrap: "wrap" }}>
-              {/* View Options */}
-              <div className="btn-group" style={{ display: "flex", gap: "5px" }}>
-                <button
-                  className={`btn ${textWrap ? "btn-primary" : "btn-secondary"}`}
-                  onClick={toggleTextWrap}
-                  title="Toggle text wrapping"
-                >
-                  {textWrap ? "🔤 Wrap On" : "📄 Wrap Off"}
-                </button>
-
-                <button
-                  className={`btn ${autoHeight ? "btn-primary" : "btn-secondary"}`}
-                  onClick={toggleAutoHeight}
-                  title="Toggle auto height"
-                >
-                  {autoHeight ? "📏 Auto Height On" : "📐 Auto Height Off"}
-                </button>
-              </div>
-
-              <button className="btn btn-secondary" onClick={() => handleExport("excel")}>
-                Export Excel
-              </button>
-
-              <button className="btn btn-secondary" onClick={() => handleExport("csv")}>
-                Export CSV
-              </button>
-
-              {Object.keys(filters || {}).length > 0 && (
-                <button
-                  onClick={handleResetFilter}
-                  className="btn btn-secondary"
-                >
-                  Reset Filters
-                </button>
-              )}
-
-              {Boolean(hasAddColumnAccess) && <button
-                onClick={() => setShowAddColumnModal(true)}
-                className="btn btn-primary"
-                style={{
-                  background: "#3b82f6",
-                  color: "white",
-                  border: "none",
-                  padding: "8px 14px",
-                  borderRadius: "8px",
-                  fontSize: "13px",
-                  cursor: "pointer",
-                  transition: "0.2s ease",
-                  display: "flex",
-                  alignItems: "center",
-                  gap: "5px"
-                }}
-              >
-                <span style={{ fontSize: "16px" }}>+</span> Add Column
-              </button>}
-              <button
-                onClick={addRow}
-                className="btn btn-secondary"
-              >
-                + Add Row
-              </button>
-
-              <button
-                onClick={saveAll}
-                disabled={!isDirty || saving}
-                className={`btn btn-save ${isDirty ? "active" : ""}`}
-              >
-                {isDirty && <span className="unsaved-dot" />} {saving ? "Saving..." : "Save"}
-              </button>
-            </div>
-          </div>
-        </div>
+        <LeadTableHeader columns={columns} grid={grid} loading={loading} isDirty={isDirty} saving={saving} addRow={addRow} saveAll={saveAll} toggleTextWrap={toggleTextWrap} textWrap={textWrap} toggleAutoHeight={toggleAutoHeight} autoHeight={autoHeight} hasAddColumnAccess={hasAddColumnAccess} setShowAddColumnModal={setShowAddColumnModal} handleExport={handleExport} filters={filters} handleResetFilter={handleResetFilter} />
 
         {/* Grid */}
         <div
@@ -1229,6 +1138,7 @@ export default function LeadExcelTable({ columns, setRows, rows, addOrUpdateLead
                   {/* Row Number - Sticky left only */}
                   <td
                     className="row-header-cell"
+                    onClick={() => handleRowClick(rowIndex)}
                     style={{
                       position: "sticky",
                       left: 0,
@@ -1251,7 +1161,10 @@ export default function LeadExcelTable({ columns, setRows, rows, addOrUpdateLead
                     {hasDeleteAccess && (
                       <MdDelete
                         className="delete-icon"
-                        onClick={() => deleteRow(row._id, rowIndex)}
+                        onClick={(e) => {
+                          e.stopPropagation(); // Prevent opening offcanvas
+                          deleteRow(row._id, rowIndex);
+                        }}
                       />
                     )}
 
@@ -1283,8 +1196,12 @@ export default function LeadExcelTable({ columns, setRows, rows, addOrUpdateLead
                         key={col.key}
                         onClick={() => selectCell(rowIndex, colIndex)}
                         onDoubleClick={() => {
-                          if (col?.systemField) return;
-                          setEditing({ row: rowIndex, key: col.key })
+                          if (col?.systemField) {
+                            handleRowClick(rowIndex)
+                          } else {
+                            setEditing({ row: rowIndex, key: col.key })
+                          }
+
                         }}
                         style={{
                           padding: "10px 14px",
@@ -1367,397 +1284,6 @@ export default function LeadExcelTable({ columns, setRows, rows, addOrUpdateLead
 
         <AddLeadColumn show={showAddColumnModal} onClose={() => setShowAddColumnModal(false)} addColumnApi={addLeadColumnApi} refetchColumnData={refetchColumnData} />
 
-        <style>
-          {`
-.modern-input {
-  position: absolute;
-  inset: 2px;
-  width: calc(100% - 4px);
-  height: calc(100% - 4px);
-
-  border: 2px solid #3b82f6;
-  border-radius: 8px;
-
-  padding: 8px 10px;
-
-  font-size: 14px;
-  font-family: inherit;
-  color: #1e293b;
-
-  background: #ffffff;
-
-  outline: none;
-  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
-
-  transition: all 0.15s ease;
-  
-  resize: none;
-  overflow: auto;
-}
-
-.modern-input[type="date"] {
-  padding: 6px 10px;
-}
-
-.modern-input[type="number"] {
-  padding: 6px 10px;
-}
-
-.modern-input select,
-.modern-input .async-select {
-  width: 100%;
-  height: 100%;
-}
-
-  th, td {
-    position: relative;
-  }
-  
-  thead tr {
-    position: relative;
-  }
-  
-  .row-header-cell,
-  th[style*="position: sticky"],
-  td[style*="position: sticky"] {
-    box-shadow: 2px 0 5px -2px rgba(0,0,0,0.1);
-  }
-  
-  th, td {
-    background-clip: padding-box;
-  }
-  
-  ::-webkit-scrollbar {
-    width: 10px;
-    height: 10px;
-  }
-  
-  ::-webkit-scrollbar-track {
-    background: #f1f5f9;
-    border-radius: 5px;
-  }
-  
-  ::-webkit-scrollbar-thumb {
-    background: #94a3b8;
-    border-radius: 5px;
-    border: 2px solid #f1f5f9;
-  }
-  
-  ::-webkit-scrollbar-thumb:hover {
-    background: #64748b;
-  }
-  
-  th:first-child {
-    z-index: 45 !important;
-  }
-  
-  td[style*="position: sticky"]:last-child,
-  th[style*="position: sticky"]:last-child {
-    border-right: 2px solid #cbd5e1;
-  }
-
-/* Resize handle */
-.column-resizer {
-  position: absolute;
-  top: 0;
-  right: 0;
-  width: 8px;
-  height: 100%;
-  cursor: col-resize;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 50;
-}
-
-.column-resizer::after {
-  content: "";
-  width: 2px;
-  height: 60%;
-  background: transparent;
-  transition: 0.2s ease;
-}
-
-th:hover .column-resizer::after {
-  background: #cbd5e1;
-}
-
-  th:hover .column-resizer {
-    opacity: 1 !important;
-  }
-  
-  .column-resizer:hover {
-    background: rgba(59, 130, 246, 0.1) !important;
-  }
-  
-  .column-resizer:hover div div{
-     background: #3b82f6 !important;
-    transform: scale(1.2);
-  }
-  .column-resizer:hover div:last-child {
-    background: #3b82f6 !important;
-  }
-
-   /* Active resizing state */
-  .column-resizer.resizing {
-    opacity: 1 !important;
-    background: rgba(59, 130, 246, 0.15) !important;
-  }
-  
-  .column-resizer.resizing div div {
-    background: #3b82f6 !important;
-    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.3);
-  }
-  
-  .column-resizer.resizing div:last-child {
-    background: #3b82f6 !important;
-    width: 3px;
-  }
-  
-  /* Visual indicator while dragging */
-  .column-resizer::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    right: 0;
-    width: 1px;
-    height: 100%;
-    background: transparent;
-    transition: all 0.2s ease;
-  }
-  
-  .column-resizer.resizing::after {
-    background: #3b82f6;
-    box-shadow: 0 0 8px #3b82f6;
-  }
-  
-  /* Prevent text selection during resize */
-  body.resizing-active {
-    user-select: none;
-    cursor: col-resize;
-  }
-
-.row-header-cell {
-  position: relative;
-}
-
-.delete-icon {
-  position: absolute;
-  right: 6px;
-  top: 50%;
-  transform: translateY(-50%);
-  opacity: 0;
-  cursor: pointer;
-  transition: opacity 0.2s ease;
-}
-
-.row-header-cell:hover .delete-icon {
-  opacity: 0.7;
-  color: red;
-}
-
-.lead-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 14px 20px;
-  border-bottom: 1px solid #e5e7eb;
-  background: #ffffff;
-  flex-wrap: wrap;
-  gap: 12px;
-}
-
-.lead-header-left {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-
-.record-info {
-  display: flex;
-  gap: 12px;
-  align-items: center;
-}
-
-.record-count {
-  font-weight: 600;
-  font-size: 15px;
-  color: #111827;
-}
-
-.loading-text {
-  font-size: 13px;
-  color: #64748b;
-}
-
-.save-status {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  font-size: 13px;
-  color: #64748b;
-}
-
-.lead-header-actions {
-  display: flex;
-  gap: 10px;
-  flex-wrap: wrap;
-}
-
-.btn {
-  border: none;
-  padding: 8px 14px;
-  border-radius: 8px;
-  font-size: 13px;
-  cursor: pointer;
-  transition: 0.2s ease;
-  font-weight: 500;
-}
-
-.btn-primary {
-  background: #111827;
-  color: white;
-}
-
-.btn-primary:hover {
-  background: #1f2937;
-}
-
-.btn-secondary {
-  background: #f3f4f6;
-  color: #111827;
-}
-
-.btn-secondary:hover {
-  background: #e5e7eb;
-}
-
-.btn-save {
-  background: #10b981;
-  color: white;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-
-.btn-save:hover:not(:disabled) {
-  background: #059669;
-}
-
-.btn-save:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-
-.btn-group {
-  display: flex;
-  gap: 5px;
-  background: #f3f4f6;
-  padding: 3px;
-  border-radius: 8px;
-}
-
-.btn-group .btn {
-  padding: 6px 12px;
-}
-
-.unsaved-dot {
-  width: 8px;
-  height: 8px;
-  background: #ef4444;
-  border-radius: 50%;
-  display: inline-block;
-}
-
-/* Badge styles */
-.badge {
-  display: inline-block;
-  padding: 4px 8px;
-  border-radius: 4px;
-  font-size: 12px;
-  font-weight: 500;
-  line-height: 1;
-}
-
-.bg-primary { background-color: #3b82f6; }
-.bg-success { background-color: #10b981; }
-.bg-danger { background-color: #ef4444; }
-.bg-warning { background-color: #f59e0b; }
-.bg-orange { background-color: #f97316; }
-.bg-secondary { background-color: #6b7280; }
-.bg-yellow { background-color: #eab308; }
-
-.text-white { color: white; }
-
-/* Frozen column indicator */
-th[style*="position: sticky"]::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  right: -2px;
-  width: 2px;
-  height: 100%;
-  background: #cbd5e1;
-}
-
-/* Scrollbar styling */
-::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
-}
-
-::-webkit-scrollbar-track {
-  background: #f1f1f1;
-}
-
-::-webkit-scrollbar-thumb {
-  background: #cbd5e1;
-  border-radius: 4px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: #94a3b8;
-}
-
-/* Auto height textarea for editing */
-.modern-input[type="text"] {
-  resize: vertical;
-  min-height: 36px;
-}
-
-/* Follow-up modal styles */
-.followup-list {
-  max-height: 500px;
-  overflow-y: auto;
-}
-
-.followup-list .card {
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-
-.followup-list .card:hover {
-  transform: translateX(4px);
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-}
-
-/* Follow-up button in lead row */
-.follow-up-btn {
-  transition: all 0.2s ease;
-}
-
-.follow-up-btn:hover {
-  transform: scale(1.05);
-  opacity: 0.9;
-}
-
-.follow-up-btn .badge-count {
-  background: rgba(255,255,255,0.3);
-  border-radius: 10px;
-  padding: 2px 6px;
-  margin-left: 4px;
-}
-`}
-        </style>
       </div>
       <LeadFollowUpModal
         show={showFollowUpModal}
@@ -1767,6 +1293,30 @@ th[style*="position: sticky"]::after {
         addOrUpdateLeadFollowUpApi={addOrUpdateLeadFollowUpApi}
         getLeadFollowUpsApi={getLeadFollowUpsApi}
         columns={columns}
+      />
+
+      <LeadDetailOffcanvas
+        show={showDetailOffcanvas}
+        onHide={() => {
+          setShowDetailOffcanvas(false);
+          setSelectedLeadData({});
+          setSelectedLeadIndex(-1);
+        }}
+        leadData={selectedLeadData}
+        rowIndex={selectedLeadIndex}
+        columns={columns}
+        grid={grid}
+        onUpdateCell={updateCell}
+        fetchOptions={fetchOptions}
+        formatDateToISO={formatDateToISO}
+        getFormateDMYDate={getFormateDMYDate}
+        getStatusClass={getStatusClass}
+        getFollowUpClass={getFollowUpClass}
+        toggleTemplateDropdown={toggleTemplateDropdown}
+        closeTemplateDropdown={closeTemplateDropdown}
+        isTemplateOpen={isTemplateOpen}
+        isSaving={saving}
+        renderFollowUpCell={renderFollowUpCell}
       />
     </div>
   );

@@ -1,6 +1,6 @@
-import {useParams } from "react-router-dom";
-import {  adminGetEmpProfile, adminGetNormalEmployee, adminUpdateEmployeeById } from "../../../apis";
-import { adminAttachementUpload,adminImageUpload } from "../../../apis/upload";
+import { useParams } from "react-router-dom";
+import { adminGetEmpProfile, adminGetNormalEmployee, adminUpdateEmployeeById } from "../../../apis";
+import { adminAttachementUpload, adminImageUpload } from "../../../apis/upload";
 import EditEmployeeComp from "../../../components/Reuse/EditEmployee";
 
 export default function AdminEditEmployee() {
@@ -15,6 +15,7 @@ export default function AdminEditEmployee() {
             attachementUpload={adminAttachementUpload}
             getEmpListApi={adminGetNormalEmployee}
             imageUpload={adminImageUpload}
+            addPermissionAccess={true}
         />
     </>)
 }

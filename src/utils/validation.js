@@ -40,20 +40,20 @@ export const empValidationSchema = yup.object().shape({
   city: yup.string(),
   state: yup.string(),
   docs: yup.array(),
-  headEmpId: yup.mixed().test("headEmpId", "Required",
-    function (value) {
-      if (!value?.value) {
-        return false
-      }
-      return true
-    }),
-  managerId: yup.mixed().test("headEmpId", "Required",
-    function (value) {
-      if (!value?.value) {
-        return false
-      }
-      return true
-    }),
+  // headEmpId: yup.mixed().test("headEmpId", "Required",
+  //   function (value) {
+  //     if (!value?.value) {
+  //       return false
+  //     }
+  //     return true
+  //   }),
+  // managerId: yup.mixed().test("headEmpId", "Required",
+  //   function (value) {
+  //     if (!value?.value) {
+  //       return false
+  //     }
+  //     return true
+  //   }),
 })
 
 export const empJoiningFormInitialValues = {

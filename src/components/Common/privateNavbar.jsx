@@ -1,6 +1,6 @@
 import { RxDashboard } from 'react-icons/rx'
 import { BsFillPersonLinesFill, BsPostcard } from 'react-icons/bs'
-import { RiAdminFill, RiBankLine, RiTeamLine, RiTimerFlashLine } from 'react-icons/ri'
+import { RiAdminFill, RiBankLine, RiMailLine, RiTeamLine, RiTimerFlashLine } from 'react-icons/ri'
 import { SiMicrosoftteams, SiReaddotcv } from 'react-icons/si'
 import { MdNotificationsActive, MdOutlineCancelPresentation, MdOutlineLeaderboard, MdOutlineLibraryAdd, MdOutlinePostAdd } from 'react-icons/md'
 import { IoLogOutOutline, IoNewspaperOutline, IoSettingsOutline } from 'react-icons/io5'
@@ -22,6 +22,7 @@ import { GrCompliance } from 'react-icons/gr'
 import { CgNotes, CgProfile } from "react-icons/cg";
 import { TbFileInvoice, } from 'react-icons/tb'
 import { GoIssueClosed } from "react-icons/go";
+import { CiMail } from 'react-icons/ci'
 
 
 export default function PrivateNavbar() {
@@ -31,7 +32,10 @@ export default function PrivateNavbar() {
     const [myRole, setRole] = useState("")
     const [showLogout, setLogout] = useState(false)
     const [showTrashOption, setShowTrashOption] = useState(false)
-    // console.log("state", state?.myAppData?.details?.role == "Admin");
+    const authDetails = state?.myAppData?.authDetails
+    const permissions = authDetails?.permissions || []
+
+    console.log("state", permissions);
 
     useEffect(() => {
         setRole(state?.myAppData?.details?.role?.toLowerCase())
@@ -79,6 +83,7 @@ export default function PrivateNavbar() {
                 { name: "Reject Case", path: "/admin/reject-cases", icon: <MdOutlineCancelPresentation />, active: location.pathname.includes("/admin/reject-cases"), disable: false },
                 { name: "Closed Case", path: "/admin/closed-cases", icon: <GoIssueClosed />, active: location.pathname.includes("/admin/closed-cases"), disable: false },
                 { name: "Weekly Follow-Up", path: "/admin/case-weekly-followUp", icon: <RiTimerFlashLine />, active: location.pathname.includes("/admin/case-weekly-followUp"), disable: false },
+                { name: "Mail", path: "/admin/mail", icon: <CiMail />, active: location.pathname.includes("/admin/mail"), disable: false },
                 { name: "Setting", path: "/admin/account setting", icon: <IoSettingsOutline />, active: location.pathname == "/admin/account%20setting", disable: false },
                 {
                     name: "Trash", path: "#", icon: <FaRegTrashCan />, active: showTrashOption, disable: false, list: [
@@ -123,6 +128,7 @@ export default function PrivateNavbar() {
                 ...(["finance", "operation"]?.includes(empType) ? [{ name: "Case Payment", path: "/employee/case-payment", icon: <FaFileInvoice />, active: location.pathname.includes("/employee/case-payment"), disable: false }] : []),
                 ...(["finance"]?.includes(empType) ? [{ name: "Add Invoice", path: "/employee/add-invoice", icon: <MdOutlineLibraryAdd />, active: location.pathname.includes("/employee/add-invoice"), disable: false }] : []),
                 ...(["operation"]?.includes(empType) ? [{ name: "Notification", path: "/employee/notification", icon: <MdNotificationsActive />, active: location.pathname.includes("/employee/notification"), disable: false }] : []),
+                ...(permissions?.includes("send_emails") ? [{ name: "Mail", path: "/employee/mail", icon: <CiMail />, active: location.pathname.includes("/employee/mail"), disable: false }] : []),
                 { name: "Setting", path: "/employee/reset password", icon: <IoSettingsOutline />, active: location.pathname == "/employee/reset%20password", disable: false },
                 ...(["operation"]?.includes(empType) && userDetails?.designation?.toLowerCase() == "manager" ? [
                     {

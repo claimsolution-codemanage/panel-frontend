@@ -60,6 +60,11 @@ import AdminAllLeads from "../features/lead/pages/viewAll/AdminAllLeads";
 import AdminCasePaymentDetail from "../features/casePaymentDetails/pages/allCasePayment/admin/AdminCasePaymentDetail";
 import AdminAllCasePaymentDetail from "../features/casePaymentDetails/pages/allCasePayment/admin/AdminAllCasePayment";
 
+// mass mail module
+import AdminSendMail from "../pages/employee/mail/AdminSendMail";
+// mass mail module
+
+
 {/* for admin */ }
 export const adminRoutes = [
   <Route path='/admin/signin' element={<PanelTemplate><AdminSignIn /></PanelTemplate>} />,
@@ -124,5 +129,10 @@ export const adminRoutes = [
   <Route path='/admin/case-payment/view/:_id' element={<AdminTemplate><AdminCasePaymentDetail /></AdminTemplate>} />,
   <Route path='/admin/case-payment/add' element={<AdminTemplate><AdminCasePaymentDetail /></AdminTemplate>} />,
   // case payment details module
+
+
+  // mass mail module
+  <Route path='/admin/mail' element={<AdminTemplate><AdminSendMail /></AdminTemplate>} />,
+  // mass mail module
 
 ]

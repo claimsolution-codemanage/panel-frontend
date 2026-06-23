@@ -1,0 +1,144 @@
+/* EditEmployeeComp.css - Permission styles */
+
+/* Permission list container */
+.permission-list {
+    max-height: 300px;
+    overflow-y: auto;
+    padding-right: 4px;
+}
+
+/* Permission item */
+.permission-item {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0 !important;
+    transition: all 0.2s ease;
+    padding: 10px 14px;
+    border-radius: 8px !important;
+}
+
+.permission-item:hover {
+    background: #f1f5f9;
+    border-color: #cbd5e0 !important;
+    transform: translateX(4px);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+/* Permission badge */
+.permission-badge {
+    min-width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50% !important;
+    background: #4f46e5 !important;
+    font-size: 0.75rem;
+}
+
+/* Permission value badge */
+.permission-value-badge {
+    background: #eef2ff !important;
+    color: #4f46e5 !important;
+    font-size: 0.7rem;
+    font-family: 'Courier New', monospace;
+    padding: 4px 10px;
+    border-radius: 12px !important;
+}
+
+/* Remove permission button */
+.remove-permission-btn {
+    opacity: 0.5;
+    transition: opacity 0.2s ease;
+}
+
+.remove-permission-btn:hover {
+    opacity: 1;
+}
+
+/* Responsive adjustments for permissions */
+@media (max-width: 768px) {
+    .permission-item {
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+
+    .permission-item .d-flex {
+        width: 100%;
+        flex-wrap: wrap;
+    }
+
+    .permission-value-badge {
+        font-size: 0.6rem;
+        padding: 2px 8px;
+    }
+
+    .permission-item .btn-link {
+        align-self: flex-end;
+    }
+}
+
+/* Scrollbar for permission list */
+.permission-list::-webkit-scrollbar {
+    width: 4px;
+}
+
+.permission-list::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 10px;
+}
+
+.permission-list::-webkit-scrollbar-thumb {
+    background: #cbd5e0;
+    border-radius: 10px;
+}
+
+.permission-list::-webkit-scrollbar-thumb:hover {
+    background: #a0aec0;
+}
+
+/* Empty state styling */
+.permission-empty-state {
+    background: #f8fafc;
+    border: 2px dashed #e2e8f0;
+    border-radius: 8px;
+    padding: 2rem;
+}
+
+/* Card styling for permissions section */
+.permissions-card {
+    border-radius: 12px !important;
+    overflow: hidden;
+}
+
+.permissions-card .card-body {
+    padding: 1.5rem !important;
+}
+
+/* Select dropdown styling */
+.form-select:focus {
+    border-color: #4f46e5;
+    box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+}
+
+/* Button animations */
+.btn-primary {
+    transition: all 0.3s ease;
+}
+
+.btn-primary:hover:not(:disabled) {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 15px rgba(79, 70, 229, 0.3);
+}
+
+.btn-primary:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.btn-outline-danger {
+    transition: all 0.2s ease;
+}
+
+.btn-outline-danger:hover {
+    transform: translateY(-1px);
+}

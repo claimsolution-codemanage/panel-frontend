@@ -53,7 +53,7 @@ export function getFormateDate(date) {
 
 export function getFormateDMYDate(date) {
   if (!date) return ""
-  if (!date?.trim()) return ""
+  if (typeof date === "string" && !date?.trim()) return ""
 
   const fullYear = new Date(date).getFullYear()
   const month = new Date(date).getMonth() + 1
