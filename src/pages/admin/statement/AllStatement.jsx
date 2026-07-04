@@ -1,16 +1,19 @@
 import Statement from '../../../components/Reuse/Statement'
-import { adminAllStatementDownload, adminChangeStatementStatusApi, adminFindCaseByFileNoApi, adminStatements } from '../../../apis'
+import { adminFindCaseByFileNoApi } from '../../../apis'
+import { adminAllStatementDownloadApi, adminChangeStatementStatusApi, adminDeleteStatementApi, adminStatementsApi } from '../../../apis/statement/adminStatementApi'
 
 export default function AllStatement() {
   return (
     <div>
-        <Statement 
-        getStatementApi={adminStatements} 
-        excelDownloadApi={adminAllStatementDownload} 
-        fileDetailApi={adminFindCaseByFileNoApi} 
+      <Statement
+        getStatementApi={adminStatementsApi}
+        excelDownloadApi={adminAllStatementDownloadApi}
+        fileDetailApi={adminFindCaseByFileNoApi}
         statementStatusUpdateApi={adminChangeStatementStatusApi}
         paidAccess={true}
-        type={"admin"}/>
+        deleteStatementApi={adminDeleteStatementApi}
+        deleteStatementAccess={true}
+        type={"admin"} />
     </div>
   )
 }

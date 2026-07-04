@@ -6,8 +6,9 @@ import { useFormik } from 'formik';
 import * as Yup from 'yup'
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import { adminCreateOrUpdateStatment, empOpCreateOrUpdateStatment } from '../../apis';
 import { FiPlus, FiTrash2, FiSearch, FiSave } from 'react-icons/fi';
+import { empCreateOrUpdateStatmentApi } from '../../apis/statement/empStatementApi';
+import { adminCreateOrUpdateStatmentApi } from '../../apis/statement/adminStatementApi';
 
 export default function CreateOrUpdateStatmentModal({ show, hide, type, partnerId, empId, data, all, fileDetailApi, refetch }) {
   const [loading, setLoading] = useState(false)
@@ -84,9 +85,9 @@ export default function CreateOrUpdateStatmentModal({ show, hide, type, partnerI
 
         let res = {}
         if (type == "admin") {
-          res = await adminCreateOrUpdateStatment({ statements: payload })
+          res = await adminCreateOrUpdateStatmentApi({ statements: payload })
         } else {
-          res = await empOpCreateOrUpdateStatment({ statements: payload })
+          res = await empCreateOrUpdateStatmentApi({ statements: payload })
         }
 
         if (res?.status == 200) {

@@ -22,8 +22,10 @@ import StatementPdf, { StatementPdfPreviewModal } from "../Common/PdfConvert/Sta
 import { LuDownload } from "react-icons/lu";
 import html2pdf from "html2pdf.js";
 import { VscPreview } from "react-icons/vsc";
+import SetStatusOfProfile from "../Common/Modal/setStatusModal";
+import { AiOutlineDelete } from "react-icons/ai";
 
-export default function Statement({ getStatementApi, type, excelDownloadApi, fileDetailApi, paidAccess, statementStatusUpdateApi }) {
+export default function Statement({ getStatementApi, type, excelDownloadApi, fileDetailApi, paidAccess, statementStatusUpdateApi, deleteStatementApi, deleteStatementAccess }) {
   const state = useContext(AppContext)
   const searchRef = useRef()
   const [data, setData] = useState([])
@@ -40,6 +42,7 @@ export default function Statement({ getStatementApi, type, excelDownloadApi, fil
   const [statementOf, setStatementOf] = useState({})
   const [downloading, setDownloading] = useState(false)
   const [changeInvoiceStatus, setChangeInvoiceStatus] = useState({ status: false, _id: null })
+  const [showDeleteModel, setShowDeleteModel] = useState({ status: false, details: "" })
   const [downloadDetails, setDownloadDetails] = useState({ data: [], statementOf: {}, dateRange: { startDate: new Date(), endDate: new Date() }, download: false })
   const defaultStatementPreview = { data: [], statementOf: {}, dateRange: { startDate: new Date(), endDate: new Date() }, status: false }
   const [statementPreview, setStatementPreview] = useState(defaultStatementPreview)
@@ -201,6 +204,27 @@ export default function Statement({ getStatementApi, type, excelDownloadApi, fil
 
   }, [searchQuery, isSearch])
 
+  const handleDeleteStatement = async () => {
+    try {
+      if (showDeleteModel?.saving) return
+      setShowDeleteModel({ ...showDeleteModel, saving: true })
+      const res = await deleteStatementApi(showDeleteModel?.details?._id)
+      if (res?.data?.success) {
+        toast.success(res?.data?.message)
+        getAllStatement()
+      }
+    } catch (error) {
+      console.log("error", error);
+      if (error && error?.response?.data?.message) {
+        toast.error(error?.response?.data?.message)
+      } else {
+        toast.error("Failed to delete")
+      }
+    } finally {
+      setShowDeleteModel({ show: false, details: {} })
+    }
+  }
+
 
   return (<>
     {loading ? <Loader /> :
@@ -279,6 +303,8 @@ export default function Statement({ getStatementApi, type, excelDownloadApi, fil
                         {paidAccess && <span data-tooltip="Change status" style={{ cursor: "pointer", height: 30, width: 30, borderRadius: 30 }} className="bg-success text-white d-flex align-items-center justify-content-center" onClick={() => setChangeInvoiceStatus({ status: true, _id: item?._id })}><MdCurrencyRupee /></span>}
                         <span data-tooltip="Download" style={{ cursor: "pointer", height: 30, width: 30, borderRadius: 30 }} className="bg-primary text-white d-flex align-items-center justify-content-center" onClick={() => !downloadDetails?.download && handleDownloadPdf(item)}>{(downloadDetails?.data?.[0]?._id == item?._id && downloadDetails?.download) ? <span className="spinner-border spinner-border-sm" role="status" aria-hidden={true}></span> : <LuDownload />}</span>
                         <span data-tooltip="Preview" style={{ cursor: "pointer", height: 30, width: 30, borderRadius: 30 }} className="bg-primary text-white d-flex align-items-center justify-content-center" onClick={() => !statementPreview?.status && handleStatementPdf(item)}><VscPreview /></span>
+                        {deleteStatementAccess && <span data-tooltip="Delete" style={{ cursor: "pointer", height: 30, width: 30, borderRadius: 30 }} className="bg-danger text-white d-flex align-items-center justify-content-center" onClick={() => setShowDeleteModel({ show: true, details: { _id: item._id, currentStatus: item?.isActive, name: item?.partnerDetails?.profile?.consultantName || item?.empDetails?.fullName || "-", recovery: false } })}><AiOutlineDelete /></span>}
+
                       </div>
                     </th>
 
@@ -311,6 +337,8 @@ export default function Statement({ getStatementApi, type, excelDownloadApi, fil
 
           </div>
         </div>
+        {showDeleteModel?.show && <SetStatusOfProfile changeStatus={showDeleteModel} hide={() => setShowDeleteModel({ show: false, details: {} })} type="Statement" handleChanges={handleDeleteStatement} />}
+
         <CreateOrUpdateStatmentModal show={showStatement?.status} data={showStatement?.data} refetch={getAllStatement} hide={() => setShowStatement({ ...showStatement, status: !showStatement?.status })} type={type} all={showStatement?.create} fileDetailApi={fileDetailApi} />
         {changeInvoiceStatus?.status && <EditInvoiceStatusModal fetchDetails={getAllStatement} changeInvoiceStatus={changeInvoiceStatus} type="statement" setChangeInvoiceStatus={setChangeInvoiceStatus} handleInvoiceStatus={statementStatusUpdateApi} />}
         <StatementPdf data={downloadDetails?.data} statementOf={downloadDetails?.statementOf} dateRange={downloadDetails?.dateRange} />

@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react'
-import { financeEmployeeEditInvoice, financeEmployeeGetInvoiceById } from '../../../../apis'
 import { useParams } from 'react-router-dom'
 import EditInvoiceComp from '../../components/editInvoice/EditInvoiceComp'
+import { employeeEditInvoice, employeeGetInvoiceById } from '../../../../apis/invoice/empInvoiceApi'
 
 export default function EmployeeEditInvoice() {
   const param = useParams()
@@ -10,8 +10,8 @@ export default function EmployeeEditInvoice() {
     <div>
       <EditInvoiceComp
         id={param?._id}
-        getInvoice={financeEmployeeGetInvoiceById}
-        editInvoice={financeEmployeeEditInvoice}
+        getInvoice={employeeGetInvoiceById}
+        editInvoice={employeeEditInvoice}
         allInvoiceUrl={"/employee/all-invoices"}
       />
     </div>

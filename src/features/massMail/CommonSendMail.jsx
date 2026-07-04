@@ -237,6 +237,9 @@ const CommonSendMail = ({ attachementUpload, sendMailApi }) => {
         { value: 'advocate', label: 'Advocate', icon: '⚖️' },
     ];
 
+    console.log("formData", formData);
+
+
     return (
         <div className="mass-mail-wrapper p-3 p-md-4">
             <Row className="mb-4 align-items-center">

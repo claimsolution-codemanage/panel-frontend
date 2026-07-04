@@ -1,7 +1,6 @@
 import EmployeeTemplate from "../template/employeeTemplate"
 import PanelTemplate from "../template/PanelTemplate"
 import { Route } from "react-router-dom"
-import { empAllStatementDownload, empOpAllStatment } from "../apis"
 import { empFindCaseByFileNoApi } from "../apis/case/empCaseApi"
 
 
@@ -62,6 +61,7 @@ import EmpCasePaymentDetail from '../features/casePaymentDetails/pages/allCasePa
 
 // mail module
 import EmpSendMail from '../pages/employee/mail/EmpSendMail'
+import { empAllStatementDownloadApi, empAllStatmentApi } from "../apis/statement/empStatementApi"
 // mail module
 
 
@@ -106,9 +106,9 @@ export const employeeRoutes = [
   <Route path='/employee/branch-team' element={<EmployeeTemplate><EmpBranchTeam /></EmployeeTemplate>} />,
   <Route path='/employee/add-sathi-team' element={<EmployeeTemplate><EmployeeAddSathiAcc /></EmployeeTemplate>} />,
   <Route path='/employee/view-sathi/:_id' element={<EmployeeTemplate><EmpViewMySathi /></EmployeeTemplate>} />,
-  <Route path='/employee/statement/partner/:partnerId' element={<EmployeeTemplate><ViewAllStatement getStatementApi={empOpAllStatment} excelDownloadApi={empAllStatementDownload} fileDetailApi={empFindCaseByFileNoApi} type={"operation"} /></EmployeeTemplate>} />,
-  <Route path='/employee/statement/employee/:empId' element={<EmployeeTemplate><ViewAllStatement getStatementApi={empOpAllStatment} excelDownloadApi={empAllStatementDownload} fileDetailApi={empFindCaseByFileNoApi} type={"operation"} /></EmployeeTemplate>} />,
-  <Route path='/employee/statement/team/:empId' element={<EmployeeTemplate><ViewAllStatement getStatementApi={empOpAllStatment} excelDownloadApi={empAllStatementDownload} fileDetailApi={empFindCaseByFileNoApi} type={"sathi team"} /></EmployeeTemplate>} />,
+  <Route path='/employee/statement/partner/:partnerId' element={<EmployeeTemplate><ViewAllStatement getStatementApi={empAllStatmentApi} excelDownloadApi={empAllStatementDownloadApi} fileDetailApi={empFindCaseByFileNoApi} type={"operation"} /></EmployeeTemplate>} />,
+  <Route path='/employee/statement/employee/:empId' element={<EmployeeTemplate><ViewAllStatement getStatementApi={empAllStatmentApi} excelDownloadApi={empAllStatementDownloadApi} fileDetailApi={empFindCaseByFileNoApi} type={"operation"} /></EmployeeTemplate>} />,
+  <Route path='/employee/statement/team/:empId' element={<EmployeeTemplate><ViewAllStatement getStatementApi={empAllStatmentApi} excelDownloadApi={empAllStatementDownloadApi} fileDetailApi={empFindCaseByFileNoApi} type={"sathi team"} /></EmployeeTemplate>} />,
   <Route path='/employee/statement' element={<EmployeeTemplate><AllStatement /></EmployeeTemplate>} />,
   <Route path='/employee/notification' element={<EmployeeTemplate><EmpNotification /></EmployeeTemplate>} />,
 

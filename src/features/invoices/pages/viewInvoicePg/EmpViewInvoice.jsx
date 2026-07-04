@@ -1,8 +1,8 @@
 import { useParams } from "react-router-dom"
-import { financeEmpEditInvoiceNoApi, financeEmployeeGetInvoiceById } from "../../../../apis"
 import ViewInvoiceComp from "../../components/viewInvoice/ViewInvoiceComp"
 import { AppContext } from "../../../../App"
 import { useContext } from "react"
+import { employeeEditInvoiceNoApi, employeeGetInvoiceById } from "../../../../apis/invoice/empInvoiceApi"
 
 
 export default function EmployeeViewInvoice() {
@@ -12,9 +12,9 @@ export default function EmployeeViewInvoice() {
    return (<>
       <ViewInvoiceComp
          id={param?._id}
-         getInvoice={financeEmployeeGetInvoiceById}
+         getInvoice={employeeGetInvoiceById}
          editInvNo={["operation", "finance"]?.includes(empType?.toLowerCase())}
-         editInvNoApi={financeEmpEditInvoiceNoApi}
+         editInvNoApi={employeeEditInvoiceNoApi}
       />
    </>)
 }

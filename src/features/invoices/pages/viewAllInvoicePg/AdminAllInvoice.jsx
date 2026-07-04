@@ -1,24 +1,24 @@
 import React from 'react'
 import AllInvoiceComp from '../../components/allInvoice/AllInvoiceComp'
-import { adminViewAllInvoice,adminUnactiveInvoice,adminPaidInvoice, adminDownloadAllInvoiceApi } from '../../../../apis'
+import { adminDownloadAllInvoiceApi, adminPaidInvoiceApi, adminUnactiveInvoiceApi, adminViewAllInvoiceApi } from '../../../../apis/invoice/adminInvoiceApi'
 
 export default function AdminAllInvoice() {
   return (
     <AllInvoiceComp
-    viewAllInvoice={adminViewAllInvoice}
-    payInvoice={()=>{}}
-    viewInvoiceUrl={"/admin/view-invoice/"}
-    role={"admin"}
-    isEdit={true}
-    isDelete={true}
-    isPerDelete={false}
-    isTrash={false}
-    paidAccess={true}
-    handlePaid={adminPaidInvoice}
-    editInvoiceUrl={"/admin/edit-invoice/"}
-    unactiveInvoice={adminUnactiveInvoice}
-    downloadAccess={true}
-    downloadApi={adminDownloadAllInvoiceApi}
+      viewAllInvoice={adminViewAllInvoiceApi}
+      payInvoice={() => { }}
+      viewInvoiceUrl={"/admin/view-invoice/"}
+      role={"admin"}
+      isEdit={true}
+      isDelete={true}
+      isPerDelete={false}
+      isTrash={false}
+      paidAccess={true}
+      handlePaid={adminPaidInvoiceApi}
+      editInvoiceUrl={"/admin/edit-invoice/"}
+      unactiveInvoice={adminUnactiveInvoiceApi}
+      downloadAccess={true}
+      downloadApi={adminDownloadAllInvoiceApi}
     />
   )
 }

@@ -16,8 +16,8 @@ import { invoiceFormatDate } from '../../../../utils/helperFunction'
 import { IoArrowBackCircleOutline } from 'react-icons/io5'
 import { itemInvInitalValues, itemInvValidationSchema, receiverInvInitalValues, receiverValidationSchema, senderInvInitalValues, senderValidationSchema } from '../../../../utils/validation'
 
-export default function CreateInvoiceComp({ createInvoice, clientId, caseId, viewInvoiceUrl, isOffice,fileDetailApi }) {
-  const [searchParams,setSearchParams] =useSearchParams()
+export default function CreateInvoiceComp({ createInvoice, clientId, caseId, viewInvoiceUrl, isOffice, fileDetailApi, nextInvoiceNoApi }) {
+  const [searchParams, setSearchParams] = useSearchParams()
   const navigate = useNavigate()
   const toWords = new ToWords()
   const printRef = useRef()
@@ -27,7 +27,7 @@ export default function CreateInvoiceComp({ createInvoice, clientId, caseId, vie
   const [showReceiver, setShowReceiver] = useState(false)
   const [invoiceItems, setInvoiceItems] = useState({ status: false, data: [] })
   const [showEditItem, setShowEditItem] = useState({ status: false, data: {}, id: "" })
-  const [finalDetails, setFinalDetails] = useState({ subAmt: 0, gstAmt: 0, totalAmt: 0, billDate: new Date().getTime() })
+  const [finalDetails, setFinalDetails] = useState({ subAmt: 0, gstAmt: 0, totalAmt: 0, billDate: new Date().getTime(), invoiceNo: '' })
 
   const senderFormik = useFormik({
     initialValues: senderInvInitalValues,
@@ -97,16 +97,11 @@ export default function CreateInvoiceComp({ createInvoice, clientId, caseId, vie
     setInvoiceItems({ ...invoiceItems, data: filterItems })
   }
 
-  const handlePrint = useReactToPrint({
-    content: () => printRef.current,
-  });
 
   const handleSave = async () => {
-    // console.log("error:", senderFormik.initialErrors, receiverFormik.isValidating, invoiceItemsFormik.errors);
     if (isOffice || (clientId && caseId)) {
       try {
         if (Object.keys(senderFormik.errors).length > 0 || !senderFormik.isValid) {
-          // console.log("senderFormik.errors", senderFormik.errors);
           let errorFields = ""
           Object.keys(senderFormik.errors).map(error => errorFields += error + ", ")
           toast.error(`Please enter sender ${errorFields} required fields`)
@@ -135,7 +130,8 @@ export default function CreateInvoiceComp({ createInvoice, clientId, caseId, vie
           subAmt: finalDetails.subAmt,
           gstAmt: finalDetails.gstAmt,
           totalAmt: finalDetails.totalAmt,
-          billDate: finalDetails.billDate
+          billDate: finalDetails.billDate,
+          invoiceNo: finalDetails.invoiceNo
         }
         setLoading(true)
         let clientObjId = clientId || searchParams?.get("clientId")
@@ -167,8 +163,31 @@ export default function CreateInvoiceComp({ createInvoice, clientId, caseId, vie
     }
   };
 
-  console.log("isOffice",isOffice);
-  
+  const fetchNextInvoiceNo = async () => {
+    if (nextInvoiceNoApi) {
+      try {
+        const res = await nextInvoiceNoApi()
+        if (res?.data?.success && res.status == 200) {
+          setFinalDetails({ ...finalDetails, invoiceNo: `ACS-${res?.data?.data?.number || ""}` })
+        }
+      } catch (error) {
+        if (error && error?.response?.data?.message) {
+          toast.error(error?.response?.data?.message)
+        } else {
+          toast.error("Something went wrong")
+        }
+      }
+    }
+  }
+
+  useEffect(() => {
+    if (nextInvoiceNoApi) {
+      fetchNextInvoiceNo()
+    }
+  }, [nextInvoiceNoApi])
+
+
+
 
   return (
     <div>
@@ -192,10 +211,14 @@ export default function CreateInvoiceComp({ createInvoice, clientId, caseId, vie
               <div className="card-body">
                 <div className="invoice-title">
                   <div className="float-end font-size-15">
-                    <h4 className='fs-4'>Invoice #ACS</h4>
-                    <div className="mt-4">
+                    <div className="mt-2">
+                      <h5 className="font-size-15 mb-1">Invoice No</h5>
+                      <div className="form-group">
+                        <input type="text" name='invoiceNo' value={finalDetails?.invoiceNo} onChange={(e) => setFinalDetails((pre) => { return { ...pre, invoiceNo: e?.target?.value } })} className={`form-control`} id="invoiceNo" />
+                      </div>
+                    </div>
+                    <div className="mt-2">
                       <h5 className="font-size-15 mb-1">Invoice Date</h5>
-                      {/* <p>{finalDetails.billDate}</p> */}
                       <div className="form-group">
                         <input type="date" name='' value={invoiceFormatDate(finalDetails.billDate)} onChange={(e) => setFinalDetails((pre) => { return { ...pre, billDate: e?.target?.value && new Date(e?.target?.value).getTime() } })} className={`form-control`} id="billDate" />
                       </div>
@@ -393,7 +416,7 @@ export default function CreateInvoiceComp({ createInvoice, clientId, caseId, vie
       </div>
 
       {showSender && <SenderModal show={showSender} onHide={() => setShowSender(false)} formik={senderFormik} data={senderFormik.values} handleChange={(field, value) => senderFormik.setFieldValue(field, value)} onSave={senderFormik.handleSubmit} />}
-      {showReceiver && <ReceiverModal show={showReceiver} onHide={() => setShowReceiver(false)} formik={receiverFormik} data={receiverFormik.values} handleChange={(field, value) => receiverFormik.setFieldValue(field, value)} onSave={receiverFormik.handleSubmit} fileDetailApi={fileDetailApi}/>}
+      {showReceiver && <ReceiverModal show={showReceiver} onHide={() => setShowReceiver(false)} formik={receiverFormik} data={receiverFormik.values} handleChange={(field, value) => receiverFormik.setFieldValue(field, value)} onSave={receiverFormik.handleSubmit} fileDetailApi={fileDetailApi} />}
       {invoiceItems.status && <AddItem show={invoiceItems.status} onHide={() => setInvoiceItems({ ...invoiceItems, status: false })} formik={invoiceItemsFormik} data={invoiceItemsFormik.values} handleChange={(field, value) => invoiceItemsFormik.setFieldValue(field, value)} onSave={invoiceItemsFormik.handleSubmit} />}
       {showEditItem.status && <EditItem show={showEditItem.status} onHide={() => setShowEditItem({ ...showEditItem, status: false })} data={showEditItem.data} id={showEditItem.id} onSave={(updateItem, id) => handleEditSave(updateItem, id)} />}
 

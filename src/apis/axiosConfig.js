@@ -66,3 +66,12 @@ export const putRequest = async (url, data = {}, header = {}) => {
 export const deleteRequest = async (url, header = {}) => {
   return await axiosInstance.delete(url, header);
 };
+
+export const downloadRequest = async (url, data = {}, header = {}) => {
+  return await axiosInstance({
+    ...header,
+    ...data,
+    url,
+    responseType: 'blob',
+  })
+}

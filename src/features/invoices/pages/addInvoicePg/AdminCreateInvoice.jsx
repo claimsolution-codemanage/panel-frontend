@@ -1,16 +1,17 @@
 import React from 'react'
 import CreateInvoiceComp from '../../components/addInvoice/CreateInvoiceComp'
-import { adminCreateInvoice } from '../../../../apis'
 import { useNavigate, useParams } from 'react-router-dom'
+import { adminCreateInvoiceApi, adminNextInvoiceNumberApi } from '../../../../apis/invoice/adminInvoiceApi'
 
 export default function AdminCreateInvoice() {
-    const caseParam = useParams()
+  const caseParam = useParams()
   return (
-    <CreateInvoiceComp 
-    createInvoice={adminCreateInvoice} 
-    clientId={caseParam?.clientId}
-    caseId={caseParam?.caseId}
-    viewInvoiceUrl={"/admin/view-invoice/"}
+    <CreateInvoiceComp
+      createInvoice={adminCreateInvoiceApi}
+      clientId={caseParam?.clientId}
+      caseId={caseParam?.caseId}
+      viewInvoiceUrl={"/admin/view-invoice/"}
+      nextInvoiceNoApi={adminNextInvoiceNumberApi}
     />
   )
 }

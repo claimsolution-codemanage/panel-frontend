@@ -1,0 +1,265 @@
+/*=============== ERROR PAGE CSS ===============*/
+
+.error-page-wrapper {
+  min-height: 100vh;
+  background: radial-gradient(circle at 10% 20%, rgba(47, 93, 177, 0.07) 0%, transparent 40%),
+              radial-gradient(circle at 90% 80%, rgba(250, 155, 35, 0.07) 0%, transparent 40%),
+              #f8fafc;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Nunito', sans-serif;
+  overflow: hidden;
+  position: relative;
+  padding: 2rem 1rem;
+  z-index: 1;
+}
+
+/* Background floating animated blobs */
+.error-bg-blob {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  z-index: -1;
+  opacity: 0.6;
+  animation: float-blob 16s infinite alternate ease-in-out;
+}
+
+.error-bg-blob-1 {
+  width: 300px;
+  height: 300px;
+  background-color: rgba(47, 93, 177, 0.15); /* Brand Blue */
+  top: 15%;
+  left: 10%;
+}
+
+.error-bg-blob-2 {
+  width: 400px;
+  height: 400px;
+  background-color: rgba(250, 155, 35, 0.12); /* Brand Orange */
+  bottom: 10%;
+  right: 10%;
+  animation-delay: -4s;
+}
+
+@keyframes float-blob {
+  0% {
+    transform: translate(0px, 0px) scale(1);
+  }
+  50% {
+    transform: translate(40px, -60px) scale(1.1);
+  }
+  100% {
+    transform: translate(-20px, 20px) scale(0.95);
+  }
+}
+
+/* Glassmorphism Card Container */
+.error-card {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  border-radius: 28px;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.08);
+  padding: 3rem;
+  z-index: 10;
+  max-width: 960px;
+  width: 100%;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.error-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 35px 60px -15px rgba(47, 93, 177, 0.12);
+}
+
+/* Branding logo area */
+.error-logo-container {
+  margin-bottom: 2.5rem;
+  text-align: left;
+}
+
+.error-logo {
+  height: 45px;
+  object-fit: contain;
+  transition: transform 0.3s ease;
+}
+
+.error-logo:hover {
+  transform: scale(1.05);
+}
+
+/* Typography styles */
+.error-title-huge {
+  font-size: 8rem;
+  font-weight: 900;
+  line-height: 1;
+  background: linear-gradient(135deg, #182f59 0%, #fa9b23 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 0.5rem;
+  letter-spacing: -3px;
+  animation: pulse-title 4s infinite alternate ease-in-out;
+}
+
+@keyframes pulse-title {
+  0% {
+    filter: drop-shadow(0 2px 4px rgba(24, 47, 89, 0.1));
+  }
+  100% {
+    filter: drop-shadow(0 6px 15px rgba(250, 155, 35, 0.2));
+  }
+}
+
+.error-subtitle {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: #182f59;
+  margin-bottom: 1rem;
+}
+
+.error-description {
+  font-size: 1.1rem;
+  color: #64748b;
+  line-height: 1.6;
+  margin-bottom: 2.25rem;
+}
+
+/* Graphic styles */
+.floating-illustration {
+  animation: float-illustration 4s infinite ease-in-out;
+  max-width: 90%;
+  height: auto;
+  display: block;
+  margin: 0 auto;
+}
+
+@keyframes float-illustration {
+  0%, 100% {
+    transform: translateY(0) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-12px) rotate(1deg);
+  }
+}
+
+/* Action button designs */
+.btn-primary-brand {
+  background-color: #182f59;
+  border: 1px solid #182f59;
+  color: #ffffff !important;
+  font-weight: 600;
+  padding: 0.85rem 1.85rem;
+  border-radius: 12px;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+  box-shadow: 0 4px 14px rgba(24, 47, 89, 0.25);
+}
+
+.btn-primary-brand:hover {
+  background-color: #fa9b23;
+  border-color: #fa9b23;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(250, 155, 35, 0.35);
+}
+
+.btn-secondary-brand {
+  background-color: transparent;
+  border: 2px solid #182f59;
+  color: #182f59 !important;
+  font-weight: 600;
+  padding: 0.85rem 1.85rem;
+  border-radius: 12px;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+.btn-secondary-brand:hover {
+  background-color: rgba(24, 47, 89, 0.05);
+  color: #182f59 !important;
+  border-color: #182f59;
+  transform: translateY(-2px);
+}
+
+.btn-link-brand {
+  color: #64748b;
+  font-weight: 500;
+  text-decoration: none;
+  transition: color 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.btn-link-brand:hover {
+  color: #fa9b23;
+}
+
+.actions-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+/* Responsiveness tweaks */
+@media (max-width: 991.98px) {
+  .error-card {
+    padding: 2.25rem;
+  }
+  
+  .error-title-huge {
+    font-size: 6rem;
+    text-align: center;
+  }
+  
+  .error-subtitle {
+    font-size: 1.5rem;
+    text-align: center;
+  }
+  
+  .error-description {
+    text-align: center;
+  }
+  
+  .actions-container {
+    justify-content: center;
+  }
+  
+  .error-logo-container {
+    text-align: center;
+  }
+  
+  .floating-illustration {
+    max-width: 60%;
+    margin-bottom: 2rem;
+  }
+}
+
+@media (max-width: 575.98px) {
+  .error-card {
+    padding: 1.5rem;
+  }
+  
+  .error-title-huge {
+    font-size: 4.5rem;
+  }
+  
+  .actions-container {
+    flex-direction: column;
+    width: 100%;
+  }
+  
+  .btn-primary-brand, .btn-secondary-brand {
+    justify-content: center;
+    width: 100%;
+  }
+  
+  .floating-illustration {
+    max-width: 80%;
+  }
+}

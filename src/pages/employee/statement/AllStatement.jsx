@@ -1,8 +1,8 @@
 import React, { useContext } from 'react'
 import Statement from '../../../components/Reuse/Statement'
-import { empAllStatementDownload, empOperationStatementUpdateApi, empOpStatments } from '../../../apis'
 import { AppContext } from '../../../App'
 import { empFindCaseByFileNoApi } from '../../../apis/case/empCaseApi'
+import { empAllStatementDownloadApi, empDeleteStatementApi, empStatementApi, empStatementUpdateApi } from '../../../apis/statement/empStatementApi'
 
 export default function AllStatement() {
     const state = useContext(AppContext)
@@ -11,12 +11,15 @@ export default function AllStatement() {
     return (
         <div>
             <Statement
-                getStatementApi={empOpStatments}
-                excelDownloadApi={empAllStatementDownload}
+                getStatementApi={empStatementApi}
+                excelDownloadApi={empAllStatementDownloadApi}
                 fileDetailApi={empFindCaseByFileNoApi}
-                statementStatusUpdateApi={empOperationStatementUpdateApi}
+                statementStatusUpdateApi={empStatementUpdateApi}
                 paidAccess={empType?.toLowerCase() === "operation"}
-                type={"operation"} />
+                type={"operation"}
+                deleteStatementApi={empDeleteStatementApi}
+                deleteStatementAccess={empType?.toLowerCase() === "operation"}
+            />
         </div>
     )
 }

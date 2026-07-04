@@ -1,7 +1,7 @@
 import AdminTemplate from "../template/adminTemplate"
 import PanelTemplate from "../template/PanelTemplate"
 import { Route } from 'react-router-dom'
-import { adminAllStatementDownload, adminAllStatment, adminFindCaseByFileNoApi, adminStatements } from "../apis";
+import { adminFindCaseByFileNoApi } from "../apis";
 
 
 // for admin routes
@@ -62,6 +62,7 @@ import AdminAllCasePaymentDetail from "../features/casePaymentDetails/pages/allC
 
 // mass mail module
 import AdminSendMail from "../pages/employee/mail/AdminSendMail";
+import { adminAllStatementDownloadApi, adminAllStatmentApi } from "../apis/statement/adminStatementApi";
 // mass mail module
 
 
@@ -95,8 +96,8 @@ export const adminRoutes = [
   <Route path='/admin/all-trash-doc' element={<AdminTemplate><AdminCaseDocTrash /></AdminTemplate>} />,
   <Route path='/admin/all-trash-employee' element={<AdminTemplate><AdminEmployeeTrash /></AdminTemplate>} />,
   <Route path='/admin/view-sathi/:_id' element={<AdminTemplate><AdminViewMySathi /></AdminTemplate>} />,
-  <Route path='/admin/statement/partner/:partnerId' element={<AdminTemplate><ViewAllStatement getStatementApi={adminAllStatment} excelDownloadApi={adminAllStatementDownload} fileDetailApi={adminFindCaseByFileNoApi} type={"admin"} /></AdminTemplate>} />,
-  <Route path='/admin/statement/employee/:empId' element={<AdminTemplate><ViewAllStatement getStatementApi={adminAllStatment} excelDownloadApi={adminAllStatementDownload} fileDetailApi={adminFindCaseByFileNoApi} type={"admin"} /></AdminTemplate>} />,
+  <Route path='/admin/statement/partner/:partnerId' element={<AdminTemplate><ViewAllStatement getStatementApi={adminAllStatmentApi} excelDownloadApi={adminAllStatementDownloadApi} fileDetailApi={adminFindCaseByFileNoApi} type={"admin"} /></AdminTemplate>} />,
+  <Route path='/admin/statement/employee/:empId' element={<AdminTemplate><ViewAllStatement getStatementApi={adminAllStatmentApi} excelDownloadApi={adminAllStatementDownloadApi} fileDetailApi={adminFindCaseByFileNoApi} type={"admin"} /></AdminTemplate>} />,
   <Route path='/admin/statement' element={<AdminTemplate><AllStatement /></AdminTemplate>} />,
   <Route path='/admin/notification' element={<AdminTemplate><AdminNotification /></AdminTemplate>} />,
 
