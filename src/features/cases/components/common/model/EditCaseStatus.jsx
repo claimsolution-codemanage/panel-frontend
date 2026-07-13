@@ -6,16 +6,27 @@ import { adminChangeCaseStatus } from '../../../../../apis';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 import TextEditor from '../../../../../components/TextEditor';
+import { formatDateToISO } from '../../../../../utils/helperFunction';
 
-export default function EditCaseStatusModal({ changeStatus, setChangeStatus, handleCaseStatus, role,getCaseById }) {
-    const [data, setData] = useState({ 
-        caseId: changeStatus?.details?.caseId, 
-        processId: changeStatus?.details?.processId, 
-        status: changeStatus?.details?.caseStatus, 
-        remark: changeStatus?.details?.caseRemark})
+const minDate = formatDateToISO(new Date(new Date().setDate(new Date().getDate() + 1)))
+
+const addOneMonthToISO = (date = new Date()) => {
+    const d = new Date(date);
+    d.setMonth(d.getMonth() + 12);
+    return d.toISOString().split("T")[0];
+};
+
+
+export default function EditCaseStatusModal({ changeStatus, setChangeStatus, handleCaseStatus, role, getCaseById }) {
+    const [data, setData] = useState({
+        caseId: changeStatus?.details?.caseId,
+        processId: changeStatus?.details?.processId,
+        status: changeStatus?.details?.caseStatus,
+        remark: changeStatus?.details?.caseRemark,
+        nextFollowUp: changeStatus?.details?.nextFollowUp ? formatDateToISO(changeStatus?.details?.nextFollowUp) : "",
+        otherDetails: changeStatus?.details?.otherDetails ? changeStatus?.details?.otherDetails : {}
+    })
     const [loading, setLoading] = useState(false)
-    const navigate = useNavigate()
-    // console.log("edit case status", changeStatus.details);
 
     const hangleOnchange = (e) => {
         const { name, value } = e.target;
@@ -26,19 +37,16 @@ export default function EditCaseStatusModal({ changeStatus, setChangeStatus, han
         e.preventDefault()
         setLoading(true)
         try {
-            let payload ={
+            let payload = {
                 ...data,
-
-                isCurrentStatus:  changeStatus?.details?.isCurrentStatus ? changeStatus?.details?.isCurrentStatus : false 
+                isCurrentStatus: changeStatus?.details?.isCurrentStatus ? changeStatus?.details?.isCurrentStatus : false
             }
             const res = await handleCaseStatus(payload)
-            // console.log("/admin/dashboard",res);
             if (res?.data?.success) {
                 setChangeStatus({ status: false, details: "" })
-                // navigate(path)
                 toast.success(res?.data?.message)
                 setLoading(false)
-                if(getCaseById){
+                if (getCaseById) {
                     getCaseById()
                 }
             }
@@ -51,7 +59,6 @@ export default function EditCaseStatusModal({ changeStatus, setChangeStatus, han
                 toast.error("Something went wrong")
 
             }
-            // console.log("adminChangeCaseStatus error", error);
             setLoading(false)
         }
     }
@@ -67,13 +74,6 @@ export default function EditCaseStatusModal({ changeStatus, setChangeStatus, han
                     <div className="border-3 border-primary border-bottom mb-5">
                         <h6 className="text-primary text-center fs-3">Edit Case Status</h6>
                     </div>
-                    {/* <div className='text-center'>
-                    <p className='badge bg-primary fs-6'>Current Status: {changeStatus?.details?.currentStatus}</p>
-                    </div> */}
-                    {/* <div className='d-flex gap-3 h5 justify-content-center'>
-                    <p>Name: {changeStatus?.details?.name}</p>
-                    <p>File No.: {changeStatus?.details?.fileNo}</p>
-                    </div> */}
 
                     <div className="mb-3">
                         <select className="form-select color-4" name="status" value={data.status} onChange={hangleOnchange} aria-label="Default select example">
@@ -81,9 +81,64 @@ export default function EditCaseStatusModal({ changeStatus, setChangeStatus, han
                             {caseStatus?.map(item => <option className='' key={item} value={item}>{item}</option>)}
                         </select>
                     </div>
-                    <div className="mb-3 col-12">
-                        {/* <label for="mobileNo." className="form-label">About you</label> */}
-                            <TextEditor value={data?.remark || ""} handleOnChange={(val) => setData({ ...data, remark: val })} placeholder={"Case Remark..."} />
+                    <div className='row row-cols-1 w-100'>
+                        <div className="mb-1">
+                            <label htmlFor={"nextFollowUp"} className='col-form-label'>Next follow-up date</label>
+                            <input
+                                type={"date"}
+                                name={"nextFollowUp"}
+                                placeholder={"Next follow-up date"}
+                                min={minDate}
+                                max={addOneMonthToISO(new Date())}
+                                value={data?.nextFollowUp ? formatDateToISO(data?.nextFollowUp) : ''}
+                                onChange={hangleOnchange}
+                                className="form-control" />
+                        </div>
+                    </div>
+                    {data?.status == "Case file in court" && <div className='row row-cols-1 row-cols-lg-2 w-100'>
+                        <div className="mb-1">
+                            <label htmlFor={"caseNumber"} className='col-form-label'>Case Number</label>
+                            <input
+                                type={"text"}
+                                name={"caseNumber"}
+                                placeholder={"Case Number"}
+                                value={data?.otherDetails?.caseNumber || ""}
+                                onChange={(e) => setData({ ...data, otherDetails: { ...data.otherDetails, caseNumber: e.target.value } })}
+                                className="form-control" />
+                        </div>
+                        <div className="mb-1">
+                            <label htmlFor={"courtName"} className='col-form-label'>Court/Forum Name</label>
+                            <input
+                                type={"text"}
+                                name={"courtName"}
+                                placeholder={"Court/Forum Name"}
+                                value={data?.otherDetails?.courtName || ""}
+                                onChange={(e) => setData({ ...data, otherDetails: { ...data.otherDetails, courtName: e.target.value } })}
+                                className="form-control" />
+                        </div>
+                        <div className="mb-1">
+                            <label htmlFor={"courtAddress"} className='col-form-label'>Court/Forum Address</label>
+                            <input
+                                type={"text"}
+                                name={"courtAddress"}
+                                placeholder={"Court/Forum Address"}
+                                value={data?.otherDetails?.courtAddress || ""}
+                                onChange={(e) => setData({ ...data, otherDetails: { ...data.otherDetails, courtAddress: e.target.value } })}
+                                className="form-control" />
+                        </div>
+                        <div className="mb-1">
+                            <label htmlFor={"nextHearingDate"} className='col-form-label'>Next Hearing Date</label>
+                            <input
+                                type={"date"}
+                                name={"nextHearingDate"}
+                                placeholder={"Next Hearing Date"}
+                                value={data?.otherDetails?.nextHearingDate || ""}
+                                onChange={(e) => setData({ ...data, otherDetails: { ...data.otherDetails, nextHearingDate: e.target.value } })}
+                                className="form-control" />
+                        </div>
+                    </div>}
+                    <div className="mb-4 col-12">
+                        <TextEditor value={data?.remark || ""} handleOnChange={(val) => setData({ ...data, remark: val })} placeholder={"Case Remark..."} />
                     </div>
                 </div>
 

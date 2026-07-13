@@ -23,8 +23,6 @@ export default function EmployeeViewCase() {
       viewClient={"/employee/client details/"}
       viewOtherClientCasePath={"/employee/view case/"}
       isViewOtherClientCase={empType?.toLowerCase() === "operation" || empType?.toLowerCase() === "branch" || empType?.toLowerCase() === "finance"}
-
-      //   editCaseProcess={adminEditCaseProcessById}
       addCaseProcess={empUpdateCaseStatusApi}
       addReference={empAddCaseReferenceApi}
       isAddRefence={empType?.toLowerCase() === "operation"}

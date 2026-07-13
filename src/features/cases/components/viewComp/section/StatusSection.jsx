@@ -1,259 +1,281 @@
 import React, { useContext, useState } from 'react'
 import { AppContext } from '../../../../../App'
 import { CiEdit } from 'react-icons/ci'
-import { FaEye, FaPlus, FaCheckCircle, FaClock, FaTimesCircle, FaUserCheck, FaCalendarAlt, FaComment, FaArrowRight, FaEyeSlash } from 'react-icons/fa'
+import { FaPlus, FaCheckCircle, FaClock, FaTimesCircle, FaUserCheck, FaCalendarAlt, FaComment, FaArrowRight, FaEye, FaChevronDown, FaChevronUp } from 'react-icons/fa'
 import { getFormateDMYDate } from '../../../../../utils/helperFunction'
 import ChangeStatusModal from '../../common/model/changeStatusModal'
 import EditCaseStatusModal from '../../common/model/EditCaseStatus'
-import { Modal, Button, Badge } from 'react-bootstrap'
+import { Modal, Button } from 'react-bootstrap'
 
 export default function StatusSection({ isAddCaseProcess, id, role, details, getCaseById, processSteps, addCaseProcess, attachementUpload, editCaseProcess }) {
     const state = useContext(AppContext)
     const [changeStatus, setChangeStatus] = useState({ status: false, details: "" })
     const [showEditCaseModal, setShowEditCaseModal] = useState({ status: false, details: {} })
     const [viewRemarkModal, setViewRemarkModal] = useState({ viewStatus: false, remark: "", status: "", date: "" })
-    const [showProcess, setShowProcess] = useState(false)
+    const [showProcess, setShowProcess] = useState(true)
+    const [expandedCardId, setExpandedCardId] = useState(null)
 
-    const getTruncatedText = (htmlText) => {
-        if (!htmlText) return "";
-        const doc = new DOMParser().parseFromString(htmlText, 'text/html');
-        let text = doc.body.textContent || "";
-        return text.length > 80 ? text.substring(0, 80) + "..." : text;
+    const toggleCardExpand = (id) => {
+        setExpandedCardId(prev => prev === id ? null : id)
+    }
+
+    const stripHtmlTags = (html) => {
+        if (!html) return "";
+        const doc = new DOMParser().parseFromString(html, 'text/html');
+        return doc.body.textContent?.substring(0, 100) || "";
     }
 
     const getStatusConfig = (status) => {
         const statusMap = {
-            'pending': { icon: <FaClock />, color: 'warning', bg: '#fff3cd', text: 'Pending', borderColor: '#ffc107' },
-            'processing': { icon: <FaArrowRight />, color: 'info', bg: '#d1ecf1', text: 'In Progress', borderColor: '#0dcaf0' },
-            'resolve': { icon: <FaCheckCircle />, color: 'success', bg: '#d4edda', text: 'Resolved', borderColor: '#28a745' },
-            'reject': { icon: <FaTimesCircle />, color: 'danger', bg: '#f8d7da', text: 'Rejected', borderColor: '#dc3545' },
-            'closed': { icon: <FaCheckCircle />, color: 'success', bg: '#d4edda', text: 'Closed', borderColor: '#28a745' },
-            'accept': { icon: <FaCheckCircle />, color: 'success', bg: '#d4edda', text: 'Accepted', borderColor: '#28a745' },
-            'review': { icon: <FaEye />, color: 'primary', bg: '#cfe2ff', text: 'Under Review', borderColor: '#0d6efd' }
+            'pending': {
+                icon: <FaClock />,
+                color: '#ffc107',
+                bg: '#fff3cd',
+                text: 'Pending',
+                borderColor: '#ffc107',
+                lightBg: '#fff8e1'
+            },
+            'processing': {
+                icon: <FaArrowRight />,
+                color: '#0dcaf0',
+                bg: '#d1ecf1',
+                text: 'In Progress',
+                borderColor: '#0dcaf0',
+                lightBg: '#e1f5fe'
+            },
+            'resolve': {
+                icon: <FaCheckCircle />,
+                color: '#28a745',
+                bg: '#d4edda',
+                text: 'Resolved',
+                borderColor: '#28a745',
+                lightBg: '#e8f5e9'
+            },
+            'reject': {
+                icon: <FaTimesCircle />,
+                color: '#dc3545',
+                bg: '#f8d7da',
+                text: 'Rejected',
+                borderColor: '#dc3545',
+                lightBg: '#fce4ec'
+            },
+            'closed': {
+                icon: <FaCheckCircle />,
+                color: '#28a745',
+                bg: '#d4edda',
+                text: 'Closed',
+                borderColor: '#28a745',
+                lightBg: '#e8f5e9'
+            },
+            'accept': {
+                icon: <FaCheckCircle />,
+                color: '#28a745',
+                bg: '#d4edda',
+                text: 'Accepted',
+                borderColor: '#28a745',
+                lightBg: '#e8f5e9'
+            },
+            'review': {
+                icon: <FaEye />,
+                color: '#0d6efd',
+                bg: '#cfe2ff',
+                text: 'Under Review',
+                borderColor: '#0d6efd',
+                lightBg: '#e8eaf6'
+            }
         }
-        return statusMap[status?.toLowerCase()] || { icon: <FaClock />, color: 'secondary', bg: '#e9ecef', text: status, borderColor: '#6c757d' }
+        return statusMap[status?.toLowerCase()] || {
+            icon: <FaClock />,
+            color: '#6c757d',
+            bg: '#e9ecef',
+            text: status,
+            borderColor: '#6c757d',
+            lightBg: '#f5f5f5'
+        }
     }
 
     return (
         <>
-            <div className="status-section-wrapper mt-4 p-4 rounded-2">
-                <div className="status-container">
-                    {/* Header with Show/Hide Button */}
-                    <div className="status-header">
-                        <div className="status-header-content">
-                            <div className="status-title-section">
-                                <div className="status-icon-wrapper">
-                                    <FaCheckCircle size={20} />
-                                </div>
-                                <div>
-                                    <h5 className=" mb-0 text-primary">Case Process Timeline</h5>
-                                    <p className="status-subtitle mb-0">Track the progress of your case</p>
-                                </div>
-                            </div>
-                            <div className="status-actions">
-                                {isAddCaseProcess && (
-                                    <button
-                                        className="btn-add-status"
-                                        onClick={() => setChangeStatus({ status: true, details: { ...details } })}
-                                    >
-                                        <FaPlus className="me-2" size={12} />
-                                        Add Status
-                                    </button>
-                                )}
-                                <button
-                                    className="btn-toggle-status"
-                                    onClick={() => setShowProcess(!showProcess)}
-                                >
-                                    {showProcess ? <FaEyeSlash size={14} /> : <FaEye size={14} />}
-                                    <span className="ms-2">{showProcess ? 'Hide' : 'Show'} Process</span>
-                                </button>
-                            </div>
+            <div className="status-timeline-wrapper mt-4">
+                {/* Header */}
+                <div className="timeline-header">
+                    <div className="header-left">
+                        <div className="header-icon-wrapper">
+                            <FaCheckCircle className="header-icon" />
+                        </div>
+                        <div>
+                            <h4 className="header-title">Case Progress Timeline</h4>
+                            <p className="header-subtitle">Visual journey of your case status updates</p>
                         </div>
                     </div>
+                    <div className="header-actions">
+                        {isAddCaseProcess && (
+                            <button
+                                className="btn-add-status"
+                                onClick={() => setChangeStatus({ status: true, details: { ...details } })}
+                            >
+                                <FaPlus className="me-2" />
+                                Add Status
+                            </button>
+                        )}
+                        <button
+                            className="btn-toggle-view"
+                            onClick={() => setShowProcess(!showProcess)}
+                        >
+                            {showProcess ? <FaChevronUp /> : <FaChevronDown />}
+                            <span className="ms-2">{showProcess ? 'Collapse' : 'Expand'} Timeline</span>
+                        </button>
+                    </div>
+                </div>
 
-                    {/* Process Content */}
-                    {showProcess && (
-                        <div className="status-content">
-                            {processSteps?.length > 0 ? (
-                                <div className="process-container">
-                                    {/* Desktop View */}
-                                    <div className="process-desktop">
-                                        <div className="process-table-wrapper">
-                                            <table className="process-table">
-                                                <thead>
-                                                    <tr>
-                                                        <th width="80">S.No</th>
-                                                        {role?.toLowerCase() == "admin" && <th width="80">Edit</th>}
-                                                        <th width="120">Date</th>
-                                                        <th width="150">Status</th>
-                                                        {role?.toLowerCase() == "admin" && <th width="150">Marked By</th>}
-                                                        <th>Remark</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    {processSteps?.map((item, ind) => {
-                                                        const statusConfig = getStatusConfig(item?.status)
+                {/* Timeline Content */}
+                {showProcess && (
+                    <div className="timeline-content">
+                        {processSteps?.length > 0 ? (
+                            <div className="timeline-container">
+                                <div className="timeline">
+                                    {processSteps?.map((item, index) => {
+                                        const statusConfig = getStatusConfig(item?.status)
+                                        const isLast = index === processSteps.length - 1
+                                        const isExpanded = expandedCardId === item._id
+                                        const isFirst = index === 0
 
-                                                        return (
-                                                            <tr key={item._id}>
-                                                                <td className="sno-cell">
-                                                                    <span className="sno-badge">{ind + 1}</span>
-                                                                </td>
-                                                                {role?.toLowerCase() == "admin" && (
-                                                                    <td>
-                                                                        <button
-                                                                            className="edit-btn"
-                                                                            onClick={() => setShowEditCaseModal({
-                                                                                status: true,
-                                                                                details: {
-                                                                                    caseId: id,
-                                                                                    processId: item?._id,
-                                                                                    caseStatus: item?.status,
-                                                                                    caseRemark: item?.remark,
-                                                                                    isCurrentStatus: details?.processSteps?.length === ind + 1
-                                                                                }
-                                                                            })}
-                                                                            title="Edit status"
-                                                                        >
-                                                                            <CiEdit size={16} />
-                                                                        </button>
-                                                                    </td>
-                                                                )}
-                                                                <td>
-                                                                    <div className="date-cell">
-                                                                        {/* <FaCalendarAlt size={12} className="me-2 text-muted" /> */}
-                                                                        <span>{item?.createdAt && getFormateDMYDate(item?.createdAt)}</span>
-                                                                    </div>
-                                                                </td>
-                                                                <td>
-                                                                    <div
-                                                                        className="status-badge-inline text-center d-flex justify-content-center align-items-center"
-                                                                        style={{
-                                                                            backgroundColor: statusConfig.bg,
-                                                                            borderColor: statusConfig.borderColor,
-                                                                            color: statusConfig.borderColor
-                                                                        }}
-                                                                    >
-                                                                        {/* <span className="status-icon">{statusConfig.icon}</span> */}
-                                                                        <span className="status-text text-center">{statusConfig.text}</span>
-                                                                    </div>
-                                                                </td>
-                                                                {role?.toLowerCase() == "admin" && (
-                                                                    <td>
-                                                                        <div className="author-cell">
-                                                                            <FaUserCheck size={12} className="me-2 text-muted" />
-                                                                            <span className="text-capitalize">{item?.consultant ? item?.consultant : "System"}</span>
-                                                                        </div>
-                                                                    </td>
-                                                                )}
-                                                                <td>
-                                                                    {item?.remark && (
-                                                                        <div className="remark-cell">
-                                                                            <FaComment size={12} className="remark-icon me-2" />
-                                                                            <span className="remark-text">{getTruncatedText(item?.remark)}</span>
-                                                                            {item?.remark?.length > 80 && (
-                                                                                <button
-                                                                                    className="view-remark-btn-inline"
-                                                                                    onClick={() => setViewRemarkModal({
-                                                                                        viewStatus: true,
-                                                                                        remark: item?.remark,
-                                                                                        status: item?.status,
-                                                                                        date: item?.createdAt
-                                                                                    })}
-                                                                                >
-                                                                                    <FaEye size={12} /> View
-                                                                                </button>
-                                                                            )}
-                                                                        </div>
-                                                                    )}
-                                                                </td>
-                                                            </tr>
-                                                        )
-                                                    })}
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    </div>
+                                        return (
+                                            <div key={item._id} className={`timeline-item ${isLast ? 'last-item' : ''}`}>
+                                                {/* Timeline Line */}
+                                                <div className="timeline-line">
+                                                    <div
+                                                        className={`timeline-dot ${isFirst ? 'first-dot' : ''}`}
+                                                        style={{
+                                                            background: isFirst ? '#28a745' : statusConfig.color,
+                                                            boxShadow: isFirst ? '0 0 0 4px #d4edda' : `0 0 0 4px ${statusConfig.lightBg}`
+                                                        }}
+                                                    >
+                                                        {isFirst && <FaCheckCircle className="dot-icon" />}
+                                                    </div>
+                                                    {!isLast && (
+                                                        <div
+                                                            className="timeline-connector"
+                                                            style={{
+                                                                background: `linear-gradient(to bottom, ${isFirst ? '#28a745' : statusConfig.color}, ${getStatusConfig(processSteps[index + 1]?.status)?.color || '#e9ecef'})`
+                                                            }}
+                                                        />
+                                                    )}
+                                                </div>
 
-                                    {/* Mobile View */}
-                                    <div className="process-mobile">
-                                        {processSteps?.map((item, ind) => {
-                                            const statusConfig = getStatusConfig(item?.status)
-
-                                            return (
-                                                <div key={item._id} className={`process-card`}   >
-                                                    <div className="process-card-header">
-                                                        <div className="card-header-left">
-                                                            <span className="step-number-mobile">{ind + 1}</span>
-                                                        </div>
-                                                        {role?.toLowerCase() == "admin" && (
-                                                            <button
-                                                                className="edit-btn-mobile"
-                                                                onClick={() => setShowEditCaseModal({
-                                                                    status: true,
-                                                                    details: {
-                                                                        caseId: id,
-                                                                        processId: item?._id,
-                                                                        caseStatus: item?.status,
-                                                                        caseRemark: item?.remark,
-                                                                        isCurrentStatus: details?.processSteps?.length === ind + 1
-                                                                    }
-                                                                })}
+                                                {/* Timeline Card */}
+                                                <div className={`timeline-card ${isFirst ? 'first-card' : ''}`}>
+                                                    <div className="card-header">
+                                                        <div className="header-left-content">
+                                                            <div className="step-number">{index + 1}</div>
+                                                            <div
+                                                                className="status-badge"
+                                                                style={{
+                                                                    backgroundColor: statusConfig.lightBg,
+                                                                    borderColor: statusConfig.color,
+                                                                    color: statusConfig.color
+                                                                }}
                                                             >
-                                                                <CiEdit size={16} />
+                                                                <span>{statusConfig.text}</span>
+                                                            </div>
+                                                            {isFirst && (
+                                                                <span className="latest-badge">Latest</span>
+                                                            )}
+                                                        </div>
+                                                        <div className="header-right-content">
+                                                            <span className="date-display">
+                                                                <FaCalendarAlt className="me-1" />
+                                                                {item?.createdAt && getFormateDMYDate(item?.createdAt)}
+                                                            </span>
+                                                            {role?.toLowerCase() === "admin" && (
+                                                                <button
+                                                                    className="edit-btn-timeline"
+                                                                    onClick={() => setShowEditCaseModal({
+                                                                        status: true,
+                                                                        details: {
+                                                                            caseId: id,
+                                                                            processId: item?._id,
+                                                                            caseStatus: item?.status,
+                                                                            caseRemark: item?.remark,
+                                                                            otherDetails: item?.otherDetails,
+                                                                            nextFollowUp: item?.nextFollowUp,
+                                                                            isCurrentStatus: index === 0
+                                                                        }
+                                                                    })}
+                                                                    title="Edit status"
+                                                                >
+                                                                    <CiEdit size={16} />
+                                                                </button>
+                                                            )}
+                                                            <button
+                                                                className="expand-btn"
+                                                                onClick={() => toggleCardExpand(item._id)}
+                                                            >
+                                                                {isExpanded ? <FaChevronUp /> : <FaChevronDown />}
                                                             </button>
-                                                        )}
+                                                        </div>
                                                     </div>
 
-                                                    <div className="process-card-body">
-                                                        <div className="card-row">
-                                                            <div className="card-label">
-                                                                <FaCalendarAlt size={12} />
-                                                                <span>Date</span>
-                                                            </div>
-                                                            <div className="card-value">{item?.createdAt && getFormateDMYDate(item?.createdAt)}</div>
-                                                        </div>
-
-                                                        <div className="card-row">
-                                                            <div className="card-label">
-                                                                <span className="status-icon-mobile">{statusConfig.icon}</span>
-                                                                <span>Status</span>
-                                                            </div>
-                                                            <div className="card-value">
-                                                                <div
-                                                                    className="status-badge-mobile"
-                                                                    style={{
-                                                                        backgroundColor: statusConfig.bg,
-                                                                        borderColor: statusConfig.borderColor,
-                                                                        color: statusConfig.borderColor
-                                                                    }}
-                                                                >
-                                                                    {statusConfig.text}
+                                                    {/* Card Body - Hidden by default, shown when expanded */}
+                                                    {isExpanded && (
+                                                        <div className="card-body">
+                                                            {/* Other Details */}
+                                                            {item?.otherDetails && Object.values(item?.otherDetails).length > 0 && (
+                                                                <div className="details-grid">
+                                                                    {item?.otherDetails?.caseNumber && (
+                                                                        <div className="detail-item">
+                                                                            <span className="detail-label">Case Number</span>
+                                                                            <span className="detail-value">{item?.otherDetails?.caseNumber}</span>
+                                                                        </div>
+                                                                    )}
+                                                                    {item?.otherDetails?.courtName && (
+                                                                        <div className="detail-item">
+                                                                            <span className="detail-label">Court/Forum</span>
+                                                                            <span className="detail-value">{item?.otherDetails?.courtName}</span>
+                                                                        </div>
+                                                                    )}
+                                                                    {item?.otherDetails?.courtAddress && (
+                                                                        <div className="detail-item">
+                                                                            <span className="detail-label">Address</span>
+                                                                            <span className="detail-value">{item?.otherDetails?.courtAddress}</span>
+                                                                        </div>
+                                                                    )}
+                                                                    {item?.otherDetails?.nextHearingDate && (
+                                                                        <div className="detail-item highlight">
+                                                                            <span className="detail-label">Next Hearing</span>
+                                                                            <span className="detail-value">
+                                                                                <FaCalendarAlt className="me-1" />
+                                                                                {getFormateDMYDate(item?.otherDetails?.nextHearingDate)}
+                                                                            </span>
+                                                                        </div>
+                                                                    )}
                                                                 </div>
-                                                            </div>
-                                                        </div>
+                                                            )}
 
-                                                        {role?.toLowerCase() == "admin" && (
-                                                            <div className="card-row">
-                                                                <div className="card-label">
-                                                                    <FaUserCheck size={12} />
-                                                                    <span>Marked By</span>
+                                                            {/* Marked By */}
+                                                            {role?.toLowerCase() === "admin" && (
+                                                                <div className="marked-by">
+                                                                    <FaUserCheck className="me-2" />
+                                                                    <span>Marked by: </span>
+                                                                    <strong className="text-capitalize">
+                                                                        {item?.consultant ? item?.consultant : "System"}
+                                                                    </strong>
                                                                 </div>
-                                                                <div className="card-value text-capitalize">{item?.consultant ? item?.consultant : "System"}</div>
-                                                            </div>
-                                                        )}
+                                                            )}
 
-                                                        {item?.remark && (
-                                                            <div className="card-row remark-row">
-                                                                <div className="card-label">
-                                                                    <FaComment size={12} />
-                                                                    <span>Remark</span>
-                                                                </div>
-                                                                <div className="card-value remark-value">
-                                                                    <div dangerouslySetInnerHTML={{ __html: getTruncatedText(item?.remark) }} />
-                                                                    {item?.remark?.length > 80 && (
+                                                            {/* Remark - Plain Text */}
+                                                            {item?.remark && (
+                                                                <div className="remark-section">
+                                                                    <div className="remark-header">
+                                                                        <FaComment className="remark-icon" />
+                                                                        <span className="remark-title">Remark</span>
+                                                                    </div>
+                                                                    <div className="remark-content">
+                                                                        {stripHtmlTags(item?.remark)}
+                                                                    </div>
+                                                                    {item?.remark?.length > 100 && (
                                                                         <button
-                                                                            className="view-remark-btn-mobile"
+                                                                            className="view-full-btn"
                                                                             onClick={() => setViewRemarkModal({
                                                                                 viewStatus: true,
                                                                                 remark: item?.remark,
@@ -261,30 +283,39 @@ export default function StatusSection({ isAddCaseProcess, id, role, details, get
                                                                                 date: item?.createdAt
                                                                             })}
                                                                         >
-                                                                            View Full <FaEye size={10} />
+                                                                            View Full Remark <FaEye className="ms-1" size={12} />
                                                                         </button>
                                                                     )}
                                                                 </div>
-                                                            </div>
-                                                        )}
-                                                    </div>
+                                                            )}
+                                                        </div>
+                                                    )}
                                                 </div>
-                                            )
-                                        })}
-                                    </div>
+                                            </div>
+                                        )
+                                    })}
                                 </div>
-                            ) : (
-                                <div className="empty-state-process">
-                                    <div className="empty-icon">
-                                        <FaClock size={40} />
-                                    </div>
-                                    <h6 className="empty-title">No Status Updates Yet</h6>
-                                    <p className="empty-text">Click "Add Status" to start tracking the case progress</p>
+                            </div>
+                        ) : (
+                            <div className="empty-state">
+                                <div className="empty-state-icon">
+                                    <FaClock size={48} />
                                 </div>
-                            )}
-                        </div>
-                    )}
-                </div>
+                                <h5 className="empty-state-title">No Status Updates Yet</h5>
+                                <p className="empty-state-text">Click "Add Status" to start tracking the case progress</p>
+                                {isAddCaseProcess && (
+                                    <button
+                                        className="btn-add-status-empty"
+                                        onClick={() => setChangeStatus({ status: true, details: { ...details } })}
+                                    >
+                                        <FaPlus className="me-2" />
+                                        Add First Status
+                                    </button>
+                                )}
+                            </div>
+                        )}
+                    </div>
+                )}
             </div>
 
             {/* Modals */}
@@ -315,515 +346,735 @@ export default function StatusSection({ isAddCaseProcess, id, role, details, get
                 onHide={() => setViewRemarkModal({ viewStatus: false, remark: "", status: "", date: "" })}
                 size="lg"
                 centered
-                className="remark-modal"
+                className="remark-modal-custom"
             >
-                <Modal.Header closeButton className="remark-modal-header">
+                <Modal.Header closeButton className="remark-modal-header-custom">
                     <Modal.Title>
-                        <div>
-                            <h5 className="mb-0">Status Details</h5>
-                            <small className="text-muted">Complete information about this status update</small>
+                        <div className="modal-title-content">
+                            <h5 className="mb-0">Detailed Remark</h5>
+                            <small className="text-white fs-6">Complete status update information</small>
                         </div>
                     </Modal.Title>
                 </Modal.Header>
-                <Modal.Body className="remark-modal-body">
-                    <div className="remark-info mb-4">
-                        <div className="remark-status">
-                            {(() => {
-                                const config = getStatusConfig(viewRemarkModal.status)
-                                return (
-                                    <div
-                                        className="remark-status-badge"
-                                        style={{
-                                            backgroundColor: config.bg,
-                                            borderColor: config.borderColor,
-                                            color: config.borderColor
-                                        }}
-                                    >
-                                        {config.icon} {config.text}
-                                    </div>
-                                )
-                            })()}
-                        </div>
-                        <div className="remark-date">
-                            <FaCalendarAlt className="me-2 text-muted" />
-                            <span className="text-muted">{viewRemarkModal.date && getFormateDMYDate(viewRemarkModal.date)}</span>
+                <Modal.Body className="remark-modal-body-custom">
+                    <div className="remark-modal-info">
+                        {(() => {
+                            const config = getStatusConfig(viewRemarkModal.status)
+                            return (
+                                <div
+                                    className="remark-modal-status"
+                                    style={{
+                                        backgroundColor: config.lightBg,
+                                        borderColor: config.color,
+                                        color: config.color
+                                    }}
+                                >
+                                    {config.icon}
+                                    <span>{config.text}</span>
+                                </div>
+                            )
+                        })()}
+                        <div className="remark-modal-date">
+                            <FaCalendarAlt className="me-2" />
+                            {viewRemarkModal.date && getFormateDMYDate(viewRemarkModal.date)}
                         </div>
                     </div>
-                    <div className="remark-full-section">
-                        <div className="remark-label">
+                    <div className="remark-modal-content-wrapper">
+                        <div className="remark-modal-label">
                             <FaComment className="me-2" />
-                            <strong>Detailed Remark</strong>
+                            <strong>Remark Details</strong>
                         </div>
                         <div
-                            className="remark-full-content p-3 bg-light rounded"
+                            className="remark-modal-content"
                             dangerouslySetInnerHTML={{ __html: viewRemarkModal.remark }}
-                        ></div>
+                        />
                     </div>
                 </Modal.Body>
-                <Modal.Footer className="remark-modal-footer">
-                    <Button variant="primary" onClick={() => setViewRemarkModal({ viewStatus: false, remark: "", status: "", date: "" })}>
+                <Modal.Footer className="remark-modal-footer-custom">
+                    <Button
+                        variant="primary"
+                        onClick={() => setViewRemarkModal({ viewStatus: false, remark: "", status: "", date: "" })}
+                        className="btn-close-modal"
+                    >
                         Close
                     </Button>
                 </Modal.Footer>
             </Modal>
 
             <style jsx="true">{`
-                .status-section-wrapper {
-                    width: 100%;
-                    overflow-x: hidden;
+                /* Main Wrapper */
+                .status-timeline-wrapper {
                     background: white;
+                    border-radius: 16px;
+                    padding: 24px;
+                    box-shadow: 0 1px 3px rgba(0,0,0,0.06);
                 }
-                
-                .status-container {
-                    // background: white;
-                    border-radius: 0;
-                }
-                
-                /* Header Styles - No background color */
-                .status-header {
-                    // background: white;
-                    padding: 0 0 20px 0;
-                    border-bottom: 2px solid #e9ecef;
-                    margin-bottom: 20px;
-                }
-                
-                .status-header-content {
+
+                /* Header */
+                .timeline-header {
                     display: flex;
                     justify-content: space-between;
                     align-items: center;
                     flex-wrap: wrap;
                     gap: 16px;
+                    padding-bottom: 20px;
+                    border-bottom: 2px solid #f0f2f5;
+                    margin-bottom: 24px;
                 }
-                
-                .status-title-section {
+
+                .header-left {
                     display: flex;
                     align-items: center;
-                    gap: 12px;
+                    gap: 16px;
                 }
-                
-                .status-icon-wrapper {
-                    width: 40px;
-                    height: 40px;
-                    background: #667eea;
-                    border-radius: 10px;
+
+                .header-icon-wrapper {
+                    width: 48px;
+                    height: 48px;
+                    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                    border-radius: 12px;
                     display: flex;
                     align-items: center;
                     justify-content: center;
                     color: white;
+                    font-size: 20px;
                 }
-                
-                .status-title {
-                    color: #333;
-                    font-size: 18px;
+
+                .header-title {
+                    font-size: 20px;
                     font-weight: 600;
+                    color: #1a1a2e;
+                    margin: 0;
                 }
-                
-                .status-subtitle {
+
+                .header-subtitle {
+                    font-size: 14px;
                     color: #6c757d;
-                    font-size: 13px;
+                    margin: 0;
                 }
-                
-                .status-actions {
+
+                .header-actions {
                     display: flex;
                     gap: 12px;
                 }
-                
+
+                table {
+                    width: 100%;
+                    border-collapse: collapse;
+                    margin: 16px 0;
+                    }
+
+                    table td,
+                    table th {
+                    border: 1px solid #d1d5db;
+                    padding: 10px;
+                    text-align: left;
+                    }
+
+                    table th {
+                    background: #f3f4f6;
+                    }
+
                 .btn-add-status {
-                    background: #667eea;
+                    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
                     color: white;
                     border: none;
-                    padding: 8px 16px;
-                    border-radius: 8px;
-                    font-size: 13px;
+                    padding: 10px 20px;
+                    border-radius: 10px;
+                    font-size: 14px;
                     font-weight: 500;
                     display: flex;
                     align-items: center;
                     transition: all 0.3s ease;
+                    cursor: pointer;
                 }
-                
+
                 .btn-add-status:hover {
-                    background: #5a67d8;
-                    transform: translateY(-1px);
+                    transform: translateY(-2px);
+                    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
                 }
-                
-                .btn-toggle-status {
+
+                .btn-toggle-view {
                     background: white;
-                    color: #6c757d;
+                    color: #495057;
                     border: 1px solid #dee2e6;
-                    padding: 8px 16px;
-                    border-radius: 8px;
-                    font-size: 13px;
+                    padding: 10px 20px;
+                    border-radius: 10px;
+                    font-size: 14px;
                     font-weight: 500;
                     display: flex;
                     align-items: center;
                     transition: all 0.3s ease;
+                    cursor: pointer;
                 }
-                
-                .btn-toggle-status:hover {
+
+                .btn-toggle-view:hover {
                     background: #f8f9fa;
                     border-color: #667eea;
                     color: #667eea;
                 }
-                
-                /* Content Styles */
-                .status-content {
-                    background: transparent;
-                    padding: 0;
+
+                /* Timeline */
+                .timeline-container {
+                    padding: 8px 0;
                 }
-                
-                /* Desktop Table View */
-                .process-desktop {
-                    display: block;
+
+                .timeline {
+                    position: relative;
                 }
-                
-                .process-table-wrapper {
-                    overflow-x: auto;
-                }
-                
-                .process-table {
-                    width: 100%;
-                    border-collapse: separate;
-                    border-spacing: 0;
-                }
-                
-                .process-table thead th {
-                    background: #f8f9fa;
-                    padding: 12px 16px;
-                    text-align: left;
-                    font-size: 13px;
-                    font-weight: 600;
-                    color: #495057;
-                    border-bottom: 2px solid #e9ecef;
-                }
-                
-                .process-table tbody tr {
-                    transition: all 0.2s ease;
-                    border-bottom: 1px solid #e9ecef;
-                }
-                
-                .process-table tbody tr:hover {
-                    background: #f8f9fa;
-                }
-                
-                .process-table tbody td {
-                    padding: 16px;
-                    vertical-align: middle;
-                    border-bottom: 1px solid #e9ecef;
-                }
-                
-                .current-row {
-                    background: rgba(102,126,234,0.05);
-                    border-left: 3px solid #667eea;
-                }
-                
-                .sno-cell {
-                    font-weight: 600;
-                }
-                
-                .sno-badge {
-                    display: inline-flex;
-                    align-items: center;
-                    justify-content: center;
-                    width: 32px;
-                    height: 32px;
-                    background: #f8f9fa;
-                    border-radius: 8px;
-                    font-weight: 600;
-                    color: #667eea;
-                }
-                
-                .current-indicator {
-                    display: inline-block;
-                    margin-left: 8px;
-                    font-size: 10px;
-                    padding: 2px 6px;
-                    background: #667eea;
-                    color: white;
-                    border-radius: 4px;
-                }
-                
-                .edit-btn {
-                    background: none;
-                    border: none;
-                    padding: 6px;
-                    cursor: pointer;
-                    border-radius: 6px;
-                    transition: all 0.2s;
-                }
-                
-                .edit-btn:hover {
-                    background: #e9ecef;
-                }
-                
-                .date-cell, .author-cell {
+
+                .timeline-item {
                     display: flex;
-                    align-items: center;
-                    font-size: 13px;
-                    color: #495057;
+                    gap: 20px;
+                    margin-bottom: 0;
+                    position: relative;
                 }
-                
-                .status-badge-inline {
-                    display: inline-flex;
-                    align-items: center;
-                    gap: 6px;
-                    padding: 4px 12px;
-                    border-radius: 20px;
-                    font-size: 12px;
-                    font-weight: 500;
-                    border: 1px solid;
-                    width: fit-content;
+
+                .timeline-item.last-item {
+                    margin-bottom: 0;
                 }
-                
-                .remark-cell {
-                    display: flex;
-                    align-items: center;
-                    flex-wrap: wrap;
-                    gap: 8px;
-                    font-size: 13px;
-                    color: #6c757d;
-                }
-                
-                .remark-text {
-                    flex: 1;
-                    color: #495057;
-                }
-                
-                .view-remark-btn-inline {
-                    background: none;
-                    border: none;
-                    color: #667eea;
-                    font-size: 12px;
-                    cursor: pointer;
-                    padding: 2px 6px;
-                    border-radius: 4px;
-                }
-                
-                .view-remark-btn-inline:hover {
-                    background: #e9ecef;
-                }
-                
-                /* Mobile View */
-                .process-mobile {
-                    display: none;
-                }
-                
-                .process-card {
-                    background: white;
-                    border-radius: 12px;
-                    padding: 16px;
-                    margin-bottom: 16px;
-                    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-                }
-                
-                .current-card {
-                    border: 1px solid #667eea;
-                    background: rgba(102,126,234,0.02);
-                }
-                
-                .process-card-header {
-                    display: flex;
-                    justify-content: space-between;
-                    align-items: center;
-                    padding-bottom: 12px;
-                    margin-bottom: 12px;
-                    border-bottom: 1px solid #e9ecef;
-                }
-                
-                .card-header-left {
-                    display: flex;
-                    align-items: center;
-                    gap: 8px;
-                }
-                
-                .step-number-mobile {
-                    font-weight: 600;
-                    font-size: 14px;
-                    color: #667eea;
-                }
-                
-                .current-badge-mobile {
-                    font-size: 10px;
-                    padding: 2px 8px;
-                    background: #667eea;
-                    color: white;
-                    border-radius: 4px;
-                }
-                
-                .edit-btn-mobile {
-                    background: none;
-                    border: none;
-                    cursor: pointer;
-                    color: #6c757d;
-                }
-                
-                .process-card-body {
+
+                /* Timeline Line */
+                .timeline-line {
                     display: flex;
                     flex-direction: column;
-                    gap: 12px;
-                }
-                
-                .card-row {
-                    display: flex;
-                    align-items: flex-start;
-                    gap: 12px;
-                }
-                
-                .card-label {
-                    width: 80px;
-                    display: flex;
                     align-items: center;
-                    gap: 6px;
-                    font-size: 12px;
-                    color: #6c757d;
-                    font-weight: 500;
+                    padding-top: 4px;
+                    flex-shrink: 0;
+                    width: 40px;
                 }
-                
-                .card-value {
-                    flex: 1;
-                    font-size: 13px;
-                    color: #495057;
-                }
-                
-                .remark-row {
-                    align-items: flex-start;
-                }
-                
-                .remark-value {
-                    line-height: 1.5;
-                }
-                
-                .status-badge-mobile {
-                    display: inline-block;
-                    padding: 2px 10px;
-                    border-radius: 12px;
-                    font-size: 11px;
-                    font-weight: 500;
-                    border: 1px solid;
-                }
-                
-                .view-remark-btn-mobile {
-                    background: none;
-                    border: none;
-                    color: #667eea;
-                    font-size: 11px;
-                    cursor: pointer;
-                    margin-top: 6px;
-                    display: inline-flex;
-                    align-items: center;
-                    gap: 4px;
-                }
-                
-                /* Empty State */
-                .empty-state-process {
-                    text-align: center;
-                    padding: 60px 20px;
-                    background: white;
-                    border-radius: 12px;
-                }
-                
-                .empty-icon {
-                    width: 70px;
-                    height: 70px;
-                    background: rgba(102,126,234,0.1);
+
+                .timeline-dot {
+                    width: 16px;
+                    height: 16px;
                     border-radius: 50%;
                     display: flex;
                     align-items: center;
                     justify-content: center;
-                    margin: 0 auto 16px;
-                    color: #667eea;
+                    position: relative;
+                    z-index: 2;
+                    flex-shrink: 0;
                 }
-                
-                .empty-title {
-                    font-size: 16px;
-                    font-weight: 600;
-                    color: #333;
-                    margin-bottom: 8px;
+
+                .timeline-dot.first-dot {
+                    width: 20px;
+                    height: 20px;
+                    background: #28a745 !important;
                 }
-                
-                .empty-text {
-                    color: #6c757d;
-                    font-size: 13px;
+
+                .dot-icon {
+                    color: white;
+                    font-size: 10px;
                 }
-                
-                /* Remark Modal */
-                .remark-modal .modal-content {
-                    border-radius: 16px;
+
+                .timeline-connector {
+                    width: 2px;
+                    flex: 1;
+                    min-height: 40px;
+                    margin: 4px 0;
+                    border-radius: 2px;
+                    opacity: 0.4;
                 }
-                
-                .remark-modal-header {
+
+                /* Timeline Card */
+                .timeline-card {
+                    flex: 1;
                     background: white;
-                    border-bottom: 1px solid #e9ecef;
-                    padding: 20px 24px;
+                    border-radius: 12px;
+                    padding: 18px 20px;
+                    margin-bottom: 20px;
+                    border: 1px solid #e9ecef;
+                    transition: all 0.3s ease;
                 }
-                
-                .remark-modal-body {
-                    padding: 24px;
+
+                .timeline-card.first-card {
+                    border-color: #28a745;
+                    background: #fafffe;
                 }
-                
-                .remark-info {
+
+                .timeline-card:hover {
+                    border-color: #667eea;
+                    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+                }
+
+                .card-header {
                     display: flex;
                     justify-content: space-between;
                     align-items: center;
                     flex-wrap: wrap;
-                    gap: 16px;
-                    padding-bottom: 16px;
-                    border-bottom: 1px solid #e9ecef;
+                    gap: 12px;
                 }
-                
-                .remark-status-badge {
+
+                .header-left-content {
+                    display: flex;
+                    align-items: center;
+                    gap: 10px;
+                    flex-wrap: wrap;
+                }
+
+                .step-number {
+                    font-size: 11px;
+                    font-weight: 600;
+                    color: #6c757d;
+                    background: #f8f9fa;
+                    padding: 2px 8px;
+                    border-radius: 10px;
+                }
+
+                .status-badge {
                     display: inline-flex;
                     align-items: center;
-                    gap: 8px;
-                    padding: 6px 16px;
-                    border-radius: 20px;
+                    gap: 4px;
+                    padding: 3px 10px;
+                    border-radius: 16px;
+                    font-size: 12px;
+                    font-weight: 500;
+                    border: 1px solid;
+                }
+
+
+
+                .latest-badge {
+                    font-size: 9px;
+                    font-weight: 600;
+                    color: white;
+                    background: #28a745;
+                    padding: 2px 8px;
+                    border-radius: 10px;
+                    text-transform: uppercase;
+                    letter-spacing: 0.5px;
+                }
+
+                .header-right-content {
+                    display: flex;
+                    align-items: center;
+                    gap: 6px;
+                    flex-wrap: wrap;
+                }
+
+                .date-display {
+                    font-size: 12px;
+                    color: #6c757d;
+                    display: flex;
+                    align-items: center;
+                }
+
+                .edit-btn-timeline {
+                    background: none;
+                    border: none;
+                    padding: 4px;
+                    cursor: pointer;
+                    border-radius: 4px;
+                    color: #6c757d;
+                    transition: all 0.2s;
+                }
+
+                .edit-btn-timeline:hover {
+                    background: #f8f9fa;
+                    color: #667eea;
+                }
+
+                .expand-btn {
+                    background: none;
+                    border: none;
+                    padding: 4px 6px;
+                    cursor: pointer;
+                    color: #6c757d;
+                    border-radius: 4px;
+                    transition: all 0.2s;
+                }
+
+                .expand-btn:hover {
+                    background: #f8f9fa;
+                }
+
+                /* Card Body */
+                .card-body {
+                    display: flex;
+                    flex-direction: column;
+                    gap: 14px;
+                    margin-top: 16px;
+                    padding-top: 16px;
+                    border-top: 1px solid #e9ecef;
+                    animation: slideDown 0.3s ease-out;
+                }
+
+                @keyframes slideDown {
+                    from {
+                        opacity: 0;
+                        transform: translateY(-10px);
+                    }
+                    to {
+                        opacity: 1;
+                        transform: translateY(0);
+                    }
+                }
+
+                .details-grid {
+                    display: grid;
+                    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+                    gap: 10px;
+                    background: #f8f9fa;
+                    padding: 12px 14px;
+                    border-radius: 8px;
+                }
+
+                .detail-item {
+                    display: flex;
+                    flex-direction: column;
+                    gap: 2px;
+                }
+
+                .detail-item.highlight {
+                    background: #fff3cd;
+                    padding: 6px 10px;
+                    border-radius: 6px;
+                }
+
+                .detail-label {
+                    font-size: 10px;
+                    color: #6c757d;
+                    font-weight: 500;
+                    text-transform: uppercase;
+                    letter-spacing: 0.3px;
+                }
+
+                .detail-value {
+                    font-size: 13px;
+                    color: #1a1a2e;
+                    font-weight: 500;
+                }
+
+                .marked-by {
+                    font-size: 13px;
+                    color: #6c757d;
+                    display: flex;
+                    align-items: center;
+                    padding: 4px 0;
+                }
+
+                .marked-by strong {
+                    color: #1a1a2e;
+                    margin-left: 4px;
+                }
+
+                /* Remark Section */
+                .remark-section {
+                    background: #f8f9fa;
+                    border-radius: 8px;
+                    padding: 10px 14px;
+                }
+
+                .remark-header {
+                    display: flex;
+                    align-items: center;
+                    gap: 6px;
+                    margin-bottom: 6px;
+                }
+
+                .remark-icon {
+                    color: #667eea;
+                    font-size: 13px;
+                }
+
+                .remark-title {
+                    font-size: 12px;
+                    font-weight: 600;
+                    color: #1a1a2e;
+                }
+
+                .remark-content {
+                    font-size: 14px;
+                    color: #495057;
+                    line-height: 1.6;
+                }
+
+                .view-full-btn {
+                    background: none;
+                    border: none;
+                    color: #667eea;
+                    font-size: 12px;
+                    font-weight: 500;
+                    cursor: pointer;
+                    padding: 4px 0;
+                    margin-top: 6px;
+                    display: inline-flex;
+                    align-items: center;
+                    transition: all 0.2s;
+                }
+
+                .view-full-btn:hover {
+                    color: #5a67d8;
+                    text-decoration: underline;
+                }
+
+                /* Empty State */
+                .empty-state {
+                    text-align: center;
+                    padding: 60px 20px;
+                    background: #fafbfc;
+                    border-radius: 12px;
+                    border: 2px dashed #e9ecef;
+                }
+
+                .empty-state-icon {
+                    width: 80px;
+                    height: 80px;
+                    background: rgba(102, 126, 234, 0.08);
+                    border-radius: 50%;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    margin: 0 auto 20px;
+                    color: #667eea;
+                }
+
+                .empty-state-title {
+                    font-size: 18px;
+                    font-weight: 600;
+                    color: #1a1a2e;
+                    margin-bottom: 8px;
+                }
+
+                .empty-state-text {
+                    color: #6c757d;
+                    font-size: 14px;
+                    margin-bottom: 20px;
+                }
+
+                .btn-add-status-empty {
+                    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                    color: white;
+                    border: none;
+                    padding: 10px 24px;
+                    border-radius: 10px;
+                    font-size: 14px;
+                    font-weight: 500;
+                    display: inline-flex;
+                    align-items: center;
+                    transition: all 0.3s ease;
+                    cursor: pointer;
+                }
+
+                .btn-add-status-empty:hover {
+                    transform: translateY(-2px);
+                    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+                }
+
+                /* Remark Modal */
+                .remark-modal-custom .modal-content {
+                    border-radius: 16px;
+                    border: none;
+                    box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+                }
+
+                .remark-modal-header-custom {
+                    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                    color: white;
+                    border-radius: 16px 16px 0 0;
+                    padding: 20px 24px;
+                }
+
+                .remark-modal-header-custom .btn-close {
+                    filter: brightness(0) invert(1);
+                }
+
+                .modal-title-content h5 {
+                    color: white;
+                }
+
+                .modal-title-content small {
+                    color: rgba(255,255,255,0.8);
+                }
+
+                .remark-modal-body-custom {
+                    padding: 24px;
+                }
+
+                .remark-modal-info {
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    flex-wrap: wrap;
+                    gap: 12px;
+                    padding-bottom: 14px;
+                    border-bottom: 1px solid #e9ecef;
+                    margin-bottom: 18px;
+                }
+
+                .remark-modal-status {
+                    display: inline-flex;
+                    align-items: center;
+                    gap: 6px;
+                    padding: 4px 14px;
+                    border-radius: 16px;
                     font-size: 13px;
                     font-weight: 500;
                     border: 1px solid;
                 }
-                
-                .remark-full-section {
-                    margin-top: 20px;
+
+                .remark-modal-date {
+                    font-size: 13px;
+                    color: #6c757d;
                 }
-                
-                .remark-label {
-                    margin-bottom: 12px;
-                    display: flex;
-                    align-items: center;
+
+                .remark-modal-content-wrapper {
+                    margin-top: 4px;
+                }
+
+                .remark-modal-label {
                     font-size: 14px;
+                    margin-bottom: 10px;
+                    color: #1a1a2e;
                 }
-                
-                .remark-full-content {
-                    min-height: 120px;
-                    max-height: 350px;
+
+                .remark-modal-content {
+                    background: #f8f9fa;
+                    padding: 16px 20px;
+                    border-radius: 8px;
+                    font-size: 14px;
+                    line-height: 1.8;
+                    max-height: 400px;
                     overflow-y: auto;
-                    font-size: 14px;
-                    line-height: 1.6;
                 }
-                
+
+                .remark-modal-footer-custom {
+                    border-top: none;
+                    padding: 12px 24px 20px;
+                }
+
+                .btn-close-modal {
+                    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                    border: none;
+                    padding: 8px 28px;
+                    border-radius: 8px;
+                }
+
+                .btn-close-modal:hover {
+                    transform: translateY(-2px);
+                    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+                }
+
                 /* Responsive */
                 @media (max-width: 768px) {
-                    .process-desktop {
-                        display: none;
+                    .status-timeline-wrapper {
+                        padding: 16px;
                     }
-                    
-                    .process-mobile {
-                        display: block;
-                    }
-                    
-                    .status-header-content {
+
+                    .timeline-header {
                         flex-direction: column;
                         align-items: flex-start;
                     }
-                    
-                    .status-actions {
+
+                    .header-actions {
                         width: 100%;
                     }
-                    
-                    .btn-add-status, .btn-toggle-status {
+
+                    .btn-add-status, .btn-toggle-view {
                         flex: 1;
                         justify-content: center;
+                        font-size: 13px;
+                        padding: 8px 16px;
+                    }
+
+                    .timeline-item {
+                        gap: 12px;
+                    }
+
+                    .timeline-line {
+                        width: 30px;
+                    }
+
+                    .timeline-card {
+                        padding: 14px 16px;
+                        margin-bottom: 16px;
+                    }
+
+                    .card-header {
+                        flex-direction: column;
+                        align-items: flex-start;
+                    }
+
+                    .header-left-content {
+                        width: 100%;
+                    }
+
+                    .header-right-content {
+                        width: 100%;
+                        justify-content: space-between;
+                    }
+
+                    .details-grid {
+                        grid-template-columns: 1fr;
+                    }
+
+                    .remark-modal-info {
+                        flex-direction: column;
+                        align-items: flex-start;
                     }
                 }
+
+                @media (max-width: 480px) {
+                    .status-timeline-wrapper {
+                        padding: 12px;
+                    }
+
+                    .header-icon-wrapper {
+                        width: 40px;
+                        height: 40px;
+                        font-size: 16px;
+                    }
+
+                    .header-title {
+                        font-size: 17px;
+                    }
+
+                    .timeline-dot {
+                        width: 14px;
+                        height: 14px;
+                    }
+
+                    .timeline-dot.first-dot {
+                        width: 18px;
+                        height: 18px;
+                    }
+
+                    .status-badge {
+                        font-size: 11px;
+                        padding: 2px 8px;
+                    }
+
+                    .remark-modal-body-custom {
+                        padding: 16px;
+                    }
+                }
+
+                /* Smooth animations */
+                .timeline-item {
+                    animation: slideIn 0.4s ease-out;
+                }
+
+                @keyframes slideIn {
+                    from {
+                        opacity: 0;
+                        transform: translateX(-10px);
+                    }
+                    to {
+                        opacity: 1;
+                        transform: translateX(0);
+                    }
+                }
+
+                .timeline-item:nth-child(1) { animation-delay: 0.05s; }
+                .timeline-item:nth-child(2) { animation-delay: 0.1s; }
+                .timeline-item:nth-child(3) { animation-delay: 0.15s; }
+                .timeline-item:nth-child(4) { animation-delay: 0.2s; }
+                .timeline-item:nth-child(5) { animation-delay: 0.25s; }
+                .timeline-item:nth-child(6) { animation-delay: 0.3s; }
+                .timeline-item:nth-child(7) { animation-delay: 0.35s; }
+                .timeline-item:nth-child(8) { animation-delay: 0.4s; }
+                .timeline-item:nth-child(9) { animation-delay: 0.45s; }
+                .timeline-item:nth-child(10) { animation-delay: 0.5s; }
             `}</style>
         </>
     )

@@ -1,11 +1,11 @@
 import { adminAddCaseFileByIdApi, adminAddOrUpdateCaseComment, adminAddOrUpdatePayment, adminGetCaseById } from "../../../../apis"
 import { useParams } from "react-router-dom"
-import { adminDeleteCaseDocById, adminSetCaseDocIsActive, adminEditCaseProcessById, adminChangeCaseStatus, adminRemoveCaseReference } from "../../../../apis"
+import { adminDeleteCaseDocById, adminSetCaseDocIsActive, adminChangeCaseStatus, adminRemoveCaseReference } from "../../../../apis"
 import { adminAddCaseReference } from "../../../../apis"
 import { adminAttachementUpload } from "../../../../apis/upload"
 import ViewCaseComp from "../../components/viewComp/ViewCaseComp"
 import { adminCreateOrUpdateCaseFormApi, adminGetCaseFormById } from "../../../../apis/case/form/caseFormApi"
-import { adminRenameCaseDocFolderApi } from "../../../../apis/case/adminCaseApi"
+import { adminEditCaseProcessById, adminRenameCaseDocFolderApi } from "../../../../apis/case/adminCaseApi"
 
 export default function AdminViewCase() {
   const param = useParams()

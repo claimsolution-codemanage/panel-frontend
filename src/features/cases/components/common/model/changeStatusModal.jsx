@@ -8,20 +8,24 @@ import TextEditor from '../../../../../components/TextEditor';
 import { formatDateToISO } from '../../../../../utils/helperFunction';
 import { AppContext } from '../../../../../App';
 
-const minDate = formatDateToISO(new Date(new Date().setDate(new Date().getDate()+1)))
+const minDate = formatDateToISO(new Date(new Date().setDate(new Date().getDate() + 1)))
 
-export default function ChangeStatusModal({ changeStatus, setChangeStatus, handleCaseStatus, getCaseById, role, attachementUpload }) {
-    const [data, setData] = useState({ _id: changeStatus?.details?._id, status: "", remark: "", mailMethod: "None", nextFollowUp: "", })
+export default function ChangeStatusModal({ changeStatus, setChangeStatus, handleCaseStatus, getCaseById, }) {
+    const [data, setData] = useState({ _id: changeStatus?.details?._id, status: "", remark: "", mailMethod: "None", nextFollowUp: "", otherDetails: {} })
     const [loading, setLoading] = useState(false)
     const state = useContext(AppContext)
-    const empType  = state?.myAppData?.details?.empType
+    const empType = state?.myAppData?.details?.empType
 
-    const isSalesEmp = empType?.toLowerCase()==="sales"
-    const statusList = isSalesEmp ? caseStatus?.filter(item=>["Accept","Under Expert Review","Processing","Query"].includes(item)) : caseStatus
+    const isSalesEmp = empType?.toLowerCase() === "sales"
+    const statusList = isSalesEmp ? caseStatus?.filter(item => ["Accept", "Under Expert Review", "Processing", "Query"].includes(item)) : caseStatus
 
     const hangleOnchange = (e) => {
         const { name, value } = e.target;
-        setData({ ...data, [name]: value })
+        if (name == "status") {
+            setData({ ...data, [name]: value, otherDetails: {} })
+        } else {
+            setData({ ...data, [name]: value })
+        }
     }
 
     const handleSumbit = async (e) => {
@@ -89,25 +93,69 @@ export default function ChangeStatusModal({ changeStatus, setChangeStatus, handl
                             {statusList?.map(item => <option className='' key={item} value={item}>{item}</option>)}
                         </select>
                     </div>
-                    <div className="mb-1">
-                        <label htmlFor={"mailMethod"} className='col-form-label'>Mail Method</label>
-                        <select className="form-select color-4" name="mailMethod" value={data?.mailMethod} onChange={hangleOnchange} aria-label="Default select example">
-                            <option>--Mail Method</option>
-                            {caseMailMethod?.map(ele => <option className='' key={ele} value={ele}>{ele}</option>)}
-                        </select>
+                    <div className='row row-cols-1 row-cols-lg-2 w-100'>
+                        <div className="mb-1">
+                            <label htmlFor={"mailMethod"} className='col-form-label'>Mail Method</label>
+                            <select className="form-select color-4" name="mailMethod" value={data?.mailMethod} onChange={hangleOnchange} aria-label="Default select example">
+                                <option>--Mail Method</option>
+                                {caseMailMethod?.map(ele => <option className='' key={ele} value={ele}>{ele}</option>)}
+                            </select>
+                        </div>
+                        <div className="mb-1">
+                            <label htmlFor={"nextFollowUp"} className='col-form-label'>Next follow-up date</label>
+                            <input
+                                type={"date"}
+                                name={"nextFollowUp"}
+                                placeholder={"Next follow-up date"}
+                                min={minDate}
+                                max={addOneMonthToISO(new Date())}
+                                value={data?.nextFollowUp ? formatDateToISO(data?.nextFollowUp) : ''}
+                                onChange={hangleOnchange}
+                                className="form-control" />
+                        </div>
                     </div>
-                    <div className="mb-1">
-                        <label htmlFor={"nextFollowUp"} className='col-form-label'>Next follow-up date</label>
-                        <input
-                            type={"date"}
-                            name={"nextFollowUp"}
-                            placeholder={"Next follow-up date"}
-                            min={minDate}
-                            max={addOneMonthToISO(new Date())}
-                            value={data?.nextFollowUp ? formatDateToISO(data?.nextFollowUp) : ''}
-                            onChange={hangleOnchange}
-                            className="form-control" />
-                    </div>
+                    {data?.status == "Case file in court" && <div className='row row-cols-1 row-cols-lg-2 w-100'>
+                        <div className="mb-1">
+                            <label htmlFor={"caseNumber"} className='col-form-label'>Case Number</label>
+                            <input
+                                type={"text"}
+                                name={"caseNumber"}
+                                placeholder={"Case Number"}
+                                value={data?.otherDetails?.caseNumber || ""}
+                                onChange={(e) => setData({ ...data, otherDetails: { ...data.otherDetails, caseNumber: e.target.value } })}
+                                className="form-control" />
+                        </div>
+                        <div className="mb-1">
+                            <label htmlFor={"courtName"} className='col-form-label'>Court/Forum Name</label>
+                            <input
+                                type={"text"}
+                                name={"courtName"}
+                                placeholder={"Court/Forum Name"}
+                                value={data?.otherDetails?.courtName || ""}
+                                onChange={(e) => setData({ ...data, otherDetails: { ...data.otherDetails, courtName: e.target.value } })}
+                                className="form-control" />
+                        </div>
+                        <div className="mb-1">
+                            <label htmlFor={"courtAddress"} className='col-form-label'>Court/Forum Address</label>
+                            <input
+                                type={"text"}
+                                name={"courtAddress"}
+                                placeholder={"Court/Forum Address"}
+                                value={data?.otherDetails?.courtAddress || ""}
+                                onChange={(e) => setData({ ...data, otherDetails: { ...data.otherDetails, courtAddress: e.target.value } })}
+                                className="form-control" />
+                        </div>
+                        <div className="mb-1">
+                            <label htmlFor={"nextHearingDate"} className='col-form-label'>Next Hearing Date</label>
+                            <input
+                                type={"date"}
+                                name={"nextHearingDate"}
+                                placeholder={"Next Hearing Date"}
+                                value={data?.otherDetails?.nextHearingDate || ""}
+                                onChange={(e) => setData({ ...data, otherDetails: { ...data.otherDetails, nextHearingDate: e.target.value } })}
+                                className="form-control" />
+                        </div>
+                    </div>}
                     <div className="mb-1 col-12">
                         <label htmlFor={"remark"} className='col-form-label'>Remark</label>
                         <TextEditor value={data?.remark || ""} handleOnChange={(val) => setData({ ...data, remark: val })} />

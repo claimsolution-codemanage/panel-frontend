@@ -25,11 +25,11 @@ import { SiMicrosoftexcel } from "react-icons/si";
 import { Link } from "react-router-dom"
 import PaginateField from "../../../../components/Common/PaginateField"
 
-export default function ViewAllCaseComp({pageTxt, getCases, downloadCase, role, viewUrl,
+export default function ViewAllCaseComp({ pageTxt, getCases, downloadCase, role, viewUrl,
   caseShare, setStatus, setCaseStatus, editUrl, createInvUrl,
   isChangeStatus, isEdit, isRemoveCase, isResolvedAmt, isDownload,
   empId, id, isShare, getNormalEmp, isBack, isReject, attachementUpload,
-  isClosed,isWeeklyFollowUp
+  isClosed, isWeeklyFollowUp
 }) {
   const [data, setData] = useState([])
   const navigate = useNavigate()
@@ -46,8 +46,6 @@ export default function ViewAllCaseComp({pageTxt, getCases, downloadCase, role, 
   const [isSearch, setIsSearch] = useState(false)
   const [caseResolvedAmt, setCaseResolvedAmt] = useState(0)
   const [caseShareModal, setCaseShareModal] = useState({ status: false, value: [] })
-  const [isClipBoardCopy, setIsClipBoardCopy] = useState({ id: "", copied: false, value: "" })
-  const [deleteCase, setDeleteCase] = useState({ status: false, id: "" })
   const [changeisActiveStatus, setChangeIsActiveStatus] = useState({ show: false, details: {} })
   const [caseAmt, setCaseAmt] = useState(0)
   const [downloading, setDownloading] = useState(false)
@@ -74,7 +72,7 @@ export default function ViewAllCaseComp({pageTxt, getCases, downloadCase, role, 
       const startDate = dateRange.startDate ? getFormateDate(dateRange.startDate) : ""
       const endDate = dateRange.endDate ? getFormateDate(dateRange.endDate) : ""
       // console.log("start", startDate, "end", endDate);
-      const res = await getCases({pageItemLimit, pgNo, searchQuery, statusType, startDate, endDate, type, empId, id, isReject,isWeeklyFollowUp,isClosed})
+      const res = await getCases({ pageItemLimit, pgNo, searchQuery, statusType, startDate, endDate, type, empId, id, isReject, isWeeklyFollowUp, isClosed })
       // console.log("allAdminCase", res?.data?.data);
       if (res?.data?.success && res?.data?.data) {
         setData([...res?.data?.data])
@@ -101,7 +99,7 @@ export default function ViewAllCaseComp({pageTxt, getCases, downloadCase, role, 
       const startDate = dateRange.startDate ? getFormateDate(dateRange.startDate) : ""
       const endDate = dateRange.endDate ? getFormateDate(dateRange.endDate) : ""
       setDownloading(true)
-      const res = await downloadCase({searchQuery, statusType, startDate, endDate, type, empId, id, isReject,isWeeklyFollowUp,isClosed})
+      const res = await downloadCase({ searchQuery, statusType, startDate, endDate, type, empId, id, isReject, isWeeklyFollowUp, isClosed })
       // console.log("res", res);
       if (res?.status == 200) {
         const url = window.URL.createObjectURL(new Blob([res.data]));
@@ -130,10 +128,10 @@ export default function ViewAllCaseComp({pageTxt, getCases, downloadCase, role, 
 
 
   useEffect(() => {
-    if (!deleteCase.status && !changeisActiveStatus.show && !deleteCase.status && !changeStatus.status) {
+    if (!changeisActiveStatus.show && !changeStatus.status) {
       getAllCases()
     }
-  }, [pageItemLimit, pgNo, statusType, changeStatus, changeisActiveStatus, deleteCase])
+  }, [pageItemLimit, pgNo, statusType, changeStatus, changeisActiveStatus])
 
   useEffect(() => {
     if (isSearch) {
@@ -211,24 +209,24 @@ export default function ViewAllCaseComp({pageTxt, getCases, downloadCase, role, 
     statusType
   }
 
-const getFollowUpClass = (nextFollowUp) => {
-  if (!nextFollowUp) return "badge bg-secondary";
+  const getFollowUpClass = (nextFollowUp) => {
+    if (!nextFollowUp) return "badge bg-secondary";
 
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
 
-  const followUpDate = new Date(nextFollowUp);
-  followUpDate.setHours(0, 0, 0, 0);
+    const followUpDate = new Date(nextFollowUp);
+    followUpDate.setHours(0, 0, 0, 0);
 
-  const diffInMs = today - followUpDate;
-  const diffInDays = Math.floor(diffInMs / (1000 * 60 * 60 * 24));
+    const diffInMs = today - followUpDate;
+    const diffInDays = Math.floor(diffInMs / (1000 * 60 * 60 * 24));
 
-  if(diffInDays<0) return "badge bg-success text-white"
-  if (diffInDays ===1) return "badge bg-warning text-white";
-  if (diffInDays >= 2) return "badge bg-orange text-white"; // custom
+    if (diffInDays < 0) return "badge bg-success text-white"
+    if (diffInDays === 1) return "badge bg-warning text-white";
+    if (diffInDays >= 2) return "badge bg-orange text-white"; // custom
 
-  return "badge bg-success"; // future follow-up
-};
+    return "badge bg-success"; // future follow-up
+  };
 
 
 
@@ -241,13 +239,13 @@ const getFollowUpClass = (nextFollowUp) => {
             {/* <IoArrowBackCircleOutline className="fs-3"  onClick={() => navigate("/admin/dashboard")} style={{ cursor: "pointer" }} /> */}
             <div className="d-flex flex align-items-center gap-1">
               {(isBack || location?.state?.back) && <IoArrowBackCircleOutline className="fs-3" onClick={handleBack} style={{ cursor: "pointer" }} />}
-              <span>{pageTxt ||  "All Case"}</span>
+              <span>{pageTxt || "All Case"}</span>
             </div>
           </div>
         </div>
 
         <div className="mx-md-5 mx-2 p-md-3">
-          {["admin","client","partner","employee"].includes(role?.toLowerCase()) && <div className={`row row-cols-1 ${isResolvedAmt ? "row-cols-md-3" : "row-cols-md-2"} `}>
+          {["admin", "client", "partner", "employee"].includes(role?.toLowerCase()) && <div className={`row row-cols-1 ${isResolvedAmt ? "row-cols-md-3" : "row-cols-md-2"} `}>
             <div className="border-end">
               <div className="bg-color-1 border-5 border-primary border-start card mx-1 my-4 p-2 shadow">
                 <div className='d-flex align-items-center justify-content-around'>
@@ -354,7 +352,6 @@ const getFollowUpClass = (nextFollowUp) => {
                         {isEdit && <span data-tooltip="Edit" style={{ cursor: "pointer", height: 30, width: 30, borderRadius: 30 }} className="bg-warning text-dark d-flex align-items-center justify-content-center" onClick={() => navigate(`${editUrl}${item._id}`, { state: { filter, back: location?.pathname, path: location?.pathname } })}><CiEdit /></span>}
                         {isChangeStatus && <span data-tooltip="Case status" style={{ cursor: "pointer", height: 30, width: 30, borderRadius: 30 }} className="bg-success text-white d-flex align-items-center justify-content-center" onClick={() => setChangeStatus({ status: true, details: item })}><VscGitPullRequestGoToChanges /></span>}
                         {isRemoveCase && <span data-tooltip="Delete" style={{ cursor: "pointer", height: 30, width: 30, borderRadius: 30 }} className="bg-danger text-white d-flex align-items-center justify-content-center" onClick={() => setChangeIsActiveStatus({ show: true, details: { _id: item._id, currentStatus: item?.isActive, name: item?.name, recovery: false } })}><AiOutlineDelete /></span>}
-                        {/* <span style={{ cursor: "pointer",height:30,width:30,borderRadius:30 }} className="bg-danger text-white d-flex align-items-center justify-content-center" onClick={() => setDeleteCase({status:true,id:item?._id})}><AiOutlineDelete /></span> */}
                       </span></td>
                     {createInvUrl && <td className="text-nowrap">
                       <span>
@@ -366,8 +363,8 @@ const getFollowUpClass = (nextFollowUp) => {
                     </td>}
                     {role?.toLowerCase() != "client" && role?.toLowerCase() != "partner" && <td className="text-nowrap">{item?.branchId}</td>}
                     <td className=" text-nowrap"><span className={isWeeklyFollowUp && item?.nextFollowUp ? getFollowUpClass(item?.nextFollowUp) : (item?.currentStatus?.toLowerCase() == "reject" ? "badge bg-danger text-white" : (item?.currentStatus?.toLowerCase() == "pending" ? "badge bg-warning" : (item?.currentStatus?.toLowerCase() == "resolve" ? "badge bg-success" : "badge bg-primary")))}>{item?.currentStatus}</span></td>
-                   {isWeeklyFollowUp && <td className="text-nowrap">{item?.nextFollowUp && getFormateDMYDate(item?.nextFollowUp)}</td>}
-          
+                    {isWeeklyFollowUp && <td className="text-nowrap">{item?.nextFollowUp && getFormateDMYDate(item?.nextFollowUp)}</td>}
+
                     <td className="text-nowrap">{item?.lastStatusDate && getFormateDMYDate(item?.lastStatusDate)}</td>
                     <td className="text-nowrap">{item?.createdAt && getFormateDMYDate(item?.createdAt)}</td>
                     <td className="text-nowrap">{item?.name}</td>
@@ -394,7 +391,6 @@ const getFollowUpClass = (nextFollowUp) => {
           </div>
           {changeStatus?.status && <ChangeStatusModal changeStatus={changeStatus} setChangeStatus={setChangeStatus} handleCaseStatus={setStatus} role="admin" attachementUpload={attachementUpload} />}
           {caseShareModal?.status && <ShareCaseModal handleShareCase={caseShare} caseShareModal={caseShareModal} getNoramlEmp={getNormalEmp} close={() => { setCaseShareModal({ value: [], status: false }); setShareCase([]) }} />}
-          {/* {deleteCase?.status && <ConfirmationModal show={deleteCase?.status} id={deleteCase?.id} hide={()=>setDeleteCase({status:false,id:""})} heading="Are you sure?" text="Your want to delete this case" handleComfirmation={adminDeleteCaseById}/>}  */}
           {changeisActiveStatus?.show && <SetStatusOfProfile changeStatus={changeisActiveStatus} hide={() => setChangeIsActiveStatus({ show: false, details: {} })} type="Case" handleChanges={handleChanges} />}
 
 

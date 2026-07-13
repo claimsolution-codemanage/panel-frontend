@@ -23,3 +23,7 @@ export const adminCasePaymentSchedulePaymentApi = (data) => {
 export const adminCasePaymentAddSchedulePaymentApi = (id, data) => {
     return postRequest(`/admin/case_payment/schedule/add-payment/${id}`, data)
 }
+
+export const adminCasePaymentDeleteApi = (id) => {
+    return deleteRequest(`/admin/case_payment/delete/${id}`)
+}

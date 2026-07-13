@@ -11,8 +11,10 @@ import loash from 'lodash'
 import DateSelect from "../../../components/Common/Modal/DateSelect";
 import { CiFilter } from "react-icons/ci";
 import PaginateField from "../../../components/Common/PaginateField";
+import { AiOutlineDelete } from "react-icons/ai";
+import SetStatusOfProfile from "../../../components/Common/Modal/setStatusModal";
 
-export default function CasePaymentDetailList({ getListApi, viewUrl, addPaymentUrl, role }) {
+export default function CasePaymentDetailList({ getListApi, viewUrl, addPaymentUrl, role, hasDeleteAccess, deleteApi }) {
     const location = useLocation()
     const [data, setData] = useState([])
     const navigate = useNavigate()
@@ -22,6 +24,8 @@ export default function CasePaymentDetailList({ getListApi, viewUrl, addPaymentU
     const [searchQuery, setSearchQuery] = useState(location?.pathname == location?.state?.path && location?.state?.filter?.searchQuery ? location?.state?.filter?.searchQuery : "")
     const [totalRecords, setTotalRecords] = useState(0)
     const [pgNo, setPgNo] = useState(location?.pathname == location?.state?.path && location?.state?.filter?.pgNo ? location?.state?.filter?.pgNo : 1)
+    const [showDeleteModel, setShowDeleteModel] = useState({ status: false, details: "" })
+
 
     const [dateRange, setDateRange] = useState(
         location?.pathname == location?.state?.path && location?.state?.filter?.dateRange ?
@@ -90,6 +94,27 @@ export default function CasePaymentDetailList({ getListApi, viewUrl, addPaymentU
         pgNo,
         searchQuery,
         dateRange
+    }
+
+    const handleDeleteCasePayment = async () => {
+        try {
+            if (showDeleteModel?.saving) return
+            setShowDeleteModel({ ...showDeleteModel, saving: true })
+            const res = await deleteApi(showDeleteModel?.details?._id)
+            if (res?.data?.success) {
+                toast.success(res?.data?.message)
+                getViewAllInvoice()
+            }
+        } catch (error) {
+            console.log("error", error);
+            if (error && error?.response?.data?.message) {
+                toast.error(error?.response?.data?.message)
+            } else {
+                toast.error("Failed to delete")
+            }
+        } finally {
+            setShowDeleteModel({ show: false, details: {} })
+        }
     }
 
     return (<>
@@ -166,6 +191,8 @@ export default function CasePaymentDetailList({ getListApi, viewUrl, addPaymentU
                                         <th scope="row">{ind + 1}</th>
                                         <td><span className="d-flex gap-2">
                                             <span data-tooltip="View" style={{ cursor: "pointer", height: 30, width: 30, borderRadius: 30 }} className="bg-warning text-white d-flex align-items-center justify-content-center" onClick={() => navigate(`${viewUrl}${item._id}`, { state: { filter, back: location?.pathname, path: location?.pathname } })}><HiMiniEye /></span>
+                                            {hasDeleteAccess && <span data-tooltip="Delete" style={{ cursor: "pointer", height: 30, width: 30, borderRadius: 30 }} className="bg-danger text-white d-flex align-items-center justify-content-center" onClick={() => setShowDeleteModel({ show: true, details: { _id: item._id, currentStatus: true, name: item?.name || "-", recovery: false } })}><AiOutlineDelete /></span>}
+
                                         </span>
                                         </td>
                                         <td className="text-nowrap">{item?.currentStatus}</td>
@@ -193,7 +220,9 @@ export default function CasePaymentDetailList({ getListApi, viewUrl, addPaymentU
                         </div>
                     </div>
                 </div>
+                {showDeleteModel?.show && <SetStatusOfProfile changeStatus={showDeleteModel} hide={() => setShowDeleteModel({ show: false, details: {} })} type="Case Payment" handleChanges={handleDeleteCasePayment} />}
             </div >
+
         }
     </>)
 }

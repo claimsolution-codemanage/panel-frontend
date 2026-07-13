@@ -236,10 +236,6 @@ export const adminAddOrUpdatePayment = (data) => {
   return axios.post(`${API_BASE}/api/admin/addOrUpdatePayment`, data)
 }
 
-export const adminEditCaseProcessById = (data) => {
-  setheader()
-  return axios.put(`${API_BASE}/api/admin/editCaseProcessById`, data)
-}
 
 export const adminSetPartnerTag = (data) => {
   setheader()
