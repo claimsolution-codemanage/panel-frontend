@@ -12,7 +12,7 @@ export default function StatusSection({ isAddCaseProcess, id, role, details, get
     const [changeStatus, setChangeStatus] = useState({ status: false, details: "" })
     const [showEditCaseModal, setShowEditCaseModal] = useState({ status: false, details: {} })
     const [viewRemarkModal, setViewRemarkModal] = useState({ viewStatus: false, remark: "", status: "", date: "" })
-    const [showProcess, setShowProcess] = useState(true)
+    const [showProcess, setShowProcess] = useState(false)
     const [expandedCardId, setExpandedCardId] = useState(null)
 
     const toggleCardExpand = (id) => {
