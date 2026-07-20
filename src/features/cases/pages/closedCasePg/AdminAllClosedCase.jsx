@@ -1,5 +1,5 @@
-import { adminChangeCaseStatus, adminShareCaseToEmployee, adminAllCaseDownload, adminGetNormalEmployee, adminSetCaseIsActive } from "../../../../apis"
-import { allAdminCase } from "../../../../apis"
+import { adminAllCaseDownload } from "../../../../apis"
+import { allAdminCaseApi } from "../../../../apis/case/adminCaseApi"
 import { adminAttachementUpload } from "../../../../apis/upload"
 import ViewAllCaseComp from "../../components/viewAllComp/ViewAllCaseComp"
 
@@ -8,7 +8,7 @@ export default function AdminClosedCasePage() {
         <ViewAllCaseComp
             pageTxt={"Closed Case"}
             isBack={false}
-            getCases={allAdminCase}
+            getCases={allAdminCaseApi}
             downloadCase={adminAllCaseDownload}
             role={"admin"}
             viewUrl={"/admin/view case/"}

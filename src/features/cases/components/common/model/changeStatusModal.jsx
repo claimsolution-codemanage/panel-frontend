@@ -49,7 +49,6 @@ export default function ChangeStatusModal({ changeStatus, setChangeStatus, handl
                 toast.error("Something went wrong")
 
             }
-            // console.log("adminChangeCaseStatus error", error);
             setLoading(false)
         }
     }

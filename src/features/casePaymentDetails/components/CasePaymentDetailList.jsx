@@ -170,6 +170,7 @@ export default function CasePaymentDetailList({ getListApi, viewUrl, addPaymentU
                                         <th scope="col" className="text-nowrap" >SL No</th>
                                         <th scope="col" className="text-nowrap">Action</th>
                                         <th scope="col" className="text-nowrap" >Current Case Status</th>
+                                        <th scope="col" className="text-nowrap"  >Next Due Date</th>
                                         <th scope="col" className="text-nowrap" >Case Added On</th>
                                         <th scope="col" className="text-nowrap"  >Payment Added On</th>
                                         {role === "client" && <th scope="col" className="text-nowrap"  >Case Name</th>}
@@ -196,6 +197,7 @@ export default function CasePaymentDetailList({ getListApi, viewUrl, addPaymentU
                                         </span>
                                         </td>
                                         <td className="text-nowrap">{item?.currentStatus}</td>
+                                        <td className="text-nowrap">{item?.nextDueDate ? getFormateDMYDate(item?.nextDueDate) : "-"}</td>
                                         <td className="text-nowrap">{item?.caseAddOn && getFormateDMYDate(item?.caseAddOn)}</td>
                                         <td className="text-nowrap">{item?.createdAt && getFormateDMYDate(item?.createdAt)}</td>
                                         {role === "client" && <td className="text-nowrap">{item?.caseName}</td>}

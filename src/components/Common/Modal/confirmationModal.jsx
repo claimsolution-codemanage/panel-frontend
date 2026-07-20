@@ -2,11 +2,11 @@ import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import { useState } from 'react';
 import { toast } from 'react-toastify';
-import {ImSwitch} from 'react-icons/im'
+import { ImSwitch } from 'react-icons/im'
 import { RiDeleteBin2Line } from "react-icons/ri";
 
-export default function ConfirmationModal({show,hide,id,handleComfirmation,heading,text,getRefreshData}) {
-    const [loading,setLoading] = useState(false)
+export default function ConfirmationModal({ show, hide, id, handleComfirmation, heading, text, getRefreshData }) {
+    const [loading, setLoading] = useState(false)
 
 
     const handleSumbit = async (e) => {
@@ -18,7 +18,7 @@ export default function ConfirmationModal({show,hide,id,handleComfirmation,headi
                 toast.success(res?.data?.message)
                 setLoading(false)
                 hide()
-                if(getRefreshData) getRefreshData()
+                if (getRefreshData) getRefreshData()
 
             }
             setLoading(false)
@@ -30,7 +30,6 @@ export default function ConfirmationModal({show,hide,id,handleComfirmation,headi
                 toast.error("Something went wrong")
 
             }
-            // console.log("adminChangeCaseStatus error", error);
             hide()
             setLoading(false)
         }
@@ -44,11 +43,11 @@ export default function ConfirmationModal({show,hide,id,handleComfirmation,headi
         >
             <Modal.Body className='color-4'>
                 <div className='p-3'>
-                <div className='d-flex flex-column align-items-center justify-content-center'>
-                    <div className='d-flex align-items-center justify-content-center text-white bg-danger' style={{height:50,width:50,borderRadius:50}}><RiDeleteBin2Line className='fs-3'/></div>
-                    <p className='text-danger fs-2 mt-4'>{heading}</p>
-                    <p className='text fs-5 text-center'>{text}</p>
-                </div>
+                    <div className='d-flex flex-column align-items-center justify-content-center'>
+                        <div className='d-flex align-items-center justify-content-center text-white bg-danger' style={{ height: 50, width: 50, borderRadius: 50 }}><RiDeleteBin2Line className='fs-3' /></div>
+                        <p className='text-danger fs-2 mt-4'>{heading}</p>
+                        <p className='text fs-5 text-center'>{text}</p>
+                    </div>
                 </div>
 
             </Modal.Body>

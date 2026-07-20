@@ -1,15 +1,15 @@
 import AllCaseTrash from '../../../components/Common/trash/AllCaseTrash'
-import { adminDeleteCaseById, adminSetCaseIsActive, allAdminCase } from '../../../apis'
+import { adminDeleteCaseByIdApi, adminSetCaseIsActiveApi, allAdminCaseApi } from '../../../apis/case/adminCaseApi'
 
 export default function AdminTrashCase() {
   return (
     <div>
       <AllCaseTrash
-      allCaseApi={allAdminCase} 
-      caseStatusApi={adminSetCaseIsActive} 
-      deleteCaseApi={adminDeleteCaseById}
-      removeCasePermission={true}
-      viewCasepath={"/admin/view case"}
+        allCaseApi={allAdminCaseApi}
+        caseStatusApi={adminSetCaseIsActiveApi}
+        deleteCaseApi={adminDeleteCaseByIdApi}
+        removeCasePermission={true}
+        viewCasepath={"/admin/view case"}
       />
     </div>
   )

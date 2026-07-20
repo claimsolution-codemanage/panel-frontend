@@ -1,5 +1,5 @@
-import { adminChangeCaseStatus, adminShareCaseToEmployee, adminAllCaseDownload, adminGetNormalEmployee, adminSetCaseIsActive } from "../../../../apis"
-import { allAdminCase } from "../../../../apis"
+import { adminShareCaseToEmployee, adminAllCaseDownload, adminGetNormalEmployee } from "../../../../apis"
+import { adminChangeCaseStatusApi, adminSetCaseIsActiveApi, allAdminCaseApi } from "../../../../apis/case/adminCaseApi"
 import { adminAttachementUpload } from "../../../../apis/upload"
 import ViewAllCaseComp from "../../components/viewAllComp/ViewAllCaseComp"
 
@@ -8,11 +8,11 @@ export default function AdminRejectCase() {
     <ViewAllCaseComp
       pageTxt={"Reject Case"}
       isBack={false}
-      getCases={allAdminCase}
+      getCases={allAdminCaseApi}
       downloadCase={adminAllCaseDownload}
       role={"admin"}
-      setStatus={adminChangeCaseStatus}
-      setCaseStatus={adminSetCaseIsActive}
+      setStatus={adminChangeCaseStatusApi}
+      setCaseStatus={adminSetCaseIsActiveApi}
       viewUrl={"/admin/view case/"}
       editUrl={"/admin/edit%20case/"}
       isEdit={false}

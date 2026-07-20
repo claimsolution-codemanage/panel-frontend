@@ -13,7 +13,7 @@ import ChangeStatusModal from "../../../features/cases/components/common/model/c
 import { useLocation, useNavigate } from "react-router-dom"
 import { BiLeftArrow } from 'react-icons/bi'
 import { BiRightArrow } from 'react-icons/bi'
-import { adminChangeCaseStatus, adminShareCaseToEmployee, adminViewSaleEmpCaseReport, adminSaleEmpCaseReportDownload } from "../../../apis"
+import { adminShareCaseToEmployee, adminViewSaleEmpCaseReport, adminSaleEmpCaseReportDownload } from "../../../apis"
 import Loader from "../../../components/Common/loader"
 import { IoShareSocialOutline } from "react-icons/io5";
 import { CiFilter } from "react-icons/ci";
@@ -21,12 +21,12 @@ import ShareCaseModal from "../../../features/cases/components/common/model/shar
 import loash from 'lodash'
 import { AiOutlineDelete } from "react-icons/ai";
 import { VscGitPullRequestGoToChanges } from 'react-icons/vsc'
-import { adminSetCaseIsActive } from "../../../apis"
 import SetStatusOfProfile from "../../../components/Common/Modal/setStatusModal"
 import { useParams } from "react-router-dom"
 import DateSelect from "../../../components/Common/Modal/DateSelect"
 import { SiMicrosoftexcel } from "react-icons/si";
 import { adminAttachementUpload } from "../../../apis/upload"
+import { adminChangeCaseStatusApi, adminSetCaseIsActiveApi } from "../../../apis/case/adminCaseApi"
 
 export default function AdminViewSaleEmpCaseReport() {
   const [data, setData] = useState([])
@@ -34,13 +34,13 @@ export default function AdminViewSaleEmpCaseReport() {
   const navigate = useNavigate()
   const location = useLocation()
   const [loading, setLoading] = useState(true)
-  const [statusType, setStatusType] = useState(location?.pathname==location?.state?.path && location?.state?.filter?.statusType ? location?.state?.filter?.statusType :"")
-  const [pageItemLimit, setPageItemLimit] = useState(location?.pathname==location?.state?.path && location?.state?.filter?.pageItemLimit ? location?.state?.filter?.pageItemLimit :10)
+  const [statusType, setStatusType] = useState(location?.pathname == location?.state?.path && location?.state?.filter?.statusType ? location?.state?.filter?.statusType : "")
+  const [pageItemLimit, setPageItemLimit] = useState(location?.pathname == location?.state?.path && location?.state?.filter?.pageItemLimit ? location?.state?.filter?.pageItemLimit : 10)
   const [showCalender, setShowCalender] = useState(false)
   const [isSearch, setIsSearch] = useState(false)
-  const [searchQuery, setSearchQuery] = useState(location?.pathname==location?.state?.path && location?.state?.filter?.searchQuery ? location?.state?.filter?.searchQuery :"")
+  const [searchQuery, setSearchQuery] = useState(location?.pathname == location?.state?.path && location?.state?.filter?.searchQuery ? location?.state?.filter?.searchQuery : "")
   const [noOfCase, setNoOfCase] = useState(0)
-  const [pgNo, setPgNo] = useState(location?.pathname==location?.state?.path && location?.state?.filter?.pgNo ? location?.state?.filter?.pgNo :1)
+  const [pgNo, setPgNo] = useState(location?.pathname == location?.state?.path && location?.state?.filter?.pgNo ? location?.state?.filter?.pgNo : 1)
   const [changeStatus, setChangeStatus] = useState({ status: false, details: "" })
   const [shareCase, setShareCase] = useState([])
   const [caseShareModal, setCaseShareModal] = useState({ status: false, value: [] })
@@ -51,7 +51,7 @@ export default function AdminViewSaleEmpCaseReport() {
   const [userReport, setUserReport] = useState({})
   const [downloading, setDownloading] = useState(false)
   const [dateRange, setDateRange] = useState(
-    location?.pathname==location?.state?.path && location?.state?.filter?.dateRange ? location?.state?.filter?.dateRange : {
+    location?.pathname == location?.state?.path && location?.state?.filter?.dateRange ? location?.state?.filter?.dateRange : {
       startDate: new Date("2024/01/01"),
       endDate: new Date(),
     }
@@ -73,7 +73,6 @@ export default function AdminViewSaleEmpCaseReport() {
         const endDate = dateRange?.endDate ? getFormateDate(dateRange?.endDate) : ""
         // console.log("start", startDate, "end", endDate);
         const res = await adminViewSaleEmpCaseReport(param?._id, pageItemLimit, pgNo, searchQuery, statusType, startDate, endDate, type)
-        // console.log("allAdminCase", res?.data?.data);
         if (res?.data?.success && res?.data?.data) {
           setData([...res?.data?.data])
           setNoOfCase(res?.data?.noOfCase)
@@ -87,7 +86,6 @@ export default function AdminViewSaleEmpCaseReport() {
         } else {
           toast.error("Something went wrong")
         }
-        // console.log("allAdminCase error", error);
       }
 
     }
@@ -166,7 +164,7 @@ export default function AdminViewSaleEmpCaseReport() {
 
   const handleChanges = async (_id, status) => {
     try {
-      const res = await adminSetCaseIsActive(_id, status)
+      const res = await adminSetCaseIsActiveApi(_id, status)
       if (res?.data?.success) {
         setChangeIsActiveStatus({ show: false, details: {} })
         toast.success(res?.data?.message)
@@ -178,7 +176,6 @@ export default function AdminViewSaleEmpCaseReport() {
       } else {
         toast.error("Something went wrong")
       }
-      // console.log("allAdminCase isActive error", error);
     }
   }
 
@@ -206,10 +203,10 @@ export default function AdminViewSaleEmpCaseReport() {
   }
 
   const handleBack = () => {
-    if(location?.state?.filter && location?.state?.back){
-        navigate(location?.state?.back,{state:{...location?.state,back:location?.pathname}});
-    }else{
-        navigate(-1)
+    if (location?.state?.filter && location?.state?.back) {
+      navigate(location?.state?.back, { state: { ...location?.state, back: location?.pathname } });
+    } else {
+      navigate(-1)
     }
   };
 
@@ -225,7 +222,7 @@ export default function AdminViewSaleEmpCaseReport() {
               {/* <span><LuPcCase /></span> */}
             </div>
           </div>
-          <button onClick={() => navigate(`/admin/partner details/${param._id}`,{state:{filter,back:location?.pathname,path:location?.pathname}})} className="btn btn-primary">View</button>
+          <button onClick={() => navigate(`/admin/partner details/${param._id}`, { state: { filter, back: location?.pathname, path: location?.pathname } })} className="btn btn-primary">View</button>
         </div>
 
         <div className="mx-5 p-3">
@@ -309,14 +306,14 @@ export default function AdminViewSaleEmpCaseReport() {
                     {/* <th scope="col" className="text-nowrap" ><th scope="col" ></th></th> */}
                     <th scope="col" className="text-nowrap" ><th scope="col" >SL No</th></th>
                     <th scope="col" className="text-nowrap">Action</th>
-                   {<th scope="col" className="text-nowrap" >Branch ID</th> }
+                    {<th scope="col" className="text-nowrap" >Branch ID</th>}
                     <th scope="col" className="text-nowrap" >Current Status</th>
                     {/* <th scope="col" className="text-nowrap" >Reference</th> */}
                     <th scope="col" className="text-nowrap" >Date</th>
-                   { <th scope="col" className="text-nowrap" >Case From</th> }
-                   { <th scope="col" className="text-nowrap" >Team Added by</th> }
-                   { <th scope="col" className="text-nowrap" >Partner Name</th> }
-                   {/* {(role?.toLowerCase()!="client" && role?.toLowerCase()!="partner" ) && <th scope="col" className="text-nowrap" >Partner Consultant Code</th> } */}
+                    {<th scope="col" className="text-nowrap" >Case From</th>}
+                    {<th scope="col" className="text-nowrap" >Team Added by</th>}
+                    {<th scope="col" className="text-nowrap" >Partner Name</th>}
+                    {/* {(role?.toLowerCase()!="client" && role?.toLowerCase()!="partner" ) && <th scope="col" className="text-nowrap" >Partner Consultant Code</th> } */}
                     <th scope="col" className="text-nowrap"  >Case Name</th>
                     <th scope="col" className="text-nowrap"  >Mobile No</th>
                     <th scope="col" className="text-nowrap"  >Email Id</th>
@@ -344,13 +341,13 @@ export default function AdminViewSaleEmpCaseReport() {
                         <span>{(isClipBoardCopy?.id == item?._id && isClipBoardCopy?.copied) ? <BsClipboardCheck className="text-primary fs-4" /> : <BsClipboard />} </span>
                         </CopyToClipboard>}
                       </td> */}
-                   {<td className="text-nowrap">{item?.branchId}</td>}
-                      <td className=" text-nowrap"><span className={(item?.currentStatus?.toLowerCase() == "reject" ? "badge bg-danger text-white" : (item?.currentStatus?.toLowerCase() == "pending" ?  "badge bg-warning" : (item?.currentStatus?.toLowerCase() == "resolve" ? "badge bg-success" :"badge bg-primary") ))}>{item?.currentStatus}</span></td>
-                              <td className="text-nowrap">{item?.createdAt && getFormateDMYDate(item?.createdAt)}</td>
-                   {<td className="text-nowrap text-capitalize">{item?.caseFrom}</td>}
-                   {<td className="text-nowrap text-capitalize" >{item?.employeeDetails?.fullName ? `${item?.employeeDetails?.fullName} | ${item?.employeeDetails?.type} | ${item?.employeeDetails?.designation}`  : "-"}</td> }
-                   {<td className="text-nowrap text-capitalize" >{item?.partnerDetails?.fullName || "-"}</td> }
-                   {/* {(role?.toLowerCase()!="client" && role?.toLowerCase()!="partner" ) && <td className="text-nowrap text-capitalize" >{item?.partnerCode || "-"}</td> } */}
+                    {<td className="text-nowrap">{item?.branchId}</td>}
+                    <td className=" text-nowrap"><span className={(item?.currentStatus?.toLowerCase() == "reject" ? "badge bg-danger text-white" : (item?.currentStatus?.toLowerCase() == "pending" ? "badge bg-warning" : (item?.currentStatus?.toLowerCase() == "resolve" ? "badge bg-success" : "badge bg-primary")))}>{item?.currentStatus}</span></td>
+                    <td className="text-nowrap">{item?.createdAt && getFormateDMYDate(item?.createdAt)}</td>
+                    {<td className="text-nowrap text-capitalize">{item?.caseFrom}</td>}
+                    {<td className="text-nowrap text-capitalize" >{item?.employeeDetails?.fullName ? `${item?.employeeDetails?.fullName} | ${item?.employeeDetails?.type} | ${item?.employeeDetails?.designation}` : "-"}</td>}
+                    {<td className="text-nowrap text-capitalize" >{item?.partnerDetails?.fullName || "-"}</td>}
+                    {/* {(role?.toLowerCase()!="client" && role?.toLowerCase()!="partner" ) && <td className="text-nowrap text-capitalize" >{item?.partnerCode || "-"}</td> } */}
                     <td className="text-nowrap">{item?.name}</td>
                     <td className="text-nowrap">{item?.mobileNo}</td>
                     <td className="text-nowrap">{item?.email}</td>
@@ -387,9 +384,8 @@ export default function AdminViewSaleEmpCaseReport() {
             </div>
 
           </div>
-          {changeStatus?.status && <ChangeStatusModal changeStatus={changeStatus} setChangeStatus={setChangeStatus} handleCaseStatus={adminChangeCaseStatus} role="admin" attachementUpload={adminAttachementUpload}/>}
+          {changeStatus?.status && <ChangeStatusModal changeStatus={changeStatus} setChangeStatus={setChangeStatus} handleCaseStatus={adminChangeCaseStatusApi} role="admin" attachementUpload={adminAttachementUpload} />}
           {caseShareModal?.status && <ShareCaseModal handleShareCase={adminShareCaseToEmployee} caseShareModal={caseShareModal} close={() => { setCaseShareModal({ value: [], status: false }); setShareCase([]) }} />}
-          {/* {deleteCase?.status && <ConfirmationModal show={deleteCase?.status} id={deleteCase?.id} hide={()=>setDeleteCase({status:false,id:""})} heading="Are you sure?" text="Your want to delete this case" handleComfirmation={adminDeleteCaseById}/>}  */}
           {changeisActiveStatus?.show && <SetStatusOfProfile changeStatus={changeisActiveStatus} hide={() => setChangeIsActiveStatus({ show: false, details: {} })} type="Case" handleChanges={handleChanges} />}
         </div>
       </div>}

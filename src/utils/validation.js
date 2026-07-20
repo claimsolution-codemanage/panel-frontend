@@ -124,6 +124,8 @@ export const paymentValidationSchema = yup.object({
     .oneOf(["Cash", "UPI", "Web", "Cheque", "Net Banking"], "Invalid payment mode"),
 
   dateOfPayment: yup.date()
+    .nullable()
+    .transform((curr, orig) => (orig === '' || orig === null ? null : curr))
     .required("Date of payment is required"),
 
   utrNumber: yup.string()
@@ -157,6 +159,8 @@ export const paymentValidationSchema = yup.object({
     ),
 
   chequeDate: yup.date()
+    .nullable()
+    .transform((curr, orig) => (orig === '' || orig === null ? null : curr))
     .test(
       "is-required-htmlFor-cheque",
       "Cheque Date is required",
@@ -178,6 +182,8 @@ export const paymentValidationSchema = yup.object({
     .typeError("Amount must be a number"),
 
   transactionDate: yup.date()
+    .nullable()
+    .transform((curr, orig) => (orig === '' || orig === null ? null : curr))
     .test(
       "is-required-htmlFor-net-banking",
       "Transaction Date is required",

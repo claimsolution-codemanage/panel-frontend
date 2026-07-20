@@ -2,9 +2,7 @@ import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import { caseStatus } from '../../../../../utils/constant';
 import { useState } from 'react';
-import { adminChangeCaseStatus } from '../../../../../apis';
 import { toast } from 'react-toastify';
-import { useNavigate } from 'react-router-dom';
 import TextEditor from '../../../../../components/TextEditor';
 import { formatDateToISO } from '../../../../../utils/helperFunction';
 

@@ -5,7 +5,6 @@ import { useParams } from "react-router-dom"
 import { IoArrowBackCircleOutline, } from 'react-icons/io5'
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
-import { adminUpdateClientCaseFee, } from "../../../../apis"
 import Loader from "../../../../components/Common/loader"
 import { useContext } from "react"
 import { AppContext } from "../../../../App"
@@ -17,6 +16,7 @@ import CaseDetails from "./section/CaseDetails"
 import DocumentSection from "./section/DocumentSection"
 import ViewCaseForm from "../common/form/CaseFormList"
 import ClientOtherCaseSection from "./section/ClientOtherCaseSection"
+import { adminUpdateClientCaseFeeApi } from "../../../../apis/case/adminCaseApi"
 
 
 export default function ViewCaseComp({ id, getCase, role, empType, attachementUpload, addCaseDoc,
@@ -69,7 +69,7 @@ export default function ViewCaseComp({ id, getCase, role, empType, attachementUp
         // console.log("clear payment handler", clearClientpayment);
         setClearClientPayment({ ...clearClientpayment, loading: true })
         try {
-            const res = await adminUpdateClientCaseFee(clearClientpayment.data)
+            const res = await adminUpdateClientCaseFeeApi(clearClientpayment.data)
             // console.log("case", res?.data);
             if (res?.data?.success) {
                 toast.success(res?.data?.message)
@@ -128,7 +128,7 @@ export default function ViewCaseComp({ id, getCase, role, empType, attachementUp
                                             }
 
                                             {/* payment details */}
-                                            {data[0]?.caseFrom?.toLowerCase() == "client" && isPaymentAccess && <PaymentSection id={id} accessPayment={accessPayment} getCaseById={getCaseById} paymentDetailsApi={paymentDetailsApi} casePayment={data[0]?.casePayment} />}
+                                            {data[0]?.caseFrom?.toLowerCase() == "client" && isPaymentAccess && <PaymentSection id={id} accessPayment={accessPayment} getCaseById={getCaseById} paymentDetailsApi={paymentDetailsApi} attachementUpload={attachementUpload} casePayment={data[0]?.casePayment} />}
 
                                             {/* client other case section */}
                                             {Boolean(isViewOtherClientCase) && Boolean(data?.[0]?.clientOtherCases?.length) && <ClientOtherCaseSection data={data?.[0]?.clientOtherCases || []} role={role} viewOtherClientCasePath={viewOtherClientCasePath} />

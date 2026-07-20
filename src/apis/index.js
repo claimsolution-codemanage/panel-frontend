@@ -157,11 +157,6 @@ export const adminCreateNewEmployee = (data) => {
   return axios.post(`${API_BASE}/api/admin/createEmployeeAccount`, data)
 }
 
-export const allAdminCase = ({ pageItemLimit = "", pgNo = 1, searchQuery = "", statusType = "", startDate = "", endDate = "", type, empId, id, isReject = "", isWeeklyFollowUp = false, isClosed = false }) => {
-  setheader()
-  return axios.get(`${API_BASE}/api/admin/viewAllCase?limit=${pageItemLimit}&pageNo=${pgNo}&search=${searchQuery}&status=${statusType}&startDate=${startDate}&endDate=${endDate}&type=${type}&isReject=${isReject}&isWeeklyFollowUp=${isWeeklyFollowUp}&isClosed=${isClosed}`)
-}
-
 export const adminAllCaseDownload = ({ searchQuery = "", statusType = "", startDate = "", endDate = "", type, empId, id, isReject = "", isWeeklyFollowUp = false, isClosed = false }) => {
   setheader()
   return axios({
@@ -216,25 +211,16 @@ export const adminSaleEmpCaseReportDownload = (empSaleId = "", searchQuery = "",
 }
 
 
-export const adminGetCaseById = (_id) => {
-  setheader()
-  return axios.get(`${API_BASE}/api/admin/viewCaseById?_id=${_id}`)
-}
 
-export const adminChangeCaseStatus = (data) => {
-  setheader()
-  return axios.put(`${API_BASE}/api/admin/changeCaseStatus`, data)
-}
+
+
 
 export const adminChangeBranch = (data) => {
   setheader()
   return axios.put(`${API_BASE}/api/admin/change-branch`, data)
 }
 
-export const adminAddOrUpdatePayment = (data) => {
-  setheader()
-  return axios.post(`${API_BASE}/api/admin/addOrUpdatePayment`, data)
-}
+
 
 
 export const adminSetPartnerTag = (data) => {
@@ -247,10 +233,7 @@ export const adminSetClientTag = (data) => {
   return axios.put(`${API_BASE}/api/admin/setClientTag`, data)
 }
 
-export const adminSetCaseIsActive = (_id, status) => {
-  setheader()
-  return axios.put(`${API_BASE}/api/admin/changeCaseIsActive?_id=${_id}&status=${!status}`)
-}
+
 
 
 export const adminSetCaseDocIsActive = (_id, status) => {
@@ -382,20 +365,6 @@ export const adminUpdateSettingDetails = (data) => {
   return axios.put(`${API_BASE}/api/admin/settingDetailsUpdate`, data)
 }
 
-export const adminAddClientPayment = (_id, data) => {
-  setheader()
-  return axios.put(`${API_BASE}/api/admin/addCaseFeeClient?_id=${_id}`, data)
-}
-
-export const adminUpdateCaseById = (_id, data) => {
-  setheader()
-  return axios.post(`${API_BASE}/api/admin/updateCaseById?_id=${_id}`, data)
-}
-
-export const adminUpdateClientCaseFee = (data) => {
-  setheader()
-  return axios.put(`${API_BASE}/api/admin/updateClientCaseFee?_id=${data?._id}&paymentId=${data?.paymentId}&paymentMode=${data?.paymentMode}`)
-}
 
 export const adminUploadCompanyPartnerTls = (data) => {
   setheader()
@@ -448,21 +417,6 @@ export const adminRemoveJobById = (id) => {
   return axios.delete(`${API_BASE}/api/admin/deleteJobById?_id=${id}`)
 }
 
-export const adminAddCaseReference = (query) => {
-  setheader()
-  return axios.put(`${API_BASE}/api/admin/addReferenceCaseAndMarge?${query}`)
-}
-
-export const adminRemoveCaseReference = (_id, type) => {
-  setheader()
-  return axios.put(`${API_BASE}/api/admin/removeReferenceCase?_id=${_id}&type=${type}`)
-}
-
-export const adminDeleteCaseById = (id) => {
-  setheader()
-  return axios.delete(`${API_BASE}/api/admin/deleteCaseById?caseId=${id}`)
-}
-
 export const adminDeletePartnerById = (id) => {
   setheader()
   return axios.delete(`${API_BASE}/api/admin/deletePartnerById?partnerId=${id}`)
@@ -499,13 +453,6 @@ export const adminUpdatePartnerBankingDetails = (_id, data) => {
   return axios.put(`${API_BASE}/api/admin/updatePartnerBankingDetails?_id=${_id}`, data)
 }
 
-export const adminDeleteCaseDocById = (id) => {
-  setheader()
-  return axios.delete(`${API_BASE}/api/admin/deleteCaseDocId?_id=${id}`)
-}
-
-
-
 //  for statment
 
 // notification
@@ -536,10 +483,7 @@ export const adminGetEmpJoiningFormApi = (empId) => {
   return axios.get(`${API_BASE}/api/admin/employee/admingetEmpJoiningForm?empId=${empId}`)
 }
 
-export const adminAddCaseFileByIdApi = (_id, data) => {
-  setheader()
-  return axios.post(`${API_BASE}/api/admin/adminAddCaseFile?_id=${_id}`, data)
-}
+
 
 
 

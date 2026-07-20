@@ -1,18 +1,17 @@
-import { adminAddCaseFileByIdApi, adminAddOrUpdateCaseComment, adminAddOrUpdatePayment, adminGetCaseById } from "../../../../apis"
+import { adminAddOrUpdateCaseComment } from "../../../../apis"
 import { useParams } from "react-router-dom"
-import { adminDeleteCaseDocById, adminSetCaseDocIsActive, adminChangeCaseStatus, adminRemoveCaseReference } from "../../../../apis"
-import { adminAddCaseReference } from "../../../../apis"
+import { adminSetCaseDocIsActive } from "../../../../apis"
 import { adminAttachementUpload } from "../../../../apis/upload"
 import ViewCaseComp from "../../components/viewComp/ViewCaseComp"
 import { adminCreateOrUpdateCaseFormApi, adminGetCaseFormById } from "../../../../apis/case/form/caseFormApi"
-import { adminEditCaseProcessById, adminRenameCaseDocFolderApi } from "../../../../apis/case/adminCaseApi"
+import { adminAddCaseFileByIdApi, adminAddCaseReferenceApi, adminAddOrUpdatePaymentApi, adminChangeCaseStatusApi, adminDeleteCaseDocByIdApi, adminEditCaseProcessById, adminGetCaseByIdApi, adminRemoveCaseReferenceApi, adminRenameCaseDocFolderApi } from "../../../../apis/case/adminCaseApi"
 
 export default function AdminViewCase() {
   const param = useParams()
 
   return (<>
     <ViewCaseComp id={param?._id}
-      getCase={adminGetCaseById}
+      getCase={adminGetCaseByIdApi}
       role={"admin"}
       attachementUpload={adminAttachementUpload}
       editUrl={"/admin/edit%20case/"}
@@ -27,14 +26,14 @@ export default function AdminViewCase() {
       isAddCaseProcess={true}
       isAddCommit={true}
       editCaseProcess={adminEditCaseProcessById}
-      addCaseProcess={adminChangeCaseStatus}
-      addReference={adminAddCaseReference}
-      deleteReference={adminRemoveCaseReference}
-      deleteDoc={adminDeleteCaseDocById}
+      addCaseProcess={adminChangeCaseStatusApi}
+      addReference={adminAddCaseReferenceApi}
+      deleteReference={adminRemoveCaseReferenceApi}
+      deleteDoc={adminDeleteCaseDocByIdApi}
       addCaseCommit={adminAddOrUpdateCaseComment}
       setCaseDocStatus={adminSetCaseDocIsActive}
       accessPayment={true}
-      paymentDetailsApi={adminAddOrUpdatePayment}
+      paymentDetailsApi={adminAddOrUpdatePaymentApi}
       isCaseFormAccess={true}
       createOrUpdateCaseFormApi={adminCreateOrUpdateCaseFormApi}
       caseFormDetailApi={adminGetCaseFormById}

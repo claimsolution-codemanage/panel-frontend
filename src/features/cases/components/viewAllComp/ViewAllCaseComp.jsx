@@ -73,7 +73,6 @@ export default function ViewAllCaseComp({ pageTxt, getCases, downloadCase, role,
       const endDate = dateRange.endDate ? getFormateDate(dateRange.endDate) : ""
       // console.log("start", startDate, "end", endDate);
       const res = await getCases({ pageItemLimit, pgNo, searchQuery, statusType, startDate, endDate, type, empId, id, isReject, isWeeklyFollowUp, isClosed })
-      // console.log("allAdminCase", res?.data?.data);
       if (res?.data?.success && res?.data?.data) {
         setData([...res?.data?.data])
         setNoOfCase(res?.data?.noOfCase)
@@ -174,7 +173,6 @@ export default function ViewAllCaseComp({ pageTxt, getCases, downloadCase, role,
       } else {
         toast.error("Something went wrong")
       }
-      // console.log("allAdminCase isActive error", error);
     }
   }
 

@@ -4,8 +4,8 @@ import { useState } from 'react';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 
-export default function AddAdminTagModal({ adminTag, setAdminTag, handleAdminTag,}) {
-    const [data, setData] = useState({ _id: adminTag?.details?._id,profileTag: adminTag?.details?.profileTag ? adminTag?.details?.profileTag : "" })
+export default function AddAdminTagModal({ adminTag, setAdminTag, handleAdminTag, }) {
+    const [data, setData] = useState({ _id: adminTag?.details?._id, profileTag: adminTag?.details?.profileTag ? adminTag?.details?.profileTag : "" })
     const [loading, setLoading] = useState(false)
     const navigate = useNavigate()
 
@@ -31,7 +31,6 @@ export default function AddAdminTagModal({ adminTag, setAdminTag, handleAdminTag
             } else {
                 toast.error("Something went wrong")
             }
-            // console.log("adminChangeCaseStatus error", error);
             setLoading(false)
         }
     }
@@ -49,7 +48,7 @@ export default function AddAdminTagModal({ adminTag, setAdminTag, handleAdminTag
                     </div>
                     <div className="mb-3 col-12">
                         {/* <label for="mobileNo." className="form-label">About you</label> */}
-                        <input className="form-control" name="profileTag" value={data?.profileTag} onChange={hangleOnchange} placeholder="Profile Tag"/>
+                        <input className="form-control" name="profileTag" value={data?.profileTag} onChange={hangleOnchange} placeholder="Profile Tag" />
                     </div>
                 </div>
 
