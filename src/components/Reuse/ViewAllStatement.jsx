@@ -42,9 +42,6 @@ export default function ViewAllStatement({ getStatementApi, type, excelDownloadA
   const excelDownloadAccess = ((roleAccess?.includes(state?.myAppData?.details?.role?.toLowerCase())) || (roleAccess?.includes(state?.myAppData?.details?.empType?.toLowerCase())))
 
 
-
-
-
   const handleReset = () => {
     setPageItemLimit(10)
     setDateRange([{ startDate: new Date("2024/01/01"), endDate: new Date() }])
@@ -348,7 +345,7 @@ export default function ViewAllStatement({ getStatementApi, type, excelDownloadA
 
           </div>
         </div>
-        <CreateOrUpdateStatmentModal show={showStatement?.status} data={showStatement?.data} hide={() => setShowStatement({ ...showStatement, status: !showStatement?.status })} partnerId={partnerId} empId={empId} type={type} fileDetailApi={fileDetailApi} />
+        <CreateOrUpdateStatmentModal show={showStatement?.status} data={showStatement?.data} hide={() => setShowStatement({ ...showStatement, status: !showStatement?.status })} partnerId={partnerId} empId={empId} type={type} fileDetailApi={fileDetailApi} refetch={getAllStatement} />
 
         {/* <StatementPdf data={downloadPdf?.data} statementOf={downloadPdf?.statementOf} dateRange={dateRange}/> */}
         <StatementPdf data={data} statementOf={statementOf} dateRange={dateRange} />

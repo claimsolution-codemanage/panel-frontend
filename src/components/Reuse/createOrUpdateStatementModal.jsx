@@ -94,7 +94,7 @@ export default function CreateOrUpdateStatmentModal({ show, hide, type, partnerI
           setLoading(false)
           formik.resetForm()
           formik.setValues({ statements: [getEmptyStatement()] })
-          refetch()
+          refetch?.()
           hide()
           toast.success(res?.data?.message || "Statements saved successfully")
         }
