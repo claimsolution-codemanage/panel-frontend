@@ -1,52 +1,54 @@
 import OtpInput from 'react-otp-input';
-import { useState } from 'react'
+import { useState, useEffect, useContext } from 'react'
 import { toast } from 'react-toastify'
-import { AppContext } from "../../App"
-import { useContext } from "react"
+import { useNavigate, Link } from 'react-router-dom';
 import { setToken, getJwtDecode } from '../../utils/helperFunction';
-import { useNavigate } from 'react-router-dom';
-import { MdMailLock, MdPhone } from 'react-icons/md'
-import { useEffect } from 'react';
-import { partnerMobileOtpCodeVerifyApi, partnerResendOtpApi, partnerVerifyOtpApi } from '../../apis/auth/partnerAuthApi';
+import { AppContext } from "../../App"
+import { MdPhone, MdAccessTime, MdRefresh, MdVerified } from 'react-icons/md'
+import { BsShieldCheck, BsArrowRight, BsEnvelope } from 'react-icons/bs'
+import { partnerMobileOtpCodeVerifyApi, partnerResendOtpApi } from '../../apis/auth/partnerAuthApi';
+import '../../styles/client/ClientOtpVerify.css'
 
 export default function OtpVerify() {
-    const [otp, setOtp] = useState('');
     const state = useContext(AppContext)
+    const [otp, setOtp] = useState('');
     const [disable, setDisable] = useState(false)
-    const [resendOtp, setResendOtp] = useState({ loading: false, message: "resend otp", timerStart: false, minutes: 1, second: 30 })
+    const [resendOtp, setResendOtp] = useState({
+        loading: false,
+        message: "resend otp",
+        timerStart: false,
+        minutes: 1,
+        second: 30
+    })
     const navigate = useNavigate()
 
     const handleVerify = async (e) => {
         e.preventDefault()
-        setDisable(true)
-        try {
-            const res = await partnerMobileOtpCodeVerifyApi({ otp: otp })
-            // console.log("res", res);
-            if (res?.data?.success) {
-                setOtp("")
-                const token = res?.headers["x-auth-token"]
-                if (token) {
-                    setToken(token)
-                    const details = getJwtDecode(token)
-                    state?.setMyAppData({ isLogin: false, details: details })
-                    toast.success(res?.data?.message)
-                    navigate("/partner/dashboard")
-                    // console.log("partner verify otp", res);
-                    setDisable(false)
+        if (otp.length === 6) {
+            setDisable(true)
+            try {
+                const res = await partnerMobileOtpCodeVerifyApi({ otp: otp })
+                if (res?.data?.success) {
+                    setOtp("")
+                    const token = res?.headers["x-auth-token"]
+                    if (token) {
+                        setToken(token)
+                        const details = getJwtDecode(token)
+                        state?.setMyAppData({ isLogin: false, details: details })
+                        toast.success(res?.data?.message)
+                        navigate("/partner/dashboard")
+                        setDisable(false)
+                    }
                 }
-                // navigate("/partner/verification completed")
-                // setDisable(false)
+            } catch (error) {
+                if (error && error?.response?.data?.message) {
+                    toast.error(error?.response?.data?.message)
+                } else {
+                    toast.error("Something went wrong")
+                }
+                setDisable(false)
             }
-        } catch (error) {
-            if (error && error?.response?.data?.message) {
-                toast.error(error?.response?.data?.message)
-            } else {
-                toast.error("Something went wrong")
-            }
-            // console.log("verify opt error", error);
-            setDisable(false)
         }
-        // console.log("otp", otp);
     }
 
     useEffect(() => {
@@ -59,7 +61,13 @@ export default function OtpVerify() {
                 if (resendOtp.second === 0) {
                     if (resendOtp.minutes === 0) {
                         clearInterval(interval)
-                        setResendOtp({ loading: false, message: "resend otp", timerStart: false, minutes: 1, second: 30 })
+                        setResendOtp({
+                            loading: false,
+                            message: "resend otp",
+                            timerStart: false,
+                            minutes: 1,
+                            second: 30
+                        })
                     } else {
                         setResendOtp({ ...resendOtp, second: 59, minutes: resendOtp?.minutes - 1 })
                     }
@@ -73,11 +81,10 @@ export default function OtpVerify() {
     }, [resendOtp.timerStart, resendOtp.minutes, resendOtp.second])
 
     const handleResentOtp = async () => {
-        // console.log("calling handleResentOtp");
         setResendOtp({ ...resendOtp, loading: true, message: "sending..." })
         try {
             const res = await partnerResendOtpApi()
-            if (res?.status == 200 && res?.data?.success) {
+            if (res?.status === 200 && res?.data?.success) {
                 toast.success(res?.data?.message)
                 setResendOtp({ ...resendOtp, loading: false, message: "", timerStart: true })
             }
@@ -91,54 +98,129 @@ export default function OtpVerify() {
         }
     }
 
-    return (<>
-        <div className="mt-5 mb-5">
-            <div className="container-px-5">
-                <div className="">
-                    <div className="row p-0 m-0">
-                        <div className="col-12 col-md-6">
-                            <img src="/Images/home/otp.png" className='img-fluid h-100' alt="signup" />
+    return (
+        <div className="enhanced-split-layout otp-layout">
+            {/* Left Side - OTP Form Section */}
+            <div className="form-section">
+                <div className="form-content-wrapper">
+                    {/* Logo/Brand - Centered */}
+                    <div className="brand-wrapper-centered">
+                        <div className="brand-logo-centered">
+                            <img
+                                src="/Images/icons/company-logo.png"
+                                height={60}
+                                alt="Claim Solution"
+                                loading="lazy"
+                            />
                         </div>
-                        <div className="col-md-6 col-sm-12 p-0  bg-color-7 color-4">
-                            <div className='mx-auto p-0 p-md-5'>
-                                <div className='aligin-items-center d-flex justify-content-center'>
-                                    <div className="w-100 w-md-75">
-                                        <h2 className='text-center '>Mobile OTP Verification</h2>
-                                        <div className="form w-100 my-4 pb-5">
-                                            <div className='d-flex align-items-center justify-content-center mb-5 mt-3'>
-                                                <div className='bg-primary text-white d-flex align-items-center justify-content-center' style={{ height: "2.5rem", width: '2.5rem', borderRadius: '2.5rem' }}>
-                                                    <MdPhone className='fs-5' />
-                                                </div>
-                                            </div>
-                                            <div className="mb-3 mt-3">
-                                                <OtpInput
-                                                    shouldAutoFocus={true}
-                                                    inputType="tel"
-                                                    value={otp}
-                                                    onChange={(otp) => setOtp(otp)}
-                                                    numInputs={6}
-                                                    containerStyle="d-flex justify-content-center gap-2"
-                                                    inputStyle="otp-input"
-                                                    renderSeparator={<span> </span>}
-                                                    renderInput={(props) => <input {...props} />}
-                                                />
-                                            </div>
-                                            <div class="d-flex gap-2 mt-5 fs-6 align-items-center justify-content-center">
-                                                <label class="" >{resendOtp?.timerStart ? "Time Remaining" : "Don't receive the OTP ?"} </label>
-                                                <div onClick={resendOtp.loading && resendOtp.timerStart ? () => { } : handleResentOtp} className={`${resendOtp.loading ? "text-info" : "text-primary cursor-pointer"} text-capitalize `}>{resendOtp?.timerStart ? `${resendOtp?.minutes}:${resendOtp.second}s` : resendOtp.message}</div>
-                                            </div>
-                                            <div className="d-flex justify-content-center mt-5">
-                                                <button type="submit" aria-disabled={disable} onClick={handleVerify} className={disable ? "btn btn-primary disabled w-100" : "btn btn-primary w-100"}> {disable ? <span className="spinner-border spinner-border-sm" role="status" aria-hidden={true}></span> : <span>Verify Account</span>} </button>
-                                            </div>
+                    </div>
 
-                                        </div>
-                                    </div>
+                    {/* Welcome Text */}
+                    <div className="welcome-text-centered">
+                        <div className="otp-icon-wrapper">
+                            <MdPhone className="otp-icon" />
+                        </div>
+                        <h1>Verify your mobile number</h1>
+                        <p>We've sent a 6-digit verification code to your registered partner mobile number</p>
+                    </div>
+
+                    {/* OTP Form */}
+                    <form onSubmit={handleVerify} className="otp-form-enhanced">
+                        <div className="otp-input-container">
+                            <OtpInput
+                                shouldAutoFocus={true}
+                                inputType="tel"
+                                value={otp}
+                                onChange={(otp) => setOtp(otp)}
+                                numInputs={6}
+                                containerStyle="otp-input-container-style"
+                                inputStyle={`otp-input-style ${otp.length === 6 ? 'completed' : ''}`}
+                                renderInput={(props) => <input {...props} />}
+                            />
+                        </div>
+
+                        {/* Resend OTP Section */}
+                        <div className="resend-otp-section">
+                            {resendOtp?.timerStart ? (
+                                <div className="timer-display">
+                                    <MdAccessTime className="timer-icon" />
+                                    <span>Resend code in {resendOtp?.minutes}:{resendOtp.second.toString().padStart(2, '0')}s</span>
                                 </div>
+                            ) : (
+                                <div className="resend-button-wrapper">
+                                    <span className="resend-label">Didn't receive the code?</span>
+                                    <button
+                                        type="button"
+                                        onClick={handleResentOtp}
+                                        disabled={resendOtp.loading}
+                                        className="resend-button"
+                                    >
+                                        {resendOtp.loading ? (
+                                            <span className="spinner-small"></span>
+                                        ) : (
+                                            <>
+                                                <MdRefresh className="resend-icon" />
+                                                <span>{resendOtp.message}</span>
+                                            </>
+                                        )}
+                                    </button>
+                                </div>
+                            )}
+                        </div>
+
+                        {/* Verify Button */}
+                        <button
+                            type="submit"
+                            className="verify-button-enhanced"
+                            disabled={disable || resendOtp.loading || otp.length !== 6}
+                        >
+                            {disable ? (
+                                <span className="spinner"></span>
+                            ) : (
+                                <>
+                                    <MdVerified className="verify-icon" />
+                                    <span>Verify Account</span>
+                                    <BsArrowRight className="button-icon" />
+                                </>
+                            )}
+                        </button>
+
+                        {/* Back to Sign In */}
+                        <div className="back-to-signin">
+                            <Link to="/partner/signin">
+                                <BsEnvelope className="back-icon" />
+                                Back to Sign In
+                            </Link>
+                        </div>
+                    </form>
+
+                    {/* Security Note */}
+                    <div className="security-note">
+                        <BsShieldCheck className="security-icon" />
+                        <span>Secure verification process</span>
+                    </div>
+                </div>
+            </div>
+
+            {/* Right Side - Image Section */}
+            <div className="image-section otp-image">
+                <div className="image-overlay-enhanced">
+                    <div className="image-content">
+                        <h2>Partner Account Verification</h2>
+                        <p>Verify your mobile number to complete your partner profile setup and access your dashboard</p>
+                        <div className="image-features">
+                            <div className="image-feature">
+                                <MdPhone />
+                                <span>Mobile Verification Required</span>
+                            </div>
+                            <div className="image-feature">
+                                <BsShieldCheck />
+                                <span>Enhanced Security Gateway</span>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </>)
+    )
 }

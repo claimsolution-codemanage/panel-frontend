@@ -6,13 +6,13 @@ import { useContext } from 'react'
 import { AppContext } from '../../App'
 import { toast } from 'react-toastify'
 import { setToken } from '../../utils/helperFunction'
-import { 
-    BsEyeSlashFill, 
-    BsEyeFill, 
-    BsArrowRight, 
-    BsPerson, 
-    BsEnvelope, 
-    BsTelephone, 
+import {
+    BsEyeSlashFill,
+    BsEyeFill,
+    BsArrowRight,
+    BsPerson,
+    BsEnvelope,
+    BsTelephone,
     BsLock,
     BsShieldCheck,
     BsFileText
@@ -63,7 +63,7 @@ export default function ClientSignUp() {
 
     return (
         <div className="enhanced-split-layout signup-layout">
-                    {/* Right Side - Image Section */}
+            {/* Right Side - Image Section */}
             <div className="image-section signup-image">
                 <div className="image-overlay-enhanced">
                     <div className="image-content">
@@ -93,10 +93,10 @@ export default function ClientSignUp() {
                     {/* Logo/Brand - Centered */}
                     <div className="brand-wrapper-centered">
                         <div className="brand-logo-centered">
-                            <img 
-                                src="/Images/icons/company-logo.png" 
-                                height={60} 
-                                alt="Claim Solution" 
+                            <img
+                                src="/Images/icons/company-logo.png"
+                                height={60}
+                                alt="Claim Solution"
                                 loading="lazy"
                             />
                         </div>
@@ -161,7 +161,7 @@ export default function ClientSignUp() {
                             <PhoneInput
                                 country={'in'}
                                 containerClass="phone-input-container"
-                                inputClass={`phone-input-field ${UserDetailsFormik?.touched?.mobileNo && UserDetailsFormik?.errors?.mobileNo ? 'error-input' : ''}`}
+                                inputClass={`phone-input-field py-4 rounded-3 ${UserDetailsFormik?.touched?.mobileNo && UserDetailsFormik?.errors?.mobileNo ? 'error-input' : ''}`}
                                 buttonClass="phone-dropdown-button"
                                 placeholder="+91 12345 67890"
                                 onlyCountries={['in', 'us', 'gb', 'au', 'ca']}
@@ -197,8 +197,8 @@ export default function ClientSignUp() {
                                     placeholder="Create a strong password"
                                     className={UserDetailsFormik?.touched?.password && UserDetailsFormik?.errors?.password ? 'error-input' : ''}
                                 />
-                                <button 
-                                    type="button" 
+                                <button
+                                    type="button"
                                     className="password-toggle-btn"
                                     onClick={() => setView(!view)}
                                 >
@@ -213,13 +213,13 @@ export default function ClientSignUp() {
                         {/* Agreement Checkbox */}
                         <div className="agreement-checkbox">
                             <label className="checkbox-label">
-                                <input 
-                                    type="checkbox" 
+                                <input
+                                    type="checkbox"
                                     checked={UserDetailsFormik?.values?.agreement}
                                     onChange={(e) => UserDetailsFormik.setFieldValue("agreement", e.target.checked)}
                                 />
                                 <span>
-                                    I agree to the 
+                                    I agree to the
                                     <Link to="/client/service-agreement" target="_blank" className="agreement-link">
                                         <BsFileText className="inline-icon" />
                                         Service Agreement
@@ -229,8 +229,8 @@ export default function ClientSignUp() {
                         </div>
 
                         {/* Sign Up Button */}
-                        <button 
-                            type="submit" 
+                        <button
+                            type="submit"
                             className="signup-button-enhanced"
                             disabled={loading || !UserDetailsFormik?.values?.agreement}
                         >
@@ -252,7 +252,7 @@ export default function ClientSignUp() {
                 </div>
             </div>
 
-    
+
         </div>
     )
 }

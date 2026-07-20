@@ -1,35 +1,43 @@
-import { Link, useParams } from 'react-router-dom'
-import { useNavigate } from 'react-router-dom'
+import { Link, useParams, useNavigate } from 'react-router-dom'
 import { useState } from 'react'
 import { toast } from 'react-toastify'
+import { BsEyeSlashFill, BsEyeFill, BsArrowRight, BsShieldCheck, BsBuilding } from "react-icons/bs"
+import { useFormik } from 'formik'
+import * as yup from 'yup'
 import { adminResetForgetPassword } from '../../../apis'
-import { BsEyeSlashFill } from "react-icons/bs";
-import { BsEyeFill } from "react-icons/bs";
-
+import '../../../styles/client/ClientSignIn.css'
 
 export default function AdminResetForgetPassword() {
-    const [data, setData] = useState({ password: "", confirmPassword: "" })
     const [loading, setLoading] = useState(false)
     const [view, setView] = useState(false)
+    const [viewConfirm, setViewConfirm] = useState(false)
     const navigate = useNavigate()
     const param = useParams()
 
-    const handleOnchange = (e) => {
-        const { name, value } = e.target
-        setData({ ...data, [name]: value })
-    }
-
-
-    const handleSumbit = async (e) => {
-        e.preventDefault()
-        setLoading(true)
-        if (param?.verifyToken) {
+    const adminFormik = useFormik({
+        initialValues: {
+            password: "",
+            confirmPassword: ""
+        },
+        validationSchema: yup.object().shape({
+            password: yup.string().min(6, "Password must be at least 6 characters").required("New password is required"),
+            confirmPassword: yup.string()
+                .oneOf([yup.ref('password'), null], "Passwords must match")
+                .required("Please confirm your password")
+        }),
+        onSubmit: async (values) => {
+            if (!param?.verifyToken) {
+                toast.error("Invalid or missing verification token")
+                return
+            }
+            setLoading(true)
             try {
-                const res = await adminResetForgetPassword(data, param?.verifyToken)
+                const res = await adminResetForgetPassword(values, param?.verifyToken)
                 if (res?.data?.success) {
-                    toast.success(res?.data?.message)
+                    toast.success(res?.data?.message || "Password reset successfully!")
                     navigate("/admin/signin")
-                    setLoading(false)
+                } else {
+                    toast.error(res?.data?.message || "Password reset failed")
                 }
             } catch (error) {
                 if (error && error?.response?.data?.message) {
@@ -37,61 +45,132 @@ export default function AdminResetForgetPassword() {
                 } else {
                     toast.error("Something went wrong")
                 }
-                // console.log("signup error", error);
+            } finally {
                 setLoading(false)
             }
-            setLoading(false)
         }
-    }
-
-
+    })
 
     return (
-        <>
-            <div className="container-fluid py-5">
-                <div className="container-px-5">
-                    <div className="bg-color-2">
-                        <div className="row m-0 p-0">
-                            <div className="col-sm-12 col-md-6 p-0">
-                                <img src="/Images/home/sign-in.png" alt="card image" className='img-fluid h-100' />
+        <div className="enhanced-split-layout">
+            {/* Left Side - Form Section */}
+            <div className="form-section">
+                <div className="form-content-wrapper">
+                    {/* Logo/Brand */}
+                    <div className="brand-wrapper">
+                        <div className="brand-logo">
+                            <img src="/Images/icons/company-logo.png" height={60} alt="Claim solution" loading="lazy" />
+                        </div>
+                    </div>
+
+                    {/* Welcome Text */}
+                    <div className="welcome-text">
+                        <h1>Reset Password</h1>
+                        <p>Enter your new password below to update your administrator credentials</p>
+                    </div>
+
+                    {/* Reset Password Form */}
+                    <form onSubmit={adminFormik.handleSubmit} className="signin-form-enhanced">
+                        <div className="input-field-group">
+                            <label htmlFor="password">New Password</label>
+                            <div className="password-input-wrapper">
+                                <input
+                                    type={view ? "text" : "password"}
+                                    id="password"
+                                    name="password"
+                                    value={adminFormik.values.password}
+                                    onChange={adminFormik.handleChange}
+                                    onBlur={adminFormik.handleBlur}
+                                    placeholder="Enter new password"
+                                    className={adminFormik.touched.password && adminFormik.errors.password ? 'error-input' : ''}
+                                />
+                                <button
+                                    type="button"
+                                    className="password-toggle-btn"
+                                    onClick={() => setView(!view)}
+                                >
+                                    {view ? <BsEyeFill /> : <BsEyeSlashFill />}
+                                </button>
                             </div>
-                            <div className="col-sm-12 col-md-6 bg-color-7 color-4 p-0">
-                                <div className="py-5">
-                                    <div className='aligin-items-center d-flex justify-content-center'>
-                                        <div className="w-75">
+                            {adminFormik.touched.password && adminFormik.errors.password && (
+                                <span className="error-message">{adminFormik.errors.password}</span>
+                            )}
+                        </div>
 
-                                            <div className="h2 fw-bold">Reset password</div>
-                                            <div className="text"></div>
-                                            <div className="mb-3 mt-3">
-                                                {/* <label for="email" className="form-label">Email: </label> */}
-                                                <input type="password" className="form-control" name='password' value={data.password} onChange={handleOnchange} id="password" placeholder="Your Password" />
-                                            </div>
-                                            <div className="mb-3 mt-3">
-                                                <div className='d-flex flex aligin-items-center form-control justify-content-center'>
-                                                    <input type={view ? "text" : "password"} className="w-100 border-0" style={{ outline: 'none' }} name='confirmPassword' value={data.confirmPassword} onChange={handleOnchange} id="password" placeholder="Confirm Password" />
-                                                    <span className='fs-6' style={{ cursor: 'pointer' }} onClick={() => setView(!view)}>
-                                                        {view ? <BsEyeFill /> : <BsEyeSlashFill />}
-                                                    </span>
-                                                </div>
-                                            </div>
+                        <div className="input-field-group">
+                            <label htmlFor="confirmPassword">Confirm New Password</label>
+                            <div className="password-input-wrapper">
+                                <input
+                                    type={viewConfirm ? "text" : "password"}
+                                    id="confirmPassword"
+                                    name="confirmPassword"
+                                    value={adminFormik.values.confirmPassword}
+                                    onChange={adminFormik.handleChange}
+                                    onBlur={adminFormik.handleBlur}
+                                    placeholder="Re-enter new password"
+                                    className={adminFormik.touched.confirmPassword && adminFormik.errors.confirmPassword ? 'error-input' : ''}
+                                />
+                                <button
+                                    type="button"
+                                    className="password-toggle-btn"
+                                    onClick={() => setViewConfirm(!viewConfirm)}
+                                >
+                                    {viewConfirm ? <BsEyeFill /> : <BsEyeSlashFill />}
+                                </button>
+                            </div>
+                            {adminFormik.touched.confirmPassword && adminFormik.errors.confirmPassword && (
+                                <span className="error-message">{adminFormik.errors.confirmPassword}</span>
+                            )}
+                        </div>
 
+                        <div className="form-options-enhanced">
+                            <div></div>
+                            <Link to="/admin/signin" className="forgot-password-link">
+                                Remember your password? Sign in
+                            </Link>
+                        </div>
 
-                                            <div class="form-check mt-2 pb-5">
-                                                <label class="float-end" >
-                                                    <Link to="/admin/signin" className=''>Remember your password? signin</Link>
-                                                </label>
-                                            </div>
-                                            <div className="mt-5">
-                                                <button aria-disabled={loading} type="submit" class={`btn btn-primary color-1 w-100 ${loading && "disabled"}`} onClick={handleSumbit}>  {loading ? <span className="spinner-border spinner-border-sm" role="status" aria-hidden={true}></span> : <span>Reset Password </span>} </button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+                        <button
+                            type="submit"
+                            className="signin-button-enhanced"
+                            disabled={loading}
+                        >
+                            {loading ? (
+                                <span className="spinner"></span>
+                            ) : (
+                                <>
+                                    Reset Password
+                                    <BsArrowRight className="button-icon" />
+                                </>
+                            )}
+                        </button>
+
+                        <div className="signup-prompt-enhanced">
+                            Back to <Link to="/admin/signin">Sign in</Link>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            {/* Right Side - Image Section */}
+            <div className="image-section">
+                <div className="image-overlay-enhanced">
+                    <div className="image-content">
+                        <h2>Claim Solution</h2>
+                        <p>Set a new password to keep your administrator portal fully protected</p>
+                        <div className="image-features">
+                            <div className="image-feature">
+                                <BsShieldCheck />
+                                <span>Password Security</span>
+                            </div>
+                            <div className="image-feature">
+                                <BsBuilding />
+                                <span>Instant Portal Access</span>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </>
+        </div>
     )
 }
