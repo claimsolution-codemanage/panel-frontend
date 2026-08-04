@@ -22,7 +22,7 @@ export const adminUpdateCaseByIdApi = (_id, data) => {
 }
 
 export const adminAddOrUpdatePaymentApi = (data) => {
-    return putRequest(`/admin/case/addOrUpdatePayment`, data)
+    return postRequest(`/admin/case/addOrUpdatePayment`, data)
 }
 
 export const adminRenameCaseDocFolderApi = (data) => {

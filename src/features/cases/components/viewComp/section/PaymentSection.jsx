@@ -18,14 +18,6 @@ export default function PaymentSection({ id, accessPayment, casePayment, getCase
         return (casePayment || []).reduce((acc, curr) => acc + (Number(curr?.amount) || 0), 0);
     }, [casePayment]);
 
-    const latestPaymentDate = useMemo(() => {
-        if (!casePayment || casePayment.length === 0) return null;
-        const dates = casePayment
-            .map(p => p.dateOfPayment)
-            .filter(Boolean)
-            .sort((a, b) => new Date(b) - new Date(a));
-        return dates[0] ? getFormateDMYDate(dates[0]) : null;
-    }, [casePayment]);
 
     const handleSubmit = async (values) => {
         setpaymentModal(prev => ({ ...prev, save: true }));

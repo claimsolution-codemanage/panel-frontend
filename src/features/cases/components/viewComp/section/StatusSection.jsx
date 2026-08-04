@@ -4,13 +4,14 @@ import { CiEdit } from 'react-icons/ci'
 import { FaPlus, FaCheckCircle, FaClock, FaTimesCircle, FaUserCheck, FaCalendarAlt, FaComment, FaArrowRight, FaEye, FaChevronDown, FaChevronUp } from 'react-icons/fa'
 import { getFormateDMYDate } from '../../../../../utils/helperFunction'
 import ChangeStatusModal from '../../common/model/changeStatusModal'
-import EditCaseStatusModal from '../../common/model/EditCaseStatus'
 import { Modal, Button } from 'react-bootstrap'
+import DocumentPreview from '../../../../../components/DocumentPreview'
+import { FiExternalLink } from 'react-icons/fi'
+import { MdAttachFile } from 'react-icons/md'
 
 export default function StatusSection({ isAddCaseProcess, id, role, details, getCaseById, processSteps, addCaseProcess, attachementUpload, editCaseProcess }) {
     const state = useContext(AppContext)
     const [changeStatus, setChangeStatus] = useState({ status: false, details: "" })
-    const [showEditCaseModal, setShowEditCaseModal] = useState({ status: false, details: {} })
     const [viewRemarkModal, setViewRemarkModal] = useState({ viewStatus: false, remark: "", status: "", date: "" })
     const [showProcess, setShowProcess] = useState(false)
     const [expandedCardId, setExpandedCardId] = useState(null)
@@ -18,6 +19,12 @@ export default function StatusSection({ isAddCaseProcess, id, role, details, get
     const toggleCardExpand = (id) => {
         setExpandedCardId(prev => prev === id ? null : id)
     }
+
+    const handleOpenUrl = (url) => {
+        if (url) {
+            window.open(url, '_blank', 'noopener,noreferrer');
+        }
+    };
 
     const stripHtmlTags = (html) => {
         if (!html) return "";
@@ -190,7 +197,7 @@ export default function StatusSection({ isAddCaseProcess, id, role, details, get
                                                             {role?.toLowerCase() === "admin" && (
                                                                 <button
                                                                     className="edit-btn-timeline"
-                                                                    onClick={() => setShowEditCaseModal({
+                                                                    onClick={() => setChangeStatus({
                                                                         status: true,
                                                                         details: {
                                                                             caseId: id,
@@ -199,7 +206,11 @@ export default function StatusSection({ isAddCaseProcess, id, role, details, get
                                                                             caseRemark: item?.remark,
                                                                             otherDetails: item?.otherDetails,
                                                                             nextFollowUp: item?.nextFollowUp,
-                                                                            isCurrentStatus: index === 0
+                                                                            isCurrentStatus: index === 0,
+                                                                            attachments: item?.attachments || [],
+                                                                            name: details?.name,
+                                                                            fileNo: details?.fileNo,
+                                                                            currentStatus: details?.currentStatus
                                                                         }
                                                                     })}
                                                                     title="Edit status"
@@ -288,6 +299,46 @@ export default function StatusSection({ isAddCaseProcess, id, role, details, get
                                                                     )}
                                                                 </div>
                                                             )}
+
+                                                            {/* Attachments */}
+                                                            {item?.attachments && item.attachments.length > 0 && (
+                                                                <div className="mt-3 pt-3 border-top">
+                                                                    <div className="d-flex align-items-center gap-2 mb-2">
+                                                                        <MdAttachFile className="text-primary fs-5" />
+                                                                        <span className="fw-bold text-dark small">Attachments ({item.attachments.length})</span>
+                                                                    </div>
+                                                                    <div className="row g-2">
+                                                                        {item.attachments.map((url, idx) => (
+                                                                            <div key={idx} className="col-6 col-sm-4 col-md-3">
+                                                                                <div className="card h-100 border rounded-3 overflow-hidden bg-white position-relative shadow-sm">
+                                                                                    <div
+                                                                                        className="bg-light d-flex align-items-center justify-content-center p-1"
+                                                                                        style={{ height: '90px', cursor: 'pointer' }}
+                                                                                        onClick={() => handleOpenUrl(url)}
+                                                                                        title="Click to view attachment"
+                                                                                    >
+                                                                                        <DocumentPreview url={url} height="80px" maxWidth="100%" />
+                                                                                    </div>
+                                                                                    <div className="card-footer bg-white p-1.5 d-flex align-items-center justify-content-between border-top">
+                                                                                        <span className="small text-muted text-truncate" style={{ fontSize: '0.75rem', maxWidth: '65%' }}>
+                                                                                            Attachment #{idx + 1}
+                                                                                        </span>
+                                                                                        <button
+                                                                                            type="button"
+                                                                                            onClick={() => handleOpenUrl(url)}
+                                                                                            className="btn btn-sm btn-outline-primary p-0 d-flex align-items-center justify-content-center rounded-circle"
+                                                                                            style={{ width: '20px', height: '20px' }}
+                                                                                            title="View"
+                                                                                        >
+                                                                                            <FiExternalLink size={10} />
+                                                                                        </button>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        ))}
+                                                                    </div>
+                                                                </div>
+                                                            )}
                                                         </div>
                                                     )}
                                                 </div>
@@ -324,19 +375,9 @@ export default function StatusSection({ isAddCaseProcess, id, role, details, get
                     changeStatus={changeStatus}
                     setChangeStatus={setChangeStatus}
                     getCaseById={getCaseById}
-                    handleCaseStatus={addCaseProcess}
+                    handleCaseStatus={changeStatus?.details?.processId ? editCaseProcess : addCaseProcess}
                     role="admin"
                     attachementUpload={attachementUpload}
-                />
-            )}
-
-            {showEditCaseModal?.status && (
-                <EditCaseStatusModal
-                    changeStatus={showEditCaseModal}
-                    getCaseById={getCaseById}
-                    setChangeStatus={setShowEditCaseModal}
-                    handleCaseStatus={editCaseProcess}
-                    role="admin"
                 />
             )}
 

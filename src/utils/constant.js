@@ -107,11 +107,53 @@ export const partnerType = [
     "Other's"
 ]
 
-export const caseStatus = ["Pending", "Accept", "Under Expert Review", "Processing",
-    "Gro", "Ombudsman stage", "Query", "Resolve", "Reject", "Others", "Ombudsman Hearing date on",
-    "Ombudsman hearing done", "Ombudsman Award", "Ombudsman dismissed/ Refer to legal team",
-    "Case file in court", "Settlement", "Payment", "Refer to the Legal Team", "Process for the Legal",
-    "IRDAI Stage", "Reimbursment Claim Filing", "RTI", "Closed"
+export const caseStatus = [
+    "Pending",
+
+    // Initial case decision
+    "Accept",
+    "Not Accept",
+    "Reject",
+    "Query",
+
+    // Internal processing
+    "Processing",
+    "Under Expert Review",
+    "Gro",
+    "Resolve",
+
+    // IRDAI stage
+    "IRDAI Stage",
+
+    // Ombudsman decision
+    "Accept for Ombudsman Process",
+    "Ombudsman stage",
+    "Ombudsman Hearing date on",
+    "Ombudsman hearing done",
+    "Ombudsman Award",
+    "Ombudsman Settlement",
+    "Ombudsman dismissed/ Refer to legal team",
+
+    // Legal escalation
+    "Accept For Legal Process",
+    "Refer to the Legal Team",
+    "Process for the Legal",
+    "Case file in court",
+    "Legal Settlement",
+
+    // Claim / reimbursement
+    "Reimbursment Claim Filing",
+
+    // Final settlement & payment
+    "Settlement",
+    "Payment",
+
+    // Other / information requests
+    "RTI",
+    "Others",
+
+    // Final status
+    "Closed",
 ];
 
 export const caseMailMethod = ["None", "Client", "Partner", "Both"];
