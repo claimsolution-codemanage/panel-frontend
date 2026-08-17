@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext, useState, useEffect } from 'react'
 import { AppContext } from '../../../../../App'
 import { CiEdit } from 'react-icons/ci'
 import { FaPlus, FaCheckCircle, FaClock, FaTimesCircle, FaUserCheck, FaCalendarAlt, FaComment, FaArrowRight, FaEye, FaChevronDown, FaChevronUp } from 'react-icons/fa'
@@ -8,13 +8,55 @@ import { Modal, Button } from 'react-bootstrap'
 import DocumentPreview from '../../../../../components/DocumentPreview'
 import { FiExternalLink } from 'react-icons/fi'
 import { MdAttachFile } from 'react-icons/md'
+import Loader from '../../../../../components/Common/loader'
+import { toast } from 'react-toastify'
 
-export default function StatusSection({ isAddCaseProcess, id, role, details, getCaseById, processSteps, addCaseProcess, attachementUpload, editCaseProcess }) {
+export default function StatusSection({ isAddCaseProcess, getCaseProcessListApi, id, role, details, getCaseById, processSteps, addCaseProcess, attachementUpload, editCaseProcess }) {
     const state = useContext(AppContext)
     const [changeStatus, setChangeStatus] = useState({ status: false, details: "" })
     const [viewRemarkModal, setViewRemarkModal] = useState({ viewStatus: false, remark: "", status: "", date: "" })
     const [showProcess, setShowProcess] = useState(false)
     const [expandedCardId, setExpandedCardId] = useState(null)
+    const [processStepsList, setProcessStepsList] = useState([])
+    const [loading, setLoading] = useState(false)
+
+    // Fetch case process steps using getCaseProcessListApi, falling back to getCaseById if not defined
+    const fetchCaseProcessList = async () => {
+        if (!id) return
+        if (getCaseProcessListApi) {
+            setLoading(true)
+            try {
+                const res = await getCaseProcessListApi(id)
+                if (res?.data?.success && res?.data?.data) {
+                    setProcessStepsList(res?.data?.data)
+                }
+            } catch (error) {
+                console.error("fetchCaseProcessList error:", error)
+                toast.error(error?.response?.data?.message || "Failed to fetch process steps")
+            } finally {
+                setLoading(false)
+            }
+        } else {
+            if (getCaseById) {
+                getCaseById()
+            }
+        }
+    }
+
+    // Initialize process steps list from prop if getCaseProcessListApi is not provided (e.g. for Admin role)
+    useEffect(() => {
+        if (!getCaseProcessListApi && processSteps) {
+            setProcessStepsList(processSteps)
+        }
+    }, [processSteps, getCaseProcessListApi])
+
+    const handleToggleProcessList = () => {
+        const nextShowState = !showProcess
+        setShowProcess(nextShowState)
+        if (nextShowState && processStepsList.length === 0) {
+            fetchCaseProcessList()
+        }
+    }
 
     const toggleCardExpand = (id) => {
         setExpandedCardId(prev => prev === id ? null : id)
@@ -116,7 +158,7 @@ export default function StatusSection({ isAddCaseProcess, id, role, details, get
                         </div>
                     </div>
                     <div className="header-actions">
-                        {isAddCaseProcess && (
+                        {isAddCaseProcess && showProcess && (
                             <button
                                 className="btn-add-status"
                                 onClick={() => setChangeStatus({ status: true, details: { ...details } })}
@@ -127,7 +169,7 @@ export default function StatusSection({ isAddCaseProcess, id, role, details, get
                         )}
                         <button
                             className="btn-toggle-view"
-                            onClick={() => setShowProcess(!showProcess)}
+                            onClick={handleToggleProcessList}
                         >
                             {showProcess ? <FaChevronUp /> : <FaChevronDown />}
                             <span className="ms-2">{showProcess ? 'Collapse' : 'Expand'} Timeline</span>
@@ -138,12 +180,14 @@ export default function StatusSection({ isAddCaseProcess, id, role, details, get
                 {/* Timeline Content */}
                 {showProcess && (
                     <div className="timeline-content">
-                        {processSteps?.length > 0 ? (
+                        {loading ? (
+                            <Loader />
+                        ) : processStepsList?.length > 0 ? (
                             <div className="timeline-container">
                                 <div className="timeline">
-                                    {processSteps?.map((item, index) => {
+                                    {processStepsList?.map((item, index) => {
                                         const statusConfig = getStatusConfig(item?.status)
-                                        const isLast = index === processSteps.length - 1
+                                        const isLast = index === processStepsList.length - 1
                                         const isExpanded = expandedCardId === item._id
                                         const isFirst = index === 0
 
@@ -164,7 +208,7 @@ export default function StatusSection({ isAddCaseProcess, id, role, details, get
                                                         <div
                                                             className="timeline-connector"
                                                             style={{
-                                                                background: `linear-gradient(to bottom, ${isFirst ? '#28a745' : statusConfig.color}, ${getStatusConfig(processSteps[index + 1]?.status)?.color || '#e9ecef'})`
+                                                                background: `linear-gradient(to bottom, ${isFirst ? '#28a745' : statusConfig.color}, ${getStatusConfig(processStepsList[index + 1]?.status)?.color || '#e9ecef'})`
                                                             }}
                                                         />
                                                     )}
@@ -374,7 +418,7 @@ export default function StatusSection({ isAddCaseProcess, id, role, details, get
                 <ChangeStatusModal
                     changeStatus={changeStatus}
                     setChangeStatus={setChangeStatus}
-                    getCaseById={getCaseById}
+                    refetchDetails={fetchCaseProcessList}
                     handleCaseStatus={changeStatus?.details?.processId ? editCaseProcess : addCaseProcess}
                     role="admin"
                     attachementUpload={attachementUpload}

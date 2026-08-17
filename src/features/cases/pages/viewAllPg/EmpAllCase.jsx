@@ -1,10 +1,10 @@
-import { salesAllCaseDownload, empOptGetNormalEmployee, empOptShareSaleEmployee } from "../../../../apis"
+import { salesAllCaseDownload, empOptGetNormalEmployee } from "../../../../apis"
 import { AppContext } from "../../../../App"
 import { useContext } from "react"
 import ViewAllCaseComp from "../../components/viewAllComp/ViewAllCaseComp"
 import { useParams } from "react-router-dom"
 import { employeeAttachementUpload } from "../../../../apis/upload"
-import { empAllCaseApi, empUpdateCaseStatusApi } from "../../../../apis/case/empCaseApi"
+import { empAllCaseApi, empShareCaseApi, empUpdateCaseStatusApi } from "../../../../apis/case/empCaseApi"
 
 export default function EmployeeAllCase() {
   const state = useContext(AppContext)
@@ -28,7 +28,7 @@ export default function EmployeeAllCase() {
       isDownload={true}
       isShare={empType?.toLowerCase() === "operation"}
       getNormalEmp={empOptGetNormalEmployee}
-      caseShare={empOptShareSaleEmployee}
+      caseShare={empShareCaseApi}
       createInvUrl={empType?.toLowerCase() === "finance" ? "/employee/create-invoice/" : ""}
       attachementUpload={employeeAttachementUpload}
     />

@@ -12,8 +12,10 @@ import { toast } from 'react-toastify'
 import { CiLock } from 'react-icons/ci'
 import { Button } from 'react-bootstrap'
 import { Eye, EyeOff } from 'lucide-react'
+import Loader from '../../../../../components/Common/loader'
 
-export default function DocumentSection({ role, data, getCaseById, attachementUpload, addCaseDoc, deleteDoc, setCaseDocStatus, renameDocFolder, isRenameDocFolder }) {
+export default function DocumentSection({ role, data, getCaseDocumentApi, attachementUpload, addCaseDoc, deleteDoc, setCaseDocStatus, renameDocFolder, isRenameDocFolder }) {
+    const [documentList, setDocumentList] = useState([])
     const [uploadingDocs, setUploadingDocs] = useState(false)
     const [folderInfo, setFolderInfo] = useState({})
     const [fileInfo, setFileInfo] = useState({ type: null, list: [] })
@@ -24,12 +26,39 @@ export default function DocumentSection({ role, data, getCaseById, attachementUp
     const [newFolderName, setNewFolderName] = useState('')
     const containerRef = useRef(null)
     const fileContainerRef = useRef(null)
+    const [loading, setLoading] = useState(false)
+    const caseId = data?.[0]?._id
+
+    const fetchCaseDocuments = async () => {
+        if (!caseId) return
+        if (getCaseDocumentApi) {
+            setLoading(true)
+            try {
+                const res = await getCaseDocumentApi(caseId)
+                if (res?.data?.success && res?.data?.data) {
+                    setDocumentList(res?.data?.data)
+                }
+            } catch (error) {
+                console.error("fetchCaseDocuments error:", error)
+                toast.error(error?.response?.data?.message || "Failed to fetch documents")
+            } finally {
+                setLoading(false)
+            }
+        }
+    }
+
+    const handleToggleDocList = () => {
+        const nextShowState = !showDocList
+        setShowDocList(nextShowState)
+        if (nextShowState && documentList.length === 0) {
+            fetchCaseDocuments()
+        }
+    }
 
     useEffect(() => {
-        let caseDocs = data?.[0]?.caseDocs
-        if (Array.isArray(caseDocs)) {
+        if (Array.isArray(documentList)) {
             let folder = {}
-            caseDocs?.forEach(ele => {
+            documentList?.forEach(ele => {
                 let type = ele?.name?.toLowerCase() || "other"
                 if (folder[type]) {
                     folder[type] = [...folder[type], ele]
@@ -39,7 +68,7 @@ export default function DocumentSection({ role, data, getCaseById, attachementUp
             })
             setFolderInfo(folder)
         }
-    }, [data])
+    }, [documentList])
 
     // Scroll to top when opening a folder
     useEffect(() => {
@@ -56,9 +85,7 @@ export default function DocumentSection({ role, data, getCaseById, attachementUp
             if (res?.data?.success) {
                 setChangeIsActiveStatus({ show: false, details: {} })
                 toast.success(res?.data?.message)
-                if (getCaseById) {
-                    getCaseById()
-                }
+                fetchCaseDocuments()
             }
         } catch (error) {
             if (error && error?.response?.data?.message) {
@@ -171,12 +198,12 @@ export default function DocumentSection({ role, data, getCaseById, attachementUp
                                         "Document Library"
                                     )}
                                 </h5>
-                                {!fileInfo?.type && (
+                                {!fileInfo?.type && showDocList && (
                                     <small className="text-muted">
                                         {Object.keys(folderInfo).length} folder(s) • Total documents: {Object.values(folderInfo).reduce((sum, docs) => sum + docs.length, 0)}
                                     </small>
                                 )}
-                                {fileInfo?.type && (
+                                {fileInfo?.type && showDocList && (
                                     <small className="text-muted d-block  text-truncate">
                                         {fileInfo.list.length} documents
                                         in this folder
@@ -185,19 +212,21 @@ export default function DocumentSection({ role, data, getCaseById, attachementUp
                             </div>
                         </div>
                         <div className="d-flex gap-2">
-                            <Button
-                                variant="primary"
-                                size="sm"
-                                onClick={() => setUploadingDocs(true)}
-                                className="d-flex align-items-center gap-2"
-                            >
-                                <IoMdAdd size={18} />
-                                Add Document
-                            </Button>
+                            {showDocList && (
+                                <Button
+                                    variant="primary"
+                                    size="sm"
+                                    onClick={() => setUploadingDocs(true)}
+                                    className="d-flex align-items-center gap-2"
+                                >
+                                    <IoMdAdd size={18} />
+                                    Add Document
+                                </Button>
+                            )}
                             <Button
                                 variant="outline-secondary"
                                 size="sm"
-                                onClick={() => setShowDocList(!showDocList)}
+                                onClick={handleToggleDocList}
                                 className="d-flex align-items-center gap-2"
                             >
                                 {showDocList ? (
@@ -217,166 +246,172 @@ export default function DocumentSection({ role, data, getCaseById, attachementUp
                         className="document-content p-4"
                         style={{ minHeight: '500px', maxHeight: '70vh', overflowY: 'auto', overflowX: 'hidden' }}
                     >
-                        {/* Folder List View */}
-                        {!fileInfo?.type && (
-                            <div className="folder-view">
-                                {Object.keys(folderInfo).length > 0 ? (
-                                    <div className="row g-4">
-                                        {Object.keys(folderInfo)?.map(ele => (
-                                            <div key={ele} className="col-12 col-sm-6 col-md-4 col-lg-3">
-                                                <div
-                                                    className="folder-card"
-                                                    onClick={() => handleFolderClick(ele, folderInfo[ele])}
-                                                >
-                                                    <div className="folder-card-inner">
-                                                        <div className="folder-icon-wrapper">
-                                                            <div className="folder-icon">
-                                                                <IoFolder size={48} />
-                                                            </div>
-                                                            {editingFolder === ele ? (
-                                                                <div
-                                                                    className="folder-edit-form"
-                                                                    onClick={(e) => e.stopPropagation()}
-                                                                >
-                                                                    <input
-                                                                        type="text"
-                                                                        className="form-control form-control-sm"
-                                                                        value={newFolderName}
-                                                                        onChange={(e) => { e.target.value.length <= 60 && setNewFolderName(e.target.value) }}
-                                                                        autoFocus
-                                                                        onKeyPress={(e) => {
-                                                                            if (e.key === 'Enter') {
-                                                                                saveFolderName(ele, e)
-                                                                            }
-                                                                        }}
-                                                                    />
-                                                                    <div className="d-flex gap-1 mt-2">
-                                                                        <button
-                                                                            className="btn btn-sm btn-outline-success"
-                                                                            onClick={(e) => saveFolderName(ele, e)}
-                                                                        >
-                                                                            <FaSave size={12} />
-                                                                        </button>
-                                                                        <button
-                                                                            className="btn btn-sm btn-outline-danger"
-                                                                            onClick={cancelEditingFolder}
-                                                                        >
-                                                                            <FaTimes size={12} />
-                                                                        </button>
+                        {loading ? (
+                            <Loader />
+                        ) : (
+                            <>
+                                {/* Folder List View */}
+                                {!fileInfo?.type && (
+                                    <div className="folder-view">
+                                        {Object.keys(folderInfo).length > 0 ? (
+                                            <div className="row g-4">
+                                                {Object.keys(folderInfo)?.map(ele => (
+                                                    <div key={ele} className="col-12 col-sm-6 col-md-4 col-lg-3">
+                                                        <div
+                                                            className="folder-card"
+                                                            onClick={() => handleFolderClick(ele, folderInfo[ele])}
+                                                        >
+                                                            <div className="folder-card-inner">
+                                                                <div className="folder-icon-wrapper">
+                                                                    <div className="folder-icon">
+                                                                        <IoFolder size={48} />
                                                                     </div>
+                                                                    {editingFolder === ele ? (
+                                                                        <div
+                                                                            className="folder-edit-form"
+                                                                            onClick={(e) => e.stopPropagation()}
+                                                                        >
+                                                                            <input
+                                                                                type="text"
+                                                                                className="form-control form-control-sm"
+                                                                                value={newFolderName}
+                                                                                onChange={(e) => { e.target.value.length <= 60 && setNewFolderName(e.target.value) }}
+                                                                                autoFocus
+                                                                                onKeyPress={(e) => {
+                                                                                    if (e.key === 'Enter') {
+                                                                                        saveFolderName(ele, e)
+                                                                                    }
+                                                                                }}
+                                                                            />
+                                                                            <div className="d-flex gap-1 mt-2">
+                                                                                <button
+                                                                                    className="btn btn-sm btn-outline-success"
+                                                                                    onClick={(e) => saveFolderName(ele, e)}
+                                                                                >
+                                                                                    <FaSave size={12} />
+                                                                                </button>
+                                                                                <button
+                                                                                    className="btn btn-sm btn-outline-danger"
+                                                                                    onClick={cancelEditingFolder}
+                                                                                >
+                                                                                    <FaTimes size={12} />
+                                                                                </button>
+                                                                            </div>
+                                                                        </div>
+                                                                    ) : (
+                                                                        <>
+                                                                            {isRenameDocFolder && <button
+                                                                                className="folder-edit-btn"
+                                                                                onClick={(e) => startEditingFolder(ele, e)}
+                                                                                title="Rename folder"
+                                                                            >
+                                                                                <FaEdit size={14} />
+                                                                            </button>}
+                                                                            <div className="folder-info">
+                                                                                <h6 className="folder-name text-capitalize mb-1 text-break">
+                                                                                    {ele}
+                                                                                </h6>
+                                                                                <small className="folder-count text-muted">
+                                                                                    {folderInfo[ele]?.length} documents
+                                                                                </small>
+                                                                            </div>
+                                                                        </>
+                                                                    )}
                                                                 </div>
-                                                            ) : (
-                                                                <>
-                                                                    {isRenameDocFolder && <button
-                                                                        className="folder-edit-btn"
-                                                                        onClick={(e) => startEditingFolder(ele, e)}
-                                                                        title="Rename folder"
-                                                                    >
-                                                                        <FaEdit size={14} />
-                                                                    </button>}
-                                                                    <div className="folder-info">
-                                                                        <h6 className="folder-name text-capitalize mb-1 text-break">
-                                                                            {ele}
-                                                                        </h6>
-                                                                        <small className="folder-count text-muted">
-                                                                            {folderInfo[ele]?.length} documents
-                                                                        </small>
-                                                                    </div>
-                                                                </>
-                                                            )}
+                                                            </div>
                                                         </div>
                                                     </div>
-                                                </div>
+                                                ))}
                                             </div>
-                                        ))}
-                                    </div>
-                                ) : (
-                                    <div className="text-center py-5">
-                                        <IoFolder size={64} className="text-muted mb-3" />
-                                        <h6 className="text-muted">No documents found</h6>
-                                        <p className="text-muted small">Click the "Add Document" button to upload files</p>
+                                        ) : (
+                                            <div className="text-center py-5">
+                                                <IoFolder size={64} className="text-muted mb-3" />
+                                                <h6 className="text-muted">No documents found</h6>
+                                                <p className="text-muted small">Click the "Add Document" button to upload files</p>
+                                            </div>
+                                        )}
                                     </div>
                                 )}
-                            </div>
-                        )}
 
-                        {/* File List View */}
-                        {fileInfo?.type && fileInfo?.list?.length > 0 && (
-                            <div
-                                ref={fileContainerRef}
-                                className="file-view"
-                            >
-                                <div className="row g-4">
-                                    {fileInfo?.list?.map(item => (
-                                        <div key={item?._id} className="col-12 col-sm-6 col-md-4 col-lg-3">
-                                            <div className="document-card">
-                                                <div className="document-card-inner">
-                                                    <div className="document-header">
-                                                        {item?.isPrivate && (
-                                                            <CiLock className="private-icon" title="Private Document" />
-                                                        )}
-                                                        <div className="dropdown">
-                                                            <i className="bi bi-three-dots-vertical" data-bs-toggle="dropdown" aria-expanded="false"></i>
-                                                            <ul className="dropdown-menu">
-                                                                <li>
-                                                                    <Link
-                                                                        className="dropdown-item"
-                                                                        to={`${getCheckStorage(item?.url) ? getCheckStorage(item?.url) : "#!"}`}
-                                                                        target="_blank"
-                                                                    >
-                                                                        View Document
-                                                                    </Link>
-                                                                </li>
-                                                                <li>
-                                                                    <div className="dropdown-item" onClick={() => handleShareDocument("whatsapp", item)}>
-                                                                        Share on WhatsApp
-                                                                    </div>
-                                                                </li>
-                                                                <li>
-                                                                    <div className="dropdown-item" onClick={() => handleShareDocument("email", item)}>
-                                                                        Share via Email
-                                                                    </div>
-                                                                </li>
-                                                                {role?.toLowerCase() == "admin" && (
-                                                                    <li>
-                                                                        <div
-                                                                            className="dropdown-item text-danger"
-                                                                            onClick={() => setChangeIsActiveStatus({
-                                                                                show: true,
-                                                                                details: {
-                                                                                    _id: item?._id,
-                                                                                    currentStatus: item?.isActive,
-                                                                                    name: item?.name
-                                                                                }
-                                                                            })}
-                                                                        >
-                                                                            Delete
-                                                                        </div>
-                                                                    </li>
+                                {/* File List View */}
+                                {fileInfo?.type && fileInfo?.list?.length > 0 && (
+                                    <div
+                                        ref={fileContainerRef}
+                                        className="file-view"
+                                    >
+                                        <div className="row g-4">
+                                            {fileInfo?.list?.map(item => (
+                                                <div key={item?._id} className="col-12 col-sm-6 col-md-4 col-lg-3">
+                                                    <div className="document-card">
+                                                        <div className="document-card-inner">
+                                                            <div className="document-header">
+                                                                {item?.isPrivate && (
+                                                                    <CiLock className="private-icon" title="Private Document" />
                                                                 )}
-                                                            </ul>
+                                                                <div className="dropdown">
+                                                                    <i className="bi bi-three-dots-vertical" data-bs-toggle="dropdown" aria-expanded="false"></i>
+                                                                    <ul className="dropdown-menu">
+                                                                        <li>
+                                                                            <Link
+                                                                                className="dropdown-item"
+                                                                                to={`${getCheckStorage(item?.url) ? getCheckStorage(item?.url) : "#!"}`}
+                                                                                target="_blank"
+                                                                            >
+                                                                                View Document
+                                                                            </Link>
+                                                                        </li>
+                                                                        <li>
+                                                                            <div className="dropdown-item" onClick={() => handleShareDocument("whatsapp", item)}>
+                                                                                Share on WhatsApp
+                                                                            </div>
+                                                                        </li>
+                                                                        <li>
+                                                                            <div className="dropdown-item" onClick={() => handleShareDocument("email", item)}>
+                                                                                Share via Email
+                                                                            </div>
+                                                                        </li>
+                                                                        {role?.toLowerCase() == "admin" && (
+                                                                            <li>
+                                                                                <div
+                                                                                    className="dropdown-item text-danger"
+                                                                                    onClick={() => setChangeIsActiveStatus({
+                                                                                        show: true,
+                                                                                        details: {
+                                                                                            _id: item?._id,
+                                                                                            currentStatus: item?.isActive,
+                                                                                            name: item?.name
+                                                                                        }
+                                                                                    })}
+                                                                                >
+                                                                                    Delete
+                                                                                </div>
+                                                                            </li>
+                                                                        )}
+                                                                    </ul>
+                                                                </div>
+                                                            </div>
+                                                            <div className="document-preview-wrapper">
+                                                                {getCheckStorage(item?.url) ? (
+                                                                    <DocumentPreview url={getCheckStorage(item?.url)} height="180px" />
+                                                                ) : (
+                                                                    <div className="document-placeholder">
+                                                                        <FaFileWord size={48} className="text-primary" />
+                                                                    </div>
+                                                                )}
+                                                            </div>
+                                                            <div className="document-footer">
+                                                                <p className="document-name mb-0 text-truncate" title={item?.name}>
+                                                                    {item?.name}
+                                                                </p>
+                                                            </div>
                                                         </div>
                                                     </div>
-                                                    <div className="document-preview-wrapper">
-                                                        {getCheckStorage(item?.url) ? (
-                                                            <DocumentPreview url={getCheckStorage(item?.url)} height="180px" />
-                                                        ) : (
-                                                            <div className="document-placeholder">
-                                                                <FaFileWord size={48} className="text-primary" />
-                                                            </div>
-                                                        )}
-                                                    </div>
-                                                    <div className="document-footer">
-                                                        <p className="document-name mb-0 text-truncate" title={item?.name}>
-                                                            {item?.name}
-                                                        </p>
-                                                    </div>
                                                 </div>
-                                            </div>
+                                            ))}
                                         </div>
-                                    ))}
-                                </div>
-                            </div>
+                                    </div>
+                                )}
+                            </>
                         )}
                     </div>
                 )}
@@ -386,7 +421,7 @@ export default function DocumentSection({ role, data, getCaseById, attachementUp
             {uploadingDocs && (
                 <AddDocsModal
                     _id={data[0]?._id}
-                    getCaseById={getCaseById}
+                    refetchDetails={fetchCaseDocuments}
                     uploadingDocs={uploadingDocs}
                     setUploadingDocs={setUploadingDocs}
                     handleCaseDocsUploading={addCaseDoc}
@@ -402,6 +437,7 @@ export default function DocumentSection({ role, data, getCaseById, attachementUp
                     handleComfirmation={deleteDoc}
                     heading={"Are you sure?"}
                     text={"Want to permanently delete this doc"}
+                    getRefreshData={fetchCaseDocuments}
                 />
             )}
 

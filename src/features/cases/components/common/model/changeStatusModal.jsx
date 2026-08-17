@@ -13,7 +13,7 @@ import { MdAttachFile } from 'react-icons/md';
 
 const minDate = formatDateToISO(new Date(new Date().setDate(new Date().getDate() + 1)))
 
-export default function ChangeStatusModal({ changeStatus, setChangeStatus, handleCaseStatus, getCaseById, attachementUpload }) {
+export default function ChangeStatusModal({ changeStatus, setChangeStatus, handleCaseStatus, refetchDetails, attachementUpload }) {
     const isEdit = !!changeStatus?.details?.processId;
     const [data, setData] = useState(() => {
         const details = changeStatus?.details;
@@ -153,8 +153,8 @@ export default function ChangeStatusModal({ changeStatus, setChangeStatus, handl
                 setChangeStatus({ status: false, details: "" })
                 toast.success(res?.data?.message)
                 setLoading(false)
-                if (getCaseById) {
-                    getCaseById()
+                if (refetchDetails) {
+                    refetchDetails()
                 }
             }
             setLoading(false)

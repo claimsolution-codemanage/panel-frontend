@@ -13,7 +13,7 @@ import ChangeStatusModal from "../../../features/cases/components/common/model/c
 import { useLocation, useNavigate } from "react-router-dom"
 import { BiLeftArrow } from 'react-icons/bi'
 import { BiRightArrow } from 'react-icons/bi'
-import { adminShareCaseToEmployee, adminViewSaleEmpCaseReport, adminSaleEmpCaseReportDownload } from "../../../apis"
+import { adminViewSaleEmpCaseReport, adminSaleEmpCaseReportDownload } from "../../../apis"
 import Loader from "../../../components/Common/loader"
 import { IoShareSocialOutline } from "react-icons/io5";
 import { CiFilter } from "react-icons/ci";
@@ -26,7 +26,7 @@ import { useParams } from "react-router-dom"
 import DateSelect from "../../../components/Common/Modal/DateSelect"
 import { SiMicrosoftexcel } from "react-icons/si";
 import { adminAttachementUpload } from "../../../apis/upload"
-import { adminChangeCaseStatusApi, adminSetCaseIsActiveApi } from "../../../apis/case/adminCaseApi"
+import { adminChangeCaseStatusApi, adminSetCaseIsActiveApi, adminShareCaseToEmployeeApi } from "../../../apis/case/adminCaseApi"
 
 export default function AdminViewSaleEmpCaseReport() {
   const [data, setData] = useState([])
@@ -385,7 +385,7 @@ export default function AdminViewSaleEmpCaseReport() {
 
           </div>
           {changeStatus?.status && <ChangeStatusModal changeStatus={changeStatus} setChangeStatus={setChangeStatus} handleCaseStatus={adminChangeCaseStatusApi} role="admin" attachementUpload={adminAttachementUpload} />}
-          {caseShareModal?.status && <ShareCaseModal handleShareCase={adminShareCaseToEmployee} caseShareModal={caseShareModal} close={() => { setCaseShareModal({ value: [], status: false }); setShareCase([]) }} />}
+          {caseShareModal?.status && <ShareCaseModal handleShareCase={adminShareCaseToEmployeeApi} caseShareModal={caseShareModal} close={() => { setCaseShareModal({ value: [], status: false }); setShareCase([]) }} />}
           {changeisActiveStatus?.show && <SetStatusOfProfile changeStatus={changeisActiveStatus} hide={() => setChangeIsActiveStatus({ show: false, details: {} })} type="Case" handleChanges={handleChanges} />}
         </div>
       </div>}

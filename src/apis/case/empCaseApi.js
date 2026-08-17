@@ -52,6 +52,24 @@ export const empDeleteCaseById = (id) => {
   return deleteRequest(`/employee/case/deleteCaseById?caseId=${id}`)
 }
 
+
+
+
+// case comment
+export const getCaseCommentsApi = (_id) => {
+  return getRequest(`/employee/case/viewCaseCommentsById?_id=${_id}`)
+}
+
+// share case
+export const empShareCaseApi = (data) => {
+  return putRequest(`/employee/case/shareCase`, data)
+}
+
+export const getCaseEmployeeListApi = (caseId) => {
+  return getRequest(`/employee/case/getCaseEmployeeList/${caseId}`)
+}
+
+// case documents
 export const empDeleteCaseDocById = (id) => {
   return deleteRequest(`/employee/case/deleteCaseDocById?_id=${id}`)
 }
@@ -59,3 +77,16 @@ export const empDeleteCaseDocById = (id) => {
 export const empRenameCaseDocFolderApi = (data) => {
   return putRequest(`/employee/case/renameCaseDocFolder`, data)
 }
+
+export const getEmpCaseDocumentListApi = (caseId) => {
+  return getRequest(`/employee/case/viewCaseDocsById/${caseId}`)
+}
+// case documents
+
+
+// case process 
+export const getEmpCaseProcessListApi = (caseId) => {
+  return getRequest(`/employee/case/viewCaseProcessStepsById/${caseId}`)
+}
+// case process 
+

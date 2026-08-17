@@ -1,9 +1,8 @@
-import { clientViewCaseById } from "../../../../apis"
 import { useParams } from "react-router-dom"
 import ViewCaseComp from "../../components/viewComp/ViewCaseComp"
 import { clientAttachementUpload } from "../../../../apis/upload"
-import { clientAddCaseFileById } from "../../../../apis"
 import { clientGetCaseFormByIdApi } from "../../../../apis/case/form/clientCaseFormApi"
+import { clientAddCaseFileByIdApi, clientViewCaseByIdApi, getClientCaseDocumentListApi, getClientCaseProcessListApi } from "../../../../apis/case/clientCaseApi"
 
 
 
@@ -12,16 +11,19 @@ export default function ClientViewCase() {
     const param = useParams()
     return (<>
         <ViewCaseComp id={param?._id}
-            getCase={clientViewCaseById}
+            getCase={clientViewCaseByIdApi}
             role={"client"}
             attachementUpload={clientAttachementUpload}
-            addCaseDoc={clientAddCaseFileById}
+            addCaseDoc={clientAddCaseFileByIdApi}
             accessPayment={false}
             paymentDetailsApi={() => { }}
             caseFormDetailApi={clientGetCaseFormByIdApi}
             isCaseFromAccess={false}
             isCaseProcess={true}
             isPaymentAccess={true}
+
+            getCaseDocumentApi={getClientCaseDocumentListApi}
+            getCaseProcessListApi={getClientCaseProcessListApi}
         />
     </>)
 }

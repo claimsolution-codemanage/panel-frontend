@@ -76,25 +76,6 @@ export const updatePartnerBankingDetails = (id, data) => {
   return axios.put(`${API_BASE}/api/partner/updateBankingDetails`, data)
 }
 
-export const addNewCasePartner = (data) => {
-  setheader()
-  return axios.post(`${API_BASE}/api/partner/addNewCase`, data)
-}
-
-export const allCasePartner = ({ pageItemLimit = "", pgNo = "", searchQuery = "", statusType = "", startDate = "", endDate = "" }) => {
-  setheader()
-  return axios.get(`${API_BASE}/api/partner/viewAllPartnerCase?limit=${pageItemLimit}&pageNo=${pgNo}&search=${searchQuery}&status=${statusType}&startDate=${startDate}&endDate=${endDate}`)
-}
-
-export const partnerGetCaseById = (_id) => {
-  setheader()
-  return axios.get(`${API_BASE}/api/partner/partnerViewCaseById?_id=${_id}`)
-}
-export const partnerAddCaseFileById = (_id, data) => {
-  setheader()
-  return axios.post(`${API_BASE}/api/partner/addCaseFile?_id=${_id}`, data)
-}
-
 export const partnerUpdateCaseById = (_id, data) => {
   setheader()
   return axios.post(`${API_BASE}/api/partner/updateCaseById?_id=${_id}`, data)
@@ -376,10 +357,6 @@ export const adminUploadCompanyClientTls = (data) => {
   return axios.put(`${API_BASE}/api/admin/uploadCompanyClientTls`, data)
 }
 
-export const adminShareCaseToEmployee = (data) => {
-  setheader()
-  return axios.put(`${API_BASE}/api/admin/addEmployeeToCase`, data)
-}
 
 export const adminSharePartnerToSaleEmp = (data) => {
   setheader()
@@ -396,11 +373,6 @@ export const adminAddPartnerRefToEmp = (data) => {
   return axios.put(`${API_BASE}/api/admin/addPartnerRefToEmp`, data)
 }
 
-
-export const adminAddOrUpdateCaseComment = (data) => {
-  setheader()
-  return axios.put(`${API_BASE}/api/admin/add_or_update_case_comment`, data)
-}
 
 export const adminDashboardData = (year = "") => {
   setheader()
@@ -507,36 +479,14 @@ export const clientUpdateProfile = (data) => {
   return axios.post(`${API_BASE}/api/client/updateClientProfile`, data)
 }
 
-export const clientAddNewCase = (data) => {
-  setheader()
-  return axios.post(`${API_BASE}/api/client/addNewClientCase`, data)
-}
+
 
 export const clientResendOtp = (data) => {
   setheader()
   return axios.post(`${API_BASE}/api/client/clientResendOtp`, data)
 }
 
-export const clientUpdateCaseById = (_id, data) => {
-  setheader()
-  return axios.post(`${API_BASE}/api/client/updateCaseById?_id=${_id}`, data)
-}
 
-
-export const clientViewAllCase = ({ pageItemLimit, pgNo, searchQuery, statusType, startDate, endDate }) => {
-  setheader()
-  return axios.get(`${API_BASE}/api/client/viewClientAllCase?limit=${pageItemLimit}&pageNo=${pgNo}&search=${searchQuery}&status=${statusType}&startDate=${startDate}&endDate=${endDate}&type=${true}`)
-}
-
-export const clientViewCaseById = (_id) => {
-  setheader()
-  return axios.get(`${API_BASE}/api/client/viewClientCaseById?_id=${_id}`)
-}
-
-export const clientAddCaseFileById = (_id, data) => {
-  setheader()
-  return axios.post(`${API_BASE}/api/client/addCaseFile?_id=${_id}`, data)
-}
 
 export const clientViewAllInvoice = (pageItemLimit = "", pageNo = "", searchQuery = "", startDate = "", endDate = "") => {
   setheader()
@@ -792,11 +742,6 @@ export const getEmpProfile = (_id) => {
 export const empOptGetNormalEmployee = (pageItemLimit = "", pageNo = "", searchQuery = "") => {
   setheader()
   return axios.get(`${API_BASE}/api/employee/operation/normalEmployee?limit=${pageItemLimit}&pageNo=${pageNo}&search=${searchQuery}`)
-}
-
-export const empOptShareSaleEmployee = (data) => {
-  setheader()
-  return axios.put(`${API_BASE}/api/employee/operation/shareCase`, data)
 }
 
 export const empDownloadAllEmp = (pageItemLimit = "", pageNo = "", searchQuery = "", type = true) => {

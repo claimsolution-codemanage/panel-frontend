@@ -1,38 +1,38 @@
-import {salesAllCaseDownload,empOptGetNormalEmployee,empOptShareSaleEmployee } from "../../../../apis"
+import { salesAllCaseDownload, empOptGetNormalEmployee } from "../../../../apis"
 import { AppContext } from "../../../../App"
-import { useContext} from "react"
+import { useContext } from "react"
 import ViewAllCaseComp from "../../components/viewAllComp/ViewAllCaseComp"
 import { useParams } from "react-router-dom"
 import { employeeAttachementUpload } from "../../../../apis/upload"
-import { empAllCaseApi, empUpdateCaseStatusApi } from "../../../../apis/case/empCaseApi"
- 
+import { empAllCaseApi, empShareCaseApi, empUpdateCaseStatusApi } from "../../../../apis/case/empCaseApi"
+
 export default function EmployeeRejectCase() {
   const state = useContext(AppContext)
   const param = useParams()
-  const empType  = state?.myAppData?.details?.empType
+  const empType = state?.myAppData?.details?.empType
 
   return (<>
-      <ViewAllCaseComp
-      isBack={param?._id ? true :false}
+    <ViewAllCaseComp
+      isBack={param?._id ? true : false}
       getCases={empAllCaseApi}
-      empId={param?._id ? param?._id :false} 
+      empId={param?._id ? param?._id : false}
       downloadCase={salesAllCaseDownload}
       role={"employee"}
       setStatus={empUpdateCaseStatusApi}
-      setCaseStatus={()=>{}}
+      setCaseStatus={() => { }}
       viewUrl={"/employee/view case/"}
       editUrl={"/employee/edit-case/"}
-      isChangeStatus={empType?.toLowerCase()==="operation"}
+      isChangeStatus={empType?.toLowerCase() === "operation"}
       isRemoveCase={false}
       isDownload={true}
-    //   isShare={empType?.toLowerCase()==="operation"}
+      //   isShare={empType?.toLowerCase()==="operation"}
       getNormalEmp={empOptGetNormalEmployee}
-      caseShare={empOptShareSaleEmployee}
-      createInvUrl={empType?.toLowerCase()==="finance" ?  "/employee/create-invoice/" : ""}
+      caseShare={empShareCaseApi}
+      createInvUrl={empType?.toLowerCase() === "finance" ? "/employee/create-invoice/" : ""}
       attachementUpload={employeeAttachementUpload}
       isEdit={false}
       isShare={false}
       isReject={true}
-    /> 
+    />
   </>)
 }

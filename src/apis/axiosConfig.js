@@ -1,7 +1,6 @@
 // src/api/axiosInstance.js
 import axios from "axios";
 import { deleteToken, getToken } from "../utils/helperFunction";
-import { toast } from "react-toastify";
 
 const axiosInstance = axios.create({
   baseURL: `${import.meta.env.VITE_API_BASE}/api`,

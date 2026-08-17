@@ -3,7 +3,7 @@ import { useState } from "react"
 import { Link, useNavigate } from "react-router-dom"
 import { toast } from 'react-toastify'
 import { empDepartmentOptions, empDesignationOptions } from "../../../utils/constant"
-import { adminGetNormalEmployee,adminCreateNewEmployee } from "../../../apis"
+import { adminGetNormalEmployee, adminCreateNewEmployee } from "../../../apis"
 import { addEmpInitialValue, addEmpValidationSchema } from "../../../utils/validation"
 import { useFormik } from "formik"
 import FormInputField from "../../../components/Common/form/FormInput"
@@ -20,8 +20,8 @@ export default function AdminCreateNewEmployee() {
         setLoading(true)
         const payload = {
             ...values,
-            headEmpId:values?.headEmpId?.value,
-            managerId:values?.managerId?.value,
+            headEmpId: values?.headEmpId?.value,
+            managerId: values?.managerId?.value,
         }
         try {
             const res = await adminCreateNewEmployee(payload)
@@ -42,9 +42,9 @@ export default function AdminCreateNewEmployee() {
     }
 
     const formik = useFormik({
-        initialValues:addEmpInitialValue,
-        validationSchema:addEmpValidationSchema,
-        onSubmit:handleSumbit
+        initialValues: addEmpInitialValue,
+        validationSchema: addEmpValidationSchema,
+        onSubmit: handleSumbit
     })
 
 
@@ -71,15 +71,15 @@ export default function AdminCreateNewEmployee() {
                                 <h6 className="text-primary text-center h3">Add New Employee</h6>
                             </div>
                             <div className="row row-cols-1 row-cols-md-2 mt-3">
-                                <FormInputField name="fullName" type="text" label="Full name" formik={formik} handleOnChange={(e,name)=>formik.handleChange(e)}/>
-                                <FormInputField name="email" type="email" label="Email" formik={formik} handleOnChange={(e,name)=>formik.handleChange(e)}/>
-                                <FormInputField name="empId" type="text" label="Employee ID" formik={formik} handleOnChange={(e,name)=>formik.handleChange(e)}/>
-                                <FormInputField name="branchId" type="text" label="Employee branch ID" formik={formik} handleOnChange={(e,name)=>formik.handleChange(e)}/>
-                                <FormPhoneInputField name="mobileNo" label="Phone" formik={formik} handleOnChange={(e,name)=>formik.setFieldValue(name,e)}/>
-                                <FormSelectField name="type" label="Department" options={empDepartmentOptions} formik={formik} handleOnChange={(e,name)=>formik.handleChange(e)}/>
-                                <FormSelectField name="designation" label="Designation" options={empDesignationOptions} formik={formik} handleOnChange={(e,name)=>formik.handleChange(e)}/>
-                                <FormEmpSelectField getEmpList={handleEmpOptionsList} name="managerId" label="Manager of employee"  formik={formik} handleOnChange={(e,name)=>formik.setFieldValue(name,e)}/>
-                                <FormEmpSelectField getEmpList={handleEmpOptionsList} name="headEmpId" label="Head of employee"  formik={formik} handleOnChange={(e,name)=>formik.setFieldValue(name,e)}/>
+                                <FormInputField name="fullName" type="text" label="Full name*" formik={formik} handleOnChange={(e, name) => formik.handleChange(e)} />
+                                <FormInputField name="email" type="email" label="Email*" formik={formik} handleOnChange={(e, name) => formik.handleChange(e)} />
+                                <FormInputField name="empId" type="text" label="Employee ID*" formik={formik} handleOnChange={(e, name) => formik.handleChange(e)} />
+                                <FormInputField name="branchId" type="text" label="Employee branch ID*" formik={formik} handleOnChange={(e, name) => formik.handleChange(e)} />
+                                <FormPhoneInputField name="mobileNo" label="Phone*" formik={formik} handleOnChange={(e, name) => formik.setFieldValue(name, e)} />
+                                <FormSelectField name="type" label="Department*" options={empDepartmentOptions} formik={formik} handleOnChange={(e, name) => formik.handleChange(e)} />
+                                <FormSelectField name="designation" label="Designation*" options={empDesignationOptions} formik={formik} handleOnChange={(e, name) => formik.handleChange(e)} />
+                                <FormEmpSelectField getEmpList={handleEmpOptionsList} name="managerId" label="Manager of employee" formik={formik} handleOnChange={(e, name) => formik.setFieldValue(name, e)} />
+                                <FormEmpSelectField getEmpList={handleEmpOptionsList} name="headEmpId" label="Head of employee" formik={formik} handleOnChange={(e, name) => formik.setFieldValue(name, e)} />
                             </div>
                             <div className="d-flex  justify-content-center">
                                 <div aria-disabled={loading} className={`d-flex align-items-center justify-content-center gap-3 btn btn-primary w-100 ${loading && "disabled"}`} onClick={formik.handleSubmit}>

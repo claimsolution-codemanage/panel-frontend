@@ -25,9 +25,7 @@ export const adminAddOrUpdatePaymentApi = (data) => {
     return postRequest(`/admin/case/addOrUpdatePayment`, data)
 }
 
-export const adminRenameCaseDocFolderApi = (data) => {
-    return putRequest(`/admin/case/renameCaseDocFolder`, data)
-}
+
 
 export const adminUpdateClientCaseFeeApi = (data) => {
     return putRequest(`/admin/case/updateClientCaseFee?_id=${data?._id}&paymentId=${data?.paymentId}&paymentMode=${data?.paymentMode}`)
@@ -53,10 +51,45 @@ export const adminDeleteCaseByIdApi = (id) => {
     return deleteRequest(`/admin/case/deleteCaseById?caseId=${id}`)
 }
 
-export const adminDeleteCaseDocByIdApi = (id) => {
-    return deleteRequest(`/admin/case/deleteCaseDocId?_id=${id}`)
-}
-
 export const adminEditCaseProcessById = (data) => {
     return putRequest(`/admin/case/editCaseProcessById`, data)
 }
+
+// comment
+export const getCaseCommentsApi = (caseId) => {
+    return getRequest(`/admin/case/viewCaseCommentsById/${caseId}`)
+}
+
+export const adminAddOrUpdateCaseCommentApi = (data) => {
+    return putRequest(`/admin/case/add_or_update_case_comment`, data)
+}
+
+export const getCaseEmployeeListApi = (caseId) => {
+    return getRequest(`/admin/case/getCaseEmployeeList/${caseId}`)
+}
+
+// share case to employee
+export const adminShareCaseToEmployeeApi = (data) => {
+    return putRequest(`/admin/case/addEmployeeToCase`, data)
+}
+
+// case documents
+export const getAdminCaseDocumentListApi = (caseId) => {
+    return getRequest(`/admin/case/viewCaseDocsById/${caseId}`)
+}
+
+export const adminRenameCaseDocFolderApi = (data) => {
+    return putRequest(`/admin/case/renameCaseDocFolder`, data)
+}
+
+export const adminDeleteCaseDocByIdApi = (id) => {
+    return deleteRequest(`/admin/case/deleteCaseDocId?_id=${id}`)
+}
+// case documents
+
+
+// case process 
+export const getAdminCaseProcessListApi = (caseId) => {
+    return getRequest(`/admin/case/viewCaseProcessStepsById/${caseId}`)
+}
+// case process 

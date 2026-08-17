@@ -10,7 +10,7 @@ import { getFileTypeFromExtension, formatFileSize } from '../../../utils/helperF
 import { AppContext } from '../../../App';
 import { Eye } from 'lucide-react';
 
-export default function AddDocsModal({ _id, uploadingDocs, getCaseById, setUploadingDocs, handleCaseDocsUploading, attachementUpload, type }) {
+export default function AddDocsModal({ _id, uploadingDocs, refetchDetails, setUploadingDocs, handleCaseDocsUploading, attachementUpload, type }) {
     const appState = useContext(AppContext);
     const docRef = useRef(null);
     const [data, setData] = useState([]);
@@ -70,7 +70,7 @@ export default function AddDocsModal({ _id, uploadingDocs, getCaseById, setUploa
             if (res?.data?.success) {
                 toast.success(res?.data?.message);
                 setData([]);
-                getCaseById && getCaseById();
+                refetchDetails && refetchDetails();
                 setDocInfo({ isPrivate: false, docName: "", otherDocName: "" });
                 setLoading({ status: false, code: 1, type: "submit", message: res?.data?.message });
                 setUploadingDocs(false);

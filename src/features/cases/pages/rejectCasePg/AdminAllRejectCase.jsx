@@ -1,5 +1,5 @@
-import { adminShareCaseToEmployee, adminAllCaseDownload, adminGetNormalEmployee } from "../../../../apis"
-import { adminChangeCaseStatusApi, adminSetCaseIsActiveApi, allAdminCaseApi } from "../../../../apis/case/adminCaseApi"
+import { adminAllCaseDownload, adminGetNormalEmployee } from "../../../../apis"
+import { adminChangeCaseStatusApi, adminSetCaseIsActiveApi, adminShareCaseToEmployeeApi, allAdminCaseApi } from "../../../../apis/case/adminCaseApi"
 import { adminAttachementUpload } from "../../../../apis/upload"
 import ViewAllCaseComp from "../../components/viewAllComp/ViewAllCaseComp"
 
@@ -23,7 +23,7 @@ export default function AdminRejectCase() {
       isShare={false}
       isReject={true}
       getNormalEmp={adminGetNormalEmployee}
-      caseShare={adminShareCaseToEmployee}
+      caseShare={adminShareCaseToEmployeeApi}
       attachementUpload={adminAttachementUpload}
     // createInvUrl={"/admin/create-invoice/"}
     />

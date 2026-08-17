@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { IoMdAdd, IoMdClose } from 'react-icons/io'
 import { AppContext } from "../../../../../App"
 import { formatWhatsAppDate } from '../../../../../utils/helperFunction'
@@ -7,9 +7,12 @@ import { MdOutlineEdit } from 'react-icons/md'
 import { RiChatPrivateLine } from 'react-icons/ri'
 import {
     FaFileImage, FaFileAudio, FaFileVideo, FaFilePdf,
-    FaFileWord, FaFileExcel, FaFile, FaDownload
+    FaFileWord, FaFileExcel, FaFile, FaDownload,
+    FaChevronDown, FaChevronUp
 } from 'react-icons/fa'
+import Loader from '../../../../../components/Common/loader'
 import "../../../../../styles/caseComment.css"
+import { toast } from 'react-toastify'
 
 const canEditMessage = (createdAt) => {
     if (!createdAt) return false;
@@ -100,9 +103,14 @@ const AttachmentList = ({ attachments, isMe }) => {
     );
 };
 
-export default function CommentSection({ caseCommit, role, id, getCaseById, addCaseCommit, privateCommit, attachementUpload }) {
+export default function CommentSection({ role, id, getCaseCommentsApi, getCaseEmployeeListApi, addCaseCommit, privateCommit, canTagComment, attachementUpload }) {
     const state = useContext(AppContext)
+    const [caseComment, setCaseComment] = useState([])
+    const [loading, setLoading] = useState(false)
     const [caseCommitModal, setCaseCommitModal] = useState({ status: false, details: null })
+    const [isOpen, setIsOpen] = useState(false)
+    const [caseEmployeeList, setCaseEmployeeList] = useState([])
+    const [loadingEmployeeList, setLoadingEmployeeList] = useState(true)
 
     const commentBy = (comment) => {
         if (role?.toLowerCase() == "employee") {
@@ -112,89 +120,190 @@ export default function CommentSection({ caseCommit, role, id, getCaseById, addC
         }
     }
 
+    const getCaseComment = async () => {
+        setLoading(true)
+        try {
+            const res = await getCaseCommentsApi(id)
+            if (res?.data?.success && res?.data?.data) {
+                setCaseComment(res?.data?.data)
+            }
+        } catch (error) {
+            if (error && error?.response?.data?.message) {
+                toast.error(error?.response?.data?.message)
+            } else {
+                toast.error("Failed to load comments")
+            }
+            console.log("case comments error", error);
+        } finally {
+            setLoading(false)
+        }
+    }
+
+    const getCaseEmployeeList = async () => {
+        setLoadingEmployeeList(true)
+        try {
+            const res = await getCaseEmployeeListApi(id)
+            console.log("case employee list", res?.data);
+            if (res?.data?.success && res?.data?.data) {
+                setCaseEmployeeList(res?.data?.data)
+            }
+        } catch (error) {
+            if (error && error?.response?.data?.message) {
+                toast.error(error?.response?.data?.message)
+            } else {
+                toast.error("Failed to load case employee list")
+            }
+            console.log("case employee list error", error);
+        } finally {
+            setLoadingEmployeeList(false)
+        }
+    }
+
+    const handleCommentAdded = () => {
+        setIsOpen(true)
+        getCaseComment()
+    }
+
+    useEffect(() => {
+        if (id && isOpen && !caseComment?.length) {
+            getCaseComment()
+        }
+    }, [id, isOpen])
+
+    useEffect(() => {
+        if (id && isOpen && canTagComment) {
+            getCaseEmployeeList()
+        }
+    }, [id, isOpen])
+
+
     return (
         <>
             <div className="bg-color-1 my-5 p-3 p-md-5 rounded-2 shadow">
-                <div className="border-bottom border-primary pb-2 mb-4 d-flex justify-content-between align-items-center">
-                    <h5 className="text-primary m-0">Case Comments</h5>
+                <div className="border-bottom border-primary pb-2 mb-4">
                     <div
-                        onClick={() => setCaseCommitModal({ status: true, details: null })}
-                        className="d-flex justify-content-center align-items-center bg-primary text-white"
-                        style={{
-                            width: 38,
-                            height: 38,
-                            borderRadius: "50%",
-                            cursor: "pointer",
-                        }}
+                        onClick={() => setIsOpen(!isOpen)}
+                        className="d-flex align-items-center justify-content-between gap-2"
+                        style={{ cursor: "pointer", userSelect: "none" }}
                     >
-                        <IoMdAdd />
+                        <h5 className="text-primary m-0">Case Comments</h5>
+                        <div className="text-primary d-flex align-items-center">
+                            {isOpen ? <FaChevronUp size={16} /> : <FaChevronDown size={16} />}
+                        </div>
                     </div>
+
                 </div>
 
-                {Boolean(caseCommit?.length) &&
-                    <div className="chat-bg">
-                        <div className="chat-wrapper">
-                            {caseCommit?.map(commit => {
-                                const isMe = commentBy(commit);
-
-                                return (
-                                    <div
-                                        key={commit?._id}
-                                        className={`chat-message ${isMe ? "me" : "other"}`}
-                                    >
-                                        <div className={`chat-bubble ${isMe ? "me" : "other"}`}>
-                                            <div className="chat-author">
-                                                {isMe ? "You" : commit?.name}
-                                            </div>
-
-                                            {commit?.message && (
-                                                <div
-                                                    className="ql-editor"
-                                                    dangerouslySetInnerHTML={{ __html: commit?.message }}
-                                                />
-                                            )}
-
-                                            {/* Display Attachments */}
-                                            {commit?.attachments && commit?.attachments.length > 0 && (
-                                                <AttachmentList
-                                                    attachments={commit?.attachments}
-                                                    isMe={isMe}
-                                                />
-                                            )}
-
-                                            <div className="chat-meta-row">
-                                                <span className="chat-time">
-                                                    {formatWhatsAppDate(commit?.createdAt)}
-                                                </span>
-
-                                                {isMe && canEditMessage(commit?.createdAt) && (
-                                                    <span
-                                                        className="chat-edit"
-                                                        title="Edit message"
-                                                        onClick={() => setCaseCommitModal({ status: true, details: commit })}
-                                                    >
-                                                        <MdOutlineEdit className='fs-6' />
-                                                    </span>
-                                                )}
-                                                {commit?.isPrivate && <RiChatPrivateLine className='fs-5 text-success' title='private' />}
-                                            </div>
-                                        </div>
-                                    </div>
-                                );
-                            })}
+                {loading ? (
+                    <Loader />
+                ) : (
+                    isOpen && <div>
+                        <div className='d-flex justify-content-end mb-2'>
+                            <div
+                                onClick={() => setCaseCommitModal({ status: true, details: null })}
+                                className="d-flex justify-content-center align-items-center bg-primary text-white"
+                                style={{
+                                    width: 38,
+                                    height: 38,
+                                    borderRadius: "50%",
+                                    cursor: "pointer",
+                                }}
+                            >
+                                <IoMdAdd />
+                            </div>
                         </div>
-                    </div>}
+                        {Boolean(caseComment?.length) ? (
+                            <div className="chat-bg">
+                                <div className="chat-wrapper">
+                                    {caseComment?.map(commit => {
+                                        const isMe = commentBy(commit);
+
+                                        return (
+                                            <div
+                                                key={commit?._id}
+                                                className={`chat-message ${isMe ? "me" : "other"}`}
+                                            >
+                                                <div className={`chat-bubble ${isMe ? "me" : "other"}`}>
+                                                    <div className="chat-author">
+                                                        {isMe ? "You" : commit?.name}
+                                                    </div>
+
+                                                    {canTagComment && commit?.tagEmployees?.length > 0 && (
+                                                        <div className="tag-container">
+                                                            {commit?.tagEmployees?.map((ele) => {
+                                                                return (
+                                                                    <span
+                                                                        key={ele?._id}
+                                                                        className="tag-badge"
+                                                                        title={`${ele?.fullName} (${ele?.type})`}
+                                                                    >
+                                                                        @{ele?.fullName}
+                                                                    </span>
+                                                                )
+                                                            })}
+                                                        </div>
+                                                    )}
+
+                                                    {commit?.message && (
+                                                        <div
+                                                            className="ql-editor"
+                                                            dangerouslySetInnerHTML={{ __html: commit?.message }}
+                                                        />
+                                                    )}
+
+                                                    {/* Display Attachments */}
+                                                    {commit?.attachments && commit?.attachments.length > 0 && (
+                                                        <AttachmentList
+                                                            attachments={commit?.attachments}
+                                                            isMe={isMe}
+                                                        />
+                                                    )}
+
+                                                    <div className="chat-meta-row">
+                                                        <span className="chat-time">
+                                                            {formatWhatsAppDate(commit?.createdAt)}
+                                                        </span>
+
+                                                        {isMe && canEditMessage(commit?.createdAt) && (
+                                                            <span
+                                                                className="chat-edit"
+                                                                title="Edit message"
+                                                                onClick={() => setCaseCommitModal({ status: true, details: commit })}
+                                                            >
+                                                                <MdOutlineEdit className='fs-6' />
+                                                            </span>
+                                                        )}
+                                                        {commit?.isPrivate && <RiChatPrivateLine className='fs-5 text-success' title='private' />}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        );
+                                    })}
+                                </div>
+                            </div>
+                        ) : (
+                            <div className="text-center text-secondary py-3">
+                                No comments yet
+                            </div>
+                        )
+                        }
+                    </div>
+                )
+                }
             </div>
+
 
             {caseCommitModal?.status &&
                 <AddCaseCommit
                     privateCommit={privateCommit}
+                    canTagComment={canTagComment}
                     show={caseCommitModal?.status}
                     attachementUpload={attachementUpload}
                     details={caseCommitModal?.details}
+                    caseEmployeeList={caseEmployeeList}
                     id={id}
                     close={() => { setCaseCommitModal({ status: false, details: null }) }}
-                    getCaseById={getCaseById}
+                    refetchDetails={handleCommentAdded}
                     handleCaseCommit={addCaseCommit}
                 />
             }

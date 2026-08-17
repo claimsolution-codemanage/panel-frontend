@@ -21,10 +21,10 @@ import { adminUpdateClientCaseFeeApi } from "../../../../apis/case/adminCaseApi"
 
 export default function ViewCaseComp({ id, getCase, role, empType, attachementUpload, addCaseDoc,
     editUrl, addCaseCommit, viewPartner, viewClient, editCaseProcess, addCaseProcess, addReference,
-    deleteReference, deleteDoc, isAddRefence, isAddCaseProcess, isAddCommit,
+    deleteReference, deleteDoc, isAddRefence, isAddCaseProcess, isAddCommit, getCaseCommentsApi, getCaseEmployeeListApi, canTagComment,
     isViewProfile, setCaseDocStatus, viewEmp, paymentDetailsApi, accessPayment, isCaseFormAccess, createOrUpdateCaseFormApi,
     privateCommit, caseFormDetailApi, viewOtherClientCasePath, isViewOtherClientCase, isCaseProcess, isPaymentAccess, isCaseFromAccess,
-    renameDocFolder, isRenameDocFolder
+    renameDocFolder, isRenameDocFolder, getCaseDocumentApi, getCaseProcessListApi
 }) {
 
     const [data, setData] = useState([])
@@ -34,8 +34,6 @@ export default function ViewCaseComp({ id, getCase, role, empType, attachementUp
     const [clearClientpayment, setClearClientPayment] = useState({ status: false, loading: false, payment: "", feeType: "", data: { _id: "", paymentId: "", paymentMode: "" } })
 
     const navigate = useNavigate()
-    const param = useParams()
-
 
     const getCaseById = async () => {
         setLoading(true)
@@ -117,10 +115,10 @@ export default function ViewCaseComp({ id, getCase, role, empType, attachementUp
                                             <CaseDetails data={data} role={role} isCaseFromAccess={isCaseFromAccess} viewPartner={viewPartner} deleteReference={deleteReference} isViewProfile={isViewProfile} getCaseById={getCaseById} editUrl={editUrl} viewClient={viewClient} isAddRefence={isAddRefence} viewEmp={viewEmp} addReference={addReference} />
 
                                             {/* documents section */}
-                                            <DocumentSection data={data} role={role} isRenameDocFolder={isRenameDocFolder} getCaseById={getCaseById} deleteDoc={deleteDoc} setCaseDocStatus={setCaseDocStatus} attachementUpload={attachementUpload} addCaseDoc={addCaseDoc} renameDocFolder={renameDocFolder} />
+                                            <DocumentSection data={data} role={role} getCaseDocumentApi={getCaseDocumentApi} isRenameDocFolder={isRenameDocFolder} deleteDoc={deleteDoc} setCaseDocStatus={setCaseDocStatus} attachementUpload={attachementUpload} addCaseDoc={addCaseDoc} renameDocFolder={renameDocFolder} />
 
                                             {/* case process */}
-                                            {isCaseProcess && <StatusSection isAddCaseProcess={isAddCaseProcess} editCaseProcess={editCaseProcess} role={role} id={id} processSteps={data[0]?.processSteps} getCaseById={getCaseById} details={data[0]} addCaseProcess={addCaseProcess} attachementUpload={attachementUpload} />}
+                                            {isCaseProcess && <StatusSection isAddCaseProcess={isAddCaseProcess} getCaseProcessListApi={getCaseProcessListApi} editCaseProcess={editCaseProcess} role={role} id={id} processSteps={data[0]?.processSteps} getCaseById={getCaseById} details={data[0]} addCaseProcess={addCaseProcess} attachementUpload={attachementUpload} />}
 
                                             {/* case  form section*/}
                                             {(data[0]?.caseFrom?.toLowerCase() == "client" || data?.[0]?.case_forms?.length) && isCaseFormAccess ?
@@ -135,7 +133,7 @@ export default function ViewCaseComp({ id, getCase, role, empType, attachementUp
                                             }
 
                                             {/* case comment */}
-                                            {isAddCommit && <CommentSection id={id} privateCommit={privateCommit} addCaseCommit={addCaseCommit} role={role} getCaseById={getCaseById} caseCommit={data[0]?.caseCommit} attachementUpload={attachementUpload} />}
+                                            {isAddCommit && <CommentSection id={id} getCaseCommentsApi={getCaseCommentsApi} getCaseEmployeeListApi={getCaseEmployeeListApi} privateCommit={privateCommit} canTagComment={canTagComment} addCaseCommit={addCaseCommit} role={role} attachementUpload={attachementUpload} />}
                                         </div>
                                     </div>
 

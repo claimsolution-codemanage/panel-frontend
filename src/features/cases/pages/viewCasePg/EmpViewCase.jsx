@@ -4,7 +4,7 @@ import { AppContext } from "../../../../App"
 import { useContext } from "react"
 import ViewCaseComp from "../../components/viewComp/ViewCaseComp"
 import { empCreateOrUpdateCaseFormApi, empGetCaseFormById } from "../../../../apis/case/form/caseFormApi"
-import { empAddCaseFileByIdApi, empAddCaseReferenceApi, empAddOrUpdateCaseCommentApi, empAddOrUpdateCasePaymentApi, empGetCaseById, empRemoveCaseReferenceApi, empRenameCaseDocFolderApi, empUpdateCaseStatusApi } from "../../../../apis/case/empCaseApi"
+import { empAddCaseFileByIdApi, empAddCaseReferenceApi, empAddOrUpdateCaseCommentApi, empAddOrUpdateCasePaymentApi, empGetCaseById, empRemoveCaseReferenceApi, empRenameCaseDocFolderApi, empUpdateCaseStatusApi, getCaseCommentsApi, getCaseEmployeeListApi, getEmpCaseDocumentListApi, getEmpCaseProcessListApi } from "../../../../apis/case/empCaseApi"
 
 export default function EmployeeViewCase() {
   const state = useContext(AppContext)
@@ -30,23 +30,41 @@ export default function EmployeeViewCase() {
       // isAddCaseProcess={empType?.toLowerCase()==="operation"}
       isAddCaseProcess={["operation", "sales"].includes(empType?.toLowerCase())}
 
-      // isAddCommit={empType?.toLowerCase()==="operation" || empType?.toLowerCase()==="branch" || (empType?.toLowerCase()===" " && designation?.toLowerCase()==="manager")}
-      isAddCommit={!["doctor", "advocate", "surveyor"].includes(empType?.toLowerCase())}
       deleteReference={empRemoveCaseReferenceApi}
-      deleteDoc={() => { }}
+
+      // comment
+      isAddCommit={![].includes(empType?.toLowerCase())}
+      canTagComment={["operation", "branch", "finance",]?.includes(empType?.toLowerCase())}
+      privateCommit={empType?.toLowerCase() === "operation"}
       addCaseCommit={empAddOrUpdateCaseCommentApi}
+      getCaseCommentsApi={getCaseCommentsApi}
+      getCaseEmployeeListApi={getCaseEmployeeListApi}
+      // comment
+
+
       accessPayment={empType?.toLowerCase() === "operation"}
       paymentDetailsApi={empAddOrUpdateCasePaymentApi}
       isCaseFormAccess={empType?.toLowerCase() === "operation"}
       createOrUpdateCaseFormApi={empCreateOrUpdateCaseFormApi}
-      addCaseDoc={empAddCaseFileByIdApi}
-      privateCommit={empType?.toLowerCase() === "operation"}
       caseFormDetailApi={empGetCaseFormById}
       isCaseProcess={!["advocate", "surveyor", "doctor"].includes(empType?.toLowerCase())}
       isPaymentAccess={["operation", "branch", "finance"].includes(empType?.toLowerCase())}
       isCaseFromAccess={!["advocate", "surveyor", "doctor"].includes(empType?.toLowerCase())}
-      renameDocFolder={empRenameCaseDocFolderApi}
+
+      // case documents
       isRenameDocFolder={empType?.toLowerCase() === "operation"}
+      getCaseDocumentApi={getEmpCaseDocumentListApi}
+      renameDocFolder={empRenameCaseDocFolderApi}
+      addCaseDoc={empAddCaseFileByIdApi}
+      deleteDoc={() => { }}
+      // case documents
+
+
+      // case process
+      getCaseProcessListApi={getEmpCaseProcessListApi}
+    // case process
+
+
     />
   </>)
 }

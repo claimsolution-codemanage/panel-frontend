@@ -1,6 +1,5 @@
-import { addNewCasePartner } from "../../../../apis"
 import { partnerSendEmailVerifyOtpApi, partnerVerifyOtpApi } from "../../../../apis/auth/partnerAuthApi"
-import { clientEmailVerifyApi } from "../../../../apis/auth/userAuthApi"
+import { addNewCasePartnerApi } from "../../../../apis/case/partnerCaseApi"
 import { partnerAttachementUpload } from "../../../../apis/upload"
 import AddCaseComp from "../../components/addCaseComp/AddCaseComp"
 
@@ -8,7 +7,7 @@ import AddCaseComp from "../../components/addCaseComp/AddCaseComp"
 export default function NewCase() {
     return (<>
         <AddCaseComp
-            addCase={addNewCasePartner}
+            addCase={addNewCasePartnerApi}
             uploadAttachment={partnerAttachementUpload}
             successUrl={"/partner/view case/"}
             role="partner"

@@ -1,6 +1,6 @@
 import PartnerTemplate from '../template/partnerTemplate'
 import PanelTemplate from '../template/PanelTemplate'
-import {Route} from 'react-router-dom'
+import { Route } from 'react-router-dom'
 // for partner
 import SignUp from '../pages/partner/signUp'
 import SignIn from '../pages/partner/signIn'
@@ -10,7 +10,6 @@ import Dashboard from '../pages/partner/dashboard'
 import Profile from '../pages/partner/profile'
 import BankDetails from '../pages/partner/bankDetails'
 import NewCase from '../features/cases/pages/addCasePg/PartnerNewCase'
-import PartnerEditCase from '../features/cases/pages/editCasePg/PartnerEditcase'
 import EditProfile from '../pages/partner/editProfile'
 import EditBankingDetails from '../pages/partner/editBankDetails'
 import AllPartnerCase from '../features/cases/pages/viewAllPg/PartnerAllCases'
@@ -42,8 +41,8 @@ export const partnerRoutes = [
     <Route path='/partner/banking details' element={<PartnerTemplate><BankDetails /></PartnerTemplate>} />,
     <Route path='/partner/view tls' element={<PartnerTemplate><PartnerViewTLS /></PartnerTemplate>} />,
     <Route path='/partner/view service agreement' element={<PartnerTemplate><PartnerServiceAgreement /></PartnerTemplate>} />,
-    <Route path='/partner/statement/:partnerId' element={<PartnerTemplate><ViewAllStatement getStatementApi={partnerStatement}/></PartnerTemplate>} />,
-    
+    <Route path='/partner/statement/:partnerId' element={<PartnerTemplate><ViewAllStatement getStatementApi={partnerStatement} /></PartnerTemplate>} />,
+
     // case start
     <Route path='/partner/add new case' element={<PartnerTemplate><NewCase /></PartnerTemplate>} />,
     <Route path='/partner/all case' element={<PartnerTemplate><AllPartnerCase /></PartnerTemplate>} />,
@@ -51,4 +50,3 @@ export const partnerRoutes = [
     // case end
 
 ]
-{/* <Route path='/partner/edit case/:_id' element={<PartnerTemplate><PartnerEditCase/></PartnerTemplate>}/> */ }

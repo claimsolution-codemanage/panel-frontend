@@ -10,18 +10,13 @@ import {
   FaFileWord, FaFileExcel, FaFile
 } from 'react-icons/fa';
 
-export default function AddCaseCommit({ show, details, handleCaseCommit, attachementUpload, getCaseById, close, id, privateCommit }) {
-  const [data, setData] = useState({
-    _id: id,
-    caseCommentId: details?._id || null,
-    comment: details?.message || "",
-    isPrivate: Boolean(details?.isPrivate),
-    attachments: details?.attachments || []
-  });
+export default function AddCaseCommit({ show, details, caseEmployeeList, canTagComment, handleCaseCommit, attachementUpload, refetchDetails, close, id, privateCommit }) {
+  const [data, setData] = useState({});
   const [commitLoading, setCommitLoading] = useState(false);
   const [uploadingAttachment, setUploadingAttachment] = useState(false);
   const [uploadProgress, setUploadProgress] = useState(0);
   const attachmentRef = useRef(null);
+
 
   // Get file icon based on file type
   const getFileIcon = (fileType) => {
@@ -62,8 +57,8 @@ export default function AddCaseCommit({ show, details, handleCaseCommit, attache
           setCommitLoading(false);
           toast.success(res?.data?.message);
           close();
-          if (getCaseById) {
-            getCaseById();
+          if (refetchDetails) {
+            refetchDetails();
           }
         }
       } catch (error) {
@@ -160,16 +155,61 @@ export default function AddCaseCommit({ show, details, handleCaseCommit, attache
     window.open(url, '_blank');
   };
 
+  const [searchTerm, setSearchTerm] = useState("");
+  const [showDropdown, setShowDropdown] = useState(false);
+  const dropdownRef = useRef(null);
+
   useEffect(() => {
-    if (details?._id) {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setShowDropdown(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside, true);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside, true);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (show) {
       setData({
-        ...data,
-        caseCommentId: details?._id,
-        comment: details?.message,
-        isPrivate: details?.isPrivate,
+        _id: id,
+        caseCommentId: details?._id || null,
+        comment: details?.message || "",
+        isPrivate: Boolean(details?.isPrivate),
+        attachments: details?.attachments || [],
+        tagEmployeeIds: details?.tagEmployees?.map(ele => ele?._id) || []
       });
     }
-  }, [details?._id]);
+  }, [show, details, id]);
+
+  const filteredEmployees = (caseEmployeeList || []).filter(emp => {
+    const isAlreadyTagged = data?.tagEmployeeIds?.includes(emp._id);
+    const matchesSearch = emp.fullName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      emp.type?.toLowerCase().includes(searchTerm.toLowerCase());
+    return !isAlreadyTagged && matchesSearch;
+  });
+
+  const selectedEmployees = (caseEmployeeList || []).filter(emp =>
+    data?.tagEmployeeIds?.includes(emp._id)
+  );
+
+  const handleAddTag = (empId) => {
+    setData(prev => ({
+      ...prev,
+      tagEmployeeIds: [...(prev.tagEmployeeIds || []), empId]
+    }));
+    setSearchTerm("");
+    setShowDropdown(false);
+  };
+
+  const handleRemoveTag = (empId) => {
+    setData(prev => ({
+      ...prev,
+      tagEmployeeIds: (prev.tagEmployeeIds || []).filter(id => id !== empId)
+    }));
+  };
 
   return (
     <Modal
@@ -201,7 +241,14 @@ export default function AddCaseCommit({ show, details, handleCaseCommit, attache
                   role="switch"
                   id="privateSwitch"
                   checked={data?.isPrivate}
-                  onChange={(e) => setData({ ...data, isPrivate: e?.target?.checked })}
+                  onChange={(e) => {
+                    const checked = e?.target?.checked;
+                    setData(prev => ({
+                      ...prev,
+                      isPrivate: checked,
+                      tagEmployeeIds: checked ? [] : prev.tagEmployeeIds
+                    }));
+                  }}
                 />
                 <label className="form-check-label fw-medium" htmlFor="privateSwitch">
                   Private Comment
@@ -210,6 +257,72 @@ export default function AddCaseCommit({ show, details, handleCaseCommit, attache
                   Only visible to you and administrators
                 </small>
               </div>
+            </div>
+          )}
+
+          {/* Tag Employees Section */}
+          {canTagComment && !data?.isPrivate && (
+            <div className="mb-4 position-relative" ref={dropdownRef}>
+              <label className="form-label fw-medium mb-2">Tag Employees</label>
+
+              {/* Selected Pills */}
+              {selectedEmployees.length > 0 && (
+                <div className="d-flex flex-wrap gap-2 mb-2">
+                  {selectedEmployees.map(emp => (
+                    <span
+                      key={emp._id}
+                      className="badge bg-light text-primary border d-flex align-items-center gap-1 p-2 rounded-pill hover-shadow"
+                      style={{ fontSize: '0.85rem', transition: 'all 0.2s' }}
+                    >
+                      <span>{emp.fullName} ({emp.type})</span>
+                      <IoMdClose
+                        className="cursor-pointer text-danger"
+                        size={14}
+                        style={{ cursor: 'pointer' }}
+                        onClick={() => handleRemoveTag(emp._id)}
+                      />
+                    </span>
+                  ))}
+                </div>
+              )}
+
+              {/* Search Input */}
+              <input
+                type="text"
+                className="form-control"
+                placeholder="Search employee by name or designation to tag..."
+                value={searchTerm}
+                onChange={(e) => {
+                  setSearchTerm(e.target.value);
+                  setShowDropdown(true);
+                }}
+                onFocus={() => setShowDropdown(true)}
+              />
+
+              {/* Dropdown Menu */}
+              {showDropdown && filteredEmployees.length > 0 && (
+                <div
+                  className="dropdown-menu show w-100 shadow border-0 mt-1 py-1 dropdown-menu-list"
+                  style={{
+                    maxHeight: '200px',
+                    overflowY: 'auto',
+                    position: 'absolute',
+                    zIndex: 1050
+                  }}
+                >
+                  {filteredEmployees.map(emp => (
+                    <button
+                      key={emp._id}
+                      className="dropdown-item d-flex justify-content-between align-items-center py-2 dropdown-employee-item"
+                      type="button"
+                      onClick={() => handleAddTag(emp._id)}
+                    >
+                      <span className="fw-medium text-dark">{emp.fullName}</span>
+                      <span className="badge bg-secondary-subtle text-secondary" style={{ fontSize: '0.75rem' }}>{emp.type}</span>
+                    </button>
+                  ))}
+                </div>
+              )}
             </div>
           )}
 
@@ -373,6 +486,18 @@ export default function AddCaseCommit({ show, details, handleCaseCommit, attache
         }
         .comment-modal .modal-body {
           animation: fadeIn 0.3s ease-out;
+        }
+        .dropdown-menu-list {
+          background-color: #ffffff;
+          border-radius: 8px;
+          box-shadow: 0 4px 12px rgba(0,0,0,0.1) !important;
+          border: 1px solid #e2e8f0 !important;
+        }
+        .dropdown-employee-item {
+          transition: background-color 0.15s ease-in-out;
+        }
+        .dropdown-employee-item:hover {
+          background-color: #f8fafc;
         }
       `}</style>
     </Modal>

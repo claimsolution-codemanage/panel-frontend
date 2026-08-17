@@ -1,17 +1,16 @@
-import { partnerGetCaseById } from "../../../../apis"
 import { useParams } from "react-router-dom"
-import { partnerAddCaseFileById } from "../../../../apis"
 import { partnerAttachementUpload } from "../../../../apis/upload"
 import ViewCaseComp from "../../components/viewComp/ViewCaseComp"
 import { partnerGetCaseFormByIdApi } from "../../../../apis/case/form/partnerCaseFormApi"
+import { partnerAddCaseFileByIdApi, partnerGetCaseByIdApi, partnerViewCaseDocsByIdApi, partnerViewCaseProcessStepsByIdApi } from "../../../../apis/case/partnerCaseApi"
 export default function PartnerViewCase() {
     const param = useParams()
 
     return (<>
         <ViewCaseComp id={param?._id}
-            getCase={partnerGetCaseById}
+            getCase={partnerGetCaseByIdApi}
             role={"partner"}
-            addCaseDoc={partnerAddCaseFileById}
+            addCaseDoc={partnerAddCaseFileByIdApi}
             attachementUpload={partnerAttachementUpload}
             accessPayment={false}
             paymentDetailsApi={() => { }}
@@ -19,6 +18,9 @@ export default function PartnerViewCase() {
             isCaseFromAccess={false}
             isCaseProcess={true}
             isPaymentAccess={false}
+
+            getCaseDocumentApi={partnerViewCaseDocsByIdApi}
+            getCaseProcessListApi={partnerViewCaseProcessStepsByIdApi}
         />
     </>)
 }
